@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <title>Flag of Russia (2:3)</title>
+  <desc>Official 2:3 flag with exact colors: White #FFFFFF, Blue #0039A6, Red #D52B1E</desc>
+  <!-- White -->
+  <rect width="900" height="600" fill="#FFFFFF"/>
+  <!-- Blue -->
+  <rect y="200" width="900" height="200" fill="#0039A6"/>
+  <!-- Red -->
+  <rect y="400" width="900" height="200" fill="#D52B1E"/>
+</svg>
