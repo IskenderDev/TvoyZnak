@@ -1,6 +1,6 @@
 import { useState } from "react";
-import NewsCard from "@/components/NewsCard";
-import Pagination from "@/components/Pagination";
+import NewsCard from "@/shared/components/NewsCard";
+import Pagination from "@/shared/components/Pagination";
 import { NEWS } from "@/data/news";
 import Seo from "@/shared/components/Seo";
 

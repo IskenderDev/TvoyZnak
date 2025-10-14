@@ -22,7 +22,7 @@ type Props = {
 
 const W = 250;
 
-export default function PlateStaticSm({
+export default function  PlateStaticSm({
   data,
   responsive = true,
   flagSrc = "/flag-russia.svg",
@@ -53,13 +53,14 @@ export default function PlateStaticSm({
   const leftWidth = "72%";
   const rightWidth = "28%";
 
-  const mainFont = 56 * k;
+  const mainFontNumbers = 48 * k;
+  const mainFont = 38 * k;
   const mainPx = 10 * k;
   const mainPb = 12 * k;
   const mainGap = 8 * k;
   const digitGap = 2 * k;
 
-  const regionFont = 38 * k;
+  const regionFont = 30 * k;
   const rusFont = 11 * k;
   const rusRowH = 16 * k;
   const rusGap = 4;
@@ -94,19 +95,19 @@ export default function PlateStaticSm({
                 boxSizing: "border-box",
               }}
             >
-              <span style={{ fontSize: mainFont, lineHeight: 0.9 }}>
-                {data.firstLetter ?? ""}
+              <span style={{ fontSize: mainFont, lineHeight: 0.4 }}>
+                {data.firstLetter ?? "*"}
               </span>
 
-              <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.9, gap: digitGap }}>
-                <span>{data.firstDigit ?? ""}</span>
-                <span>{data.secondDigit ?? ""}</span>
-                <span>{data.thirdDigit ?? ""}</span>
+              <div className="flex" style={{ fontSize: mainFontNumbers, lineHeight: 0.5, gap: digitGap }}>
+                <span>{data.firstDigit ?? "*"}</span>
+                <span>{data.secondDigit ?? "*"}</span>
+                <span>{data.thirdDigit ?? "*"}</span>
               </div>
 
-              <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.9, gap: digitGap }}>
-                <span>{data.secondLetter ?? ""}</span>
-                <span>{data.thirdLetter ?? ""}</span>
+              <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.4, gap: digitGap }}>
+                <span>{data.secondLetter ?? "*"}</span>
+                <span>{data.thirdLetter ?? "*"}</span>
               </div>
             </div>
 
@@ -123,7 +124,7 @@ export default function PlateStaticSm({
               }}
             >
               <p className="font-bold" style={{ fontSize: regionFont, lineHeight: 1, }}>
-                {String(data.regionId ?? "")}
+                {String(data.regionId ?? "*")}
               </p>
 
               <p
