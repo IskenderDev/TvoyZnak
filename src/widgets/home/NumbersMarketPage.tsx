@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 import UiSelect from "@/shared/components/UiSelect"
 import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
-import PlateMarketRow from "@/components/PlateMarketRow"
+import PlateMarketRow from "@/shared/components/plate/PlateMarketRow"
 import { PLATES } from "@/data/plates"
 import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters"
 import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
@@ -43,7 +43,7 @@ export default function NumbersMarketPage() {
   }
 
   return (
-    <section className="min-h-screen bg-[#0B0B0C] py-10 text-white">
+    <section className="min-h-screen bg-[#0B0B0C] py-10 text-white ">
       <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
         <div className="flex items-center justify-between gap-4">
           <div className="flex gap-3">
