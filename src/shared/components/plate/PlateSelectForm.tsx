@@ -4,7 +4,7 @@ import { useScale } from "./useScale";
 import SlotSelect from "./SlotSelect";
 
 type Props = {
-  size?: PlateSize;
+  size?: PlateSize;          
   responsive?: boolean;
   flagSrc?: string;
   showCaption?: boolean;
@@ -26,51 +26,50 @@ export default function PlateSelectForm({
   const [thirdLetter, setThirdLetter]   = React.useState<(typeof LETTERS)[number]>("*");
   const [region, setRegion]             = React.useState<string>("*");
 
-  // масштаб
   const preset = PRESETS[size];
   const { ref: wrapperRef, k } = useScale(preset.w);
 
-  // геометрия
-  const borderW   = Math.max(1, 8 * k);
-  const radius    = Math.max(6, 14 * k);
-  const outerPadY = 6 * k;
+  const isXs = size === "xs";
 
-  const mainFontLetter  = 140 * k;
-  const mainFontNumber  = 180 * k;
-  const mainGap         = 20 * k;
-  const mainPx          = 32 * k;
-  const mainPb          = 1;
+  const borderW   = isXs ? 2 : Math.max(1, 8 * k);
+  const radius    = isXs ? 10 : Math.max(6, 14 * k);
+  const outerPadY = isXs ? 4 : 6 * k;              
 
-  const slotW = 90 * k;
-  const slotH = mainFontNumber;
-  const digitGap  = 4 * k;
+  const mainFontLetter  = isXs ? 48 : 140 * k;
+  const mainFontNumber  = isXs ? 60 : 180 * k;
+  const mainGap         = isXs ? 15 : 20 * k;       
+  const mainPx          = isXs ? 6  : 32 * k;     
+  const mainPb          = isXs ? 0  : 1;           
+  const slotW = isXs ? 22 : 90 * k;               
+  const slotH = isXs ? 68 : mainFontNumber;        
+  const digitGap  = isXs ? 3 : 4 * k;              
+  const digitGapLetter  = isXs ? 7 : 4 * k;              
 
-  const regionFont  = 128 * k;
-  const rusFont     = 42 * k;
-  const rusRowH     = 40 * k;
-  const rusGap      = 10 * k;
-  const rusPb       = 4 * k;
-  const flagH       = rusRowH * 0.9;
-  const flagBorder  = Math.max(1, 2 * k);
+  const regionFont  = isXs ? 32 : 128 * k;
+  const rusFont     = isXs ? 14 : 42 * k;
+  const rusRowH     = isXs ? 16 : 40 * k;
+  const rusGap      = isXs ? 6  : 10 * k;
+  const rusPb       = isXs ? 2  : 4 * k;
+  const flagH       = isXs ? 12 : rusRowH * 0.9;
+  const flagBorder  = isXs ? 1  : Math.max(1, 2 * k);
 
-  const captionFs = Math.max(10, 24 * k);
-  const captionMt = Math.max(4, 8 * k);
+  const captionFs = isXs ? 0 : Math.max(10, 24 * k); 
+  const captionMt = isXs ? 0 : Math.max(4, 8 * k);
 
-  const containerStyle: React.CSSProperties = responsive
+  const containerStyle: React.CSSProperties = responsive && !isXs
     ? { width: "100%", maxWidth: `${preset.w}px` }
     : { width: `${preset.w}px` };
 
-  const glyphColor = (v: string) => (v === "*" ? "#9AA0A6" : "#000000"); // * — серый
+  const glyphColor = (v: string) => (v === "*" ? "#9AA0A6" : "#000000"); 
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
       <div ref={wrapperRef} className="w-full">
         <div
           className="flex flex-col rounded-xl bg-black box-border"
-          style={{ border: `${borderW}px solid #000`, borderRadius: radius }}
+          style={{ border: `${borderW}px solid #000`, borderRadius: radius, height: `${preset.h}px` }}
         >
-          <div className="flex w-full bg-black rounded-xl font-road">
-            {/* Левая зона */}
+          <div className="flex w-full bg-black rounded-xl font-road" style={{ height: "100%" }}>
             <div
               className="flex items-end justify-center bg-white font-bold"
               style={{
@@ -80,6 +79,7 @@ export default function PlateSelectForm({
                 paddingLeft: mainPx,
                 paddingRight: mainPx,
                 paddingBottom: mainPb,
+                paddingTop: isXs ? 2 : undefined,
                 gap: mainGap,
                 boxSizing: "border-box",
               }}
@@ -134,7 +134,8 @@ export default function PlateSelectForm({
                 />
               </div>
 
-              <div className="flex" style={{ gap: digitGap }}>
+              {/* AA */}
+              <div className="flex" style={{ gap: digitGapLetter }}>
                 <SlotSelect
                   ariaLabel="Буква 2"
                   value={secondLetter}
@@ -160,58 +161,42 @@ export default function PlateSelectForm({
               </div>
             </div>
 
-            {/* Правая зона: регион + RUS + флаг */}
             <div
-              className="flex flex-col items-center mx-auto  bg-white"
+              className="flex flex-col items-center mx-auto bg-white"
               style={{
                 width: "30%",
                 border: `${borderW}px solid #000`,
                 borderRadius: radius,
                 paddingTop: outerPadY,
                 paddingBottom: outerPadY,
-                justifyContent: "space-between",
-                gap: 8 * k,
+                justifyContent: "center",
+                gap: (isXs ? 10 : 4 * k),
                 boxSizing: "border-box",
               }}
             >
-              {/* Регион — тем же UI-слотом (шире) */}
               <SlotSelect
                 ariaLabel="Регион (РФ)"
                 value={region}
                 onChange={(v) => setRegion(v)}
                 options={REGIONS_RF as unknown as string[]}
                 fontSize={regionFont}
-                slotW={Math.max(110 * k, 130 * 1.35)}
-                slotH={regionFont * 1.05}
+                slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
+                slotH={isXs ? 22 : regionFont * 1.05}
                 color={glyphColor(region)}
                 centerText
                 dropdownMaxHeight={240}
               />
 
-              <p
-                className="flex items-center justify-center"
-                style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb, margin: 0 }}
-              >
-                <span
-                  className="font-extrabold font-actay-druk"
-                  style={{ fontSize: rusFont, lineHeight: 1 }}
-                >
+              <p className="flex items-center justify-center m-0" style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb}}>
+                <span className="font-extrabold font-actay-druk" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
-                <img
-                  src={flagSrc}
-                  alt="Russia"
-                  style={{
-                    height: flagH,
-                    border: `${flagBorder}px solid #000`,
-                    display: "block",
-                  }}
-                />
+                <img src={flagSrc} alt="Russia" style={{ height: flagH, border: `${flagBorder}px solid #000`, display: "block" }} />
               </p>
             </div>
           </div>
 
-          {showCaption && (
+          {showCaption && !isXs && (
             <div
               className="w-full text-white text-center uppercase font-actay-druk italic font-extrabold"
               style={{ fontSize: captionFs, marginTop: captionMt }}
@@ -224,3 +209,5 @@ export default function PlateSelectForm({
     </figure>
   );
 }
+
+// --------------------------------------------------------------

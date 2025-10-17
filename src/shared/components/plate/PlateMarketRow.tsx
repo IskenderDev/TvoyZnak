@@ -1,9 +1,15 @@
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
-import { formatPrice } from "@/lib/format"
-import type { PlateRow } from "@/data/plates"
+import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
+import type { PlateData } from "@/shared/components/plate/PlateStaticSm";
+import { formatPrice } from "@/lib/format";
+import type { PlateRow } from "@/data/plates";
 
-export default function PlateMarketRow({ row }: { row: PlateRow }) {
+export default function PlateMarketRow({
+  row,
+  gridCols,
+}: {
+  row: PlateRow;
+  gridCols: string;
+}) {
   const data: PlateData = {
     price: row.price,
     comment: row.plate.comment ?? "",
@@ -14,27 +20,35 @@ export default function PlateMarketRow({ row }: { row: PlateRow }) {
     secondDigit: row.plate.secondDigit,
     thirdDigit: row.plate.thirdDigit,
     regionId: row.plate.regionId,
-  }
+  };
 
   return (
-    <li className="grid grid-cols-[120px_minmax(160px,1fr)_minmax(190px,1fr)_minmax(220px,1fr)_120px] items-center gap-4 border-b border-white/10 px-4 py-3 last:border-b-0">
-      <span className="text-xs">{row.date}</span>
+    <li
+      className="grid font-actay items-center gap-4 px-6 py-4 [grid-template-columns:var(--cols)] text-center"
+      style={{ ["--cols" as any]: gridCols }}
+    >
+      <time className="text-sm md:text-lg tabular-nums text-black">{row.date}</time>
 
       <div className="flex items-center">
-        <PlateStaticSm data={data} responsive className="max-w-[180px]" showCaption={false} />
+        <PlateStaticSm
+          data={data}
+          responsive
+          showCaption={false}
+          className="max-w-[210px] mx-auto"
+        />
       </div>
 
-      <div className="text-sm">
+      <div className="tabular-nums text-sm md:text-lg">
         <span className="font-medium">{formatPrice(row.price)}</span>
       </div>
 
-      <div className="text-sm font-actay">{row.seller}</div>
+      <div className="text-sm md:text-lg font-actay">{row.seller}</div>
 
-      <div className="flex justify-end">
-        <button className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white hover:brightness-95">
+      <div className="justify-self-end">
+        <button className="rounded-full bg-[#0177FF] px-5 py-2 text-sm md:text-lg font-medium text-white hover:brightness-95">
           Купить
         </button>
       </div>
     </li>
-  )
+  );
 }

@@ -1,107 +1,117 @@
-import { useMemo, useState } from "react"
-import UiSelect from "@/shared/components/UiSelect"
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
-import PlateMarketRow from "@/shared/components/plate/PlateMarketRow"
-import { PLATES } from "@/data/plates"
-import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters"
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
-import { LuChevronDown } from "react-icons/lu"
+import { useMemo, useState } from "react";
+import UiSelect from "@/shared/components/UiSelect";
+import PlateMarketRow from "@/shared/components/plate/PlateMarketRow";
+import MobilePlateCard from "@/shared/components/plate/MobilePlateCard";
+import { PLATES } from "@/data/plates";
+import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters";
+import { LuChevronDown } from "react-icons/lu";
+import PlateSelectForm320 from "@/shared/components/plate/PlateSelectForm320";
 
-type SortDir = "asc" | "desc"
+type SortDir = "asc" | "desc";
+
+const COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px";
 
 export default function NumbersMarketPage() {
+  // Значение '' означает "Все"
+  const [region, setRegion] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [limit, setLimit] = useState(8);
 
-  const [region, setRegion] = useState<(typeof REGION_OPTS)[number]["value"]>(REGION_OPTS[0].value)
-  const [category, setCategory] = useState<(typeof CATEGORY_OPTS)[number]["value"]>(CATEGORY_OPTS[0].value)
-  const [sortDir, setSortDir] = useState<SortDir>("asc")
-  const [limit, setLimit] = useState(8)
+  // Добавляем в начало пункт "Все ..."
+  const REGION_OPTS_ALL = useMemo(
+    () => [{ label: "Все регионы", value: "" }, ...REGION_OPTS],
+    []
+  );
+  const CATEGORY_OPTS_ALL = useMemo(
+    () => [{ label: "Все категории", value: "" }, ...CATEGORY_OPTS],
+    []
+  );
 
   const filtered = useMemo(() => {
-    let arr = [...PLATES]
-    if (region) arr = arr.filter((r) => String(r.region) === region)
-    if (category) arr = arr.filter((r) => r.category === category)
-    arr.sort((a, b) => (sortDir === "asc" ? a.price - b.price : b.price - a.price))
-    return arr
-  }, [region, category, sortDir])
+    let arr = [...PLATES];
+    if (region) arr = arr.filter((r) => String(r.region) === region);
+    if (category) arr = arr.filter((r) => r.category === category);
+    arr.sort((a, b) => (sortDir === "asc" ? a.price - b.price : b.price - a.price));
+    return arr;
+  }, [region, category, sortDir]);
 
   const reset = () => {
-    setRegion(REGION_OPTS[0].value)
-    setCategory(CATEGORY_OPTS[0].value)
-    setSortDir("asc")
-  }
-
-  const starPlate: PlateData = {
-    price: 0,
-    comment: "",
-    firstLetter: "*",
-    firstDigit: "*",
-    secondDigit: "*",
-    thirdDigit: "*",
-    secondLetter: "*",
-    thirdLetter: "*",
-    regionId: 0,
-  }
+    setRegion("");     // сбрасываем на "Все регионы"
+    setCategory("");   // сбрасываем на "Все категории"
+    setSortDir("asc");
+  };
 
   return (
-    <section className="min-h-screen bg-[#0B0B0C] py-10 text-white ">
-      <div className="mx-auto max-w-[1120px] px-4 sm:px-6">
-        <div className="flex items-center justify-between gap-4">
+    <section className="min-h-screen bg-[#0B0B0C] py-10 text-white">
+      <div className="mx-auto px-4 sm:px-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex gap-3">
             <UiSelect
               name="region"
               value={region}
               onChange={(v) => setRegion(v)}
               placeholder="Регионы"
-              options={REGION_OPTS}
-              className="min-w-[150px] rounded-full bg-white px-4 py-2 text-black shadow-sm"
+              options={REGION_OPTS_ALL}
+              className="min-w-[150px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
             />
             <UiSelect
               name="category"
               value={category}
               onChange={(v) => setCategory(v)}
               placeholder="Категория"
-              options={CATEGORY_OPTS}
-              className="min-w-[200px] rounded-full bg-white px-4 py-2 text-black shadow-sm"
+              options={CATEGORY_OPTS_ALL}
+              className="min-w-[200px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
             />
           </div>
 
-          <div className="rounded-lg border border-black/20 bg-white px-3 py-2">
-            <PlateStaticSm data={starPlate} responsive className="max-w-[210px]" />
+          <div className="mx-auto md:ml-auto md:mx-0">
+            <PlateSelectForm320 />
           </div>
         </div>
 
-        <div className="mt-6 overflow-hidden rounded-2xl bg-white text-black">
-          <div className="flex items-center justify-between border-b border-black/10 px-4 py-3">
-            <div className="grid w-full grid-cols-[120px_minmax(160px,1fr)_minmax(190px,1fr)_minmax(220px,1fr)_120px] text-xs font-medium text-black/60">
-              <span>Дата</span>
-              <span>Номер</span>
-              <button
-                type="button"
-                onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
-                className="flex items-center gap-1 text-left"
-                title="Сортировать по цене"
-              >
-                Цена
-                <LuChevronDown className={`transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
-              </button>
-              <span>Продавец</span>
-              <span className="text-right"> </span>
-            </div>
+        <div className="mt-6 overflow-hidden rounded-2xl bg-white text-black hidden md:block">
+          <div
+            className="font-actay-druk font-bold grid items-center gap-4 border-b border-black/10 px-6 py-3 text-lg [grid-template-columns:var(--cols)] text-center"
+            style={{ ["--cols" as any]: COLS }}
+          >
+            <span>Дата</span>
+            <span>Номер</span>
 
             <button
-              onClick={reset}
-              className="ml-4 rounded-full border border-black/20 px-3 py-1.5 text-sm hover:bg-black/5"
+              type="button"
+              onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+              className="mx-auto flex items-center gap-1 tabular-nums"
+              title="Сортировать по цене"
             >
-              Сбросить фильтры
+              Цена
+              <LuChevronDown className={`h-4 w-4 transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
             </button>
+
+            <span>Продавец</span>
+
+            <div>
+              <button
+                onClick={reset}
+                className="rounded-full border border-black/20 px-4 py-1.5 text-lg font-medium hover:bg:black/5 -mr-4"
+              >
+                Сбросить фильтры
+              </button>
+            </div>
           </div>
 
-          <ul>
+          <ul className="divide-y divide-black/10">
             {filtered.slice(0, limit).map((row) => (
-              <PlateMarketRow key={row.id} row={row} />
+              <PlateMarketRow key={row.id} row={row} gridCols={COLS} />
             ))}
           </ul>
         </div>
+
+        <ul className="mt-6 grid gap-3 md:hidden">
+          {filtered.slice(0, limit).map((row) => (
+            <MobilePlateCard key={row.id} row={row} />
+          ))}
+        </ul>
 
         {limit < filtered.length && (
           <div className="flex justify-center">
@@ -115,5 +125,5 @@ export default function NumbersMarketPage() {
         )}
       </div>
     </section>
-  )
+  );
 }
