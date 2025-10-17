@@ -6,6 +6,7 @@ import { PLATES } from "@/data/plates";
 import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters";
 import { LuChevronDown } from "react-icons/lu";
 import PlateSelectForm320 from "@/shared/components/plate/PlateSelectForm320";
+import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/shared/components/plate/PlateSelectForm";
 
 type SortDir = "asc" | "desc";
 
@@ -17,6 +18,7 @@ export default function NumbersMarketPage() {
   const [category, setCategory] = useState<string>("");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [limit, setLimit] = useState(8);
+  const [plateQuery, setPlateQuery] = useState<PlateSelectValue>(() => ({ ...DEFAULT_PLATE_VALUE }));
 
   // Добавляем в начало пункт "Все ..."
   const REGION_OPTS_ALL = useMemo(
@@ -30,16 +32,42 @@ export default function NumbersMarketPage() {
 
   const filtered = useMemo(() => {
     let arr = [...PLATES];
-    if (region) arr = arr.filter((r) => String(r.region) === region);
-    if (category) arr = arr.filter((r) => r.category === category);
+
+    if (region) {
+      arr = arr.filter((r) => String(r.plate.regionId) === region || r.region === region);
+    }
+
+    if (category) {
+      arr = arr.filter((r) => r.category === category);
+    }
+
+    const hasTextQuery = plateQuery.text.split("").some((char) => char !== "*");
+    const searchRegion = plateQuery.region && plateQuery.region !== "*" ? plateQuery.region : "";
+
+    if (hasTextQuery || searchRegion) {
+      arr = arr.filter((row) => {
+        if (searchRegion && String(row.plate.regionId) !== searchRegion) {
+          return false;
+        }
+
+        if (!hasTextQuery) return true;
+
+        const rowText = `${row.plate.firstLetter}${row.plate.firstDigit}${row.plate.secondDigit}${row.plate.thirdDigit}${row.plate.secondLetter}${row.plate.thirdLetter}`;
+        return plateQuery.text
+          .split("")
+          .every((char, idx) => char === "*" || char === rowText[idx]);
+      });
+    }
+
     arr.sort((a, b) => (sortDir === "asc" ? a.price - b.price : b.price - a.price));
     return arr;
-  }, [region, category, sortDir]);
+  }, [region, category, sortDir, plateQuery]);
 
   const reset = () => {
     setRegion("");     // сбрасываем на "Все регионы"
     setCategory("");   // сбрасываем на "Все категории"
     setSortDir("asc");
+    setPlateQuery({ ...DEFAULT_PLATE_VALUE });
   };
 
   return (
@@ -66,7 +94,7 @@ export default function NumbersMarketPage() {
           </div>
 
           <div className="mx-auto md:ml-auto md:mx-0">
-            <PlateSelectForm320 />
+            <PlateSelectForm320 value={plateQuery} onChange={setPlateQuery} />
           </div>
         </div>
 
