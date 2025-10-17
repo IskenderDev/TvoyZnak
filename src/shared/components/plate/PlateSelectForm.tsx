@@ -4,11 +4,55 @@ import { useScale } from "./useScale";
 import SlotSelect from "./SlotSelect";
 
 type Props = {
-  size?: PlateSize;          
+  size?: PlateSize;
   responsive?: boolean;
   flagSrc?: string;
   showCaption?: boolean;
   className?: string;
+  value?: PlateSelectValue;
+  defaultValue?: PlateSelectValue;
+  onChange?: (value: PlateSelectValue) => void;
+};
+
+export type PlateSelectValue = {
+  text: string;
+  region: string;
+};
+
+export const DEFAULT_PLATE_VALUE: PlateSelectValue = {
+  text: "******",
+  region: "*",
+};
+
+const ensureChar = (char: string | undefined, allowed: readonly string[]) => {
+  if (char && allowed.includes(char)) return char;
+  return "*";
+};
+
+const normalizeValue = (value?: PlateSelectValue): PlateSelectValue => {
+  const base = value ?? DEFAULT_PLATE_VALUE;
+  const rawText = ((base.text ?? DEFAULT_PLATE_VALUE.text).toUpperCase() + "******").slice(0, 6);
+  const normalizedChars: [string, string, string, string, string, string] = [
+    ensureChar(rawText[0], LETTERS),
+    ensureChar(rawText[1], DIGITS),
+    ensureChar(rawText[2], DIGITS),
+    ensureChar(rawText[3], DIGITS),
+    ensureChar(rawText[4], LETTERS),
+    ensureChar(rawText[5], LETTERS),
+  ];
+
+  const region = base.region && base.region.trim() ? base.region.trim() : DEFAULT_PLATE_VALUE.region;
+
+  return {
+    text: normalizedChars.join(""),
+    region,
+  };
+};
+
+const setCharAt = (text: string, index: number, nextChar: string) => {
+  const chars = text.split("");
+  chars[index] = nextChar;
+  return chars.join("");
 };
 
 export default function PlateSelectForm({
@@ -17,14 +61,31 @@ export default function PlateSelectForm({
   flagSrc = "/flag-russia.svg",
   showCaption = true,
   className = "",
+  value,
+  defaultValue,
+  onChange,
 }: Props) {
-  const [firstLetter, setFirstLetter]   = React.useState<(typeof LETTERS)[number]>("*");
-  const [firstDigit, setFirstDigit]     = React.useState<(typeof DIGITS)[number]>("*");
-  const [secondDigit, setSecondDigit]   = React.useState<(typeof DIGITS)[number]>("*");
-  const [thirdDigit, setThirdDigit]     = React.useState<(typeof DIGITS)[number]>("*");
-  const [secondLetter, setSecondLetter] = React.useState<(typeof LETTERS)[number]>("*");
-  const [thirdLetter, setThirdLetter]   = React.useState<(typeof LETTERS)[number]>("*");
-  const [region, setRegion]             = React.useState<string>("*");
+  const isControlled = value != null;
+  const controlledValue = React.useMemo(() => (value != null ? normalizeValue(value) : null), [value]);
+  const [internalValue, setInternalValue] = React.useState<PlateSelectValue>(() => normalizeValue(defaultValue));
+  const currentValue = controlledValue ?? internalValue;
+
+  React.useEffect(() => {
+    if (!isControlled && defaultValue) {
+      setInternalValue(normalizeValue(defaultValue));
+    }
+  }, [defaultValue, isControlled]);
+
+  const applyChange = React.useCallback(
+    (nextRaw: PlateSelectValue) => {
+      const next = normalizeValue(nextRaw);
+      if (!isControlled) {
+        setInternalValue(next);
+      }
+      onChange?.(next);
+    },
+    [isControlled, onChange],
+  );
 
   const preset = PRESETS[size];
   const { ref: wrapperRef, k } = useScale(preset.w);
@@ -60,7 +121,31 @@ export default function PlateSelectForm({
     ? { width: "100%", maxWidth: `${preset.w}px` }
     : { width: `${preset.w}px` };
 
-  const glyphColor = (v: string) => (v === "*" ? "#9AA0A6" : "#000000"); 
+  const glyphColor = (v: string) => (v === "*" ? "#9AA0A6" : "#000000");
+
+  const text = currentValue.text;
+  const firstLetter = text[0] ?? "*";
+  const firstDigit = text[1] ?? "*";
+  const secondDigit = text[2] ?? "*";
+  const thirdDigit = text[3] ?? "*";
+  const secondLetter = text[4] ?? "*";
+  const thirdLetter = text[5] ?? "*";
+  const region = currentValue.region ?? "*";
+
+  const handleFirstLetterChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 0, v), region });
+  const handleFirstDigitChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 1, v), region });
+  const handleSecondDigitChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 2, v), region });
+  const handleThirdDigitChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 3, v), region });
+  const handleSecondLetterChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 4, v), region });
+  const handleThirdLetterChange = (v: string) =>
+    applyChange({ text: setCharAt(text, 5, v), region });
+  const handleRegionChange = (v: string) =>
+    applyChange({ text, region: v });
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -88,7 +173,7 @@ export default function PlateSelectForm({
               <SlotSelect
                 ariaLabel="Буква 1"
                 value={firstLetter}
-                onChange={(v) => setFirstLetter(v as (typeof LETTERS)[number])}
+                onChange={handleFirstLetterChange}
                 options={LETTERS as unknown as string[]}
                 fontSize={mainFontLetter}
                 slotW={slotW}
@@ -102,7 +187,7 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 1"
                   value={firstDigit}
-                  onChange={(v) => setFirstDigit(v as (typeof DIGITS)[number])}
+                  onChange={handleFirstDigitChange}
                   options={DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
@@ -113,7 +198,7 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 2"
                   value={secondDigit}
-                  onChange={(v) => setSecondDigit(v as (typeof DIGITS)[number])}
+                  onChange={handleSecondDigitChange}
                   options={DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
@@ -124,7 +209,7 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 3"
                   value={thirdDigit}
-                  onChange={(v) => setThirdDigit(v as (typeof DIGITS)[number])}
+                  onChange={handleThirdDigitChange}
                   options={DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
@@ -139,7 +224,7 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Буква 2"
                   value={secondLetter}
-                  onChange={(v) => setSecondLetter(v as (typeof LETTERS)[number])}
+                  onChange={handleSecondLetterChange}
                   options={LETTERS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
@@ -150,7 +235,7 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Буква 3"
                   value={thirdLetter}
-                  onChange={(v) => setThirdLetter(v as (typeof LETTERS)[number])}
+                  onChange={handleThirdLetterChange}
                   options={LETTERS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
@@ -177,7 +262,7 @@ export default function PlateSelectForm({
               <SlotSelect
                 ariaLabel="Регион (РФ)"
                 value={region}
-                onChange={(v) => setRegion(v)}
+                onChange={handleRegionChange}
                 options={REGIONS_RF as unknown as string[]}
                 fontSize={regionFont}
                 slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
