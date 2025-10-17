@@ -1,4 +1,4 @@
-import type { PlateSelectValue } from "@/shared/components/plate/PlateSelectForm"
+import type { PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
 
 export type SortDir = "asc" | "desc"
 

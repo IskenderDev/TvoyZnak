@@ -1,5 +1,4 @@
 export const REGION_OPTS = [
-  { label: "Регионы", value: "" },
   { label: "25", value: "25" },
   { label: "77", value: "77" },
   { label: "78", value: "78" },

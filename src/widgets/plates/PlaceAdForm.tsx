@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit";
-import PlateSelectForm from '@/shared/components/plate/PlateSelectForm'
+import PlateSelectForm from '@/features/plate-select/ui/PlateSelectForm'
 
 type LeadForm = LeadFormPayload & {
   email?: string;

@@ -1,5 +1,5 @@
 import type { PlateRow } from "@/data/plates"
-import type { PlateSelectValue } from "@/shared/components/plate/PlateSelectForm"
+import type { PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
 import type { PlateMarketFiltersState } from "../model/types"
 
 const hasAnyChar = (value: string) => value.split("").some((char) => char !== "*")

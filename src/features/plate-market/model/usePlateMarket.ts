@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react"
 import { PLATES } from "@/data/plates"
 import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters"
-import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/shared/components/plate/PlateSelectForm"
+import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
 import { filterPlates } from "../lib/filterPlates"
 import type { PlateMarketFiltersState, SortDir } from "./types"
 
