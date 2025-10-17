@@ -1,18 +1,21 @@
 import { useMemo, useState } from "react"
 import UiSelect from "@/shared/components/UiSelect"
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
 import PlateMarketRow from "@/components/PlateMarketRow"
-import { PLATES } from "@/data/plates"
-import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters"
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
+import {
+  CATEGORY_OPTIONS,
+  PLATES,
+  PlateStaticSm,
+  REGION_OPTIONS,
+  type PlateView,
+} from "@/entities/plate"
 import { LuChevronDown } from "react-icons/lu"
 
 type SortDir = "asc" | "desc"
 
 export default function NumbersMarketPage() {
 
-  const [region, setRegion] = useState<(typeof REGION_OPTS)[number]["value"]>(REGION_OPTS[0].value)
-  const [category, setCategory] = useState<(typeof CATEGORY_OPTS)[number]["value"]>(CATEGORY_OPTS[0].value)
+  const [region, setRegion] = useState<(typeof REGION_OPTIONS)[number]["value"]>(REGION_OPTIONS[0].value)
+  const [category, setCategory] = useState<(typeof CATEGORY_OPTIONS)[number]["value"]>(CATEGORY_OPTIONS[0].value)
   const [sortDir, setSortDir] = useState<SortDir>("asc")
   const [limit, setLimit] = useState(8)
 
@@ -25,12 +28,12 @@ export default function NumbersMarketPage() {
   }, [region, category, sortDir])
 
   const reset = () => {
-    setRegion(REGION_OPTS[0].value)
-    setCategory(CATEGORY_OPTS[0].value)
+    setRegion(REGION_OPTIONS[0].value)
+    setCategory(CATEGORY_OPTIONS[0].value)
     setSortDir("asc")
   }
 
-  const starPlate: PlateData = {
+  const starPlate: PlateView = {
     price: 0,
     comment: "",
     firstLetter: "*",
@@ -52,7 +55,7 @@ export default function NumbersMarketPage() {
               value={region}
               onChange={(v) => setRegion(v)}
               placeholder="Регионы"
-              options={REGION_OPTS}
+              options={REGION_OPTIONS}
               className="min-w-[150px] w-full rounded-full bg-white px-4 py-2 text-black shadow-sm sm:w-auto"
             />
             <UiSelect
@@ -60,7 +63,7 @@ export default function NumbersMarketPage() {
               value={category}
               onChange={(v) => setCategory(v)}
               placeholder="Категория"
-              options={CATEGORY_OPTS}
+              options={CATEGORY_OPTIONS}
               className="min-w-[200px] w-full rounded-full bg-white px-4 py-2 text-black shadow-sm sm:w-auto"
             />
           </div>

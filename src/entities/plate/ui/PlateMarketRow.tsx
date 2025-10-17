@@ -1,7 +1,6 @@
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm";
+import PlateStaticSm from "./PlateStaticSm";
 import { formatPrice } from "@/lib/format";
-import type { PlateRow } from "@/data/plates";
+import type { PlateRow, PlateView } from "../model/types";
 
 export default function PlateMarketRow({
   row,
@@ -10,7 +9,7 @@ export default function PlateMarketRow({
   row: PlateRow;
   gridCols: string;
 }) {
-  const data: PlateData = {
+  const data: PlateView = {
     price: row.price,
     comment: row.plate.comment ?? "",
     firstLetter: row.plate.firstLetter,

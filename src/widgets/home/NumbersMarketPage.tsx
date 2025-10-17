@@ -1,11 +1,8 @@
 import { useMemo, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
-import PlateMarketRow from "@/shared/components/plate/PlateMarketRow";
-import MobilePlateCard from "@/shared/components/plate/MobilePlateCard";
-import { PLATES } from "@/data/plates";
-import { REGION_OPTS, CATEGORY_OPTS } from "@/data/filters";
+import { CATEGORY_OPTIONS, PLATES, PlateMarketRow, MobilePlateCard, REGION_OPTIONS } from "@/entities/plate";
 import { LuChevronDown } from "react-icons/lu";
-import PlateSelectForm320 from "@/shared/components/plate/PlateSelectForm320";
+import { PlateSelectForm320 } from "@/features/plate-select";
 
 type SortDir = "asc" | "desc";
 
@@ -19,12 +16,12 @@ export default function NumbersMarketPage() {
   const [limit, setLimit] = useState(8);
 
   // Добавляем в начало пункт "Все ..."
-  const REGION_OPTS_ALL = useMemo(
-    () => [{ label: "Все регионы", value: "" }, ...REGION_OPTS],
+  const REGION_OPTIONS_ALL = useMemo(
+    () => [{ label: "Все регионы", value: "" }, ...REGION_OPTIONS],
     []
   );
-  const CATEGORY_OPTS_ALL = useMemo(
-    () => [{ label: "Все категории", value: "" }, ...CATEGORY_OPTS],
+  const CATEGORY_OPTIONS_ALL = useMemo(
+    () => [{ label: "Все категории", value: "" }, ...CATEGORY_OPTIONS],
     []
   );
 
@@ -52,7 +49,7 @@ export default function NumbersMarketPage() {
               value={region}
               onChange={(v) => setRegion(v)}
               placeholder="Регионы"
-              options={REGION_OPTS_ALL}
+              options={REGION_OPTIONS_ALL}
               className="min-w-[150px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
             />
             <UiSelect
@@ -60,7 +57,7 @@ export default function NumbersMarketPage() {
               value={category}
               onChange={(v) => setCategory(v)}
               placeholder="Категория"
-              options={CATEGORY_OPTS_ALL}
+              options={CATEGORY_OPTIONS_ALL}
               className="min-w-[200px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
             />
           </div>

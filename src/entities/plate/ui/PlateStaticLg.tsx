@@ -1,21 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-
-export type PlateData = {
-  price: number;
-  firstLetter: string;
-  secondLetter: string;
-  thirdLetter: string;
-  firstDigit: string;
-  secondDigit: string;
-  thirdDigit: string;
-  comment: string;
-  regionId: number;
-};
+import type { PlateView } from "../model/types";
 
 type PlateSize = "sm" | "lg";
 
 type Props = {
-  data: PlateData;
+  data: PlateView;
   size?: PlateSize;
   responsive?: boolean;
   flagSrc?: string;

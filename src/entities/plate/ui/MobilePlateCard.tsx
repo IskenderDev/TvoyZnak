@@ -1,6 +1,6 @@
-// shared/components/plate/MobilePlateCard.tsx
 import React from "react";
-import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import PlateStaticSm from "./PlateStaticSm";
+import type { PlateView } from "../model/types";
 
 type Props = {
   row: any;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, className = "" }: Props) {
-  const plate: PlateData = pickPlate(row);
+  const plate: PlateView = pickPlate(row);
   const date = fmtDate(row.date || row.createdAt);
   const price = fmtPrice(row.price);
   const seller = row.seller || row.owner || row.ownerName || row.user || "Продавец";
@@ -43,7 +43,7 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
 
 /* ---------- helpers ---------- */
 
-function pickPlate(row: any): PlateData {
+function pickPlate(row: any): PlateView {
   const src = row.plate || row.data || row.plateData || {};
   return {
     price: src.price ?? row.price ?? 0,

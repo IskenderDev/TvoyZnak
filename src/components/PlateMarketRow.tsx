@@ -1,10 +1,9 @@
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
+import PlateStaticSm from "@/entities/plate/ui/PlateStaticSm"
+import type { PlateRow, PlateView } from "@/entities/plate/model/types"
 import { formatPrice } from "@/lib/format"
-import type { PlateRow } from "@/data/plates"
 
 export default function PlateMarketRow({ row }: { row: PlateRow }) {
-  const data: PlateData = {
+  const data: PlateView = {
     price: row.price,
     comment: row.plate.comment ?? "",
     firstLetter: row.plate.firstLetter,

@@ -1,6 +1,12 @@
 import React from "react";
-import { PRESETS, LETTERS, DIGITS, REGIONS_RF, type PlateSize } from "./constants";
-import { useScale } from "./useScale";
+import {
+  PLATE_PRESETS,
+  PLATE_LETTERS,
+  PLATE_DIGITS,
+  PLATE_REGIONS,
+  type PlateSize,
+} from "@/entities/plate/model/config";
+import { useScale } from "../lib/useScale";
 import SlotSelect from "./SlotSelect";
 
 type Props = {
@@ -18,15 +24,15 @@ export default function PlateSelectForm({
   showCaption = true,
   className = "",
 }: Props) {
-  const [firstLetter, setFirstLetter]   = React.useState<(typeof LETTERS)[number]>("*");
-  const [firstDigit, setFirstDigit]     = React.useState<(typeof DIGITS)[number]>("*");
-  const [secondDigit, setSecondDigit]   = React.useState<(typeof DIGITS)[number]>("*");
-  const [thirdDigit, setThirdDigit]     = React.useState<(typeof DIGITS)[number]>("*");
-  const [secondLetter, setSecondLetter] = React.useState<(typeof LETTERS)[number]>("*");
-  const [thirdLetter, setThirdLetter]   = React.useState<(typeof LETTERS)[number]>("*");
+  const [firstLetter, setFirstLetter]   = React.useState<(typeof PLATE_LETTERS)[number]>("*");
+  const [firstDigit, setFirstDigit]     = React.useState<(typeof PLATE_DIGITS)[number]>("*");
+  const [secondDigit, setSecondDigit]   = React.useState<(typeof PLATE_DIGITS)[number]>("*");
+  const [thirdDigit, setThirdDigit]     = React.useState<(typeof PLATE_DIGITS)[number]>("*");
+  const [secondLetter, setSecondLetter] = React.useState<(typeof PLATE_LETTERS)[number]>("*");
+  const [thirdLetter, setThirdLetter]   = React.useState<(typeof PLATE_LETTERS)[number]>("*");
   const [region, setRegion]             = React.useState<string>("*");
 
-  const preset = PRESETS[size];
+  const preset = PLATE_PRESETS[size];
   const { ref: wrapperRef, k } = useScale(preset.w);
 
   const isXs = size === "xs";
@@ -88,8 +94,8 @@ export default function PlateSelectForm({
               <SlotSelect
                 ariaLabel="Буква 1"
                 value={firstLetter}
-                onChange={(v) => setFirstLetter(v as (typeof LETTERS)[number])}
-                options={LETTERS as unknown as string[]}
+                onChange={(v) => setFirstLetter(v as (typeof PLATE_LETTERS)[number])}
+                options={PLATE_LETTERS as unknown as string[]}
                 fontSize={mainFontLetter}
                 slotW={slotW}
                 slotH={slotH}
@@ -102,8 +108,8 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 1"
                   value={firstDigit}
-                  onChange={(v) => setFirstDigit(v as (typeof DIGITS)[number])}
-                  options={DIGITS as unknown as string[]}
+                  onChange={(v) => setFirstDigit(v as (typeof PLATE_DIGITS)[number])}
+                  options={PLATE_DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -113,8 +119,8 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 2"
                   value={secondDigit}
-                  onChange={(v) => setSecondDigit(v as (typeof DIGITS)[number])}
-                  options={DIGITS as unknown as string[]}
+                  onChange={(v) => setSecondDigit(v as (typeof PLATE_DIGITS)[number])}
+                  options={PLATE_DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -124,8 +130,8 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Цифра 3"
                   value={thirdDigit}
-                  onChange={(v) => setThirdDigit(v as (typeof DIGITS)[number])}
-                  options={DIGITS as unknown as string[]}
+                  onChange={(v) => setThirdDigit(v as (typeof PLATE_DIGITS)[number])}
+                  options={PLATE_DIGITS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -139,8 +145,8 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Буква 2"
                   value={secondLetter}
-                  onChange={(v) => setSecondLetter(v as (typeof LETTERS)[number])}
-                  options={LETTERS as unknown as string[]}
+                  onChange={(v) => setSecondLetter(v as (typeof PLATE_LETTERS)[number])}
+                  options={PLATE_LETTERS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
                   slotH={slotH}
@@ -150,8 +156,8 @@ export default function PlateSelectForm({
                 <SlotSelect
                   ariaLabel="Буква 3"
                   value={thirdLetter}
-                  onChange={(v) => setThirdLetter(v as (typeof LETTERS)[number])}
-                  options={LETTERS as unknown as string[]}
+                  onChange={(v) => setThirdLetter(v as (typeof PLATE_LETTERS)[number])}
+                  options={PLATE_LETTERS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
                   slotH={slotH}
@@ -178,7 +184,7 @@ export default function PlateSelectForm({
                 ariaLabel="Регион (РФ)"
                 value={region}
                 onChange={(v) => setRegion(v)}
-                options={REGIONS_RF as unknown as string[]}
+                options={PLATE_REGIONS as unknown as string[]}
                 fontSize={regionFont}
                 slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
                 slotH={isXs ? 22 : regionFont * 1.05}

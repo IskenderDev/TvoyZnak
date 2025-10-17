@@ -1,22 +1,4 @@
-export type PlateRow = {
-  id: string
-  date: string
-  seller: string
-  price: number
-  plate: {
-    firstLetter: string
-    firstDigit: string
-    secondDigit: string
-    thirdDigit: string
-    secondLetter: string
-    thirdLetter: string
-    regionId: number
-    comment?: string
-    price?: number
-  }
-  region: string
-  category: "same-digits" | "same-letters" | "mirror" | "vip" | "random"
-}
+import type { PlateRow } from "./types";
 
 export const PLATES: PlateRow[] = [
   {

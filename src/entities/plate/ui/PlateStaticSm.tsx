@@ -1,19 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-
-export type PlateData = {
-  price: number;
-  firstLetter: string;
-  secondLetter: string;
-  thirdLetter: string;
-  firstDigit: string;
-  secondDigit: string;
-  thirdDigit: string;
-  comment: string;
-  regionId: number;
-};
+import type { PlateView } from "../model/types";
 
 type Props = {
-  data: PlateData;
+  data: PlateView;
   responsive?: boolean;
   flagSrc?: string;
   showCaption?: boolean;
@@ -22,7 +11,7 @@ type Props = {
 
 const W = 250;
 
-export default function  PlateStaticSm({
+export default function PlateStaticSm({
   data,
   responsive = true,
   flagSrc = "/flag-russia.svg",

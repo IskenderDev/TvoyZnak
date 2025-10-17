@@ -4,7 +4,6 @@ import FaqSection from '@/widgets/home/FaqSection'
 import HeroSection from '@/widgets/home/HeroSection'
 import ProjectsSection from '@/widgets/home/ProjectsSection'
 import NumbersMarketPage from '../../widgets/home/NumbersMarketPage'
-import PlateStaticSm from '@/shared/components/plate/PlateStaticSm'
 
 export default function HomePage() {
   return (
