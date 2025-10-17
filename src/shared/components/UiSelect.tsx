@@ -92,7 +92,7 @@ export default function UiSelect<T extends string>({
         <ul
           ref={listRef}
           role="listbox"
-          className="absolute z-20 mt-2 w-full rounded-2xl bg-[#1E63FF] text-white shadow-lg p-3"
+          className="absolute z-20 mt-2 w-full rounded-2xl bg-[#0177FF] text-white shadow-lg p-3"
         >
           {options.map((opt, idx) => {
             const selected = value === opt.value;
