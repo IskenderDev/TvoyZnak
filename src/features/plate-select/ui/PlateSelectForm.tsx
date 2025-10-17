@@ -1,7 +1,7 @@
 import React from "react";
-import { PRESETS, LETTERS, DIGITS, REGIONS_RF, type PlateSize } from "./constants";
-import { useScale } from "./useScale";
-import SlotSelect from "./SlotSelect";
+import { PRESETS, LETTERS, DIGITS, REGIONS_RF, type PlateSize } from "../../../shared/components/plate/constants";
+import { useScale } from "../../../shared/components/plate/useScale";
+import SlotSelect from "../../../shared/components/plate/SlotSelect";
 
 type Props = {
   size?: PlateSize;
