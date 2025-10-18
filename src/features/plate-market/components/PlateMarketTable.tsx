@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react"
-import type { PlateRow } from "@/data/plates"
+import type { PlateRow } from "@/app/data/plates"
 import { LuChevronDown } from "react-icons/lu"
 import { PlateMarketRow } from "./PlateMarketRow"
 import type { SortDir } from "../model/types"

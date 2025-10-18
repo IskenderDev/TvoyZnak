@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react"
 import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
 import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
-import { formatPrice } from "@/lib/format"
-import type { PlateRow } from "@/data/plates"
+import { formatPrice } from "@/shared/lib/format"
+import type { PlateRow } from "@/app/data/plates"
 
 type PlateMarketRowProps = {
   row: PlateRow

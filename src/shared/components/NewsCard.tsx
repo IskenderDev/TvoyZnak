@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { NewsItem } from "@/data/news";
+import type { NewsItem } from "@/app/data/news";
 
 export default function NewsCard({ news }: { news: NewsItem }) {
   return (
@@ -8,7 +8,7 @@ export default function NewsCard({ news }: { news: NewsItem }) {
       <div className="p-5 flex flex-col justify-between min-h-[200px]">
         <div>
           <p className="text-neutral-400 text-sm flex items-center gap-2">
-            {news.date} • 👁 {news.views}
+            {news.date} 
           </p>
           <h3 className="text-white font-road font-bold mt-2 leading-snug uppercase">
             {news.title}

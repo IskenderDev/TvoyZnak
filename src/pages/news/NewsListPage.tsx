@@ -1,7 +1,7 @@
 import { useState } from "react";
 import NewsCard from "@/shared/components/NewsCard";
 import Pagination from "@/shared/components/Pagination";
-import { NEWS } from "@/data/news";
+import { NEWS } from "@/app/data/news";
 import Seo from "@/shared/components/Seo";
 
 const PER_PAGE = 6;

@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Header from "@/shared/components/Header";
+import { Toaster } from "react-hot-toast";
+
+import Header from "@/widgets/layout/Header";
 import Footer from "@/shared/components/Footer";
 import Container from "@/shared/components/Container";
 
@@ -13,6 +15,7 @@ export default function App() {
         </Container>
       </main>
       <Footer />
+      <Toaster position="top-right" />
     </div>
   );
 }
