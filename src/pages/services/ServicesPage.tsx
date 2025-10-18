@@ -13,149 +13,117 @@ const serviceBlocks = [
   {
     number: "01",
     badgeNote:
-      "Экспертно оцениваем комбинацию, анализируем закрытые сделки и актуальный спрос.",
+      "Если вы планируете продать красивые госномера, наша команда позволит определить справедливую цену.",
     title: "ОЦЕНКА ВАШЕГО НОМЕРА",
     description:
-      "Подготовим подробный отчёт о стоимости номера, учтём редкость комбинации, регион и историю владения, чтобы вы понимали реальную цену перед сделкой.",
-    subtitle: "Мы предлагаем",
+      "Наша команда профессионалов проведёт полную оценку вашего госномера: учтём редкость комбинации, регион, историю владения и актуальные рыночные данные, чтобы вы понимали реальную стоимость перед переговорами.",
+    subtitle: "Мы предлагаем:",
     chips: [
-      "Аналитику по базе премиальных номеров",
-      "Оценку за 15 минут",
-      "Персональные рекомендации по продаже",
-      "Юридическую проверку комбинации",
+      "Бесплатную предварительную  консультацию",
+      "Экспертную оценку красивых госномеров на авто"
     ],
   },
   {
     number: "02",
     badgeNote:
-      "Сделка в день обращения с прозрачными условиями и гарантиями безопасности.",
+      "Если вы хотите продать красивые госномера срочно, мы оценим их стоимость, согласуем цену и оформим все документы в кратчайшие сроки.",
     title: "БЫСТРЫЙ ВЫКУП НОМЕРА",
     description:
-      "Организуем оперативный выкуп вашего госномера: согласуем цену, подготовим документы и возьмём на себя расчёты в удобном для вас формате.",
-    subtitle: "Мы обеспечиваем",
+      "Наша компания предлагает услугу быстрого выкупа красивых автономеров с официальным переоформлением. Мы покупаем редкие комбинации по цене ниже рыночной и гарантируем полное юридическое сопровождение сделки.",
+    subtitle: "Мы обеспечиваем:",
     chips: [
-      "Фиксированную цену до встречи",
-      "Расчёт наличными или безналично",
-      "Оформление договора",
-      "Сопровождение передачи номера",
+      "Мгновенную оценку и честную цену",
+      "Выкуп красивых автономеров в течение одного дня",
+      "Безопасное оформление и юридическую прозрачность."
     ],
   },
   {
     number: "03",
     badgeNote:
-      "Эксклюзивные комбинации «Знак Отличия» с гарантией юридической чистоты и бронирования.",
+      "Если вы хотите купить красивые госномера или доверить нам их продажу, мы сделаем всё быстро, законно и выгодно.",
     title: "ПРОДАЖА НОМЕРОВ «ЗНАК ОТЛИЧИЯ»",
     description:
-      "Предложим лучшие комбинации из закрытой базы, оформим бронь и проведём сделку под ключ, чтобы вы получили премиальный номер без лишних хлопот.",
-    subtitle: "Мы предлагаем",
+      "Наша компания специализируется на продаже красивых госномеров с полным юридическим сопровождением. Мы предлагаем широкий выбор уникальных комбинаций — от популярных серий с одинаковыми цифрами до эксклюзивных номеров премиум-класса.",
+    subtitle: "Мы обеспечиваем:",
     chips: [
-      "Каталог редких комбинаций",
-      "Персонального менеджера",
-      "Гибкие условия оплаты",
-      "Подготовку пакета документов",
+      "Большой каталог номеров с актуальными ценами",
+      "Индивидуальный подбор номера под запрос клиента",
+      "Безопасную и прозрачную сделку",
+      "Помощь и консультацию на каждом этапе"
     ],
   },
   {
     number: "04",
     badgeNote:
-      "Находим номера под ваш запрос и сопровождаем поиск до результата, соблюдая конфиденциальность.",
+      "Если вы хотите купить красивые госномера или доверить нам их продажу, мы сделаем всё быстро, законно и выгодно.",
     title: "ПОИСК НОМЕРА ПОД ВАШ ЗАПРОС",
     description:
-      "Расскажите, какой госномер нужен, и мы предложим подходящие варианты: проверим по закрытым каналам, согласуем условия и доведём сделку до регистрации.",
-    subtitle: "Мы предлагаем",
+      "Не нашли подходящий номер в нашем каталоге? Мы предлагаем услугу поиска красивого госномера под ваш запрос. Если вы хотите определённую комбинацию цифр или букв — наша команда возьмёт на себя все этапы поиска и оформления. Мы работаем напрямую с владельцами и знаем рынок изнутри. Это позволяет быстро находить даже самые редкие и эксклюзивные комбинации",
+    subtitle: "Мы обеспечиваем:",
     chips: [
-      "Поиск по партнёрским базам",
-      "Подтверждение юридической чистоты",
-      "Согласование условий сделки",
-      "Контроль постановки на учёт",
+      "Индивидуальный подбор номера в Москве и области",
+      "Полное юридическое сопровождение сделки",
+      "Поиск по вашим критериям (цифры, буквы, регион)",
+      "Возможность купить красивые госномера на авто безопасно и официально",
     ],
   },
-]
+];
+
 
 export default function ServicesPage() {
   return (
     <>
       <Seo title="Услуги — Знак отличия" description="Все услуги компании Знак отличия по работе с автомобильными номерами" />
 
-      <main className="bg-[#040507] text-white">
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#040507] via-[#05070A] to-[#06070B]">
+      <main className="  text-white">
+        <section className="relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-[#0177FF]/25 blur-[140px]" />
-            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#040507] to-transparent" />
           </div>
 
           <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 sm:py-20 md:px-8 lg:py-24">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8AAFFF] sm:text-sm">Наши решения</p>
             <h1 className="mt-5 text-center font-actay-wide text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
               ВСЕ УСЛУГИ С <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
               <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
             </h1>
             <p className="mt-5 max-w-[820px] text-center text-sm text-white/75 sm:text-base">
-              Оценка, выкуп и продажа премиальных автомобильных номеров по всей России. Мы сопровождаем сделку, обеспечиваем
-              конфиденциальность и подбираем решения под ваши задачи.
+              Компания «ЗНАК ОТЛИЧИЯ» предлагает комплексные решения для владельцев и покупателей автомобильных номеров. Мы оцениваем, выкупаем, продаём и подбираем уникальные комбинации, обеспечивая прозрачность, безопасность и удобство на каждом этапе.
             </p>
-
-            <div className="relative mt-6 flex w-full max-w-3xl flex-col items-center gap-4 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center">
-              {heroActions.map((action) => (
-                <button
-                  key={action}
-                  type="button"
-                  className="w-full rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-200 hover:border-white/40 hover:bg-white/5 sm:w-auto sm:text-sm"
-                >
-                  {action}
-                </button>
-              ))}
+            <div className="mt-10 mx-auto">
+              <img src="/services/heroServices.png" alt="" />
             </div>
+      
 
-            <div className="relative mt-6 flex w-full max-w-4xl items-end justify-center gap-3 sm:mt-8">
-              <div className="relative flex w-32 flex-col items-center justify-end rounded-3xl border border-dashed border-white/15 bg-white/5 py-4 backdrop-blur-sm sm:w-40">
-                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-white/15 bg-[#0B1018]/70 px-6 py-8 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 sm:max-h-[320px]">
-                  ЛЕВОЕ АВТО
-                </div>
-              </div>
-              <div className="relative z-20 flex w-40 scale-90 flex-col items-center justify-end rounded-3xl border border-dashed border-[#0177FF]/30 bg-[#0E1420] px-6 py-6 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 shadow-[0_25px_60px_rgba(1,119,255,0.2)] sm:w-56 sm:scale-100">
-                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-[#0177FF]/30 bg-[#101726] px-6 py-10 sm:max-h-[320px]">
-                  ГЛАВНОЕ АВТО
-                </div>
-              </div>
-              <div className="relative z-10 flex w-32 scale-90 flex-col items-center justify-end rounded-3xl border border-dashed border-white/15 bg-white/5 py-4 opacity-95 backdrop-blur-sm sm:w-40 sm:scale-100">
-                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-white/15 bg-[#0B1018]/70 px-6 py-8 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 sm:max-h-[320px]">
-                  ПРАВОЕ АВТО
-                </div>
-              </div>
-            </div>
+        
           </div>
         </section>
 
-        <section className="bg-[#040507]">
-          <div className="mx-auto max-w-5xl px-5 pb-12 pt-6 sm:pb-16 md:px-8">
-            <ServicesSection />
-          </div>
-        </section>
+        <ServicesSection />
 
-        <section className="bg-[#040507] px-5 pb-16 pt-4 md:px-8 lg:pb-24">
-          <div className="mx-auto max-w-5xl">
+        <section className=" px-5 pb-16 pt-4 md:px-8 lg:pb-24">
+          <div className="mx-auto flex flex-col max-w-6xl gap-15">
             {serviceBlocks.map((service) => (
-              <article key={service.number} className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-[280px_1fr] lg:gap-10">
-                <div className="relative">
-                  <div className="relative rounded-2xl bg-[#1E63FF] p-5 text-white shadow-[0_6px_0_0_rgba(255,255,255,0.08)_inset] before:absolute before:-bottom-3 before:left-3 before:right-3 before:h-3 before:rounded-full before:bg-black/25 before:content-['']">
-                    <div className="flex items-start justify-between">
-                      <span className="text-xs font-semibold tracking-[0.35em] text-white/80">УСЛУГА</span>
-                      <span className="font-actay-wide text-4xl font-extrabold leading-none sm:text-5xl">{service.number}</span>
+              <article key={service.number} className="mt-10 grid grid-cols-1 items-start gap-15 lg:grid-cols-[280px_1fr] lg:gap-10">
+                <div className="relative mr-10">
+                  <div
+                    className="rounded-2xl bg-[#0177FF] p-5 text-white shadow-[_24px_24px_rgb(44,44,44)]"
+                  >
+                    <div className="items-start justify-between font-actay-druk ">
+                      <div className="text-2xl text-left md:text-3xl  font-bold tracking-[0.2em]">УСЛУГА</div>
+                      <div className=" text-right text-5xl font-extrabold leading-none tracking-[0.2em]">{service.number}</div>
                     </div>
                     <p className="mt-5 text-xs leading-snug text-white/90">{service.badgeNote}</p>
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-actay-wide text-lg font-extrabold uppercase sm:text-xl">{service.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/80">{service.description}</p>
-                  <p className="mt-4 text-sm text-white/70">{service.subtitle}</p>
+                <div className='font-actay text-white/95'>
+                  <h3 className="font-actay-wide text-2xl md:text-3xl font-extrabold uppercase">{service.title}</h3>
+                  <p className="mt-2 text-[16px] md:text-2xl leading-relaxed  ">{service.description}</p>
+                  <p className="mt-4 text-[16px] md:text-2xl ">{service.subtitle}</p>
                   <div className="mt-3 flex flex-wrap gap-3">
                     {service.chips.map((chip) => (
                       <span
                         key={chip}
-                        className="rounded-xl border border-white/30 px-4 py-2 text-xs text-white/80 transition-colors duration-200 hover:bg-white/5 sm:text-sm"
+                        className="rounded-xl border border-white/30 px-4 py-2 text-[15px] md:text-lg  transition-colors duration-200 hover:bg-white/5 max-w-100"
                       >
                         {chip}
                       </span>
@@ -167,15 +135,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="bg-[#040507] px-5 pb-20 pt-12 md:px-8 lg:pb-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="font-actay-wide text-xl font-extrabold uppercase sm:text-2xl">ОСТАВЬТЕ ЗАЯВКУ!</h2>
-            <p className="mt-3 text-sm text-white/70 sm:text-base">Расскажите о задаче, и мы свяжемся с вами, чтобы предложить лучший вариант.</p>
-          </div>
-          <div className="mx-auto mt-8 max-w-[900px]">
-            <ContactForm />
-          </div>
-        </section>
+        <ContactForm />
       </main>
     </>
   )
