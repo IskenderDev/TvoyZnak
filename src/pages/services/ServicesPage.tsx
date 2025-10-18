@@ -2,73 +2,73 @@ import ContactForm from "@/shared/components/ContactForm"
 import Seo from "@/shared/components/Seo"
 import ServicesSection from "@/widgets/about/ServicesSection"
 
-const serviceHighlights = [
-  {
-    id: "01",
-    title: "Оценка выкупа номера",
-    subtitle: "Получите точную стоимость номера за 15 минут",
-    description:
-      "Наши эксперты анализируют рыночную стоимость и актуальные сделки, чтобы предложить честную цену за ваш автомобильный номер.",
-    bullets: [
-      "Анализ базы премиальных номеров по всей России",
-      "Юридическая проверка права собственности и истории",
-      "Конфиденциальность и прозрачные условия",
-    ],
-    cta: "Оценить номер",
-  },
-  {
-    id: "02",
-    title: "Быстрый выкуп номера",
-    subtitle: "Заключим сделку в день обращения",
-    description:
-      "Выкупим номер в кратчайшие сроки с полным юридическим сопровождением и гарантией безопасного расчёта.",
-    bullets: [
-      "Юридическое сопровождение на всех этапах",
-      "Предварительная оценка удалённо",
-      "Сделка в удобном для вас формате",
-    ],
-    cta: "Продать номер",
-  },
-  {
-    id: "03",
-    title: "Продажа номеров «Знак Отличия»",
-    subtitle: "Подберём номер под ваш статус и задачи",
-    description:
-      "Эксклюзивные подборки автомобильных номеров с гарантией юридической чистоты и быстрым оформлением сделки.",
-    bullets: [
-      "Каталог проверенных премиальных номеров",
-      "Гибкие условия оплаты и бронирования",
-      "Персональный менеджер от подбора до сделки",
-    ],
-    cta: "Подобрать номер",
-  },
-  {
-    id: "04",
-    title: "Поиск номера под запрос",
-    subtitle: "Найдём номер вашей мечты в сжатые сроки",
-    description:
-      "Расскажите, какой номер вам нужен, и мы подберём варианты, соответствующие вашему бюджету и пожеланиям.",
-    bullets: [
-      "Работаем с закрытыми базами и сообществами",
-      "Предлагаем только подтверждённые варианты",
-      "Помогаем оформить сделку и поставить номер на учёт",
-    ],
-    cta: "Оставить запрос",
-  },
+const heroActions = [
+  "Оценка вашего номера",
+  "Быстрый выкуп номера",
+  "Продажа номеров «Знак Отличия»",
+  "Поиск номера под ваш запрос",
 ]
 
-const advantages = [
+const serviceBlocks = [
   {
-    title: "Юридическая безопасность",
-    text: "Работаем только по официальным договорам и сопровождаем сделки юристами с опытом в автомобильной сфере.",
+    number: "01",
+    badgeNote:
+      "Экспертно оцениваем комбинацию, анализируем закрытые сделки и актуальный спрос.",
+    title: "ОЦЕНКА ВАШЕГО НОМЕРА",
+    description:
+      "Подготовим подробный отчёт о стоимости номера, учтём редкость комбинации, регион и историю владения, чтобы вы понимали реальную цену перед сделкой.",
+    subtitle: "Мы предлагаем",
+    chips: [
+      "Аналитику по базе премиальных номеров",
+      "Оценку за 15 минут",
+      "Персональные рекомендации по продаже",
+      "Юридическую проверку комбинации",
+    ],
   },
   {
-    title: "Эксклюзивная база",
-    text: "Собственная база премиальных номеров, к которой имеют доступ лишь постоянные клиенты и партнёры компании.",
+    number: "02",
+    badgeNote:
+      "Сделка в день обращения с прозрачными условиями и гарантиями безопасности.",
+    title: "БЫСТРЫЙ ВЫКУП НОМЕРА",
+    description:
+      "Организуем оперативный выкуп вашего госномера: согласуем цену, подготовим документы и возьмём на себя расчёты в удобном для вас формате.",
+    subtitle: "Мы обеспечиваем",
+    chips: [
+      "Фиксированную цену до встречи",
+      "Расчёт наличными или безналично",
+      "Оформление договора",
+      "Сопровождение передачи номера",
+    ],
   },
   {
-    title: "Персональный подход",
-    text: "Назначаем персонального менеджера, который ведёт клиента от первого обращения до окончательной передачи номеров.",
+    number: "03",
+    badgeNote:
+      "Эксклюзивные комбинации «Знак Отличия» с гарантией юридической чистоты и бронирования.",
+    title: "ПРОДАЖА НОМЕРОВ «ЗНАК ОТЛИЧИЯ»",
+    description:
+      "Предложим лучшие комбинации из закрытой базы, оформим бронь и проведём сделку под ключ, чтобы вы получили премиальный номер без лишних хлопот.",
+    subtitle: "Мы предлагаем",
+    chips: [
+      "Каталог редких комбинаций",
+      "Персонального менеджера",
+      "Гибкие условия оплаты",
+      "Подготовку пакета документов",
+    ],
+  },
+  {
+    number: "04",
+    badgeNote:
+      "Находим номера под ваш запрос и сопровождаем поиск до результата, соблюдая конфиденциальность.",
+    title: "ПОИСК НОМЕРА ПОД ВАШ ЗАПРОС",
+    description:
+      "Расскажите, какой госномер нужен, и мы предложим подходящие варианты: проверим по закрытым каналам, согласуем условия и доведём сделку до регистрации.",
+    subtitle: "Мы предлагаем",
+    chips: [
+      "Поиск по партнёрским базам",
+      "Подтверждение юридической чистоты",
+      "Согласование условий сделки",
+      "Контроль постановки на учёт",
+    ],
   },
 ]
 
@@ -77,159 +77,104 @@ export default function ServicesPage() {
     <>
       <Seo title="Услуги — Знак отличия" description="Все услуги компании Знак отличия по работе с автомобильными номерами" />
 
-      <main className="bg-[#050505] text-white">
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#050505] to-[#0B0B0C]">
+      <main className="bg-[#040507] text-white">
+        <section className="relative overflow-hidden bg-gradient-to-b from-[#040507] via-[#05070A] to-[#06070B]">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-32 left-1/2 h-72 w-72 sm:w-96 sm:h-96 -translate-x-1/2 rounded-full bg-[#0177FF]/20 blur-[110px]" />
+            <div className="absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-[#0177FF]/25 blur-[140px]" />
+            <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#040507] to-transparent" />
           </div>
 
-          <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-5 py-16 md:px-8 md:py-20 lg:flex-row lg:items-center">
-            <div className="flex-1 text-center lg:text-left">
-              <p className="font-medium uppercase tracking-[0.3em] text-[#8AAFFF]">Все услуги в одном месте</p>
-              <h1 className="mt-4 font-actay-wide text-3xl leading-tight md:text-4xl lg:text-5xl">
-                Все услуги с автомобильными номерами: быстро, удобно и безопасно
-              </h1>
-              <p className="mt-5 text-base text-[#D1D5DB] md:text-lg">
-                Поможем оценить, купить или продать эксклюзивный номер. Работаем по всей России, обеспечиваем конфиденциальность и
-                юридическое сопровождение на каждом этапе сделки.
-              </p>
+          <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 sm:py-20 md:px-8 lg:py-24">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8AAFFF] sm:text-sm">Наши решения</p>
+            <h1 className="mt-5 text-center font-actay-wide text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
+              ВСЕ УСЛУГИ С <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
+              <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
+            </h1>
+            <p className="mt-5 max-w-[820px] text-center text-sm text-white/75 sm:text-base">
+              Оценка, выкуп и продажа премиальных автомобильных номеров по всей России. Мы сопровождаем сделку, обеспечиваем
+              конфиденциальность и подбираем решения под ваши задачи.
+            </p>
 
-              <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
+            <div className="relative mt-6 flex w-full max-w-3xl flex-col items-center gap-4 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center">
+              {heroActions.map((action) => (
                 <button
+                  key={action}
                   type="button"
-                  className="w-full rounded-full bg-[#0177FF] px-8 py-3 text-base font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 sm:w-auto"
+                  className="w-full rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-200 hover:border-white/40 hover:bg-white/5 sm:w-auto sm:text-sm"
                 >
-                  Получить консультацию
+                  {action}
                 </button>
-                <button
-                  type="button"
-                  className="w-full rounded-full border border-white/20 px-8 py-3 text-base font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white/40 hover:text-[#8AAFFF] sm:w-auto"
-                >
-                  Смотреть каталог номеров
-                </button>
-              </div>
+              ))}
             </div>
 
-            <div className="flex-1">
-              <div className="mx-auto w-full max-w-[500px] rounded-[32px] border border-white/10 bg-[#0F1013] p-6 shadow-[0_25px_60px_rgba(1,119,255,0.15)]">
-                <div className="aspect-[16/9] w-full rounded-2xl border border-dashed border-white/20 bg-[#121318] flex items-center justify-center">
-                  <span className="text-xs uppercase tracking-[0.35em] text-white/40 sm:text-sm">Изображение для страницы</span>
+            <div className="relative mt-6 flex w-full max-w-4xl items-end justify-center gap-3 sm:mt-8">
+              <div className="relative flex w-32 flex-col items-center justify-end rounded-3xl border border-dashed border-white/15 bg-white/5 py-4 backdrop-blur-sm sm:w-40">
+                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-white/15 bg-[#0B1018]/70 px-6 py-8 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 sm:max-h-[320px]">
+                  ЛЕВОЕ АВТО
                 </div>
-                <p className="mt-6 text-center text-sm text-[#9CA3AF] sm:text-base">
-                  Здесь можно разместить визуал с автомобилями или вашей командой, чтобы подчеркнуть экспертность и премиальный подход.
-                </p>
+              </div>
+              <div className="relative z-20 flex w-40 scale-90 flex-col items-center justify-end rounded-3xl border border-dashed border-[#0177FF]/30 bg-[#0E1420] px-6 py-6 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 shadow-[0_25px_60px_rgba(1,119,255,0.2)] sm:w-56 sm:scale-100">
+                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-[#0177FF]/30 bg-[#101726] px-6 py-10 sm:max-h-[320px]">
+                  ГЛАВНОЕ АВТО
+                </div>
+              </div>
+              <div className="relative z-10 flex w-32 scale-90 flex-col items-center justify-end rounded-3xl border border-dashed border-white/15 bg-white/5 py-4 opacity-95 backdrop-blur-sm sm:w-40 sm:scale-100">
+                <div className="flex h-full w-full max-h-[260px] items-center justify-center rounded-2xl border border-white/15 bg-[#0B1018]/70 px-6 py-8 text-center text-[10px] uppercase tracking-[0.2em] text-white/40 sm:max-h-[320px]">
+                  ПРАВОЕ АВТО
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="border-y border-white/5 bg-[#090A0C]">
-          <div className="mx-auto grid max-w-6xl gap-6 px-5 py-12 md:grid-cols-3 md:px-8 md:py-16">
-            {advantages.map((item) => (
-              <div key={item.title} className="rounded-3xl bg-[#0F1013] p-6 shadow-[0_20px_45px_rgba(1,119,255,0.12)]">
-                <h3 className="text-xl font-semibold text-white md:text-2xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-[#D1D5DB] md:text-base">{item.text}</p>
-              </div>
+        <section className="bg-[#040507]">
+          <div className="mx-auto max-w-5xl px-5 pb-12 pt-6 sm:pb-16 md:px-8">
+            <ServicesSection />
+          </div>
+        </section>
+
+        <section className="bg-[#040507] px-5 pb-16 pt-4 md:px-8 lg:pb-24">
+          <div className="mx-auto max-w-5xl">
+            {serviceBlocks.map((service) => (
+              <article key={service.number} className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-[280px_1fr] lg:gap-10">
+                <div className="relative">
+                  <div className="relative rounded-2xl bg-[#1E63FF] p-5 text-white shadow-[0_6px_0_0_rgba(255,255,255,0.08)_inset] before:absolute before:-bottom-3 before:left-3 before:right-3 before:h-3 before:rounded-full before:bg-black/25 before:content-['']">
+                    <div className="flex items-start justify-between">
+                      <span className="text-xs font-semibold tracking-[0.35em] text-white/80">УСЛУГА</span>
+                      <span className="font-actay-wide text-4xl font-extrabold leading-none sm:text-5xl">{service.number}</span>
+                    </div>
+                    <p className="mt-5 text-xs leading-snug text-white/90">{service.badgeNote}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-actay-wide text-lg font-extrabold uppercase sm:text-xl">{service.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/80">{service.description}</p>
+                  <p className="mt-4 text-sm text-white/70">{service.subtitle}</p>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    {service.chips.map((chip) => (
+                      <span
+                        key={chip}
+                        className="rounded-xl border border-white/30 px-4 py-2 text-xs text-white/80 transition-colors duration-200 hover:bg-white/5 sm:text-sm"
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section className="bg-[#050505]">
-          <ServicesSection />
-        </section>
-
-        <section className="bg-[#050505]">
-          <div className="mx-auto max-w-5xl px-5 py-12 md:px-8 md:py-20">
-            <div className="space-y-10">
-              {serviceHighlights.map((service) => (
-                <article
-                  key={service.id}
-                  className="grid grid-cols-1 gap-6 rounded-[40px] border border-white/5 bg-gradient-to-br from-[#0F1013] to-[#05070B] p-8 shadow-[0_30px_80px_rgba(1,119,255,0.15)] md:grid-cols-[auto_1fr] md:gap-10 md:p-12"
-                >
-                  <div className="flex items-start gap-4 md:flex-col md:items-center md:text-center">
-                    <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0177FF] text-2xl font-bold text-white md:h-20 md:w-20">
-                      {service.id}
-                    </span>
-                    <div className="text-left md:text-center">
-                      <h3 className="font-actay-wide text-2xl text-white md:text-3xl">{service.title}</h3>
-                      <p className="mt-2 text-sm uppercase tracking-[0.2em] text-[#8AAFFF] md:text-base">{service.subtitle}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between gap-6 md:gap-8">
-                    <div>
-                      <p className="text-sm leading-relaxed text-[#D1D5DB] md:text-base">{service.description}</p>
-
-                      <ul className="mt-5 space-y-3 text-sm text-[#F9FAFB]/90 md:text-base">
-                        {service.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-3">
-                            <span className="mt-[7px] inline-block h-2.5 w-2.5 flex-shrink-0 rounded-full bg-[#0177FF]" />
-                            <span className="flex-1 leading-relaxed">{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <button
-                        type="button"
-                        className="w-full rounded-full bg-[#0177FF] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 md:w-auto md:px-8"
-                      >
-                        {service.cta}
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
+        <section className="bg-[#040507] px-5 pb-20 pt-12 md:px-8 lg:pb-24">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="font-actay-wide text-xl font-extrabold uppercase sm:text-2xl">ОСТАВЬТЕ ЗАЯВКУ!</h2>
+            <p className="mt-3 text-sm text-white/70 sm:text-base">Расскажите о задаче, и мы свяжемся с вами, чтобы предложить лучший вариант.</p>
           </div>
-        </section>
-
-        <section className="border-y border-white/5 bg-[#090A0C]">
-          <div className="mx-auto max-w-6xl px-5 py-12 md:px-8 md:py-20">
-            <div className="grid gap-8 md:grid-cols-2">
-              <div className="space-y-5">
-                <h2 className="font-actay-wide text-3xl md:text-4xl">Как мы работаем</h2>
-                <p className="text-sm text-[#D1D5DB] md:text-base">
-                  Мы берём на себя полный цикл сделки: от первичного запроса до регистрации номера. Для каждого клиента готовим индивидуальный план и
-                  подбираем лучшие условия.
-                </p>
-                <ol className="space-y-4 text-sm text-[#F3F4F6]/90 md:text-base">
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#0177FF] text-sm font-semibold">1</span>
-                    <span className="leading-relaxed">Проводим консультацию и уточняем пожелания к номеру или условиям сделки.</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#0177FF] text-sm font-semibold">2</span>
-                    <span className="leading-relaxed">Подбираем предложения, проводим юридическую проверку и подтверждаем наличие.</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#0177FF] text-sm font-semibold">3</span>
-                    <span className="leading-relaxed">Организуем сделку, сопровождаем оформление и передачу номера.</span>
-                  </li>
-                </ol>
-              </div>
-
-              <div className="rounded-[36px] border border-dashed border-white/15 bg-[#0F1013] p-8 text-center">
-                <div className="mx-auto flex h-full flex-col justify-center gap-6">
-                  <div className="aspect-[4/3] w-full rounded-2xl border border-white/10 bg-[#121318]" />
-                  <p className="text-sm text-[#9CA3AF] md:text-base">
-                    Разместите здесь фото команды, процесс сделки или инфографику, которая подчеркнёт ваш подход к работе.
-                  </p>
-                  <button
-                    type="button"
-                    className="mx-auto inline-flex rounded-full border border-white/20 px-8 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-all duration-200 hover:border-white/40 hover:text-[#8AAFFF]"
-                  >
-                    Узнать подробнее
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div className="mx-auto mt-8 max-w-[900px]">
+            <ContactForm />
           </div>
-        </section>
-
-        <section className="bg-[#050505]">
-          <ContactForm />
         </section>
       </main>
     </>
