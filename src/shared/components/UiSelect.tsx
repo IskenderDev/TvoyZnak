@@ -9,6 +9,8 @@ type UiSelectProps<T extends string> = {
   placeholder?: string;
   options: Option<T>[];
   className?: string;
+  valueClassName?: string;
+  placeholderClassName?: string;
 };
 
 export default function UiSelect<T extends string>({
@@ -18,6 +20,8 @@ export default function UiSelect<T extends string>({
   placeholder = "Выберите действие",
   options,
   className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
+  valueClassName = "text-black",
+  placeholderClassName = "text-[#777]",
 }: UiSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState<number>(-1);
@@ -79,7 +83,7 @@ export default function UiSelect<T extends string>({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        className={`${className} pr-10 relative ${value ? "text-black" : "text-[#777]"} text-left`}
+        className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-left`}
       >
         {current?.label ?? placeholder}
         <LuChevronDown
