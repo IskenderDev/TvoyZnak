@@ -1,6 +1,6 @@
 import Seo from "@/shared/components/Seo"
+import ContactSection from '@/widgets/contact/ContactSection'
 
-import ContactSection from "./components/ContactSection"
 
 export default function ContactsPage() {
   return (

@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom"
 import { FaVk, FaTelegramPlane, FaWhatsapp } from "react-icons/fa"
-import Container from "./Container"
-import { paths } from '../routes/paths'
+import Container from "../../shared/components/Container"
+import { paths } from '../../shared/routes/paths'
 
 export default function Footer() {
   const linkClass = ({ isActive }: { isActive: boolean }) =>

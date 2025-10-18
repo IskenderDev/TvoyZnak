@@ -104,18 +104,16 @@ export default function ContactForm() {
             />
           </div>
 
-            <label className="flex items-start gap-3 text-sm select-none cursor-pointer">
-              <input
+          <label className="flex items-center gap-2 text-xs text-[#6AA3FF] select-none">
+            <input
               type="checkbox"
               name="consent"
               checked={formData.consent}
               onChange={handleChange}
-              className="mt-0.5 w-4 h-4 accent-[#1E63FF]"
-              />
-              <a href='#' className="text-[#1E63FF] flex items-center">
-              Я согласен на обработку персональных данных <span className="text-[#EB5757] ml-1">*</span>
-              </a>
-            </label>
+              className="accent-[#0177FF] w-4 h-4 "
+            />
+            Я согласен на обработку персональных данных<span className="text-[#EB5757]">*</span>
+          </label>
 
           <div className="flex justify-center">
             <button

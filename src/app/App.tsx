@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import Header from "@/widgets/layout/Header";
-import Footer from "@/shared/components/Footer";
+import Footer from "@/widgets/layout/Footer";
 import Container from "@/shared/components/Container";
 
 export default function App() {

@@ -72,7 +72,6 @@ export default function Header() {
 
       <LegacyModal open={sellOpen} onClose={() => setSellOpen(false)} />
 
-      {/* Модальное окно регистрации пользователя */}
       <RegisterModal open={isRegisterOpen} onClose={() => setRegisterOpen(false)} />
     </header>
   );
