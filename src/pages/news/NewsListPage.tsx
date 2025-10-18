@@ -15,7 +15,7 @@ export default function NewsListPage() {
     <>
       <Seo title="Новости — Знак отличия" description="Свежие новости компании и полезные материалы" />
       <section className="bg-[#0B0B0C] text-white min-h-screen py-16 font-actay">
-        <div className="max-w-[1200px] mx-auto px-6">
+        <div className=" mx-auto px-6">
           <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
