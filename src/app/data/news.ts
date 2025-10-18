@@ -3,7 +3,6 @@ export type NewsItem = {
   slug: string
   title: string
   date: string
-  views: number
   cover: string
   excerpt: string
   content: string
@@ -22,7 +21,6 @@ export const NEWS: NewsItem[] = [
     slug: "rules-2025",
     title: "Новые правила регистрации номеров в 2025 году",
     date: "27.08.2025",
-    views: 63,
     cover:
       "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80",
     excerpt:
@@ -36,7 +34,6 @@ export const NEWS: NewsItem[] = [
     slug: "electric-cars",
     title: "Как подготовить инфраструктуру для электрического транспорта",
     date: "18.07.2025",
-    views: 112,
     cover:
       "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80",
     excerpt:
@@ -50,7 +47,6 @@ export const NEWS: NewsItem[] = [
     slug: "vip-numbers",
     title: "Редкие комбинации номеров: как выстроить очередь без стрессов",
     date: "05.07.2025",
-    views: 98,
     cover:
       "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80",
     excerpt:
@@ -64,7 +60,6 @@ export const NEWS: NewsItem[] = [
     slug: "tax-benefits",
     title: "Налоговые льготы для корпоративных автопарков в 2025 году",
     date: "21.06.2025",
-    views: 76,
     cover:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
     excerpt:
@@ -78,7 +73,6 @@ export const NEWS: NewsItem[] = [
     slug: "fleet-digital",
     title: "Цифровизация автопарка: от телематики до аналитики",
     date: "08.06.2025",
-    views: 54,
     cover:
       "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=1200&q=80",
     excerpt:
@@ -92,7 +86,6 @@ export const NEWS: NewsItem[] = [
     slug: "service-standards",
     title: "Сервисные стандарты: как выбрать надёжный техцентр",
     date: "24.05.2025",
-    views: 39,
     cover:
       "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1200&q=80",
     excerpt:

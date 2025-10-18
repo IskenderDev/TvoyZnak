@@ -8,7 +8,6 @@ import Container from "@/shared/components/Container";
 export default function App() {
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* Хедер с кнопкой профиля и модалкой регистрации */}
       <Header />
       <main className="flex-1">
         <Container>
@@ -16,7 +15,6 @@ export default function App() {
         </Container>
       </main>
       <Footer />
-      {/* Глобальные уведомления для статусов регистрации */}
       <Toaster position="top-right" />
     </div>
   );

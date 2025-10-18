@@ -1,4 +1,4 @@
-import type { PlateRow } from "@/data/plates"
+import type { PlateRow } from "@/app/data/plates"
 import type { PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
 import type { PlateMarketFiltersState } from "../model/types"
 

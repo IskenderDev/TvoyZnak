@@ -1,17 +1,15 @@
-/**
- * Перечень фильтров каталога (без реализации).
- * Использование: только типы/enum, чтобы обозначить возможные варианты.
- */
 
-export enum NumbersFilter {
-  SameDigits = "same-digits",         // Одинаковые цифры
-  SameLetters = "same-letters",       // Одинаковые буквы
-  Mirror = "mirror",                  // Зеркально
-  ByRegion = "by-region",             // По регионам
-  LeadingZeros = "leading-zeros"      // Первые две цифры — нули
-}
 
-// Альтернативно: союз типов
+export const NumbersFilter = {
+  SameDigits: "same-digits",        
+  SameLetters: "same-letters",       
+  Mirror: "mirror",                  
+  ByRegion: "by-region",             
+  LeadingZeros: "leading-zeros"     
+} as const;
+
+export type NumbersFilter = typeof NumbersFilter[keyof typeof NumbersFilter];
+
 export type NumbersFilterUnion =
   | "same-digits"
   | "same-letters"

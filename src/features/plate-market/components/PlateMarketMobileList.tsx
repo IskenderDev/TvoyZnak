@@ -1,4 +1,4 @@
-import type { PlateRow } from "@/data/plates"
+import type { PlateRow } from "@/app/data/plates"
 import MobilePlateCard from "@/shared/components/plate/MobilePlateCard"
 
 type PlateMarketMobileListProps = {
