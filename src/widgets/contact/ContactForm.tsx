@@ -29,6 +29,12 @@ export default function ContactForm() {
     return () => clearTimeout(t)
   }, [toast])
 
+  const sanitizeCarNumber = (value: string) =>
+    value
+      .replace(/\s+/g, "")
+      .replace(/[^0-9A-Za-zА-Яа-яЁё]/g, "")
+      .toUpperCase()
+
   useEffect(() => {
     const state = (location.state as { leadPrefill?: Partial<LeadFormPayload> } | null)?.leadPrefill || {}
     const params = new URLSearchParams(location.search)
@@ -66,7 +72,9 @@ export default function ContactForm() {
       ...prev,
       ...(typeof merged.fullName === "string" && merged.fullName.trim() ? { fullName: merged.fullName } : {}),
       ...(typeof merged.phoneNumber === "string" && merged.phoneNumber.trim() ? { phoneNumber: merged.phoneNumber } : {}),
-      ...(typeof merged.carNumber === "string" && merged.carNumber.trim() ? { carNumber: merged.carNumber } : {}),
+      ...(typeof merged.carNumber === "string"
+        ? { carNumber: sanitizeCarNumber(merged.carNumber) }
+        : {}),
       ...(typeof merged.feedbackType === "string" && merged.feedbackType.trim()
         ? { feedbackType: merged.feedbackType }
         : {}),
@@ -84,9 +92,11 @@ export default function ContactForm() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
+    const processedValue =
+      name === "carNumber" && type !== "checkbox" ? sanitizeCarNumber(value) : value
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : processedValue,
     }))
   }
 
@@ -96,7 +106,18 @@ export default function ContactForm() {
       setToast({ type: "error", msg: "Пожалуйста, согласитесь на обработку персональных данных." })
       return
     }
-    const ok = await submit(formData)
+    const sanitizedCarNumber = sanitizeCarNumber(formData.carNumber)
+    if (!sanitizedCarNumber) {
+      setToast({ type: "error", msg: "Введите корректный гос. номер без пробелов." })
+      setFormData((prev) => ({ ...prev, carNumber: sanitizedCarNumber }))
+      return
+    }
+
+    if (sanitizedCarNumber !== formData.carNumber) {
+      setFormData((prev) => ({ ...prev, carNumber: sanitizedCarNumber }))
+    }
+
+    const ok = await submit({ ...formData, carNumber: sanitizedCarNumber })
     if (ok)
       setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "", consent: false })
   }
@@ -139,6 +160,8 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Гос. номер *"
         required
+        pattern="[0-9A-Za-zА-Яа-яЁё]+"
+        title="Введите номер автомобиля без пробелов"
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
