@@ -12,7 +12,7 @@ export interface NumbersApi {
   list(params?: NumbersListParams): Promise<NumberItem[]>;
   get(id: string): Promise<NumberItem>;
   create(payload: CreateNumberLotPayload): Promise<NumberItem>;
-  createAndRegister(payload: CreateNumberLotPayload): Promise<NumberItem>;
+  createAndRegister(payload: CreateAndRegisterPayload): Promise<NumberItem>;
   delete(id: string): Promise<void>;
 }
 
@@ -23,6 +23,24 @@ export interface CreateNumberLotPayload {
   sellerName: string;
   phone?: string;
   description?: string;
+  email?: string;
+  password?: string;
+}
+
+export interface CreateAndRegisterPayload {
+  price: number;
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string | number;
+  secondDigit: string | number;
+  thirdDigit: string | number;
+  comment?: string;
+  regionId: string | number;
+  fullName: string;
+  phoneNumber: string;
+  email?: string;
+  password: string;
 }
 
 type CarNumberLotDto = z.infer<typeof carNumberLotSchema>;
@@ -344,13 +362,18 @@ const numbersApi: NumbersApi = {
       () =>
         apiClient.post("/api/car-number-lots/create-and-register", {
           price: payload.price,
-          sellerName: payload.sellerName,
-          phone: payload.phone,
-          description: payload.description,
-          carNumber: {
-            series: payload.series,
-            regionCode: payload.regionCode,
-          },
+          firstLetter: payload.firstLetter,
+          secondLetter: payload.secondLetter,
+          thirdLetter: payload.thirdLetter,
+          firstDigit: payload.firstDigit,
+          secondDigit: payload.secondDigit,
+          thirdDigit: payload.thirdDigit,
+          comment: payload.comment,
+          regionId: payload.regionId,
+          fullName: payload.fullName,
+          phoneNumber: payload.phoneNumber,
+          email: payload.email,
+          password: payload.password,
         }),
       (data) => {
         const parsed = carNumberLotSchema.safeParse(data);
