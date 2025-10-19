@@ -82,11 +82,19 @@ export default function ContactForm() {
     []
   )
 
+  const sanitizeCarNumber = (value: string) =>
+    value
+      .replace(/\s+/g, "")
+      .replace(/[^0-9A-Za-zА-Яа-яЁё]/g, "")
+      .toUpperCase()
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
+    const processedValue =
+      name === "carNumber" && type !== "checkbox" ? sanitizeCarNumber(value) : value
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : processedValue,
     }))
   }
 
@@ -139,6 +147,8 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Гос. номер *"
         required
+        pattern="[0-9A-Za-zА-Яа-яЁё]+"
+        title="Введите номер автомобиля без пробелов"
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
