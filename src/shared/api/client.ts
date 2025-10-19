@@ -5,7 +5,7 @@ const baseURL = ((): string => {
   if (url && typeof url === "string" && url.trim()) {
     return url;
   }
-  return "http://localhost:8081";
+  return "http://172.20.10.3:8081";
 })();
 
 const apiClient = axios.create({

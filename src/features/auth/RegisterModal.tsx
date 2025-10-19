@@ -7,6 +7,7 @@ import { isAxiosError } from "axios";
 
 import Modal from "@/shared/ui/Modal";
 import apiClient from "@/shared/api/client";
+import { useAuth, type AuthUser } from "@/shared/hooks/useAuth";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Укажите имя"),
@@ -33,6 +34,7 @@ type RegisterModalProps = {
 const rememberKey = "registerRemember";
 
 export default function RegisterModal({ open, onClose }: RegisterModalProps) {
+  const { setUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -83,12 +85,51 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      await apiClient.post("/api/auth/register", {
+      const response = await apiClient.post("/api/auth/register", {
         fullName: values.fullName,
         email: values.email,
         phoneNumber: values.phoneNumber,
         password: values.password,
       });
+
+      const rawData = (response?.data as { user?: unknown } | undefined) ?? undefined;
+      const userData = (rawData && typeof rawData === "object" && "user" in rawData
+        ? (rawData as { user?: AuthUser | Record<string, unknown> }).user
+        : response?.data) as AuthUser | Record<string, unknown> | undefined;
+
+      const normalizedUser: AuthUser = {
+        id:
+          userData && typeof userData === "object" && "id" in userData
+            ? (userData as { id?: AuthUser["id"] }).id
+            : undefined,
+        fullName:
+          (userData && typeof userData === "object" && "fullName" in userData
+            ? (userData as { fullName?: string }).fullName
+            : undefined) ?? values.fullName,
+        email:
+          userData && typeof userData === "object" && "email" in userData
+            ? (userData as { email?: string }).email
+            : values.email,
+        phoneNumber:
+          userData && typeof userData === "object" && "phoneNumber" in userData
+            ? (userData as { phoneNumber?: string }).phoneNumber
+            : values.phoneNumber,
+        role:
+          userData && typeof userData === "object" && "role" in userData
+            ? normalizeRole((userData as { role?: unknown }).role)
+            : undefined,
+        token:
+          userData && typeof userData === "object" && "token" in userData
+            ? (userData as { token?: string }).token
+            : undefined,
+      };
+
+      normalizedUser.fullName = normalizedUser.fullName?.trim() ?? values.fullName.trim();
+      normalizedUser.email = normalizedUser.email?.trim() ?? values.email.trim();
+      normalizedUser.phoneNumber =
+        normalizedUser.phoneNumber?.trim() ?? values.phoneNumber.trim();
+
+      setUser(normalizedUser);
 
       if (typeof window !== "undefined") {
         if (values.remember) {
@@ -266,3 +307,13 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
     </Modal>
   );
 }
+
+const normalizeRole = (value: unknown): AuthUser["role"] => {
+  if (typeof value === "string") {
+    const normalized = value.toLowerCase();
+    if (normalized === "admin" || normalized === "user") {
+      return normalized;
+    }
+  }
+  return undefined;
+};

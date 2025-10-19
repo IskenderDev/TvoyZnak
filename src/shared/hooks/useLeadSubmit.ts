@@ -2,12 +2,11 @@ import { useState, useCallback } from "react";
 import { feedbacksApi } from "@/shared/services/feedbacksApi";
 
 export type LeadFormPayload = {
-  name: string;
-  phone: string;
-  type: string;
-  number: string;
+  fullName: string;
+  phoneNumber: string;
+  feedbackType: string;
+  carNumber: string;
   consent: boolean;
-  message?: string;
 };
 
 export function useLeadSubmit() {
@@ -23,11 +22,10 @@ export function useLeadSubmit() {
 
       try {
         await feedbacksApi.create({
-          name: data.name,
-          phone: data.phone,
-          type: data.type,
-          number: data.number,
-          message: data.message,
+          fullName: data.fullName.trim(),
+          phoneNumber: data.phoneNumber.trim(),
+          feedbackType: data.feedbackType,
+          carNumber: data.carNumber.trim(),
         });
         setSuccess(true);
         return true;
@@ -39,7 +37,7 @@ export function useLeadSubmit() {
         setLoading(false);
       }
     },
-    []
+    [],
   );
 
   return { submit, loading, error, success };

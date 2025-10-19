@@ -7,10 +7,10 @@ export default function ContactForm() {
   const { submit, loading, error, success } = useLeadSubmit()
 
   const [formData, setFormData] = useState<LeadFormPayload>({
-    name: "",
-    phone: "",
-    type: "buy",
-    number: "",
+    fullName: "",
+    phoneNumber: "",
+    feedbackType: "buy",
+    carNumber: "",
     consent: false,
   })
 
@@ -32,7 +32,7 @@ export default function ContactForm() {
       [
         { label: "Купить номер", value: "buy" },
         { label: "Продать номер", value: "sell" },
-      ] as { label: string; value: LeadFormPayload["type"] }[],
+      ] as { label: string; value: LeadFormPayload["feedbackType"] }[],
     []
   )
 
@@ -51,11 +51,16 @@ export default function ContactForm() {
       return
     }
     const ok = await submit(formData)
-    if (ok) setFormData({ name: "", phone: "", type: "buy", number: "", consent: false })
+    if (ok)
+      setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "", consent: false })
   }
 
   const isSubmitDisabled =
-    loading || !formData.name.trim() || !formData.phone.trim() || !formData.type || !formData.consent
+    loading ||
+    !formData.fullName.trim() ||
+    !formData.phoneNumber.trim() ||
+    !formData.feedbackType ||
+    !formData.consent
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
@@ -63,8 +68,8 @@ export default function ContactForm() {
 
       <input
         type="text"
-        name="name"
-        value={formData.name}
+        name="fullName"
+        value={formData.fullName}
         onChange={handleChange}
         placeholder="Имя *"
         required
@@ -73,8 +78,8 @@ export default function ContactForm() {
 
       <input
         type="tel"
-        name="phone"
-        value={formData.phone}
+        name="phoneNumber"
+        value={formData.phoneNumber}
         onChange={handleChange}
         placeholder="Телефон *"
         required
@@ -83,18 +88,18 @@ export default function ContactForm() {
 
       <input
         type="text"
-        name="number"
-        value={formData.number}
+        name="carNumber"
+        value={formData.carNumber}
         onChange={handleChange}
-        placeholder="Номер *"
+        placeholder="Гос. номер *"
         required
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
-      <UiSelect<LeadFormPayload["type"]>
-        name="type"
-        value={formData.type}
-        onChange={(v) => setFormData((prev) => ({ ...prev, type: v }))}
+      <UiSelect<LeadFormPayload["feedbackType"]>
+        name="feedbackType"
+        value={formData.feedbackType}
+        onChange={(v) => setFormData((prev) => ({ ...prev, feedbackType: v }))}
         options={contactOptions}
         placeholder="Выберите действие"
         className="w-full bg-white text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
