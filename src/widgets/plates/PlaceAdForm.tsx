@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
@@ -49,8 +49,6 @@ export default function PlaceAdForm() {
     return () => clearTimeout(timeout);
   }, [toast]);
 
-  const composedNumber = useMemo(() => composeNumber(plate), [plate]);
-
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
     event,
   ) => {
@@ -80,17 +78,6 @@ export default function PlaceAdForm() {
     setPlate(INITIAL_PLATE);
   }, []);
 
-  const buildDescription = (): string => {
-    const typeLabel = TYPE_OPTIONS.find((opt) => opt.value === form.type)?.label;
-    const chunks = [
-      typeLabel && `Тип заявки: ${typeLabel}`,
-      form.email && `Email: ${form.email}`,
-      form.comment && `Комментарий: ${form.comment}`,
-      composedNumber && `Номер: ${composedNumber}`,
-    ];
-    return chunks.filter(Boolean).join("\n");
-  };
-
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     if (isSubmitDisabled) {
@@ -117,17 +104,38 @@ export default function PlaceAdForm() {
       return;
     }
 
+    const regionId = Number(regionCode);
+    if (!Number.isFinite(regionId) || regionId <= 0) {
+      setToast({ type: "error", msg: "Укажите корректный регион" });
+      return;
+    }
+
+    const trimmedPassword = form.password.trim();
+    if (trimmedPassword.length < 6) {
+      setToast({ type: "error", msg: "Пароль должен содержать минимум 6 символов" });
+      return;
+    }
+
+    const plateParts = extractPlateParts(plate);
+
     setLoading(true);
     setError(null);
 
     try {
       await numbersApi.createAndRegister({
-        series,
-        regionCode,
         price: priceValue,
-        sellerName: form.name,
-        phone: form.phone,
-        description: buildDescription(),
+        firstLetter: plateParts.firstLetter,
+        secondLetter: plateParts.secondLetter,
+        thirdLetter: plateParts.thirdLetter,
+        firstDigit: plateParts.firstDigit,
+        secondDigit: plateParts.secondDigit,
+        thirdDigit: plateParts.thirdDigit,
+        comment: form.comment.trim() ? form.comment.trim() : undefined,
+        regionId,
+        fullName: form.name.trim(),
+        phoneNumber: form.phone.trim(),
+        email: form.email.trim() ? form.email.trim() : undefined,
+        password: trimmedPassword,
       });
       setToast({ type: "success", msg: "Объявление успешно отправлено" });
       resetForm();
@@ -288,10 +296,26 @@ const normalizePrice = (value: string): number => {
   return Number.isFinite(parsed) ? parsed : NaN;
 };
 
-const composeNumber = (plate: PlateSelectValue): string => {
-  const cleanText = (plate.text || "").replace(/\*/g, "");
-  const cleanRegion = (plate.region || "").replace(/\*/g, "");
-  return [cleanText, cleanRegion].filter(Boolean).join("-");
+type PlateParts = {
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string;
+  secondDigit: string;
+  thirdDigit: string;
+};
+
+const extractPlateParts = (plate: PlateSelectValue): PlateParts => {
+  const text = (plate.text || "").toUpperCase();
+
+  return {
+    firstLetter: text[0] ?? "",
+    firstDigit: text[1] ?? "",
+    secondDigit: text[2] ?? "",
+    thirdDigit: text[3] ?? "",
+    secondLetter: text[4] ?? "",
+    thirdLetter: text[5] ?? "",
+  };
 };
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {
