@@ -19,6 +19,8 @@ export interface NumberItem {
   region: RegionCode;
   price: number;
   seller: string;
+  sellerLogin?: string;
+  sellerName?: string;
   date: string;
   status: NumberStatus;
   category: string;

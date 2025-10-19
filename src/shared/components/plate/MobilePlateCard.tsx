@@ -37,7 +37,12 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
       {/* верх: номер + дата */}
       <div className="flex items-start justify-between gap-3">
         {detailsHref ? (
-          <Link to={detailsHref} className="block w-[160px] shrink-0 transition hover:opacity-90">
+          <Link
+            to={detailsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-[160px] shrink-0 transition hover:opacity-90"
+          >
             <PlateStaticSm data={plate} responsive className="w-full" />
           </Link>
         ) : (
@@ -60,6 +65,8 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
       {detailsHref && (
         <Link
           to={detailsHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[#0177FF] hover:underline"
         >
           Подробнее

@@ -64,7 +64,7 @@ export default function NumberDetailsSection() {
 
   if (loading) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#05070D] text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     );
@@ -72,7 +72,7 @@ export default function NumberDetailsSection() {
 
   if (error) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#05070D] text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     );
@@ -80,7 +80,7 @@ export default function NumberDetailsSection() {
 
   if (!item) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#05070D] text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
     );
@@ -96,105 +96,81 @@ export default function NumberDetailsSection() {
     );
   };
 
+  const sellerLogin = item.sellerLogin || item.seller || "—";
+  const sellerName = item.sellerName || item.seller || "—";
+  const phone = item.phone || "—";
+
+  const detailsRows: Array<{ label: string; value: string }> = [
+    { label: "Цена", value: price },
+    { label: "Дата размещения", value: publishedDate || "—" },
+    { label: "Логин", value: sellerLogin },
+    { label: "Имя", value: sellerName },
+    { label: "Телефон", value: phone },
+  ];
+
   return (
     <>
       <Seo
         title={`Номер ${numberLabel || item.series} — Знак отличия`}
         description={`Предложение от ${item.seller}. Стоимость ${price}.`}
       />
-      <section className="bg-[#0B0B0C] text-white min-h-screen py-12">
-        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 sm:px-6 md:flex-row">
-          <div className="flex-1 rounded-2xl bg-[#111214] p-6 shadow-lg">
-            <div className="flex items-center justify-between gap-4">
-              <h1 className="text-2xl font-road font-bold uppercase text-white md:text-3xl">
-                {numberLabel ? `Госномер ${numberLabel}` : `Объявление №${item.id}`}
+      <section className="min-h-screen bg-[#05070D] py-12 text-white">
+        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+          <div className="overflow-hidden rounded-3xl bg-[#0B0D12] shadow-[0_24px_80px_rgba(1,8,28,0.45)]">
+            <div className="bg-[#05070D] px-6 py-8 text-center sm:px-10">
+              <h1 className="text-2xl font-road font-semibold uppercase tracking-wide sm:text-3xl">
+                Продам номер {numberLabel || item.series}
               </h1>
-              {publishedDate && (
-                <time className="text-sm text-neutral-400" dateTime={item.date}>
-                  {publishedDate}
-                </time>
-              )}
-            </div>
 
-            <PlateStaticSm
-              data={{
-                price: item.price,
-                comment: item.plate.comment ?? item.description ?? "",
-                firstLetter: item.plate.firstLetter,
-                secondLetter: item.plate.secondLetter,
-                thirdLetter: item.plate.thirdLetter,
-                firstDigit: item.plate.firstDigit,
-                secondDigit: item.plate.secondDigit,
-                thirdDigit: item.plate.thirdDigit,
-                regionId: item.plate.regionId,
-              }}
-              responsive
-              showCaption={false}
-              className="mx-auto"
-            />
-
-            <dl className="mt-6 grid gap-3 text-sm text-neutral-300 md:grid-cols-2">
-              <div className="flex flex-col gap-1 rounded-xl bg-[#0B0B0C] px-4 py-3">
-                <dt className="font-semibold text-white">Стоимость</dt>
-                <dd>{price}</dd>
+              <div className="mt-6 flex items-center justify-center rounded-2xl bg-[#0F111A] p-6">
+                <PlateStaticSm
+                  data={{
+                    price: item.price,
+                    comment: item.plate.comment ?? item.description ?? "",
+                    firstLetter: item.plate.firstLetter,
+                    secondLetter: item.plate.secondLetter,
+                    thirdLetter: item.plate.thirdLetter,
+                    firstDigit: item.plate.firstDigit,
+                    secondDigit: item.plate.secondDigit,
+                    thirdDigit: item.plate.thirdDigit,
+                    regionId: item.plate.regionId,
+                  }}
+                  responsive
+                  showCaption={false}
+                  className="w-full max-w-[320px]"
+                />
               </div>
-              <div className="flex flex-col gap-1 rounded-xl bg-[#0B0B0C] px-4 py-3">
-                <dt className="font-semibold text-white">Регион</dt>
-                <dd>{item.region || item.plate.regionId}</dd>
-              </div>
-              {item.category && (
-                <div className="flex flex-col gap-1 rounded-xl bg-[#0B0B0C] px-4 py-3">
-                  <dt className="font-semibold text-white">Категория</dt>
-                  <dd className="uppercase tracking-wide">{item.category}</dd>
-                </div>
-              )}
-              {item.status && (
-                <div className="flex flex-col gap-1 rounded-xl bg-[#0B0B0C] px-4 py-3">
-                  <dt className="font-semibold text-white">Статус</dt>
-                  <dd className="uppercase tracking-wide">{item.status}</dd>
-                </div>
-              )}
-            </dl>
-          </div>
 
-          <div className="flex-1 rounded-2xl bg-[#111214] p-6 shadow-lg">
-            <h2 className="text-2xl font-road font-bold uppercase">Информация о продавце</h2>
-            <p className="mt-3 text-neutral-300">{item.seller}</p>
-            {item.phone && (
-              <a
-                href={`tel:${item.phone}`}
-                className="mt-1 inline-flex items-center text-neutral-200 transition hover:text-white"
+              <button
+                onClick={handleBuyClick}
+                className="mt-8 inline-flex items-center justify-center rounded-full bg-[#0177FF] px-10 py-3 text-lg font-medium text-white transition hover:bg-[#0C8BFF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Телефон: {item.phone}
-              </a>
-            )}
-
-            <div className="mt-6 space-y-3 rounded-xl bg-[#0B0B0C] p-4 text-sm leading-relaxed text-neutral-300">
-              <h3 className="text-lg font-road font-semibold uppercase text-white">Детали предложения</h3>
-              <p>
-                <span className="text-white">Госномер:</span> {numberLabel || item.series}
-              </p>
-              <p>
-                <span className="text-white">Стоимость:</span> {price}
-              </p>
-              <p>
-                <span className="text-white">ID объявления:</span> {item.id}
-              </p>
+                Купить
+              </button>
             </div>
 
-            {item.description && (
-              <div className="mt-4 rounded-xl bg-[#0B0B0C] p-4 text-neutral-300">
-                <h3 className="text-lg font-road font-semibold uppercase text-white">Описание</h3>
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed">{item.description}</p>
-              </div>
-            )}
-
-            <button
-              onClick={handleBuyClick}
-              className="mt-8 w-full rounded-full bg-[#0177FF] px-6 py-3 text-lg font-medium text-white transition hover:bg-[#046FFF]"
-            >
-              Купить этот номер
-            </button>
+            <dl className="divide-y divide-white/5 bg-[#0B0D12]">
+              {detailsRows.map((row) => (
+                <div
+                  key={row.label}
+                  className="grid grid-cols-1 gap-2 px-6 py-5 text-left text-sm sm:grid-cols-[200px_1fr] sm:px-10 sm:text-base"
+                >
+                  <dt className="font-road uppercase tracking-wide text-white/60">{row.label}</dt>
+                  <dd className="text-white/90">
+                    {row.label === "Телефон" && item.phone ? (
+                      <a
+                        href={`tel:${item.phone}`}
+                        className="transition hover:text-white"
+                      >
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>

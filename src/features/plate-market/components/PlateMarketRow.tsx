@@ -42,6 +42,11 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   }).toString();
 
   const handleOpenDetails = () => {
+    if (typeof window !== "undefined") {
+      window.open(detailsPath, "_blank", "noopener,noreferrer");
+      return;
+    }
+
     navigate(detailsPath);
   };
 
