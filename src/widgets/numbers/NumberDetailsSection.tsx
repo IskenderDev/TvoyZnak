@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createSearchParams, useNavigate, useParams } from "react-router-dom";
 import Seo from "@/shared/components/Seo";
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
+import PlateStaticLg from "@/shared/components/plate/PlateStaticLg";
 import { formatPrice } from "@/shared/lib/format";
 import { buildContactPrefill, formatPlateLabel } from "@/shared/lib/plate";
 import { paths } from "@/shared/routes/paths";
@@ -115,15 +115,15 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${item.seller}. Стоимость ${price}.`}
       />
       <section className="min-h-screen bg-[#05070D] py-12 text-white">
-        <div className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+        <div className="mx-auto w-full px-4 sm:px-8 lg:px-12">
           <div className="overflow-hidden rounded-3xl bg-[#0B0D12] shadow-[0_24px_80px_rgba(1,8,28,0.45)]">
-            <div className="bg-[#05070D] px-6 py-8 text-center sm:px-10">
+            <div className="bg-[#05070D] px-6 py-10 text-center sm:px-10 lg:px-16">
               <h1 className="text-2xl font-road font-semibold uppercase tracking-wide sm:text-3xl">
                 Продам номер {numberLabel || item.series}
               </h1>
 
-              <div className="mt-6 flex items-center justify-center rounded-2xl bg-[#0F111A] p-6">
-                <PlateStaticSm
+              <div className="mt-10 flex w-full items-center justify-center">
+                <PlateStaticLg
                   data={{
                     price: item.price,
                     comment: item.plate.comment ?? item.description ?? "",
@@ -137,39 +137,43 @@ export default function NumberDetailsSection() {
                   }}
                   responsive
                   showCaption={false}
-                  className="w-full max-w-[320px]"
+                  className="w-full max-w-[880px] drop-shadow-[0_40px_120px_rgba(1,8,28,0.45)]"
                 />
               </div>
 
               <button
                 onClick={handleBuyClick}
-                className="mt-8 inline-flex items-center justify-center rounded-full bg-[#0177FF] px-10 py-3 text-lg font-medium text-white transition hover:bg-[#0C8BFF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="mt-10 inline-flex items-center justify-center rounded-full bg-[#0177FF] px-10 py-3 text-lg font-medium text-white transition hover:bg-[#0C8BFF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Купить
               </button>
             </div>
 
-            <dl className="divide-y divide-white/5 bg-[#0B0D12]">
-              {detailsRows.map((row) => (
-                <div
-                  key={row.label}
-                  className="grid grid-cols-1 gap-2 px-6 py-5 text-left text-sm sm:grid-cols-[200px_1fr] sm:px-10 sm:text-base"
-                >
-                  <dt className="font-road uppercase tracking-wide text-white/60">{row.label}</dt>
-                  <dd className="text-white/90">
-                    {row.label === "Телефон" && item.phone ? (
-                      <a
-                        href={`tel:${item.phone}`}
-                        className="transition hover:text-white"
-                      >
-                        {row.value}
-                      </a>
-                    ) : (
-                      row.value
-                    )}
-                  </dd>
-                </div>
-              ))}
+            <dl className="bg-[#0B0D12]">
+              {detailsRows.map((row, index) => {
+                const rowTone = index % 2 === 0 ? "bg-white/5" : "bg-white/10";
+
+                return (
+                  <div
+                    key={row.label}
+                    className={`grid grid-cols-1 gap-2 px-6 py-5 text-left text-sm sm:grid-cols-[200px_1fr] sm:px-10 sm:text-base ${rowTone}`}
+                  >
+                    <dt className="font-road uppercase tracking-wide text-white/60">{row.label}</dt>
+                    <dd className="text-white/90">
+                      {row.label === "Телефон" && item.phone ? (
+                        <a
+                          href={`tel:${item.phone}`}
+                          className="transition hover:text-white"
+                        >
+                          {row.value}
+                        </a>
+                      ) : (
+                        row.value
+                      )}
+                    </dd>
+                  </div>
+                );
+              })}
             </dl>
           </div>
         </div>
