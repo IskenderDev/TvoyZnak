@@ -60,6 +60,7 @@ const carNumberSchema = z
     thirdDigit: z.union([z.string(), z.number()]).optional(),
     letters: z.array(z.string()).optional(),
     digits: z.union([z.string(), z.array(z.union([z.string(), z.number()]))]).optional(),
+    comment: z.string().optional(),
   })
   .partial()
   .passthrough();
@@ -72,12 +73,21 @@ const carNumberLotSchema = z
     state: z.string().optional(),
     seller: z.string().optional(),
     sellerName: z.string().optional(),
+    fullName: z.string().optional(),
     owner: z.object({ name: z.string().optional() }).optional(),
     ownerName: z.string().optional(),
     user: z.string().optional(),
     phone: z.string().optional(),
+    phoneNumber: z.string().optional(),
     description: z.string().optional(),
     comment: z.string().optional(),
+    fullCarNumber: z.string().optional(),
+    firstLetter: z.string().optional(),
+    secondLetter: z.string().optional(),
+    thirdLetter: z.string().optional(),
+    firstDigit: z.union([z.string(), z.number()]).optional(),
+    secondDigit: z.union([z.string(), z.number()]).optional(),
+    thirdDigit: z.union([z.string(), z.number()]).optional(),
     createdAt: z.string().optional(),
     createdDate: z.string().optional(),
     created: z.string().optional(),
@@ -96,13 +106,29 @@ const carNumberLotSchema = z
 const listResponseSchema = z.array(carNumberLotSchema);
 
 const toNumberItem = (dto: CarNumberLotDto): NumberItem => {
-  const carNumber = (dto.carNumber || dto.plate || dto.number || {}) as z.infer<typeof carNumberSchema>;
+  const baseCarNumber = (dto.carNumber || dto.plate || dto.number || {}) as z.infer<typeof carNumberSchema>;
+
+  const carNumber: z.infer<typeof carNumberSchema> = {
+    ...baseCarNumber,
+    series: baseCarNumber.series ?? dto.series ?? dto.fullCarNumber ?? baseCarNumber.number,
+    number: baseCarNumber.number ?? dto.fullCarNumber ?? baseCarNumber.series,
+    regionCode: baseCarNumber.regionCode ?? baseCarNumber.region ?? dto.regionCode ?? dto.region,
+    region: baseCarNumber.region ?? baseCarNumber.regionCode ?? dto.region ?? dto.regionCode,
+    firstLetter: baseCarNumber.firstLetter ?? dto.firstLetter,
+    secondLetter: baseCarNumber.secondLetter ?? dto.secondLetter,
+    thirdLetter: baseCarNumber.thirdLetter ?? dto.thirdLetter,
+    firstDigit: baseCarNumber.firstDigit ?? dto.firstDigit,
+    secondDigit: baseCarNumber.secondDigit ?? dto.secondDigit,
+    thirdDigit: baseCarNumber.thirdDigit ?? dto.thirdDigit,
+    comment: baseCarNumber.comment ?? dto.comment ?? undefined,
+  };
 
   const rawSeries = pickString([
     carNumber.series,
     dto.series,
     carNumber.number,
     carNumber.letters ? carNumber.letters.join("") : undefined,
+    dto.fullCarNumber,
   ]);
 
   const fromDigits = normalizeDigits(carNumber, rawSeries);
@@ -117,6 +143,8 @@ const toNumberItem = (dto: CarNumberLotDto): NumberItem => {
     dto.region,
   ]);
 
+  const plateComment = pickString([dto.comment, carNumber.comment]);
+
   const plate: PlateInfo = {
     firstLetter: fromLetters[0],
     secondLetter: fromLetters[1],
@@ -125,7 +153,7 @@ const toNumberItem = (dto: CarNumberLotDto): NumberItem => {
     secondDigit: fromDigits[1],
     thirdDigit: fromDigits[2],
     regionId: Number(regionCode || carNumber.id || 0) || 0,
-    comment: dto.comment ?? carNumber.comment ?? undefined,
+    comment: plateComment || undefined,
   };
 
   const digitsString = `${fromDigits[0]}${fromDigits[1]}${fromDigits[2]}`;
@@ -142,11 +170,12 @@ const toNumberItem = (dto: CarNumberLotDto): NumberItem => {
       pickString([
         dto.seller,
         dto.sellerName,
+        dto.fullName,
         dto.owner?.name,
         dto.ownerName,
         dto.user,
       ]) || "Продавец",
-    phone: pickString([dto.phone]),
+    phone: pickString([dto.phone, dto.phoneNumber]),
     description: pickString([dto.description]),
     date: normalizeDate(pickString([dto.createdAt, dto.createdDate, dto.created, dto.date, dto.updatedAt])),
     status: pickString([dto.status, dto.state]) || "available",
