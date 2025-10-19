@@ -68,6 +68,7 @@ export default function PlateStaticLg({
   const outerPadY = 6 * k;
 
   const mainFont = 180 * k;
+  const mainFontLetter = 140 * k;
   const mainGap = 20 * k;
   const mainPx = 32 * k;
   const mainPb = 12 * k;
@@ -110,7 +111,7 @@ export default function PlateStaticLg({
                 boxSizing: "border-box",
               }}
             >
-              <span style={{ fontSize: mainFont, lineHeight: 0.9 }}>
+              <span style={{ fontSize: mainFontLetter, lineHeight: 0.9 }}>
                 {data.firstLetter ?? ""}
               </span>
 
@@ -120,7 +121,7 @@ export default function PlateStaticLg({
                 <span>{data.thirdDigit ?? ""}</span>
               </div>
 
-              <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.9, gap: digitGap }}>
+              <div className="flex" style={{ fontSize: mainFontLetter, lineHeight: 0.9, gap: digitGap }}>
                 <span>{data.secondLetter ?? ""}</span>
                 <span>{data.thirdLetter ?? ""}</span>
               </div>
