@@ -40,10 +40,9 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
         {date && <span className="text-xs text-black/50">{date}</span>}
       </div>
 
-      {/* низ: цена/продавец + CTA */}
       <div className="mt-3 flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <div className="text-sm font-semibold tabular-nums leading-tight">{price}</div>
+          <div className="text-sm font-semibold tabular-nums font-actay-druk  leading-tight">{price}</div>
           <div className="text-xs text-black/70 truncate">{seller}</div>
         </div>
 
@@ -55,7 +54,6 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
   );
 }
 
-/* ---------- helpers ---------- */
 
 function pickPlate(row: PlateRowLike): PlateData {
   const src = (row.plate as PlateLike | undefined) ?? row.data ?? row.plateData ?? {};

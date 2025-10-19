@@ -32,7 +32,7 @@ export default function NumbersCatalogSection() {
     <>
       <Seo title="Номера — Знак отличия" description="Каталог автомобильных номеров с актуальными предложениями." />
       <section className="bg-[#0B0B0C] text-white min-h-screen py-12">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto px-4 sm:px-6">
           <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">Номера</h1>
 
           <PlateMarketFilters
