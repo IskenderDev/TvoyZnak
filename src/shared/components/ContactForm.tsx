@@ -1,12 +1,18 @@
 import UiSelect from "@/shared/components/UiSelect"
 import Toast from "@/shared/components/Toast"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
-import { useEffect, useState } from "react"
+import { useFeedbackTypes } from "@/shared/hooks/useFeedbackTypes"
+import { useEffect, useMemo, useState } from "react"
 
 type LeadForm = LeadFormPayload
 
 export default function ContactForm() {
   const { submit, loading, error, success } = useLeadSubmit()
+  const {
+    options: typeOptions,
+    loading: typesLoading,
+    error: typesError,
+  } = useFeedbackTypes()
   const [formData, setFormData] = useState<LeadForm>({
     name: "",
     phone: "",
@@ -28,6 +34,24 @@ export default function ContactForm() {
     return () => clearTimeout(t)
   }, [toast])
 
+  const selectOptions = useMemo(() => {
+    if (!typeOptions.length) {
+      return [
+        { label: "Купить номер", value: "buy" },
+        { label: "Продать номер", value: "sell" },
+      ] as const
+    }
+    return typeOptions
+  }, [typeOptions])
+
+  useEffect(() => {
+    if (!selectOptions.length) return
+    setFormData((prev) => {
+      if (prev.type) return prev
+      return { ...prev, type: selectOptions[0].value }
+    })
+  }, [selectOptions])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const target = e.target as HTMLInputElement | HTMLSelectElement
     const { name, value, type } = target
@@ -43,12 +67,25 @@ export default function ContactForm() {
       setToast({ type: "error", msg: "Пожалуйста, согласитесь на обработку персональных данных." })
       return
     }
-    const ok = await submit(formData)
-    if (ok) setFormData({ name: "", phone: "", type: "", number: "", consent: false })
+    const ok = await submit({
+      name: formData.name,
+      phone: formData.phone,
+      type: formData.type,
+      number: formData.number,
+      consent: formData.consent,
+      message: formData.number ? `Интересующий номер: ${formData.number}` : undefined,
+    })
+    if (ok)
+      setFormData({ name: "", phone: "", type: "", number: "", consent: false })
   }
 
   const isSubmitDisabled =
-    loading || !formData.name.trim() || !formData.phone.trim() || !formData.type || !formData.consent
+    loading ||
+    !formData.name.trim() ||
+    !formData.phone.trim() ||
+    !formData.type ||
+    !formData.consent ||
+    typesLoading
 
   return (
     <section className="bg-[#0B0B0C] text-white py-12 md:py-16">
@@ -83,16 +120,18 @@ export default function ContactForm() {
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
-            <UiSelect
-              name="type"
-              value={formData.type}
-              onChange={(v) => setFormData((p) => ({ ...p, type: v as LeadForm["type"] }))}
-              placeholder="Выберите действие *"
-              options={[
-                { label: "Купить номер", value: "buy" },
-                { label: "Продать номер", value: "sell" },
-              ]}
-            />
+            <div className="space-y-1">
+              <UiSelect
+                name="type"
+                value={formData.type}
+                onChange={(v) => setFormData((p) => ({ ...p, type: v }))}
+                placeholder={typesLoading ? "Загрузка..." : "Выберите действие *"}
+                options={selectOptions as { label: string; value: string }[]}
+              />
+              {typesError && (
+                <p className="text-xs text-[#EB5757]">{typesError}</p>
+              )}
+            </div>
 
             <input
               type="text"

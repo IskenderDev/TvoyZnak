@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react"
-import type { PlateRow } from "@/app/data/plates"
 import { LuChevronDown } from "react-icons/lu"
 import { PlateMarketRow } from "./PlateMarketRow"
 import type { SortDir } from "../model/types"
+import type { NumberItem } from "@/entities/number/types"
 
 const DEFAULT_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px"
 
 type PlateMarketTableProps = {
-  rows: PlateRow[]
+  rows: NumberItem[]
   sortDir: SortDir
   onToggleSort: () => void
   onReset: () => void

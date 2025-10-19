@@ -45,11 +45,17 @@ export default function PlateStaticLg({
     if (!el) return;
 
     const ro = new ResizeObserver(([entry]) => {
-      const w =
-        (Array.isArray(entry.contentBoxSize)
-          ? entry.contentBoxSize[0]?.inlineSize
-          : (entry as any).contentBoxSize?.inlineSize) ?? entry.contentRect.width;
+      const boxSize = entry.contentBoxSize;
+      let inlineSize = entry.contentRect.width;
 
+      if (Array.isArray(boxSize)) {
+        inlineSize = boxSize[0]?.inlineSize ?? inlineSize;
+      } else if (boxSize && typeof boxSize === "object" && "inlineSize" in boxSize) {
+        const size = boxSize as ResizeObserverSize;
+        inlineSize = size.inlineSize ?? inlineSize;
+      }
+
+      const w = inlineSize || el.clientWidth;
       const scale = (w || el.clientWidth) / preset.w;
       setK(scale > 0 ? scale : 1);
     });

@@ -2,13 +2,6 @@ import ContactForm from "@/shared/components/ContactForm"
 import Seo from "@/shared/components/Seo"
 import ServicesSection from "@/widgets/about/ServicesSection"
 
-const heroActions = [
-  "Оценка вашего номера",
-  "Быстрый выкуп номера",
-  "Продажа номеров «Знак Отличия»",
-  "Поиск номера под ваш запрос",
-]
-
 const serviceBlocks = [
   {
     number: "01",

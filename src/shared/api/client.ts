@@ -1,9 +1,18 @@
 import axios from "axios";
 
+const baseURL = ((): string => {
+  const url = import.meta?.env?.VITE_API_BASE_URL;
+  if (url && typeof url === "string" && url.trim()) {
+    return url;
+  }
+  return "http://localhost:8081";
+})();
+
 const apiClient = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL,
   headers: {
     "Content-Type": "application/json",
+    Accept: "application/json",
   },
   withCredentials: false,
 });

@@ -5,7 +5,7 @@ export const paths = {
   numbers: "/numbers",
   numberDetails: (id = ":id") => `/numbers/${id}`,
   news: "/news",
-  newsDetails: (slug = ":slug") => `/news/${slug}`,
+  newsDetails: (id = ":id") => `/news/${id}`,
   contacts: "/contacts",
   sellNumber:"/sellNumber",
   auth: {
@@ -19,7 +19,7 @@ export const paths = {
     numbersEdit: (id = ":id") => `/admin/numbers/${id}/edit`,
     news: "/admin/news",
     newsNew: "/admin/news/new",
-    newsEdit: (slug = ":slug") => `/admin/news/${slug}/edit`
+    newsEdit: (id = ":id") => `/admin/news/${id}/edit`
   },
   notFound: "*"
 } as const;

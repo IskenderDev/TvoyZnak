@@ -2,6 +2,7 @@ import React from "react";
 import { PRESETS, LETTERS, DIGITS, REGIONS_RF, type PlateSize } from "../../../shared/components/plate/constants";
 import { useScale } from "../../../shared/components/plate/useScale";
 import SlotSelect from "../../../shared/components/plate/SlotSelect";
+import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "../model/types";
 
 type Props = {
   size?: PlateSize;
@@ -12,16 +13,6 @@ type Props = {
   value?: PlateSelectValue;
   defaultValue?: PlateSelectValue;
   onChange?: (value: PlateSelectValue) => void;
-};
-
-export type PlateSelectValue = {
-  text: string;
-  region: string;
-};
-
-export const DEFAULT_PLATE_VALUE: PlateSelectValue = {
-  text: "******",
-  region: "*",
 };
 
 const ensureChar = (char: string | undefined, allowed: readonly string[]) => {

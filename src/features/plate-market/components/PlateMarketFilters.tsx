@@ -1,6 +1,6 @@
 import UiSelect from "@/shared/components/UiSelect"
 import PlateSelectForm320 from "@/features/plate-select/ui/PlateSelectForm320"
-import type { PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
+import type { PlateSelectValue } from "@/features/plate-select/model/types"
 
 export type SelectOption = { label: string; value: string }
 
