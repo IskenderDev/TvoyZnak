@@ -1,5 +1,5 @@
 // shared/components/plate/MobilePlateCard.tsx
-import React from "react";
+import { Link } from "react-router-dom";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
 import type { NumberItem } from "@/entities/number/types";
 
@@ -16,17 +16,17 @@ type PlateRowLike = Partial<NumberItem> & {
   data?: PlateLike;
   plateData?: PlateLike;
   plate?: PlateLike;
-  [key: string]: unknown;
 };
 
 type Props = {
   row: PlateRowLike;
   ctaText?: string;
   onBuy?: (row: PlateRowLike) => void;
+  detailsHref?: string;
   className?: string;
 };
 
-export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, className = "" }: Props) {
+export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, detailsHref, className = "" }: Props) {
   const plate: PlateData = pickPlate(row);
   const date = fmtDate(row.date || row.createdAt);
   const price = fmtPrice(row.price);
@@ -36,7 +36,18 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
     <li className={`rounded-2xl bg-white p-3 text-black shadow-sm ${className}`}>
       {/* верх: номер + дата */}
       <div className="flex items-start justify-between gap-3">
-        <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
+        {detailsHref ? (
+          <Link
+            to={detailsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-[160px] shrink-0 transition hover:opacity-90"
+          >
+            <PlateStaticSm data={plate} responsive className="w-full" />
+          </Link>
+        ) : (
+          <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
+        )}
         {date && <span className="text-xs text-black/50">{date}</span>}
       </div>
 
@@ -50,6 +61,17 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
           {ctaText}
         </button>
       </div>
+
+      {detailsHref && (
+        <Link
+          to={detailsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[#0177FF] hover:underline"
+        >
+          Подробнее
+        </Link>
+      )}
     </li>
   );
 }

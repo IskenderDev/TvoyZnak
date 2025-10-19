@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react"
+import { useLocation } from "react-router-dom"
 import Toast from "@/shared/components/Toast"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
 import UiSelect from "@/shared/components/UiSelect"
 
 export default function ContactForm() {
   const { submit, loading, error, success } = useLeadSubmit()
+  const location = useLocation()
 
   const [formData, setFormData] = useState<LeadFormPayload>({
     fullName: "",
@@ -26,6 +28,50 @@ export default function ContactForm() {
     const t = setTimeout(() => setToast(null), 3000)
     return () => clearTimeout(t)
   }, [toast])
+
+  useEffect(() => {
+    const state = (location.state as { leadPrefill?: Partial<LeadFormPayload> } | null)?.leadPrefill || {}
+    const params = new URLSearchParams(location.search)
+
+    type PrefillKey = "fullName" | "phoneNumber" | "carNumber" | "feedbackType"
+    const allowedKeys: PrefillKey[] = ["fullName", "phoneNumber", "carNumber", "feedbackType"]
+
+    const fromParams: Partial<Record<PrefillKey, string>> = {}
+    allowedKeys.forEach((key) => {
+      const value = params.get(key)
+      if (value) {
+        fromParams[key] = value
+      }
+    })
+
+    const fromState = allowedKeys.reduce<Partial<Record<PrefillKey, string>>>((acc, key) => {
+      const value = state[key]
+      if (typeof value === "string" && value.trim()) {
+        acc[key] = value
+      }
+      return acc
+    }, {})
+
+    const merged: Partial<Record<PrefillKey, string>> = { ...fromParams, ...fromState }
+    const hasValues = allowedKeys.some((key) => {
+      const value = merged[key]
+      return typeof value === "string" && value.trim()
+    })
+
+    if (!hasValues) {
+      return
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      ...(typeof merged.fullName === "string" && merged.fullName.trim() ? { fullName: merged.fullName } : {}),
+      ...(typeof merged.phoneNumber === "string" && merged.phoneNumber.trim() ? { phoneNumber: merged.phoneNumber } : {}),
+      ...(typeof merged.carNumber === "string" && merged.carNumber.trim() ? { carNumber: merged.carNumber } : {}),
+      ...(typeof merged.feedbackType === "string" && merged.feedbackType.trim()
+        ? { feedbackType: merged.feedbackType }
+        : {}),
+    }))
+  }, [location.key, location.search, location.state])
 
   const contactOptions = useMemo(
     () =>

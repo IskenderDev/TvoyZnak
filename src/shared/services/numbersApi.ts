@@ -251,20 +251,26 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
   const digitsString = digits.join("");
   const lettersString = letters.join("");
 
+  const sellerLoginRaw = pickString([dto.user, dto.seller]);
+  const sellerNameRaw = pickString([
+    dto.sellerName,
+    dto.fullName,
+    dto.ownerName,
+    dto.owner && (dto.owner as UnknownRecord).name,
+  ]);
+
+  const sellerLogin = sellerLoginRaw || undefined;
+  const sellerName = sellerNameRaw || undefined;
+  const sellerDisplay = sellerName || sellerLogin || "Продавец";
+
   return {
     id: String(dto.id),
     series,
     region: regionCode || "",
     price: toNumber(dto.price, 0),
-    seller:
-      pickString([
-        dto.seller,
-        dto.sellerName,
-        dto.fullName,
-        dto.ownerName,
-        dto.owner && (dto.owner as UnknownRecord).name,
-        dto.user,
-      ]) || "Продавец",
+    seller: sellerDisplay,
+    sellerLogin,
+    sellerName,
     phone: pickString([dto.phone, dto.phoneNumber]) || undefined,
     description: pickString([dto.description]) || undefined,
     date: normalizeDate(

@@ -1,135 +1,178 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Seo from "@/shared/components/Seo";
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
-import { formatPrice } from "@/shared/lib/format";
-import { numbersApi } from "@/shared/services/numbersApi";
-import type { NumberItem } from "@/entities/number/types";
+import { useEffect, useMemo, useState } from "react"
+import { createSearchParams, Link, useNavigate, useParams } from "react-router-dom"
+import { LuArrowLeft } from "react-icons/lu"
+import Seo from "@/shared/components/Seo"
+import PlateStaticLg from "@/shared/components/plate/PlateStaticLg"
+import { formatPrice } from "@/shared/lib/format"
+import { buildContactPrefill, formatPlateLabel } from "@/shared/lib/plate"
+import { paths } from "@/shared/routes/paths"
+import { numbersApi } from "@/shared/services/numbersApi"
+import type { NumberItem } from "@/entities/number/types"
 
 export default function NumberDetailsSection() {
-  const { id } = useParams<{ id: string }>();
-  const [item, setItem] = useState<NumberItem | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { id } = useParams<{ id: string }>()
+  const [item, setItem] = useState<NumberItem | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (!id) return;
-    let mounted = true;
-    setLoading(true);
-    setError(null);
+    if (!id) return
+    let mounted = true
+    setLoading(true)
+    setError(null)
 
     numbersApi
       .get(id)
       .then((data) => {
-        if (!mounted) return;
-        setItem(data);
+        if (!mounted) return
+        setItem(data)
       })
       .catch((err) => {
-        if (!mounted) return;
-        const message = err?.response?.data?.message || err?.message || "Не удалось загрузить номер";
-        setError(message);
+        if (!mounted) return
+        const message = err?.response?.data?.message || err?.message || "Не удалось загрузить номер"
+        setError(message)
       })
-      .finally(() => {
-        if (mounted) setLoading(false);
-      });
+      .finally(() => mounted && setLoading(false))
 
     return () => {
-      mounted = false;
-    };
-  }, [id]);
+      mounted = false
+    }
+  }, [id])
+
+  const contactPrefill = useMemo(() => {
+    if (!item) return { carNumber: "", feedbackType: "buy" as const }
+    return buildContactPrefill(item)
+  }, [item])
+
+  const contactSearch = useMemo(() => {
+    const params = createSearchParams({
+      ...(contactPrefill.carNumber ? { carNumber: contactPrefill.carNumber } : {}),
+      feedbackType: contactPrefill.feedbackType,
+    }).toString()
+    return params ? `?${params}` : ""
+  }, [contactPrefill])
+
+  const price = item ? formatPrice(item.price) : ""
+  const publishedDate = item?.date ? new Date(item.date).toLocaleDateString("ru-RU") : ""
+  const numberLabel = item ? formatPlateLabel(item) : ""
 
   if (loading) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
-    );
+    )
   }
-
   if (error) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
-    );
+    )
   }
-
   if (!item) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
-    );
+    )
   }
 
-  const price = formatPrice(item.price);
-  const publishedDate = item.date ? new Date(item.date).toLocaleDateString("ru-RU") : "";
+  const handleBuyClick = () => {
+    navigate({ pathname: paths.contacts, search: contactSearch }, { state: { leadPrefill: contactPrefill } })
+  }
+
+  const sellerLogin = item.sellerLogin || item.seller || "—"
+  const sellerName = item.sellerName || item.seller || "—"
+  const phone = item.phone || "—"
+
+  const detailsRows: Array<{ label: string; value: string; isPhone?: boolean }> = [
+    { label: "Цена", value: price },
+    { label: "Дата размещения", value: publishedDate || "—" },
+    { label: "Логин", value: sellerLogin },
+    { label: "Имя", value: sellerName },
+    { label: "Телефон", value: phone, isPhone: !!item.phone },
+  ]
 
   return (
     <>
-      <Seo title={`Номер ${item.series} — Знак отличия`} description={`Предложение от ${item.seller}. Стоимость ${price}.`} />
-      <section className="bg-[#0B0B0C] text-white min-h-screen py-12">
-        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 sm:px-6 md:flex-row">
-          <div className="flex-1 rounded-2xl bg-[#111214] p-6 shadow-lg">
-            <PlateStaticSm
-              data={{
-                price: item.price,
-                comment: item.plate.comment ?? item.description ?? "",
-                firstLetter: item.plate.firstLetter,
-                secondLetter: item.plate.secondLetter,
-                thirdLetter: item.plate.thirdLetter,
-                firstDigit: item.plate.firstDigit,
-                secondDigit: item.plate.secondDigit,
-                thirdDigit: item.plate.thirdDigit,
-                regionId: item.plate.regionId,
-              }}
-              responsive
-              showCaption={false}
-              className="mx-auto"
-            />
+      <Seo
+        title={`Номер ${numberLabel || item.series} — Знак отличия`}
+        description={`Предложение от ${item.seller}. Стоимость ${price}.`}
+      />
 
-            <dl className="mt-6 space-y-2 text-sm text-neutral-300">
-              <div className="flex justify-between">
-                <dt className="font-semibold text-white">Стоимость:</dt>
-                <dd>{price}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt className="font-semibold text-white">Регион:</dt>
-                <dd>{item.region || item.plate.regionId}</dd>
-              </div>
-              {publishedDate && (
-                <div className="flex justify-between">
-                  <dt className="font-semibold text-white">Добавлен:</dt>
-                  <dd>{publishedDate}</dd>
-                </div>
-              )}
-              {item.status && (
-                <div className="flex justify-between">
-                  <dt className="font-semibold text-white">Статус:</dt>
-                  <dd className="uppercase">{item.status}</dd>
-                </div>
-              )}
-            </dl>
+      <section className=" px-4 sm:px-6 lg:px-8  bg-[#0B0B0C] py-6 text-white">
+        <div className="mx-auto w-full ">
+          <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
+            <Link to={paths.home} > 
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                aria-label="Назад"
+                className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#0177FF] hover:bg-[#0C8BFF]  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                <LuArrowLeft className="h-6 w-6 text-white" />
+              </button></Link>
+
+            <h1 className="text-[30px] leading-tight sm:text-[36px] md:text-[42px] font-semibold">
+              Продам номер <span className="font-road uppercase tracking-wide">{numberLabel || item.series}</span>
+            </h1>
           </div>
 
-          <div className="flex-1 rounded-2xl bg-[#111214] p-6 shadow-lg">
-            <h2 className="text-2xl font-road font-bold uppercase">Информация о продавце</h2>
-            <p className="mt-3 text-neutral-300">{item.seller}</p>
-            {item.phone && <p className="mt-1 text-neutral-400">Телефон: {item.phone}</p>}
+          {/* Plate + Buy */}
+          <div className="mt-6">
+            <div className="flex items-center">
+              <PlateStaticLg
+                data={{
+                  price: item.price,
+                  comment: item.plate.comment ?? item.description ?? "",
+                  firstLetter: item.plate.firstLetter,
+                  secondLetter: item.plate.secondLetter,
+                  thirdLetter: item.plate.thirdLetter,
+                  firstDigit: item.plate.firstDigit,
+                  secondDigit: item.plate.secondDigit,
+                  thirdDigit: item.plate.thirdDigit,
+                  regionId: item.plate.regionId,
+                }}
+                responsive
+                showCaption={false}
+                className="w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
+              />
+            </div>
 
-            {item.description && (
-              <div className="mt-6 rounded-xl bg-[#0B0B0C] p-4 text-neutral-300">
-                <h3 className="text-lg font-road font-semibold uppercase text-white">Описание</h3>
-                <p className="mt-2 whitespace-pre-line text-sm leading-relaxed">{item.description}</p>
-              </div>
-            )}
-
-            <button className="mt-8 w-full rounded-full bg-[#0177FF] px-6 py-3 text-lg font-medium text-white hover:bg-[#046FFF]">
-              Связаться
+            <button
+              onClick={handleBuyClick}
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-25 md:px-50 py-3 text-base font-medium text-white transition hover:bg-[#0C8BFF]focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white mx-4 sm:mx-6 lg:mx-8"
+            >
+              Купить
             </button>
+          </div>
+
+          <div className="mt-8 w-screen -ml-8 -mb-6">
+            {detailsRows.map((row, index) => {
+              const bg = index % 2 === 0 ? "bg-[#2C2C2C] " : "bg-transparent"
+              return (
+                <div
+                  key={row.label}
+                  className={`grid grid-cols-2 gap-5 items-center ${bg} px-10 py-4 sm:px-10 sm:py-5`}
+                >
+                  <div className="text-[18px] sm:text-[22px] md:text-[24px] font-semibold">{row.label}</div>
+                  <div className="text-[18px] sm:text-[22px] md:text-[24px] text-white">
+                    {row.isPhone ? (
+                      <a href={`tel:${item.phone}`} className="hover:opacity-90">
+                        {row.value}
+                      </a>
+                    ) : (
+                      row.value
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
     </>
-  );
+  )
 }
