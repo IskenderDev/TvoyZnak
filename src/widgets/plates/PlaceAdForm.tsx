@@ -141,7 +141,7 @@ export default function PlaceAdForm() {
   };
 
   return (
-    <section className="bg-[#0B0B0C] text-white py-12 md:py-16" aria-label="Размещение объявления">
+    <section className="bg-background text-foreground py-12 md:py-16" aria-label="Размещение объявления">
       {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
@@ -224,7 +224,7 @@ export default function PlaceAdForm() {
             />
           </div>
 
-          <p className="text-[12px] text-[#FF6B6B]">
+          <p className="text-[12px] text-danger">
             * При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
@@ -245,13 +245,13 @@ export default function PlaceAdForm() {
             onChange={handleInputChange}
           />
 
-          {error && <p className="text-sm text-[#EB5757]">{error}</p>}
+          {error && <p className="text-sm text-danger">{error}</p>}
 
           <div className="flex items-start gap-2">
             <input
               id="consent"
               type="checkbox"
-              className="mt-1 h-4 w-4 rounded border border-white/30 bg-white/10 focus:ring-2 focus:ring-[#1E63FF]"
+              className="mt-1 h-4 w-4 rounded border border-foreground/30 bg-foreground/10 focus:ring-2 focus:ring-primary-500"
               checked={form.consent}
               onChange={handleInputChange}
               name="consent"
@@ -266,7 +266,7 @@ export default function PlaceAdForm() {
             <button
               type="submit"
               disabled={isSubmitDisabled}
-              className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+              className="w-full rounded-full px-10 py-3 font-medium text-primary-foreground transition-colors sm:w-auto bg-primary-500 hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Разместить объявление"
             >
               {loading ? "Отправка..." : "Разместить"}
@@ -279,7 +279,7 @@ export default function PlaceAdForm() {
 }
 
 const INPUT_BASE =
-  "bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]";
+  "rounded-lg bg-surface px-4 py-3 text-foreground placeholder:text-muted/80 outline-none focus:ring-2 focus:ring-primary-500";
 
 const normalizePrice = (value: string): number => {
   if (!value) return NaN;

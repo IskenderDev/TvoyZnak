@@ -68,7 +68,7 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Имя *"
         required
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-lg bg-surface text-foreground placeholder:text-muted/80 px-4 py-3 outline-none focus:ring-2 focus:ring-primary-500"
       />
 
       <input
@@ -78,7 +78,7 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Телефон *"
         required
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-lg bg-surface text-foreground placeholder:text-muted/80 px-4 py-3 outline-none focus:ring-2 focus:ring-primary-500"
       />
 
       <input
@@ -88,7 +88,7 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Номер *"
         required
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-lg bg-surface text-foreground placeholder:text-muted/80 px-4 py-3 outline-none focus:ring-2 focus:ring-primary-500"
       />
 
       <UiSelect<LeadFormPayload["type"]>
@@ -97,26 +97,26 @@ export default function ContactForm() {
         onChange={(v) => setFormData((prev) => ({ ...prev, type: v }))}
         options={contactOptions}
         placeholder="Выберите действие"
-        className="w-full bg-white text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
-        valueClassName="text-black"
-        placeholderClassName="text-[#7A7A7A]"
+        className="w-full rounded-lg bg-surface px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary-500"
+        valueClassName="text-foreground"
+        placeholderClassName="text-muted/80"
       />
 
-      <label className="flex items-center gap-2 text-xs text-[#6AA3FF] select-none">
+      <label className="flex items-center gap-2 text-xs text-primary-300 select-none">
         <input
           type="checkbox"
           name="consent"
           checked={formData.consent}
           onChange={handleChange}
-          className="accent-[#0177FF] w-4 h-4 "
+          className="h-4 w-4 accent-primary-500"
         />
-        Я согласен на обработку персональных данных<span className="text-[#EB5757]">*</span>
+        Я согласен на обработку персональных данных<span className="text-danger">*</span>
       </label>
 
       <button
         type="submit"
         disabled={isSubmitDisabled}
-        className="w-full rounded-lg bg-[#0177FF] hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 font-medium transition"
+        className="w-full rounded-lg bg-primary-500 py-3 font-medium text-primary-foreground transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Отправка..." : "Отправить"}
       </button>

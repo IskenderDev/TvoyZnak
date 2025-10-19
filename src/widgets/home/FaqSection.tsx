@@ -15,11 +15,11 @@ function FaqRow({
 }) {
   return (
     <div
-      className="rounded-xl border border-neutral-700 bg-[#1A1A1A] shadow-[0_0_0_1px_#2a2a2a] px-4 sm:px-6 py-4 sm:py-5"
+      className="rounded-xl border border-border/40 bg-surface px-4 py-4 shadow-[0_0_0_1px_rgba(var(--color-border),0.35)] sm:px-6 sm:py-5"
     >
       <div className="flex items-start gap-3 sm:gap-4">
-        <div className="relative mt-1 grid place-items-center w-6 h-6 rounded-full bg-white text-xs shrink-0">
-          <LuInfo className='text-[#0177FF] h-4 w-4' />
+        <div className="relative mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-primary-500/10 text-xs">
+          <LuInfo className='h-4 w-4 text-primary-500' />
         </div>
 
         <div className="flex-1">
@@ -29,19 +29,19 @@ function FaqRow({
             aria-controls={`faq-panel-${item.id}`}
             onClick={onToggle}
           >
-            <span className="font-semibold text-[15px] sm:text-base text-white">
+            <span className="font-semibold text-[15px] text-foreground sm:text-base">
               {item.question}
             </span>
 
             <span
-              className="shrink-0 text-white"
+              className="shrink-0 text-foreground"
               aria-hidden="true"
               title={open ? "Свернуть" : "Развернуть"}
             >
               {open ? (
-                <FaSquareMinus className="text-white w-5 h-5" />
+                <FaSquareMinus className="h-5 w-5 text-foreground" />
               ) : (
-                <FaSquarePlus  className="text-[#0177FF] w-5 h-5" />
+                <FaSquarePlus  className="h-5 w-5 text-primary-500" />
               )}
             </span>
           </button>
@@ -76,7 +76,7 @@ export default function FaqSection({
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
 
   return (
-    <section className=" text-white py-12 md:py-16">
+    <section className="bg-background text-foreground py-12 md:py-16">
       <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
         <h2 className="text-center text-2xl md:text-4xl font-bold uppercase tracking-wide">
           Часто задаваемые вопросы

@@ -68,17 +68,17 @@ export default function ServicesPage() {
     <>
       <Seo title="Услуги — Знак отличия" description="Все услуги компании Знак отличия по работе с автомобильными номерами" />
 
-      <main className="  text-white">
+      <main className="bg-background text-foreground">
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
           </div>
 
           <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 sm:py-20 md:px-8 lg:py-24">
             <h1 className="mt-5 text-center font-actay-wide text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
-              ВСЕ УСЛУГИ С <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
+              ВСЕ УСЛУГИ С <span className="text-primary-200">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
               <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
             </h1>
-            <p className="mt-5 max-w-[820px] text-center text-sm text-white/75 sm:text-base">
+            <p className="mt-5 max-w-[820px] text-center text-sm text-foreground/80 sm:text-base">
               Компания «ЗНАК ОТЛИЧИЯ» предлагает комплексные решения для владельцев и покупателей автомобильных номеров. Мы оцениваем, выкупаем, продаём и подбираем уникальные комбинации, обеспечивая прозрачность, безопасность и удобство на каждом этапе.
             </p>
             <div className="mt-10 mx-auto">
@@ -92,23 +92,23 @@ export default function ServicesPage() {
 
         <ServicesSection />
 
-        <section className=" px-5 pb-16 pt-4 md:px-8 lg:pb-24">
+        <section className="px-5 pb-16 pt-4 md:px-8 lg:pb-24">
           <div className="mx-auto flex flex-col max-w-6xl gap-15">
             {serviceBlocks.map((service) => (
               <article key={service.number} className="mt-10 grid grid-cols-1 items-start gap-15 lg:grid-cols-[280px_1fr] lg:gap-10">
                 <div className="relative mr-10">
                   <div
-                    className="rounded-2xl bg-[#0177FF] p-5 text-white shadow-[_24px_24px_rgb(44,44,44)]"
+                    className="rounded-2xl bg-primary-500 p-5 text-primary-foreground shadow-[_24px_24px_rgba(15,23,42,0.35)]"
                   >
                     <div className="items-start justify-between font-actay-druk ">
                       <div className="text-2xl text-left md:text-3xl  font-bold tracking-[0.2em]">УСЛУГА</div>
                       <div className=" text-right text-5xl font-extrabold leading-none tracking-[0.2em]">{service.number}</div>
                     </div>
-                    <p className="mt-5 text-xs leading-snug text-white/90">{service.badgeNote}</p>
+                    <p className="mt-5 text-xs leading-snug text-primary-foreground/90">{service.badgeNote}</p>
                   </div>
                 </div>
 
-                <div className='font-actay text-white/95'>
+                <div className='font-actay text-foreground/95'>
                   <h3 className="font-actay-wide text-2xl md:text-3xl font-extrabold uppercase">{service.title}</h3>
                   <p className="mt-2 text-[16px] md:text-2xl leading-relaxed  ">{service.description}</p>
                   <p className="mt-4 text-[16px] md:text-2xl ">{service.subtitle}</p>
@@ -116,7 +116,7 @@ export default function ServicesPage() {
                     {service.chips.map((chip) => (
                       <span
                         key={chip}
-                        className="rounded-xl border border-white/30 px-4 py-2 text-[15px] md:text-lg  transition-colors duration-200 hover:bg-white/5 max-w-100"
+                        className="max-w-100 rounded-xl border border-border/50 px-4 py-2 text-[15px] md:text-lg transition-colors duration-200 hover:bg-foreground/5"
                       >
                         {chip}
                       </span>

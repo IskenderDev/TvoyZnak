@@ -26,9 +26,9 @@ export const PlateMarketTable = ({
   const style = { "--cols": gridCols } as CSSProperties
 
   return (
-    <div className={`overflow-hidden rounded-2xl bg-white text-black ${className}`}>
+    <div className={`overflow-hidden rounded-2xl bg-surface text-foreground ${className}`}>
       <div
-        className="font-actay-druk font-bold grid items-center gap-4 border-b border-black/10 px-6 py-3 text-lg [grid-template-columns:var(--cols)] text-center"
+        className="grid items-center gap-4 border-b border-border/30 px-6 py-3 text-center font-actay-druk text-lg font-bold [grid-template-columns:var(--cols)]"
         style={style}
       >
         <span>Дата</span>
@@ -49,14 +49,14 @@ export const PlateMarketTable = ({
         <div>
           <button
             onClick={onReset}
-            className="-mr-4 rounded-full border border-black/20 px-4 py-1.5 text-lg font-medium hover:bg-black/5"
+            className="-mr-4 rounded-full border border-border/40 px-4 py-1.5 text-lg font-medium transition hover:bg-foreground/5"
           >
             Сбросить фильтры
           </button>
         </div>
       </div>
 
-      <ul className="divide-y divide-black/10">
+      <ul className="divide-y divide-border/30">
         {rows.map((row) => (
           <PlateMarketRow key={row.id} row={row} gridCols={gridCols} />
         ))}

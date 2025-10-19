@@ -6,12 +6,12 @@ import { paths } from '../../shared/routes/paths'
 export default function Footer() {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `transition-colors duration-200 font-medium text-[14px] ${isActive
-      ? "text-[#85B6FF]"
-      : "text-white hover:text-[#85B6FF]"
+      ? "text-primary-200"
+      : "text-foreground hover:text-primary-200"
     }`
 
   return (
-    <footer className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-actay text-white p-10">
+    <footer className="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 p-10 font-actay text-foreground">
       <Container>
           <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto">
             <div className="flex flex-col items-start">
@@ -51,28 +51,28 @@ export default function Footer() {
             <div className="flex flex-col items-center md:items-end gap-3">
               <a
                 href="tel:+79959202090"
-                className="text-lg font-semibold text-white hover:text-[#85B6FF] transition-colors"
+                className="text-lg font-semibold text-foreground transition-colors hover:text-primary-200"
               >
                 +7 (995) 920-20-90
               </a>
               <div className="flex gap-4 text-[22px]">
                 <a
                   href="#"
-                  className="hover:text-[#85B6FF] transition-colors"
+                  className="transition-colors hover:text-primary-200"
                   aria-label="VK"
                 >
                   <FaVk />
                 </a>
                 <a
                   href="#"
-                  className="hover:text-[#85B6FF] transition-colors"
+                  className="transition-colors hover:text-primary-200"
                   aria-label="Telegram"
                 >
                   <FaTelegramPlane />
                 </a>
                 <a
                   href="#"
-                  className="hover:text-[#85B6FF] transition-colors"
+                  className="transition-colors hover:text-primary-200"
                   aria-label="WhatsApp"
                 >
                   <FaWhatsapp />

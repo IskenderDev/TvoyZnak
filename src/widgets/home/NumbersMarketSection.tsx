@@ -28,7 +28,7 @@ export default function NumbersMarketSection() {
   } = usePlateMarket();
 
   return (
-    <section className="min-h-screen bg-[#0B0B0C] py-10 text-white">
+    <section className="min-h-screen bg-background py-10 text-foreground">
       <div className="mx-auto px-4 sm:px-6">
         <PlateMarketFilters
           className="mb-6"
@@ -42,11 +42,11 @@ export default function NumbersMarketSection() {
           onPlateQueryChange={setPlateQuery}
         />
 
-        {error && <p className="mb-4 rounded-xl bg-[#1E1E1E] px-4 py-3 text-[#FF6B6B]">{error}</p>}
+        {error && <p className="mb-4 rounded-xl bg-surface-muted px-4 py-3 text-danger">{error}</p>}
         {loading && <p className="mb-4 text-neutral-300">Загрузка предложений...</p>}
 
         {!loading && !visibleRows.length && !error ? (
-          <p className="rounded-xl bg-[#1E1E1E] px-6 py-10 text-center text-neutral-300">
+          <p className="rounded-xl bg-surface-muted px-6 py-10 text-center text-neutral-300">
             Номера не найдены. Измените фильтры.
           </p>
         ) : (
@@ -66,7 +66,7 @@ export default function NumbersMarketSection() {
               <div className="mt-6 flex justify-center">
                 <button
                   onClick={showMore}
-                  className="rounded-full border border-black/20 bg-white px-6 py-2 text-black hover:bg-white/90"
+                  className="rounded-full border border-border/40 bg-surface px-6 py-2 text-foreground transition hover:bg-surface/80"
                 >
                   Показать ещё
                 </button>

@@ -33,21 +33,21 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
   const seller = row.seller || row.owner || row.ownerName || row.user || "Продавец";
 
   return (
-    <li className={`rounded-2xl bg-white p-3 text-black shadow-sm ${className}`}>
+    <li className={`rounded-2xl bg-surface p-3 text-foreground shadow-sm ${className}`}>
       {/* верх: номер + дата */}
       <div className="flex items-start justify-between gap-3">
         <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
-        {date && <span className="text-xs text-black/50">{date}</span>}
+        {date && <span className="text-xs text-foreground/60">{date}</span>}
       </div>
 
       {/* низ: цена/продавец + CTA */}
       <div className="mt-3 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="text-sm font-semibold tabular-nums leading-tight">{price}</div>
-          <div className="text-xs text-black/70 truncate">{seller}</div>
+          <div className="truncate text-xs text-foreground/70">{seller}</div>
         </div>
 
-        <button className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white" onClick={() => onBuy?.(row)}>
+        <button className="shrink-0 rounded-full bg-primary-500 px-4 py-2 text-primary-foreground transition hover:brightness-95" onClick={() => onBuy?.(row)}>
           {ctaText}
         </button>
       </div>

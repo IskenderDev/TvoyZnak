@@ -19,11 +19,11 @@ export default function Header() {
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `transition-colors duration-200 font-medium text-[15px] ${
-      isActive ? "text-[#85B6FF]" : "text-white hover:text-[#85B6FF]"
+      isActive ? "text-primary-200" : "text-foreground hover:text-primary-200"
     }`;
 
   return (
-    <header className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-actay font-light text-xl mb-12">
+    <header className="bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 font-actay font-light text-xl text-foreground mb-12">
       <Container>
         <div className="flex items-center justify-between gap-4 p-5 md:p-10">
           <Link to={paths.home} className="shrink-0">
@@ -54,7 +54,7 @@ export default function Header() {
           <div className="flex items-center gap-3 md:gap-5">
             <Button
               onClick={handleSellClick}
-              className="rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-3 py-2 text-sm font-medium text-white transition hover:opacity-90 md:px-4 md:text-[15px]"
+              className="rounded-full bg-gradient-to-r from-primary-500 to-primary-600 px-3 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90 md:px-4 md:text-[15px]"
             >
               Продать номер
             </Button>
@@ -64,7 +64,7 @@ export default function Header() {
               aria-haspopup="dialog"
               aria-expanded={isRegisterOpen}
             >
-              <LuCircleUserRound color="white" className="h-8 w-8" />
+              <LuCircleUserRound className="h-8 w-8 text-foreground" />
             </button>
           </div>
         </div>

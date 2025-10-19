@@ -2,13 +2,13 @@
 import React from "react"
 
 export default function WhyChooseUs() {
-	const cardBase =
-		"rounded-xl border border-[#D2D2D2] bg-[#FFFFFF1A] backdrop-blur-[2px] " +
-		"text-[14px] md:text-[24px] p-1 md:p-4 " +
-		"max-w-[250px] md:max-w-[450px] "
+        const cardBase =
+                "rounded-xl border border-border/60 bg-surface/60 backdrop-blur-[2px] " +
+                "text-[14px] md:text-[24px] p-1 md:p-4 " +
+                "max-w-[250px] md:max-w-[450px] "
 
-	return (
-		<section className="relative text-white py-9 md:py-12" aria-label="Почему выбирают нас">
+        return (
+                <section className="relative bg-background text-foreground py-9 md:py-12" aria-label="Почему выбирают нас">
 			<div className="max-w-[1120px] mx-auto px-6 md:px-10">
 				<h2 className="text-center text-2xl md:text-5xl font-extrabold tracking-wide font-actay-wide">
 					ПОЧЕМУ ВЫБИРАЮТ НАС

@@ -118,102 +118,102 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <div className="relative mx-auto w-full max-w-[700px] rounded-2xl bg-[#0B0B0C] px-6 py-7 text-white md:px-8 md:py-8">
+      <div className="relative mx-auto w-full max-w-[700px] rounded-2xl bg-background px-6 py-7 text-foreground md:px-8 md:py-8">
         <button
           type="button"
           onClick={handleClose}
-          className="absolute right-6 top-6 text-white/60 transition hover:text-white"
+          className="absolute right-6 top-6 text-foreground/60 transition hover:text-foreground"
           aria-label="Закрыть модальное окно"
         >
           ×
         </button>
 
-        <h2 className="mb-6 text-[22px] font-semibold uppercase tracking-wide text-primary">
+        <h2 className="mb-6 text-[22px] font-semibold uppercase tracking-wide text-primary-200">
           ЗАРЕГИСТРИРОВАТЬСЯ
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-white/80">
+              <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-foreground/80">
                 Имя
               </label>
               <input
                 id="fullName"
                 type="text"
                 placeholder="Введите имя"
-                className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-[10px] bg-surface px-4 text-[14px] text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 {...register("fullName")}
               />
               {errors.fullName ? (
-                <p className="mt-2 text-xs text-red-400">{errors.fullName.message}</p>
+                <p className="mt-2 text-xs text-danger">{errors.fullName.message}</p>
               ) : null}
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium text-white/80">
-                Почта <span className="text-red-400">*</span>
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-foreground/80">
+                Почта <span className="text-danger">*</span>
               </label>
               <input
                 id="email"
                 type="email"
                 placeholder="example@mail.com"
-                className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-[10px] bg-surface px-4 text-[14px] text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 {...register("email")}
               />
               {errors.email ? (
-                <p className="mt-2 text-xs text-red-400">{errors.email.message}</p>
+                <p className="mt-2 text-xs text-danger">{errors.email.message}</p>
               ) : null}
             </div>
 
             <div>
-              <label htmlFor="phoneNumber" className="mb-2 block text-sm font-medium text-white/80">
-                Телефон <span className="text-red-400">*</span>
+              <label htmlFor="phoneNumber" className="mb-2 block text-sm font-medium text-foreground/80">
+                Телефон <span className="text-danger">*</span>
               </label>
               <input
                 id="phoneNumber"
                 type="tel"
                 placeholder="+996 700 000 000"
-                className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-[10px] bg-surface px-4 text-[14px] text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 {...register("phoneNumber")}
               />
               {errors.phoneNumber ? (
-                <p className="mt-2 text-xs text-red-400">{errors.phoneNumber.message}</p>
+                <p className="mt-2 text-xs text-danger">{errors.phoneNumber.message}</p>
               ) : null}
             </div>
 
             <div>
-              <label htmlFor="password" className="mb-2 block text-sm font-medium text-white/80">
-                Пароль <span className="text-red-400">*</span>
+              <label htmlFor="password" className="mb-2 block text-sm font-medium text-foreground/80">
+                Пароль <span className="text-danger">*</span>
               </label>
               <input
                 id="password"
                 type="password"
                 placeholder="Введите пароль"
-                className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="h-11 w-full rounded-[10px] bg-surface px-4 text-[14px] text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 {...register("password")}
               />
               {errors.password ? (
-                <p className="mt-2 text-xs text-red-400">{errors.password.message}</p>
+                <p className="mt-2 text-xs text-danger">{errors.password.message}</p>
               ) : null}
             </div>
           </div>
 
           <div className="space-y-3">
-            <label className="flex items-start gap-3 text-sm text-white/80">
+            <label className="flex items-start gap-3 text-sm text-foreground/80">
               <input
                 type="checkbox"
-                className="mt-1 h-5 w-5 accent-[#0177FF]"
+                className="mt-1 h-5 w-5 accent-primary-500"
                 {...register("agree")}
               />
               <span>
-                Я согласен на обработку персональных данных <span className="text-red-400">*</span>
+                Я согласен на обработку персональных данных <span className="text-danger">*</span>
               </span>
             </label>
-            {errors.agree ? <p className="text-xs text-red-400">{errors.agree.message}</p> : null}
+            {errors.agree ? <p className="text-xs text-danger">{errors.agree.message}</p> : null}
 
-            <label className="flex items-center gap-3 text-sm text-white/80">
-              <input type="checkbox" className="h-5 w-5 accent-[#0177FF]" {...register("remember")} />
+            <label className="flex items-center gap-3 text-sm text-foreground/80">
+              <input type="checkbox" className="h-5 w-5 accent-primary-500" {...register("remember")} />
               <span>Запомнить меня</span>
             </label>
           </div>
@@ -222,7 +222,7 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-primary text-[15px] font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-primary-500 text-[15px] font-medium text-primary-foreground transition disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
                 <>
@@ -256,7 +256,7 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
 
             <button
               type="button"
-              className="flex h-11 w-full items-center justify-center rounded-[10px] bg-[#3D3D3D] text-[15px] font-medium text-white transition hover:bg-[#4A4A4A]"
+              className="flex h-11 w-full items-center justify-center rounded-[10px] bg-surface-muted text-[15px] font-medium text-foreground transition hover:bg-surface-muted/80"
             >
               Вход
             </button>

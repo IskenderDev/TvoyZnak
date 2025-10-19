@@ -18,8 +18,8 @@ export default function ProjectsSection({ items }: Props) {
                 setActive((prev) => (dir === "left" ? Math.max(0, prev - 1) : Math.min(max, prev + 1)))
         }
 
-	return (
-		<section className=" text-white py-14 md:py-18">
+        return (
+                <section className="bg-background text-foreground py-14 md:py-18">
 			<div className="max-w-[1200px] mx-auto px-6 md:px-10">
 				<h2 className="text-center font-bold uppercase text-2xl md:text-4xl tracking-wide font-actay-wide">
 					НАШИ ГОТОВЫЕ РАБОТЫ
@@ -62,20 +62,20 @@ export default function ProjectsSection({ items }: Props) {
 						</dl>
 
 						<div className="absolute bottom-0 left-0 right-0 flex justify-between">
-							<button
-								aria-label="Показать предыдущую карточку"
-								onClick={() => go("left")}
-								className="w-11 h-11 grid place-items-center bg-[#1E63FF] hover:opacity-90 transition disabled:opacity-40"
-								disabled={active === 0}
-							>
+                                                        <button
+                                                                aria-label="Показать предыдущую карточку"
+                                                                onClick={() => go("left")}
+                                                                className="grid h-11 w-11 place-items-center rounded-full bg-primary-500 text-primary-foreground transition hover:opacity-90 disabled:opacity-40"
+                                                                disabled={active === 0}
+                                                        >
 								<FaArrowLeftLong className="w-5 h-5" />
 							</button>
-							<button
-								aria-label="Показать следующую карточку"
-								onClick={() => go("right")}
-								className="w-11 h-11 grid place-items-center bg-[#1E63FF] hover:opacity-90 transition disabled:opacity-40"
-								disabled={active === data.length - 1}
-							>
+                                                        <button
+                                                                aria-label="Показать следующую карточку"
+                                                                onClick={() => go("right")}
+                                                                className="grid h-11 w-11 place-items-center rounded-full bg-primary-500 text-primary-foreground transition hover:opacity-90 disabled:opacity-40"
+                                                                disabled={active === data.length - 1}
+                                                        >
 								<FaArrowRightLong className="w-5 h-5" />
 							</button>
 						</div>

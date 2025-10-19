@@ -4,7 +4,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative isolate overflow-hidden bg-[#0B0B0C] text-white w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
+      className="relative isolate overflow-hidden bg-background text-foreground w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
       aria-label="Премиальные автомобильные номера с гарантией"
     >
       <div className="relative -top-10 w-full px-6 lg:px-16 py-10 md:py-16 min-h-[70svh] md:min-h-[80svh] lg:min-h-[90svh] flex items-center">
@@ -23,7 +23,7 @@ export default function HeroSection() {
             {tags.map((t) => (
               <span
                 key={t}
-                className="inline-block mr-2 mb-2 rounded-full border border-[#0177FF] px-4 py-1 text-sm text-neutral-200"
+                className="inline-block mr-2 mb-2 rounded-full border border-primary-500 px-4 py-1 text-sm text-neutral-200"
               >
                 {t}
               </span>
@@ -32,7 +32,7 @@ export default function HeroSection() {
 
           <button
             type="button"
-            className="mt-6 rounded-full bg-[#0177FF] px-6 py-3 font-medium text-white transition-colors duration-300 hover:brightness-110"
+            className="mt-6 rounded-full bg-primary-500 px-6 py-3 font-medium text-primary-foreground transition-colors duration-300 hover:brightness-110"
           >
             Запросить список
           </button>

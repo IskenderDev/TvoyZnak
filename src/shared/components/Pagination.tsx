@@ -11,10 +11,10 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
   const handleNext = () => onPageChange((p) => Math.min(totalPages, p + 1));
 
   return (
-    <div className="flex justify-center items-center gap-2 font-road">
+    <div className="flex items-center justify-center gap-2 font-road">
       <button
         onClick={handlePrev}
-        className="px-3 py-2 text-2xl text-white/60 hover:text-white"
+        className="px-3 py-2 text-2xl text-foreground/60 transition-colors hover:text-foreground"
         aria-label="Предыдущая страница"
       >
         ‹
@@ -24,10 +24,10 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
         <button
           key={n}
           onClick={() => onPageChange(n)}
-          className={`w-9 h-9 rounded-md font-medium transition-colors ${
+          className={`h-9 w-9 rounded-md font-medium transition-colors ${
             page === n
-              ? "bg-[#0177FF] text-white"
-              : "text-white/70 hover:text-white hover:bg-white/10"
+              ? "bg-primary-500 text-primary-foreground"
+              : "text-foreground/70 hover:bg-foreground/10 hover:text-foreground"
           }`}
         >
           {n}
@@ -36,7 +36,7 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
 
       <button
         onClick={handleNext}
-        className="px-3 py-2 text-2xl text-white/60 hover:text-white"
+        className="px-3 py-2 text-2xl text-foreground/60 transition-colors hover:text-foreground"
         aria-label="Следующая страница"
       >
         ›

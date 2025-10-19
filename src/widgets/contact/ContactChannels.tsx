@@ -48,12 +48,12 @@ function ChannelRow({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="inline-flex size-10 items-center justify-center rounded-lg bg-[#0177FF]">
+      <span className="inline-flex size-10 items-center justify-center rounded-lg bg-primary-500 text-primary-foreground">
         {icon}
       </span>
       <a
         href={href}
-        className="text-[15px] sm:text-base font-medium hover:text-[#0177FF] transition-colors"
+        className="text-[15px] sm:text-base font-medium transition-colors hover:text-primary-500"
       >
         {label}
       </a>
@@ -76,7 +76,7 @@ function SocialIcon({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex size-10 items-center justify-center rounded-lg bg-[#0177FF] hover:brightness-95 transition"
+      className="inline-flex size-10 items-center justify-center rounded-lg bg-primary-500 text-primary-foreground transition hover:brightness-95"
       title={label}
     >
       {icon}

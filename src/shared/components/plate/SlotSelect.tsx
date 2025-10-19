@@ -194,7 +194,7 @@ export default function SlotSelect({
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
-            className="rounded-xl bg-[#0019FF] overflow-y-auto no-scrollbar shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
+            className="rounded-xl bg-primary-800 overflow-y-auto no-scrollbar shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
             style={{
               width: Math.max(40),
               maxHeight: dropdownMaxHeight, // скролл внутри, без полосы
@@ -226,8 +226,8 @@ export default function SlotSelect({
                           onChange(opt);
                           setOpen(false);
                         }}
-                        className={`w-full grid place-items-center text-white font-bold transition-transform duration-150
-                          ${highlighted && !selected ? " bg-[#0177FF]" : ""}
+                        className={`w-full grid place-items-center text-primary-foreground font-bold transition-transform duration-150
+                          ${highlighted && !selected ? " bg-primary-500" : ""}
                         `}
                         style={{
                           paddingTop: 12,

@@ -19,9 +19,9 @@ export default function UiSelect<T extends string>({
   onChange,
   placeholder = "Выберите действие",
   options,
-  className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
-  valueClassName = "text-black",
-  placeholderClassName = "text-[#777]",
+  className = "w-full rounded-lg bg-surface px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary-500",
+  valueClassName = "text-foreground",
+  placeholderClassName = "text-muted/80",
 }: UiSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState<number>(-1);
@@ -83,7 +83,7 @@ export default function UiSelect<T extends string>({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-left`}
+        className={`${className} relative pr-10 text-left ${value ? valueClassName : placeholderClassName}`}
       >
         {current?.label ?? placeholder}
         <LuChevronDown
@@ -96,7 +96,7 @@ export default function UiSelect<T extends string>({
         <ul
           ref={listRef}
           role="listbox"
-          className="absolute z-20 mt-2 w-full rounded-2xl bg-[#0177FF] text-white shadow-lg p-3"
+          className="absolute z-20 mt-2 w-full rounded-2xl bg-primary-500 p-3 text-primary-foreground shadow-lg"
         >
           {options.map((opt, idx) => {
             const selected = value === opt.value;
@@ -113,12 +113,12 @@ export default function UiSelect<T extends string>({
                   onChange(opt.value);
                   setOpen(false);
                 }}
-                className="px-2 py-2 rounded-lg cursor-pointer"
+                className="cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-primary-600/60"
               >
                 <span
                   className={[
-                    "inline-flex items-center px-2 py-1 rounded-full",
-                    selected || active ? "ring-2 ring-white/60" : "",
+                    "inline-flex items-center rounded-full px-2 py-1",
+                    selected || active ? "ring-2 ring-primary-foreground/70" : "",
                   ].join(" ")}
                 >
                   {opt.label}

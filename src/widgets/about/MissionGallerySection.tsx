@@ -18,11 +18,11 @@ export default function MissionGallerySection({ items }: Props) {
   const data = items && items.length > 0 ? items : FALLBACK;
 
   return (
-    <section className="relative text-white py-10 md:py-14" aria-label="Наша миссия — делать редкие номера доступными и безопасными">
+    <section className="relative bg-background text-foreground py-10 md:py-14" aria-label="Наша миссия — делать редкие номера доступными и безопасными">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10">
         <h2 className="text-2xl md:text-4xl font-extrabold tracking-wide text-center uppercase">
           НАША МИССИЯ — ДЕЛАТЬ РЕДКИЕ НОМЕРА
-          <span className="text-[#0177FF] block">ДОСТУПНЫМИ И БЕЗОПАСНЫМИ</span>
+          <span className="text-primary-200 block">ДОСТУПНЫМИ И БЕЗОПАСНЫМИ</span>
         </h2>
 
         <p className="max-w-[900px] mx-auto text-neutral-300 text-sm md:text-base leading-relaxed mt-3 md:mt-4 text-center">
@@ -44,7 +44,7 @@ export default function MissionGallerySection({ items }: Props) {
                 key={img.id}
                 className="min-w-[78%] sm:min-w-[48%] md:min-w-[31%] lg:min-w-[28%] snap-start"
               >
-                <div className="rounded-2xl overflow-hidden bg-neutral-900">
+                <div className="rounded-2xl overflow-hidden bg-surface-muted">
                   <div className="aspect-[3/4]">
                     <img
                       src={img.src}

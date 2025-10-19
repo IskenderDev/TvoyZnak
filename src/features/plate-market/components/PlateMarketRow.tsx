@@ -31,8 +31,8 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   const style = { "--cols": gridCols } as CSSProperties;
 
   return (
-    <li className="grid items-center gap-4 px-6 py-4 text-center font-actay [grid-template-columns:var(--cols)]" style={style}>
-      <time className="tabular-nums text-sm text-black md:text-lg">
+    <li className="grid items-center gap-4 px-6 py-4 text-center font-actay text-foreground [grid-template-columns:var(--cols)]" style={style}>
+      <time className="tabular-nums text-sm text-foreground md:text-lg">
         {row.date ? formatDate(row.date) : "—"}
       </time>
 
@@ -47,7 +47,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
       <div className="text-sm font-actay md:text-lg">{row.seller}</div>
 
       <div className="justify-self-end">
-        <button className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white hover:brightness-95 md:text-lg">
+        <button className="rounded-full bg-primary-500 px-5 py-2 text-sm font-medium text-primary-foreground transition hover:brightness-95 md:text-lg">
           Купить
         </button>
       </div>

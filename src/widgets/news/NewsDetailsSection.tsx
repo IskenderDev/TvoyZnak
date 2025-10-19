@@ -45,7 +45,7 @@ export default function NewsDetailsSection() {
 
   if (loading) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="bg-background text-foreground min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     );
@@ -53,15 +53,15 @@ export default function NewsDetailsSection() {
 
   if (error) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
-        <p className="text-[#EB5757]">{error}</p>
+      <section className="bg-background text-foreground min-h-screen flex items-center justify-center">
+        <p className="text-danger">{error}</p>
       </section>
     );
   }
 
   if (!item) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className="bg-background text-foreground min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Новость не найдена</p>
       </section>
     );
@@ -70,10 +70,10 @@ export default function NewsDetailsSection() {
   return (
     <>
       <Seo title={`${item.title} — Знак отличия`} description={item.excerpt || item.content?.slice(0, 180)} />
-      <Link to="/news" className="text-[#0177FF] hover:underline mx-6">
+      <Link to="/news" className="text-primary-500 hover:underline mx-6">
         ← Все новости
       </Link>
-      <article className="bg-[#0B0B0C] text-white min-h-screen py-8 font-actay">
+      <article className="bg-background text-foreground min-h-screen py-8 font-actay">
         <div className="mx-auto px-6 max-w-6xl flex flex-col lg:flex-row gap-10">
           {item.cover && (
             <img src={item.cover} alt={item.title} className="w-full lg:w-1/2 rounded-2xl object-cover" loading="lazy" />

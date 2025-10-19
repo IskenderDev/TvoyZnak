@@ -88,7 +88,7 @@ export default function ContactForm() {
     typesLoading
 
   return (
-    <section className="bg-[#0B0B0C] text-white py-12 md:py-16">
+    <section className="bg-background text-foreground py-12 md:py-16">
       {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
@@ -106,7 +106,7 @@ export default function ContactForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Имя *"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full rounded-lg bg-surface px-4 py-3 text-foreground placeholder:text-muted/80 outline-none focus:ring-2 focus:ring-primary-500"
             />
 
             <input
@@ -117,7 +117,7 @@ export default function ContactForm() {
               onChange={handleChange}
               placeholder="Телефон *"
               inputMode="tel"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full rounded-lg bg-surface px-4 py-3 text-foreground placeholder:text-muted/80 outline-none focus:ring-2 focus:ring-primary-500"
             />
 
             <div className="space-y-1">
@@ -129,7 +129,7 @@ export default function ContactForm() {
                 options={selectOptions as { label: string; value: string }[]}
               />
               {typesError && (
-                <p className="text-xs text-[#EB5757]">{typesError}</p>
+                <p className="text-xs text-danger">{typesError}</p>
               )}
             </div>
 
@@ -139,26 +139,26 @@ export default function ContactForm() {
               value={formData.number}
               onChange={handleChange}
               placeholder="Автомобильный номер (необязательно)"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full rounded-lg bg-surface px-4 py-3 text-foreground placeholder:text-muted/80 outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
-          <label className="flex items-center gap-2 text-xs text-[#6AA3FF] select-none">
+          <label className="flex items-center gap-2 text-xs text-primary-300 select-none">
             <input
               type="checkbox"
               name="consent"
               checked={formData.consent}
               onChange={handleChange}
-              className="accent-[#0177FF] w-4 h-4 "
+              className="h-4 w-4 accent-primary-500"
             />
-            Я согласен на обработку персональных данных<span className="text-[#EB5757]">*</span>
+            Я согласен на обработку персональных данных<span className="text-danger">*</span>
           </label>
 
           <div className="flex justify-center">
             <button
               type="submit"
               disabled={isSubmitDisabled}
-              className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors duration-300"
+              className="w-full rounded-full bg-primary-500 px-10 py-3 font-medium text-primary-foreground transition-colors duration-300 hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               {loading ? "Отправка..." : "Отправить"}
             </button>
