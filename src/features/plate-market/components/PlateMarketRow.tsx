@@ -40,8 +40,8 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         <PlateStaticSm data={data} responsive showCaption={false} className="mx-auto max-w-[210px]" />
       </div>
 
-      <div className="tabular-nums text-sm md:text-lg">
-        <span className="font-medium">{formatPrice(row.price)}</span>
+      <div className="tabular-nums text-sm md:text-lg font-actay">
+        <span className="font-medium font-actay-druk">{formatPrice(row.price)}</span>
       </div>
 
       <div className="text-sm font-actay md:text-lg">{row.seller}</div>
