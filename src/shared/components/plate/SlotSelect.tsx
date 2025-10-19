@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useId } from "react";
+import React, { useCallback, useEffect, useRef, useState, useId } from "react";
 
 type Props = {
   ariaLabel: string;
@@ -8,7 +8,6 @@ type Props = {
   fontSize: number;
   slotW: number;
   slotH: number;
-  left?:number;
   color?: string;
   centerText?: boolean;
   dropdownMaxHeight?: number;
@@ -20,7 +19,6 @@ export default function SlotSelect({
   onChange,
   options,
   fontSize,
-  left,
   slotW,
   slotH,
   color = "#000",
@@ -36,7 +34,7 @@ export default function SlotSelect({
 
   // тайпахед
   const typeBufferRef = useRef("");
-  const typeTimerRef = useRef<number | null>(null);
+  const typeTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const listboxRef = useRef<HTMLDivElement | null>(null);
@@ -44,6 +42,11 @@ export default function SlotSelect({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const listboxId = useId();
+
+  const scrollActiveIntoView = useCallback(() => {
+    const el = optionRefs.current[activeIndex];
+    el?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
@@ -65,23 +68,25 @@ export default function SlotSelect({
         scrollActiveIntoView();
       }, 0);
       return () => cancelAnimationFrame(id);
-    } else {
-      setAppear(false);
-      // вернуть фокус на триггер
-      triggerRef.current?.focus({ preventScroll: true });
     }
-  }, [open, value, options]);
+
+    setAppear(false);
+    triggerRef.current?.focus({ preventScroll: true });
+    return;
+  }, [open, options, scrollActiveIntoView, value]);
 
   useEffect(() => {
     if (!open) return;
     scrollActiveIntoView();
-  }, [activeIndex, open]);
+  }, [activeIndex, open, scrollActiveIntoView]);
 
   const isPrintableKey = (e: React.KeyboardEvent) =>
     e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 
   const applyTypeahead = (key: string) => {
-    window.clearTimeout(typeTimerRef.current as any);
+    if (typeTimerRef.current) {
+      window.clearTimeout(typeTimerRef.current);
+    }
     typeBufferRef.current += key;
     const q = typeBufferRef.current.toLowerCase();
     let idx = options.findIndex((o) => o.toLowerCase().startsWith(q));
@@ -92,7 +97,7 @@ export default function SlotSelect({
 
     typeTimerRef.current = window.setTimeout(() => {
       typeBufferRef.current = "";
-    }, 600) as any;
+    }, 600);
   };
 
   const onTriggerKeyDown = (e: React.KeyboardEvent) => {
@@ -156,11 +161,6 @@ export default function SlotSelect({
       applyTypeahead(e.key);
       return;
     }
-  };
-
-  const scrollActiveIntoView = () => {
-    const el = optionRefs.current[activeIndex];
-    el?.scrollIntoView({ block: "nearest" });
   };
 
   return (

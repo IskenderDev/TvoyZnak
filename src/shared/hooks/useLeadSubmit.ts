@@ -1,22 +1,16 @@
 import { useState, useCallback } from "react";
+import { feedbacksApi } from "@/shared/services/feedbacksApi";
 
 export type LeadFormPayload = {
   name: string;
   phone: string;
-  type: "buy" | "sell" | "evaluate" | "";
+  type: string;
   number: string;
   consent: boolean;
+  message?: string;
 };
 
-type UseLeadSubmitOptions = {
-  url?: string; // можно прокинуть свой endpoint
-  headers?: Record<string, string>;
-};
-
-export function useLeadSubmit(options: UseLeadSubmitOptions = {}) {
-  const { url = "/api/lead", headers = { "Content-Type": "application/json" } } =
-    options;
-
+export function useLeadSubmit() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -28,30 +22,50 @@ export function useLeadSubmit(options: UseLeadSubmitOptions = {}) {
       setSuccess(false);
 
       try {
-        // Пока просто логируем. Когда будет бэкенд — раскомментируйте fetch.
-        console.log("Lead submit:", data);
-
-        // const res = await fetch(url, {
-        //   method: "POST",
-        //   headers,
-        //   body: JSON.stringify(data),
-        // });
-        // if (!res.ok) {
-        //   const text = await res.text().catch(() => "");
-        //   throw new Error(text || `Request failed: ${res.status}`);
-        // }
-
+        await feedbacksApi.create({
+          name: data.name,
+          phone: data.phone,
+          type: data.type,
+          number: data.number,
+          message: data.message,
+        });
         setSuccess(true);
         return true;
-      } catch (e: any) {
-        setError(e?.message || "Ошибка отправки");
+      } catch (error: unknown) {
+        const msg = extractErrorMessage(error, "Ошибка отправки");
+        setError(msg);
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [url, headers]
+    []
   );
 
   return { submit, loading, error, success };
 }
+
+const extractErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  if (error && typeof error === "object") {
+    const withMessage = error as { message?: unknown; response?: { data?: { message?: unknown; error?: unknown } } };
+    const responseMessage = withMessage.response?.data?.message;
+    const responseError = withMessage.response?.data?.error;
+    const message = withMessage.message;
+
+    if (typeof responseMessage === "string" && responseMessage.trim()) {
+      return responseMessage;
+    }
+    if (typeof responseError === "string" && responseError.trim()) {
+      return responseError;
+    }
+    if (typeof message === "string" && message.trim()) {
+      return message;
+    }
+  }
+
+  return fallback;
+};

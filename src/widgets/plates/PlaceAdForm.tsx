@@ -1,142 +1,157 @@
-// pages/PlaceAdPage.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
-import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit";
-import PlateSelectForm from '@/features/plate-select/ui/PlateSelectForm'
-
-type LeadForm = LeadFormPayload & {
-  email?: string;
-  password: string;
-  price: string;
-  comment?: string;
-};
-
-type PlateSelectValue = { text: string; region: string };
+import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
+import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
+import { numbersApi } from "@/shared/services/numbersApi";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
   { label: "Продать номер", value: "sell" },
 ];
 
-const INITIAL_PLATE: PlateSelectValue = { text: "******", region: "*" };
+type FormState = {
+  name: string;
+  phone: string;
+  email: string;
+  password: string;
+  price: string;
+  type: string;
+  comment: string;
+  consent: boolean;
+};
 
-export default function PlaceAdPage() {
-  // --- отправка
-  const { submit, loading, error, success } = useLeadSubmit();
+type ToastState = { type: "success" | "error"; msg: string } | null;
 
-  // --- Toast
-  const [toast, setToast] =
-    useState<{ type: "success" | "error"; msg: string } | null>(null);
+const INITIAL_FORM: FormState = {
+  name: "",
+  phone: "",
+  email: "",
+  password: "",
+  price: "",
+  type: TYPE_OPTIONS[1]?.value ?? "sell",
+  comment: "",
+  consent: false,
+};
 
-  useEffect(() => {
-    if (error) setToast({ type: "error", msg: `Не удалось отправить: ${error}` });
-    if (success) setToast({ type: "success", msg: "Заявка успешно отправлена!" });
-  }, [error, success]);
+const INITIAL_PLATE: PlateSelectValue = { ...DEFAULT_PLATE_VALUE };
+
+export default function PlaceAdForm() {
+  const [form, setForm] = useState<FormState>(INITIAL_FORM);
+  const [plate, setPlate] = useState<PlateSelectValue>(INITIAL_PLATE);
+  const [toast, setToast] = useState<ToastState>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!toast) return;
-    const t = setTimeout(() => setToast(null), 3000);
-    return () => clearTimeout(t);
+    const timeout = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(timeout);
   }, [toast]);
 
-  // --- форма
-  const [formData, setFormData] = useState<LeadForm>({
-    name: "",
-    phone: "",
-    type: "",
-    number: "",
-    consent: false,
-    email: "",
-    password: "",
-    price: "",
-    comment: "",
-  });
+  const composedNumber = useMemo(() => composeNumber(plate), [plate]);
 
-  // --- состояние номера (контролируем PlateSelectForm, чтобы можно было сбрасывать)
-  const [plate, setPlate] = useState<PlateSelectValue>(INITIAL_PLATE);
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
+    event,
+  ) => {
+    const { name, value, type, checked } = event.target as HTMLInputElement;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-  // Собранная строка номера формата A000AA-REGION
-  const composedNumber = useMemo(() => {
-    const cleanText = (plate.text || "").replace(/\*/g, "");
-    const cleanRegion = (plate.region || "").replace(/\*/g, "");
-    return [cleanText, cleanRegion].filter(Boolean).join("-");
-  }, [plate]);
+  const handleTypeChange = (value: string) => {
+    setForm((prev) => ({ ...prev, type: value }));
+  };
 
-  // синхронизируем number в formData при любом изменении слотов
-  useEffect(() => {
-    setFormData((p) => ({ ...p, number: composedNumber }));
-  }, [composedNumber]);
-
-  // валидация (кнопка неактивна, пока не выполнены условия)
   const isSubmitDisabled =
     loading ||
-    !formData.name.trim() ||
-    !formData.phone.trim() ||
-    !formData.password.trim() ||
-    !formData.price.trim() ||
-    !formData.type ||
-    !formData.consent;
+    !form.consent ||
+    !form.name.trim() ||
+    !form.phone.trim() ||
+    !form.price.trim() ||
+    plate.text.includes("*") ||
+    !plate.region ||
+    plate.region === "*";
 
-  // обработчик селекта действия (поддержка разных сигнатур onChange)
-  const handleTypeChange = (v: unknown) => {
-    const value =
-      typeof v === "string" ? v : (v as { value?: string })?.value ?? "";
-  };
-
-  // отправка
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    if (isSubmitDisabled) return;
-
-    await submit({
-      name: formData.name,
-      phone: formData.phone,
-      type: formData.type,
-      number: formData.number, // может быть пустым — это ок
-      consent: formData.consent,
-    });
-
-    // При успехе — сброс (сам success ловим эффектом для тоста)
-    // Делаем мягкий сброс, иначе, если была ошибка — не теряем данные
-    // Сбрасываем только когда success === true
-  };
-
-  // как только success стал true — очищаем форму и табличку
-  useEffect(() => {
-    if (!success) return;
-    setFormData({
-      name: "",
-      phone: "",
-      type: "",
-      number: "",
-      consent: false,
-      email: "",
-      password: "",
-      price: "",
-      comment: "",
-    });
+  const resetForm = useCallback(() => {
+    setForm(INITIAL_FORM);
     setPlate(INITIAL_PLATE);
-  }, [success]);
+  }, []);
 
-  // общие классы инпутов
-  const inputBase =
-    "bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 " +
-    "outline-none focus:ring-2 focus:ring-[#1E63FF]";
+  const buildDescription = (): string => {
+    const typeLabel = TYPE_OPTIONS.find((opt) => opt.value === form.type)?.label;
+    const chunks = [
+      typeLabel && `Тип заявки: ${typeLabel}`,
+      form.email && `Email: ${form.email}`,
+      form.comment && `Комментарий: ${form.comment}`,
+      composedNumber && `Номер: ${composedNumber}`,
+    ];
+    return chunks.filter(Boolean).join("\n");
+  };
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+    if (isSubmitDisabled) {
+      setToast({ type: "error", msg: "Заполните все обязательные поля" });
+      return;
+    }
+
+    const series = plate.text.replace(/\*/g, "");
+    const regionCode = plate.region.replace(/\*/g, "");
+    const priceValue = normalizePrice(form.price);
+
+    if (!series || series.length !== 6) {
+      setToast({ type: "error", msg: "Укажите корректный номер" });
+      return;
+    }
+
+    if (!regionCode) {
+      setToast({ type: "error", msg: "Выберите регион" });
+      return;
+    }
+
+    if (!Number.isFinite(priceValue) || priceValue <= 0) {
+      setToast({ type: "error", msg: "Укажите корректную стоимость" });
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await numbersApi.createAndRegister({
+        series,
+        regionCode,
+        price: priceValue,
+        sellerName: form.name,
+        phone: form.phone,
+        description: buildDescription(),
+      });
+      setToast({ type: "success", msg: "Объявление успешно отправлено" });
+      resetForm();
+    } catch (error: unknown) {
+      const message = extractErrorMessage(error, "Не удалось отправить объявление");
+      setError(message);
+      setToast({ type: "error", msg: message });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="bg-[#0B0B0C] text-white py-12 md:py-16" aria-label="Размещение объявления">
+      {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
         <h2 className="text-center text-3xl md:text-4xl font-bold uppercase font-actay-wide">
           Оставьте заявку!
         </h2>
         <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
-          Все сделки сопровождаются юридической поддержкой, а номера подбираются
-          только из проверенных источников.
+          Все сделки сопровождаются юридической поддержкой, а номера подбираются только из проверенных источников.
         </p>
 
-        {/* Номер */}
         <div className="mt-6 md:mt-8">
           <PlateSelectForm
             size="lg"
@@ -144,112 +159,102 @@ export default function PlaceAdPage() {
             flagSrc="/flag-russia.svg"
             showCaption={false}
             className="mx-auto"
+            value={plate}
+            onChange={setPlate}
           />
         </div>
 
-        {/* Форма */}
         <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
               type="text"
               inputMode="text"
-              className={inputBase}
+              className={INPUT_BASE}
               placeholder="Имя *"
               aria-label="Имя"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, name: e.target.value }))
-              }
+              name="name"
+              value={form.name}
+              onChange={handleInputChange}
               required
             />
 
             <input
               type="tel"
               inputMode="tel"
-              className={inputBase}
+              className={INPUT_BASE}
               placeholder="Телефон *"
               aria-label="Телефон"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, phone: e.target.value }))
-              }
+              name="phone"
+              value={form.phone}
+              onChange={handleInputChange}
               required
             />
 
             <input
               type="email"
               inputMode="email"
-              className={inputBase}
-              placeholder="Почта *"
+              className={INPUT_BASE}
+              placeholder="Почта"
               aria-label="Почта"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, email: e.target.value }))
-              }
+              name="email"
+              value={form.email}
+              onChange={handleInputChange}
             />
 
             <input
               type="password"
-              className={inputBase}
-              placeholder="Пароль *"
+              className={INPUT_BASE}
+              placeholder="Пароль"
               aria-label="Пароль"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, password: e.target.value }))
-              }
-              required
+              name="password"
+              value={form.password}
+              onChange={handleInputChange}
             />
 
             <input
               type="text"
               inputMode="numeric"
-              className={inputBase + " sm:col-span-2"}
+              className={`${INPUT_BASE} sm:col-span-2`}
               placeholder="Стоимость *"
               aria-label="Стоимость"
-              value={formData.price}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, price: e.target.value }))
-              }
+              name="price"
+              value={form.price}
+              onChange={handleInputChange}
               required
             />
           </div>
 
-          {/* красная сноска под Стоимостью */}
           <p className="text-[12px] text-[#FF6B6B]">
-            * При публикации объявления к конечной стоимости добавляется комиссия
-            в размере 10–30% минимум
+            * При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
-          {/* Выбор действия */}
           <UiSelect
             name="type"
-            placeholder="Выберите действие *"
+            placeholder="Выберите действие"
             options={TYPE_OPTIONS}
-            value={formData.type}
+            value={form.type}
             onChange={handleTypeChange}
           />
 
-          {/* Комментарий */}
           <textarea
-            className={inputBase + " w-full min-h-[110px] resize-y"}
+            className={`${INPUT_BASE} w-full min-h-[110px] resize-y`}
             placeholder="Комментарий"
             aria-label="Комментарий"
-            value={formData.comment}
-            onChange={(e) =>
-              setFormData((p) => ({ ...p, comment: e.target.value }))
-            }
+            name="comment"
+            value={form.comment}
+            onChange={handleInputChange}
           />
 
-          {/* Чекбокс согласия */}
+          {error && <p className="text-sm text-[#EB5757]">{error}</p>}
+
           <div className="flex items-start gap-2">
             <input
               id="consent"
               type="checkbox"
               className="mt-1 h-4 w-4 rounded border border-white/30 bg-white/10 focus:ring-2 focus:ring-[#1E63FF]"
-              checked={formData.consent}
-              onChange={(e) =>
-                setFormData((p) => ({ ...p, consent: e.target.checked }))
-              }
+              checked={form.consent}
+              onChange={handleInputChange}
+              name="consent"
               required
             />
             <label htmlFor="consent" className="text-[13px] leading-[1.4]">
@@ -257,7 +262,6 @@ export default function PlaceAdPage() {
             </label>
           </div>
 
-          {/* Кнопка */}
           <div className="flex justify-center">
             <button
               type="submit"
@@ -273,3 +277,44 @@ export default function PlaceAdPage() {
     </section>
   );
 }
+
+const INPUT_BASE =
+  "bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]";
+
+const normalizePrice = (value: string): number => {
+  if (!value) return NaN;
+  const normalized = value.replace(/[^0-9.,]/g, "").replace(",", ".");
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : NaN;
+};
+
+const composeNumber = (plate: PlateSelectValue): string => {
+  const cleanText = (plate.text || "").replace(/\*/g, "");
+  const cleanRegion = (plate.region || "").replace(/\*/g, "");
+  return [cleanText, cleanRegion].filter(Boolean).join("-");
+};
+
+const extractErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  if (error && typeof error === "object") {
+    const withMessage = error as { message?: unknown; response?: { data?: { message?: unknown; error?: unknown } } };
+    const responseMessage = withMessage.response?.data?.message;
+    const responseError = withMessage.response?.data?.error;
+    const message = withMessage.message;
+
+    if (typeof responseMessage === "string" && responseMessage.trim()) {
+      return responseMessage;
+    }
+    if (typeof responseError === "string" && responseError.trim()) {
+      return responseError;
+    }
+    if (typeof message === "string" && message.trim()) {
+      return message;
+    }
+  }
+
+  return fallback;
+};

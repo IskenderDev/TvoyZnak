@@ -1,4 +1,4 @@
-import type { PlateSelectValue } from "@/features/plate-select/ui/PlateSelectForm"
+import type { PlateSelectValue } from "@/features/plate-select/model/types"
 
 export type SortDir = "asc" | "desc"
 

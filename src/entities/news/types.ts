@@ -6,5 +6,5 @@ export interface NewsItem {
   excerpt?: string;
   content?: string;
   publishedAt?: string;
-  status?: "draft" | "published";
+  status?: string;
 }

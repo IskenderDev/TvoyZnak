@@ -1,11 +1,28 @@
-export type RegionCode = string; // коды регионов РФ (строка, без проверки)
+export type RegionCode = string;
+
+export type NumberStatus = "available" | "sold" | "hidden" | string;
+
+export interface PlateInfo {
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string;
+  secondDigit: string;
+  thirdDigit: string;
+  regionId: number;
+  comment?: string;
+}
 
 export interface NumberItem {
   id: string;
-  series: string;       // серия/номер (строка)
-  region: RegionCode;   // регион РФ (строка/код)
-  price: number;        // цена (число)
-  seller: string;       // продавец (строка/идентификатор)
-  date: string;         // дата добавления (ISO)
-  status: "available" | "sold" | "hidden";
+  series: string;
+  region: RegionCode;
+  price: number;
+  seller: string;
+  date: string;
+  status: NumberStatus;
+  category: string;
+  phone?: string;
+  description?: string;
+  plate: PlateInfo;
 }

@@ -1,11 +1,28 @@
 // shared/components/plate/MobilePlateCard.tsx
 import React from "react";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import type { NumberItem } from "@/entities/number/types";
+
+type PlateLike = Partial<PlateData> & {
+  region?: string | number;
+  regionId?: number;
+};
+
+type PlateRowLike = Partial<NumberItem> & {
+  createdAt?: string;
+  owner?: string;
+  ownerName?: string;
+  user?: string;
+  data?: PlateLike;
+  plateData?: PlateLike;
+  plate?: PlateLike;
+  [key: string]: unknown;
+};
 
 type Props = {
-  row: any;
+  row: PlateRowLike;
   ctaText?: string;
-  onBuy?: (row: any) => void;
+  onBuy?: (row: PlateRowLike) => void;
   className?: string;
 };
 
@@ -30,10 +47,7 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
           <div className="text-xs text-black/70 truncate">{seller}</div>
         </div>
 
-        <button
-          className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white"
-          onClick={() => onBuy?.(row)}
-        >
+        <button className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white" onClick={() => onBuy?.(row)}>
           {ctaText}
         </button>
       </div>
@@ -43,19 +57,29 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
 
 /* ---------- helpers ---------- */
 
-function pickPlate(row: any): PlateData {
-  const src = row.plate || row.data || row.plateData || {};
+function pickPlate(row: PlateRowLike): PlateData {
+  const src = (row.plate as PlateLike | undefined) ?? row.data ?? row.plateData ?? {};
   return {
     price: src.price ?? row.price ?? 0,
-    comment: src.comment ?? "",
-    firstLetter: src.firstLetter ?? src.A1 ?? row.firstLetter ?? "*",
-    firstDigit: src.firstDigit ?? src.D1 ?? row.firstDigit ?? "*",
-    secondDigit: src.secondDigit ?? src.D2 ?? row.secondDigit ?? "*",
-    thirdDigit: src.thirdDigit ?? src.D3 ?? row.thirdDigit ?? "*",
-    secondLetter: src.secondLetter ?? src.A2 ?? row.secondLetter ?? "*",
-    thirdLetter: src.thirdLetter ?? src.A3 ?? row.thirdLetter ?? "*",
-    regionId: Number(src.regionId ?? src.region ?? row.regionId ?? row.region ?? 0) || 0,
+    comment: src.comment ?? (typeof row.description === "string" ? row.description : ""),
+    firstLetter: ensureChar(src.firstLetter ?? row.plate?.firstLetter),
+    firstDigit: ensureChar(src.firstDigit ?? row.plate?.firstDigit),
+    secondDigit: ensureChar(src.secondDigit ?? row.plate?.secondDigit),
+    thirdDigit: ensureChar(src.thirdDigit ?? row.plate?.thirdDigit),
+    secondLetter: ensureChar(src.secondLetter ?? row.plate?.secondLetter),
+    thirdLetter: ensureChar(src.thirdLetter ?? row.plate?.thirdLetter),
+    regionId: Number(src.regionId ?? src.region ?? row.plate?.regionId ?? row.region ?? 0) || 0,
   };
+}
+
+function ensureChar(value: unknown): string {
+  if (typeof value === "string" && value.trim()) {
+    return value.trim().slice(0, 1);
+  }
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value).slice(0, 1);
+  }
+  return "*";
 }
 
 function fmtDate(v?: string) {

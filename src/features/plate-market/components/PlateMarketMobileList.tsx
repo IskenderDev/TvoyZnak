@@ -1,8 +1,8 @@
-import type { PlateRow } from "@/app/data/plates"
 import MobilePlateCard from "@/shared/components/plate/MobilePlateCard"
+import type { NumberItem } from "@/entities/number/types"
 
 type PlateMarketMobileListProps = {
-  rows: PlateRow[]
+  rows: NumberItem[]
   className?: string
 }
 

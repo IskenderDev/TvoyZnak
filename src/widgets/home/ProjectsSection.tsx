@@ -13,16 +13,10 @@ export default function ProjectsSection({ items }: Props) {
 	const featured = data[active]
 	const railRef = useRef<HTMLDivElement | null>(null)
 
-	const go = (dir: "left" | "right") => {
-		const max = data.length - 1
-		setActive((prev) => (dir === "left" ? Math.max(0, prev - 1) : Math.min(max, prev + 1)))
-
-		requestAnimationFrame(() => {
-			const rail = railRef.current
-			if (!rail) return
-			const indexInThumbs = Math.max(0, (dir === "left" ? active - 1 : active + 1) - 1)
-		})
-	}
+        const go = (dir: "left" | "right") => {
+                const max = data.length - 1
+                setActive((prev) => (dir === "left" ? Math.max(0, prev - 1) : Math.min(max, prev + 1)))
+        }
 
 	return (
 		<section className=" text-white py-14 md:py-18">

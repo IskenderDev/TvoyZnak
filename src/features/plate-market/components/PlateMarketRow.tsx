@@ -1,18 +1,24 @@
-import type { CSSProperties } from "react"
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm"
-import type { PlateData } from "@/shared/components/plate/PlateStaticSm"
-import { formatPrice } from "@/shared/lib/format"
-import type { PlateRow } from "@/app/data/plates"
+import type { CSSProperties } from "react";
+import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
+import type { PlateData } from "@/shared/components/plate/PlateStaticSm";
+import { formatPrice } from "@/shared/lib/format";
+import type { NumberItem } from "@/entities/number/types";
 
 type PlateMarketRowProps = {
-  row: PlateRow
-  gridCols: string
-}
+  row: NumberItem;
+  gridCols: string;
+};
+
+const formatDate = (value: string) => {
+  const date = new Date(value);
+  if (Number.isNaN(+date)) return "";
+  return date.toLocaleDateString("ru-RU");
+};
 
 export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   const data: PlateData = {
     price: row.price,
-    comment: row.plate.comment ?? "",
+    comment: row.plate.comment ?? row.description ?? "",
     firstLetter: row.plate.firstLetter,
     secondLetter: row.plate.secondLetter,
     thirdLetter: row.plate.thirdLetter,
@@ -20,24 +26,18 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
     secondDigit: row.plate.secondDigit,
     thirdDigit: row.plate.thirdDigit,
     regionId: row.plate.regionId,
-  }
+  };
 
-  const style = { "--cols": gridCols } as CSSProperties
+  const style = { "--cols": gridCols } as CSSProperties;
 
   return (
-    <li
-      className="grid items-center gap-4 px-6 py-4 text-center font-actay [grid-template-columns:var(--cols)]"
-      style={style}
-    >
-      <time className="tabular-nums text-sm text-black md:text-lg">{row.date}</time>
+    <li className="grid items-center gap-4 px-6 py-4 text-center font-actay [grid-template-columns:var(--cols)]" style={style}>
+      <time className="tabular-nums text-sm text-black md:text-lg">
+        {row.date ? formatDate(row.date) : "—"}
+      </time>
 
       <div className="flex items-center">
-        <PlateStaticSm
-          data={data}
-          responsive
-          showCaption={false}
-          className="mx-auto max-w-[210px]"
-        />
+        <PlateStaticSm data={data} responsive showCaption={false} className="mx-auto max-w-[210px]" />
       </div>
 
       <div className="tabular-nums text-sm md:text-lg">
@@ -52,5 +52,5 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         </button>
       </div>
     </li>
-  )
-}
+  );
+};

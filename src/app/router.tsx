@@ -22,7 +22,7 @@ import AdminNumberEditPage from "@/pages/admin/numbers/AdminNumberEditPage";
 import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
 import AdminNewsNewPage from "@/pages/admin/news/AdminNewsNewPage";
 import AdminNewsEditPage from "@/pages/admin/news/AdminNewsEditPage";
-import SellNumber from '@/pages/sellNumber/SellNumber'
+import SellNumberPage from "@/pages/sellNumber/SellNumber";
 
 export const router = createBrowserRouter([
   {
@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
       { path: paths.numberDetails(), element: <NumberDetailsPage /> },
       { path: paths.news, element: <NewsListPage /> },
       { path: paths.newsDetails(), element: <NewsDetailsPage /> },
-      { path: paths.sellNumber, element: <SellNumber /> },
+      { path: paths.sellNumber, element: <SellNumberPage /> },
       { path: paths.contacts, element: <ContactsPage /> },
       { path: paths.auth.login, element: <LoginPage /> },
       { path: paths.auth.register, element: <RegisterPage /> },
