@@ -61,12 +61,16 @@ export default function Header() {
               Продать номер
             </Button>
             {user ? (
-              <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white">
+              <Link
+                to={paths.profile}
+                className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
+                aria-label="Открыть профиль"
+              >
                 <LuCircleUserRound className="h-6 w-6 text-white" />
                 <span className="hidden text-sm font-medium md:block">
                   {user.fullName}
                 </span>
-              </div>
+              </Link>
             ) : (
               <button
                 type="button"

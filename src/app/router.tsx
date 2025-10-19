@@ -14,6 +14,7 @@ import ContactsPage from "@/pages/contacts/ContactsPage";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import NotFoundPage from "@/pages/not-found/NotFoundPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
 
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminNumbersListPage from "@/pages/admin/numbers/AdminNumbersListPage";
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
       { path: paths.news, element: <NewsListPage /> },
       { path: paths.newsDetails(), element: <NewsDetailsPage /> },
       { path: paths.sellNumber, element: <SellNumberPage /> },
+      { path: paths.profile, element: <ProfilePage /> },
       { path: paths.contacts, element: <ContactsPage /> },
       { path: paths.auth.login, element: <LoginPage /> },
       { path: paths.auth.register, element: <RegisterPage /> },
