@@ -29,6 +29,12 @@ export default function ContactForm() {
     return () => clearTimeout(t)
   }, [toast])
 
+  const sanitizeCarNumber = (value: string) =>
+    value
+      .replace(/\s+/g, "")
+      .replace(/[^0-9A-Za-zА-Яа-яЁё]/g, "")
+      .toUpperCase()
+
   useEffect(() => {
     const state = (location.state as { leadPrefill?: Partial<LeadFormPayload> } | null)?.leadPrefill || {}
     const params = new URLSearchParams(location.search)
@@ -66,7 +72,9 @@ export default function ContactForm() {
       ...prev,
       ...(typeof merged.fullName === "string" && merged.fullName.trim() ? { fullName: merged.fullName } : {}),
       ...(typeof merged.phoneNumber === "string" && merged.phoneNumber.trim() ? { phoneNumber: merged.phoneNumber } : {}),
-      ...(typeof merged.carNumber === "string" && merged.carNumber.trim() ? { carNumber: merged.carNumber } : {}),
+      ...(typeof merged.carNumber === "string"
+        ? { carNumber: sanitizeCarNumber(merged.carNumber) }
+        : {}),
       ...(typeof merged.feedbackType === "string" && merged.feedbackType.trim()
         ? { feedbackType: merged.feedbackType }
         : {}),
@@ -81,12 +89,6 @@ export default function ContactForm() {
       ] as { label: string; value: LeadFormPayload["feedbackType"] }[],
     []
   )
-
-  const sanitizeCarNumber = (value: string) =>
-    value
-      .replace(/\s+/g, "")
-      .replace(/[^0-9A-Za-zА-Яа-яЁё]/g, "")
-      .toUpperCase()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -104,7 +106,18 @@ export default function ContactForm() {
       setToast({ type: "error", msg: "Пожалуйста, согласитесь на обработку персональных данных." })
       return
     }
-    const ok = await submit(formData)
+    const sanitizedCarNumber = sanitizeCarNumber(formData.carNumber)
+    if (!sanitizedCarNumber) {
+      setToast({ type: "error", msg: "Введите корректный гос. номер без пробелов." })
+      setFormData((prev) => ({ ...prev, carNumber: sanitizedCarNumber }))
+      return
+    }
+
+    if (sanitizedCarNumber !== formData.carNumber) {
+      setFormData((prev) => ({ ...prev, carNumber: sanitizedCarNumber }))
+    }
+
+    const ok = await submit({ ...formData, carNumber: sanitizedCarNumber })
     if (ok)
       setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "", consent: false })
   }
