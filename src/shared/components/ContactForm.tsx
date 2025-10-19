@@ -14,10 +14,10 @@ export default function ContactForm() {
     error: typesError,
   } = useFeedbackTypes()
   const [formData, setFormData] = useState<LeadForm>({
-    name: "",
-    phone: "",
-    type: "",
-    number: "",
+    fullName: "",
+    phoneNumber: "",
+    feedbackType: "",
+    carNumber: "",
     consent: false,
   })
 
@@ -47,8 +47,8 @@ export default function ContactForm() {
   useEffect(() => {
     if (!selectOptions.length) return
     setFormData((prev) => {
-      if (prev.type) return prev
-      return { ...prev, type: selectOptions[0].value }
+      if (prev.feedbackType) return prev
+      return { ...prev, feedbackType: selectOptions[0].value }
     })
   }, [selectOptions])
 
@@ -68,22 +68,21 @@ export default function ContactForm() {
       return
     }
     const ok = await submit({
-      name: formData.name,
-      phone: formData.phone,
-      type: formData.type,
-      number: formData.number,
+      fullName: formData.fullName,
+      phoneNumber: formData.phoneNumber,
+      feedbackType: formData.feedbackType,
+      carNumber: formData.carNumber,
       consent: formData.consent,
-      message: formData.number ? `Интересующий номер: ${formData.number}` : undefined,
     })
     if (ok)
-      setFormData({ name: "", phone: "", type: "", number: "", consent: false })
+      setFormData({ fullName: "", phoneNumber: "", feedbackType: "", carNumber: "", consent: false })
   }
 
   const isSubmitDisabled =
     loading ||
-    !formData.name.trim() ||
-    !formData.phone.trim() ||
-    !formData.type ||
+    !formData.fullName.trim() ||
+    !formData.phoneNumber.trim() ||
+    !formData.feedbackType ||
     !formData.consent ||
     typesLoading
 
@@ -101,30 +100,30 @@ export default function ContactForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <input
               type="text"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Имя *"
+            name="fullName"
+            required
+            value={formData.fullName}
+            onChange={handleChange}
+            placeholder="Имя *"
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
             <input
               type="tel"
-              name="phone"
-              required
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Телефон *"
+            name="phoneNumber"
+            required
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            placeholder="Телефон *"
               inputMode="tel"
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
             <div className="space-y-1">
               <UiSelect
-                name="type"
-                value={formData.type}
-                onChange={(v) => setFormData((p) => ({ ...p, type: v }))}
+                name="feedbackType"
+                value={formData.feedbackType}
+                onChange={(v) => setFormData((p) => ({ ...p, feedbackType: v }))}
                 placeholder={typesLoading ? "Загрузка..." : "Выберите действие *"}
                 options={selectOptions as { label: string; value: string }[]}
               />
@@ -135,8 +134,8 @@ export default function ContactForm() {
 
             <input
               type="text"
-              name="number"
-              value={formData.number}
+              name="carNumber"
+              value={formData.carNumber}
               onChange={handleChange}
               placeholder="Автомобильный номер (необязательно)"
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"

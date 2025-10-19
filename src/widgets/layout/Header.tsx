@@ -7,11 +7,13 @@ import Container from "@/shared/components/Container";
 import Button from "@/shared/components/Button";
 import LegacyModal from "@/shared/components/Modal";
 import RegisterModal from "@/features/auth/RegisterModal";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 export default function Header() {
   const navigate = useNavigate();
   const [sellOpen, setSellOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
+  const { user } = useAuth();
 
   const handleSellClick = () => {
     navigate(paths.sellNumber);
@@ -58,21 +60,31 @@ export default function Header() {
             >
               Продать номер
             </Button>
-            <button
-              type="button"
-              onClick={() => setRegisterOpen(true)}
-              aria-haspopup="dialog"
-              aria-expanded={isRegisterOpen}
-            >
-              <LuCircleUserRound color="white" className="h-8 w-8" />
-            </button>
+            {user ? (
+              <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white">
+                <LuCircleUserRound className="h-6 w-6 text-white" />
+                <span className="hidden text-sm font-medium md:block">
+                  {user.fullName}
+                </span>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setRegisterOpen(true)}
+                aria-haspopup="dialog"
+                aria-expanded={isRegisterOpen}
+              >
+                <LuCircleUserRound color="white" className="h-8 w-8" />
+              </button>
+            )}
           </div>
         </div>
       </Container>
 
       <LegacyModal open={sellOpen} onClose={() => setSellOpen(false)} />
-
-      <RegisterModal open={isRegisterOpen} onClose={() => setRegisterOpen(false)} />
+      {!user && (
+        <RegisterModal open={isRegisterOpen} onClose={() => setRegisterOpen(false)} />
+      )}
     </header>
   );
 }

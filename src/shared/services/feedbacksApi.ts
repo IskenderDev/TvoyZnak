@@ -2,11 +2,10 @@ import { z } from "zod";
 import apiClient from "@/shared/api/client";
 
 export interface FeedbackRequestPayload {
-  name: string;
-  phone: string;
-  type: string;
-  message?: string;
-  number?: string;
+  fullName: string;
+  phoneNumber: string;
+  carNumber: string;
+  feedbackType: string;
 }
 
 export interface FeedbackTypeOption {
@@ -29,11 +28,10 @@ const feedbackTypeSchema = z
 const feedbackRequestSchema = z
   .object({
     id: z.union([z.string(), z.number()]).optional(),
-    name: z.string().optional(),
-    phone: z.string().optional(),
-    type: z.string().optional(),
-    message: z.string().optional(),
-    number: z.string().optional(),
+    fullName: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    feedbackType: z.string().optional(),
+    carNumber: z.string().optional(),
     createdAt: z.string().optional(),
   })
   .passthrough();

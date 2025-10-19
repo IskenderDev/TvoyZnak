@@ -1,10 +1,13 @@
-import { useMemo } from "react";
+import { useContext } from "react";
 
-export type Role = "admin" | "user";
+import { AuthContext, type AuthContextValue } from "@/shared/context/AuthContext";
 
-export function useAuth() {
-  const isAuthenticated = true; 
-  const role: Role | undefined = "admin";
+export type { Role, AuthUser } from "@/shared/context/AuthContext";
 
-  return useMemo(() => ({ isAuthenticated, role }), [isAuthenticated, role]);
+export function useAuth(): AuthContextValue {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }
