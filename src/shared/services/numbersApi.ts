@@ -9,6 +9,7 @@ export interface NumbersListParams {
 
 export interface NumbersApi {
   list(params?: NumbersListParams): Promise<NumberItem[]>;
+  listMy(): Promise<NumberItem[]>;
   get(id: string): Promise<NumberItem>;
   create(payload: CreateNumberLotPayload): Promise<NumberItem>;
   createAndRegister(payload: CreateAndRegisterPayload): Promise<NumberItem>;
@@ -85,6 +86,12 @@ const arrayLikeKeys = ["content", "items", "data", "results", "rows"] as const;
 const numbersApi: NumbersApi = {
   async list(params) {
     const response = await apiClient.get("/api/car-number-lots", { params });
+    const lots = extractList(response.data);
+    return lots.map(toNumberItem);
+  },
+
+  async listMy() {
+    const response = await apiClient.get("/api/car-number-lots/my");
     const lots = extractList(response.data);
     return lots.map(toNumberItem);
   },
