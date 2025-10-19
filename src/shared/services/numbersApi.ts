@@ -1,4 +1,3 @@
-import { z } from "zod";
 import apiClient from "@/shared/api/client";
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
 
@@ -43,250 +42,313 @@ export interface CreateAndRegisterPayload {
   password: string;
 }
 
-type CarNumberLotDto = z.infer<typeof carNumberLotSchema>;
+type UnknownRecord = Record<string, unknown>;
 
-const carNumberSchema = z
-  .object({
-    id: z.union([z.string(), z.number()]).optional(),
-    series: z.string().optional(),
-    number: z.string().optional(),
-    regionCode: z.union([z.string(), z.number()]).optional(),
-    region: z.union([z.string(), z.number()]).optional(),
-    firstLetter: z.string().optional(),
-    secondLetter: z.string().optional(),
-    thirdLetter: z.string().optional(),
-    firstDigit: z.union([z.string(), z.number()]).optional(),
-    secondDigit: z.union([z.string(), z.number()]).optional(),
-    thirdDigit: z.union([z.string(), z.number()]).optional(),
-    letters: z.array(z.string()).optional(),
-    digits: z.union([z.string(), z.array(z.union([z.string(), z.number()]))]).optional(),
-    comment: z.string().optional(),
-  })
-  .partial()
-  .passthrough();
+interface RawCarNumberLot extends UnknownRecord {
+  id: string | number;
+  price?: unknown;
+  status?: unknown;
+  state?: unknown;
+  seller?: unknown;
+  sellerName?: unknown;
+  fullName?: unknown;
+  ownerName?: unknown;
+  owner?: UnknownRecord | null;
+  user?: unknown;
+  phone?: unknown;
+  phoneNumber?: unknown;
+  description?: unknown;
+  comment?: unknown;
+  fullCarNumber?: unknown;
+  series?: unknown;
+  number?: unknown;
+  region?: unknown;
+  regionCode?: unknown;
+  createdAt?: unknown;
+  createdDate?: unknown;
+  created?: unknown;
+  updatedAt?: unknown;
+  date?: unknown;
+  firstLetter?: unknown;
+  secondLetter?: unknown;
+  thirdLetter?: unknown;
+  firstDigit?: unknown;
+  secondDigit?: unknown;
+  thirdDigit?: unknown;
+  carNumber?: UnknownRecord;
+  plate?: UnknownRecord;
+  numberInfo?: UnknownRecord;
+}
 
-const carNumberLotSchema = z
-  .object({
-    id: z.union([z.string(), z.number()]),
-    price: z.union([z.number(), z.string()]).optional(),
-    status: z.string().optional(),
-    state: z.string().optional(),
-    seller: z.string().optional(),
-    sellerName: z.string().optional(),
-    fullName: z.string().optional(),
-    owner: z.object({ name: z.string().optional() }).optional(),
-    ownerName: z.string().optional(),
-    user: z.string().optional(),
-    phone: z.string().optional(),
-    phoneNumber: z.string().optional(),
-    description: z.string().optional(),
-    comment: z.string().optional(),
-    fullCarNumber: z.string().optional(),
-    firstLetter: z.string().optional(),
-    secondLetter: z.string().optional(),
-    thirdLetter: z.string().optional(),
-    firstDigit: z.union([z.string(), z.number()]).optional(),
-    secondDigit: z.union([z.string(), z.number()]).optional(),
-    thirdDigit: z.union([z.string(), z.number()]).optional(),
-    createdAt: z.string().optional(),
-    createdDate: z.string().optional(),
-    created: z.string().optional(),
-    updatedAt: z.string().optional(),
-    date: z.string().optional(),
-    series: z.string().optional(),
-    region: z.union([z.string(), z.number()]).optional(),
-    regionCode: z.union([z.string(), z.number()]).optional(),
-    lot: z.object({}).optional(),
-    carNumber: carNumberSchema.optional(),
-    plate: carNumberSchema.optional(),
-    number: carNumberSchema.optional(),
-  })
-  .passthrough();
+const arrayLikeKeys = ["content", "items", "data", "results", "rows"] as const;
 
-const listResponseSchema = z.array(carNumberLotSchema);
+const numbersApi: NumbersApi = {
+  async list(params) {
+    const response = await apiClient.get("/api/car-number-lots", { params });
+    const lots = extractList(response.data);
+    return lots.map(toNumberItem);
+  },
 
-const toNumberItem = (dto: CarNumberLotDto): NumberItem => {
-  const baseCarNumber = (dto.carNumber || dto.plate || dto.number || {}) as z.infer<typeof carNumberSchema>;
+  async get(id) {
+    const response = await apiClient.get(`/api/car-number-lots/${id}`);
+    const lot = extractSingle(response.data);
+    if (!lot) {
+      throw new Error("Не удалось получить информацию о номере");
+    }
+    return toNumberItem(lot);
+  },
 
-  const carNumber: z.infer<typeof carNumberSchema> = {
-    ...baseCarNumber,
-    series: baseCarNumber.series ?? dto.series ?? dto.fullCarNumber ?? baseCarNumber.number,
-    number: baseCarNumber.number ?? dto.fullCarNumber ?? baseCarNumber.series,
-    regionCode: baseCarNumber.regionCode ?? baseCarNumber.region ?? dto.regionCode ?? dto.region,
-    region: baseCarNumber.region ?? baseCarNumber.regionCode ?? dto.region ?? dto.regionCode,
-    firstLetter: baseCarNumber.firstLetter ?? dto.firstLetter,
-    secondLetter: baseCarNumber.secondLetter ?? dto.secondLetter,
-    thirdLetter: baseCarNumber.thirdLetter ?? dto.thirdLetter,
-    firstDigit: baseCarNumber.firstDigit ?? dto.firstDigit,
-    secondDigit: baseCarNumber.secondDigit ?? dto.secondDigit,
-    thirdDigit: baseCarNumber.thirdDigit ?? dto.thirdDigit,
-    comment: baseCarNumber.comment ?? dto.comment ?? undefined,
-  };
+  async create(payload) {
+    const response = await apiClient.post("/api/car-number-lots", {
+      price: payload.price,
+      sellerName: payload.sellerName,
+      phone: payload.phone,
+      description: payload.description,
+      carNumber: {
+        series: payload.series,
+        regionCode: payload.regionCode,
+      },
+      email: payload.email,
+      password: payload.password,
+    });
 
-  const rawSeries = pickString([
-    carNumber.series,
-    dto.series,
-    carNumber.number,
-    carNumber.letters ? carNumber.letters.join("") : undefined,
+    const lot = extractSingle(response.data);
+    if (!lot) {
+      throw new Error("Неверный ответ сервера при создании объявления");
+    }
+    return toNumberItem(lot);
+  },
+
+  async createAndRegister(payload) {
+    const response = await apiClient.post("/api/car-number-lots/create-and-register", {
+      price: payload.price,
+      firstLetter: payload.firstLetter,
+      secondLetter: payload.secondLetter,
+      thirdLetter: payload.thirdLetter,
+      firstDigit: payload.firstDigit,
+      secondDigit: payload.secondDigit,
+      thirdDigit: payload.thirdDigit,
+      comment: payload.comment,
+      regionId: payload.regionId,
+      fullName: payload.fullName,
+      phoneNumber: payload.phoneNumber,
+      email: payload.email,
+      password: payload.password,
+    });
+
+    const lot = extractSingle(response.data);
+    if (!lot) {
+      throw new Error("Неверный ответ сервера при регистрации объявления");
+    }
+    return toNumberItem(lot);
+  },
+
+  async delete(id) {
+    await apiClient.delete(`/api/car-number-lots/${id}`);
+  },
+};
+
+const extractList = (payload: unknown): RawCarNumberLot[] => {
+  if (Array.isArray(payload)) {
+    return payload.filter(isRawLot);
+  }
+
+  if (payload && typeof payload === "object") {
+    for (const key of arrayLikeKeys) {
+      const nested = (payload as UnknownRecord)[key];
+      if (Array.isArray(nested)) {
+        return nested.filter(isRawLot);
+      }
+    }
+  }
+
+  return [];
+};
+
+const extractSingle = (payload: unknown): RawCarNumberLot | null => {
+  if (isRawLot(payload)) {
+    return payload;
+  }
+
+  if (payload && typeof payload === "object") {
+    for (const key of ["data", "result", "item", "lot"]) {
+      const nested = (payload as UnknownRecord)[key];
+      if (isRawLot(nested)) {
+        return nested;
+      }
+    }
+
+    for (const key of arrayLikeKeys) {
+      const nested = (payload as UnknownRecord)[key];
+      if (Array.isArray(nested)) {
+        const lot = nested.find(isRawLot);
+        if (lot) {
+          return lot;
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
+const isRawLot = (value: unknown): value is RawCarNumberLot => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const id = (value as UnknownRecord).id;
+  return typeof id === "string" || typeof id === "number";
+};
+
+const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
+  const plateSource = mergePlateSources(dto);
+
+  const fullNumber = pickString([
     dto.fullCarNumber,
+    plateSource.fullCarNumber,
+    plateSource.series,
+    plateSource.number,
   ]);
 
-  const fromDigits = normalizeDigits(carNumber, rawSeries);
-  const fromLetters = normalizeLetters(carNumber, rawSeries);
+  const lettersFromNumber = extractLetters(fullNumber);
+  const digitsFromNumber = extractDigits(fullNumber);
 
-  const series = buildSeries(fromLetters, fromDigits);
+  const letters = [
+    ensureLetter(pickString([dto.firstLetter, plateSource.firstLetter, lettersFromNumber[0]])),
+    ensureLetter(pickString([dto.secondLetter, plateSource.secondLetter, lettersFromNumber[1]])),
+    ensureLetter(pickString([dto.thirdLetter, plateSource.thirdLetter, lettersFromNumber[2]])),
+  ];
+
+  const digits = [
+    ensureDigit(pickString([dto.firstDigit, plateSource.firstDigit, digitsFromNumber[0]])),
+    ensureDigit(pickString([dto.secondDigit, plateSource.secondDigit, digitsFromNumber[1]])),
+    ensureDigit(pickString([dto.thirdDigit, plateSource.thirdDigit, digitsFromNumber[2]])),
+  ];
 
   const regionCode = pickString([
-    carNumber.regionCode,
-    carNumber.region,
     dto.regionCode,
+    plateSource.regionCode,
     dto.region,
+    plateSource.region,
   ]);
 
-  const plateComment = pickString([dto.comment, carNumber.comment]);
-
   const plate: PlateInfo = {
-    firstLetter: fromLetters[0],
-    secondLetter: fromLetters[1],
-    thirdLetter: fromLetters[2],
-    firstDigit: fromDigits[0],
-    secondDigit: fromDigits[1],
-    thirdDigit: fromDigits[2],
-    regionId: Number(regionCode || carNumber.id || 0) || 0,
-    comment: plateComment || undefined,
+    firstLetter: letters[0],
+    secondLetter: letters[1],
+    thirdLetter: letters[2],
+    firstDigit: digits[0],
+    secondDigit: digits[1],
+    thirdDigit: digits[2],
+    regionId: toNumber(regionCode, 0),
+    comment: pickString([dto.comment, plateSource.comment]) || undefined,
   };
 
-  const digitsString = `${fromDigits[0]}${fromDigits[1]}${fromDigits[2]}`;
-  const lettersString = `${fromLetters[0]}${fromLetters[1]}${fromLetters[2]}`;
+  const series =
+    pickString([dto.series, plateSource.series, fullNumber]) ||
+    buildSeries(letters, digits);
 
-  const resolvedRegion = regionCode || (plate.regionId ? String(plate.regionId) : "");
+  const digitsString = digits.join("");
+  const lettersString = letters.join("");
 
   return {
     id: String(dto.id),
     series,
-    region: resolvedRegion,
+    region: regionCode || "",
     price: toNumber(dto.price, 0),
     seller:
       pickString([
         dto.seller,
         dto.sellerName,
         dto.fullName,
-        dto.owner?.name,
         dto.ownerName,
+        dto.owner && (dto.owner as UnknownRecord).name,
         dto.user,
       ]) || "Продавец",
-    phone: pickString([dto.phone, dto.phoneNumber]),
-    description: pickString([dto.description]),
-    date: normalizeDate(pickString([dto.createdAt, dto.createdDate, dto.created, dto.date, dto.updatedAt])),
+    phone: pickString([dto.phone, dto.phoneNumber]) || undefined,
+    description: pickString([dto.description]) || undefined,
+    date: normalizeDate(
+      pickString([dto.updatedAt, dto.createdAt, dto.createdDate, dto.created, dto.date]),
+    ),
     status: pickString([dto.status, dto.state]) || "available",
     category: resolveCategory(series, digitsString, lettersString),
     plate,
   };
 };
 
-const normalizeDigits = (
-  carNumber: z.infer<typeof carNumberSchema>,
-  rawSeries?: string,
-): [string, string, string] => {
-  const digitsFromSeries = extractDigits(rawSeries);
-  const digitsFromArray = Array.isArray(carNumber.digits)
-    ? carNumber.digits.map(String)
-    : typeof carNumber.digits === "string"
-      ? carNumber.digits.split("")
-      : [];
-
-  const digits: [string, string, string] = [
-    ensureDigit(carNumber.firstDigit),
-    ensureDigit(carNumber.secondDigit),
-    ensureDigit(carNumber.thirdDigit),
-  ];
-
-  digits.forEach((digit, idx) => {
-    if (digit !== "*") return;
-    digits[idx] = digitsFromArray[idx] ?? digitsFromSeries[idx] ?? "*";
-  });
-
-  return digits;
-};
-
-const normalizeLetters = (
-  carNumber: z.infer<typeof carNumberSchema>,
-  rawSeries?: string,
-): [string, string, string] => {
-  const lettersFromSeries = extractLetters(rawSeries);
-  const lettersFromArray = Array.isArray(carNumber.letters)
-    ? carNumber.letters.map((item) => (typeof item === "string" ? item : "")).filter(Boolean)
-    : [];
-
-  const letters: [string, string, string] = [
-    ensureLetter(carNumber.firstLetter),
-    ensureLetter(carNumber.secondLetter),
-    ensureLetter(carNumber.thirdLetter),
-  ];
-
-  letters.forEach((letter, idx) => {
-    if (letter !== "*") return;
-    letters[idx] = lettersFromArray[idx] ?? lettersFromSeries[idx] ?? "*";
-  });
-
-  return letters;
-};
-
-const ensureLetter = (value: unknown): string => {
-  if (typeof value === "string" && value.trim()) {
-    return value.trim().slice(0, 1).toUpperCase();
-  }
-  return "*";
-};
-
-const ensureDigit = (value: unknown): string => {
-  if (typeof value === "number" && Number.isFinite(value)) {
-    return String(value).slice(0, 1);
-  }
-  if (typeof value === "string" && value.trim()) {
-    const match = value.trim().match(/[0-9]/);
-    if (match) {
-      return match[0];
+const mergePlateSources = (dto: RawCarNumberLot): UnknownRecord => {
+  const sources = [dto.carNumber, dto.plate, dto.numberInfo, dto.number];
+  return sources.reduce<UnknownRecord>((acc, source) => {
+    if (source && typeof source === "object") {
+      return { ...acc, ...source };
     }
-  }
-  return "*";
+    return acc;
+  }, {});
 };
 
-const extractDigits = (series?: string): string[] => {
-  if (!series) return [];
-  const cleaned = series.replace(/[^0-9]/g, "");
-  return cleaned.slice(0, 3).split("");
-};
-
-const extractLetters = (series?: string): string[] => {
-  if (!series) return [];
-  const cleaned = series.replace(/[^A-Za-zА-Яа-я]/g, "").toUpperCase();
-  return cleaned.slice(0, 3).split("");
-};
-
-const buildSeries = (letters: [string, string, string], digits: [string, string, string]) => {
-  const normalized = [letters[0], ...digits, letters[1], letters[2]].map((char) => (char === "*" ? "" : char));
-  return normalized.join("");
-};
-
-const pickString = (values: Array<unknown | undefined>): string => {
+const pickString = (values: unknown[]): string => {
   for (const value of values) {
     if (typeof value === "string" && value.trim()) {
       return value.trim();
+    }
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return String(value);
     }
   }
   return "";
 };
 
-const toNumber = (value: unknown, fallback = 0): number => {
+const ensureLetter = (value: string): string => {
+  if (value) {
+    return value.slice(0, 1).toUpperCase();
+  }
+  return "*";
+};
+
+const ensureDigit = (value: string): string => {
+  if (!value) {
+    return "*";
+  }
+
+  const match = value.match(/[0-9]/);
+  return match ? match[0] : "*";
+};
+
+const extractLetters = (value?: string): [string, string, string] => {
+  if (!value) {
+    return ["", "", ""];
+  }
+
+  const normalized = value.replace(/[^A-Za-zА-Яа-я]/g, "").toUpperCase();
+  return [normalized[0] || "", normalized[1] || "", normalized[2] || ""];
+};
+
+const extractDigits = (value?: string): [string, string, string] => {
+  if (!value) {
+    return ["", "", ""];
+  }
+
+  const normalized = value.replace(/[^0-9]/g, "");
+  return [normalized[0] || "", normalized[1] || "", normalized[2] || ""];
+};
+
+const buildSeries = (letters: string[], digits: string[]): string => {
+  return [letters[0], digits[0], digits[1], digits[2], letters[1], letters[2]]
+    .map((char) => (char === "*" ? "" : char))
+    .join("");
+};
+
+const toNumber = (value: unknown, fallback: number): number => {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
   }
+
   if (typeof value === "string") {
-    const normalized = value.replace(/[^0-9.,-]/g, "").replace(",", ".");
-    const parsed = Number(normalized);
+    const cleaned = value.replace(/[^0-9.,-]/g, "").replace(/,/g, ".");
+    const parsed = Number(cleaned);
     return Number.isFinite(parsed) ? parsed : fallback;
   }
+
   return fallback;
 };
 
@@ -294,10 +356,12 @@ const normalizeDate = (value?: string): string => {
   if (!value) {
     return new Date().toISOString();
   }
+
   const date = new Date(value);
-  if (Number.isNaN(+date)) {
+  if (Number.isNaN(date.getTime())) {
     return new Date().toISOString();
   }
+
   return date.toISOString();
 };
 
@@ -331,93 +395,5 @@ const resolveCategory = (series: string, digits: string, letters: string): strin
   return series ? "random" : "hidden";
 };
 
-const request = async <T>(
-  fn: () => Promise<{ data: unknown }>,
-  transform: (payload: unknown) => T,
-): Promise<T> => {
-  const response = await fn();
-  return transform(response.data);
-};
-
-const numbersApi: NumbersApi = {
-  async list(params) {
-    return request(() => apiClient.get("/api/car-number-lots", { params }), (payload) => {
-      const parsed = listResponseSchema.safeParse(payload);
-      if (!parsed.success) {
-        console.error("Failed to parse car-number-lots list", parsed.error);
-        return [];
-      }
-      return parsed.data.map(toNumberItem);
-    });
-  },
-
-  async get(id) {
-    return request(() => apiClient.get(`/api/car-number-lots/${id}`), (payload) => {
-      const parsed = carNumberLotSchema.safeParse(payload);
-      if (!parsed.success) {
-        console.error("Failed to parse car-number-lot", parsed.error);
-        throw new Error("Не удалось получить информацию о номере");
-      }
-      return toNumberItem(parsed.data);
-    });
-  },
-
-  async create(payload) {
-    return request(
-      () =>
-        apiClient.post("/api/car-number-lots", {
-          price: payload.price,
-          sellerName: payload.sellerName,
-          phone: payload.phone,
-          description: payload.description,
-          carNumber: {
-            series: payload.series,
-            regionCode: payload.regionCode,
-          },
-        }),
-      (data) => {
-        const parsed = carNumberLotSchema.safeParse(data);
-        if (!parsed.success) {
-          console.error("Failed to parse car-number-lot after create", parsed.error);
-          throw new Error("Неверный ответ сервера при создании объявления");
-        }
-        return toNumberItem(parsed.data);
-      },
-    );
-  },
-
-  async createAndRegister(payload) {
-    return request(
-      () =>
-        apiClient.post("/api/car-number-lots/create-and-register", {
-          price: payload.price,
-          firstLetter: payload.firstLetter,
-          secondLetter: payload.secondLetter,
-          thirdLetter: payload.thirdLetter,
-          firstDigit: payload.firstDigit,
-          secondDigit: payload.secondDigit,
-          thirdDigit: payload.thirdDigit,
-          comment: payload.comment,
-          regionId: payload.regionId,
-          fullName: payload.fullName,
-          phoneNumber: payload.phoneNumber,
-          email: payload.email,
-          password: payload.password,
-        }),
-      (data) => {
-        const parsed = carNumberLotSchema.safeParse(data);
-        if (!parsed.success) {
-          console.error("Failed to parse car-number-lot after register", parsed.error);
-          throw new Error("Неверный ответ сервера при регистрации объявления");
-        }
-        return toNumberItem(parsed.data);
-      },
-    );
-  },
-
-  async delete(id) {
-    await apiClient.delete(`/api/car-number-lots/${id}`);
-  },
-};
-
 export { numbersApi };
+
