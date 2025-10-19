@@ -41,6 +41,27 @@ export default function NumberDetailsSection() {
     };
   }, [id]);
 
+  const contactPrefill = useMemo(() => {
+    if (!item) {
+      return { carNumber: "", feedbackType: "buy" as const };
+    }
+
+    return buildContactPrefill(item);
+  }, [item]);
+
+  const contactSearch = useMemo(() => {
+    const params = createSearchParams({
+      ...(contactPrefill.carNumber ? { carNumber: contactPrefill.carNumber } : {}),
+      feedbackType: contactPrefill.feedbackType,
+    }).toString();
+
+    return params ? `?${params}` : "";
+  }, [contactPrefill]);
+
+  const price = item ? formatPrice(item.price) : "";
+  const publishedDate = item?.date ? new Date(item.date).toLocaleDateString("ru-RU") : "";
+  const numberLabel = item ? formatPlateLabel(item) : "";
+
   if (loading) {
     return (
       <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
@@ -64,19 +85,6 @@ export default function NumberDetailsSection() {
       </section>
     );
   }
-
-  const price = formatPrice(item.price);
-  const publishedDate = item.date ? new Date(item.date).toLocaleDateString("ru-RU") : "";
-  const numberLabel = formatPlateLabel(item);
-  const contactPrefill = useMemo(() => buildContactPrefill(item), [item]);
-  const contactSearch = useMemo(() => {
-    const params = createSearchParams({
-      ...(contactPrefill.carNumber ? { carNumber: contactPrefill.carNumber } : {}),
-      feedbackType: contactPrefill.feedbackType,
-    }).toString();
-
-    return params ? `?${params}` : "";
-  }, [contactPrefill]);
 
   const handleBuyClick = () => {
     navigate(
