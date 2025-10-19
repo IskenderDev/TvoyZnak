@@ -217,7 +217,9 @@ export default function SlotSelect({
                     <li key={opt} className="w-full">
                       <button
                         id={`${listboxId}-opt-${idx}`}
-                        ref={(el) => (optionRefs.current[idx] = el)}
+                        ref={(el) => {
+                          optionRefs.current[idx] = el
+                        }}
                         role="option"
                         aria-selected={selected}
                         type="button"

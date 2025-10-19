@@ -1,5 +1,4 @@
 // components/WhyChooseUs.tsx
-import React from "react"
 
 export default function WhyChooseUs() {
 	const cardBase =

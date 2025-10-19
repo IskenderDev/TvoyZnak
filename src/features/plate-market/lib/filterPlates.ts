@@ -12,7 +12,7 @@ const matchPlateText = (pattern: string, row: NumberItem) => {
     .every((char, idx) => char === "*" || char === raw[idx])
 }
 
-const matchesTextQuery = (query: PlateSelectValue, row: PlateRow) => {
+const matchesTextQuery = (query: PlateSelectValue, row: NumberItem) => {
   if (!hasAnyChar(query.text)) return true
   return matchPlateText(query.text, row)
 }

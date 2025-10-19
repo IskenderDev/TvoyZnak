@@ -15,7 +15,7 @@ export function useScale(baseWidth: number) {
       if (Array.isArray(boxSize)) {
         inlineSize = boxSize[0]?.inlineSize ?? inlineSize;
       } else if (boxSize && typeof boxSize === "object" && "inlineSize" in boxSize) {
-        const size = boxSize as ResizeObserverSize;
+        const size = boxSize as unknown as ResizeObserverSize;
         inlineSize = size.inlineSize ?? inlineSize;
       }
 
