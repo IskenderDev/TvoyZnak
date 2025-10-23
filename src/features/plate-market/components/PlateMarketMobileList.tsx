@@ -10,11 +10,11 @@ type PlateMarketMobileListProps = {
 }
 
 export const PlateMarketMobileList = ({ rows, className = "" }: PlateMarketMobileListProps) => {
+  const navigate = useNavigate()
+
   if (!rows.length) {
     return null
   }
-
-  const navigate = useNavigate()
 
   const handleBuy = (row: NumberItem) => {
     const contactPrefill = buildContactPrefill(row)

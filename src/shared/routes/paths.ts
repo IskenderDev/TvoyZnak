@@ -7,7 +7,8 @@ export const paths = {
   news: "/news",
   newsDetails: (id = ":id") => `/news/${id}`,
   contacts: "/contacts",
-  sellNumber:"/sellNumber",
+  sellNumber: "/sellNumber",
+  profile: "/profile",
   auth: {
     login: "/auth/login",
     register: "/auth/register"
