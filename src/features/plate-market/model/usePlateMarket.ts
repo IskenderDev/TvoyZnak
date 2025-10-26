@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
-import { numbersApi } from "@/shared/services/numbersApi";
+import { legacyNumbersApi } from "@/shared/services/legacyNumbersApi";
 import type { PlateMarketFiltersState, SortDir } from "./types";
 import { filterPlates } from "../lib/filterPlates";
 import type { NumberItem } from "@/entities/number/types";
@@ -34,7 +34,7 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await numbersApi.list();
+      const data = await legacyNumbersApi.list();
       setItems(data);
     } catch (err: unknown) {
       const message = extractErrorMessage(err, "Не удалось загрузить номера");

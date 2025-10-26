@@ -7,11 +7,13 @@ export const paths = {
   news: "/news",
   newsDetails: (id = ":id") => `/news/${id}`,
   contacts: "/contacts",
-  sellNumber: "/sellNumber",
+  sell: "/sell",
+  sellNew: "/sell/new",
   profile: "/profile",
+  profileListing: (id = ":id") => `/profile/listings/${id}`,
   auth: {
-    login: "/auth/login",
-    register: "/auth/register"
+    login: "/login",
+    register: "/register"
   },
   admin: {
     root: "/admin",

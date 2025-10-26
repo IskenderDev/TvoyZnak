@@ -6,7 +6,7 @@ import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
-import { numbersApi } from "@/shared/services/numbersApi";
+import { legacyNumbersApi } from "@/shared/services/legacyNumbersApi";
 import type { NumberItem } from "@/entities/number/types";
 import { formatPrice } from "@/shared/lib/format";
 import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
@@ -44,7 +44,7 @@ export default function ProfilePage() {
     setLoading(true);
     setError(null);
 
-    numbersApi
+    legacyNumbersApi
       .listMy()
       .then((data) => {
         if (!isActive) return;
@@ -81,7 +81,7 @@ export default function ProfilePage() {
     setDeletingId(id);
     setError(null);
     try {
-      await numbersApi.delete(id);
+      await legacyNumbersApi.delete(id);
       setNumbers((prev) => prev.filter((item) => item.id !== id));
     } catch (err: unknown) {
       const message = extractErrorMessage(err, "Не удалось удалить номер");
@@ -146,7 +146,7 @@ export default function ProfilePage() {
               <p className="mt-1 text-sm text-white/60">Добавляйте, просматривайте и удаляйте объявления.</p>
             </div>
             <Link
-              to={paths.sellNumber}
+              to={paths.sell}
               className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
             >
               <LuPlus className="h-4 w-4" /> Добавить номер

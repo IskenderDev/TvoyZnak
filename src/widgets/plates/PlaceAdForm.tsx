@@ -3,7 +3,7 @@ import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
-import { numbersApi } from "@/shared/services/numbersApi";
+import { legacyNumbersApi } from "@/shared/services/legacyNumbersApi";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -122,7 +122,7 @@ export default function PlaceAdForm() {
     setError(null);
 
     try {
-      await numbersApi.createAndRegister({
+      await legacyNumbersApi.createAndRegister({
         price: priceValue,
         firstLetter: plateParts.firstLetter,
         secondLetter: plateParts.secondLetter,

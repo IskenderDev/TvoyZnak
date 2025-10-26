@@ -23,7 +23,9 @@ import AdminNumberEditPage from "@/pages/admin/numbers/AdminNumberEditPage";
 import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
 import AdminNewsNewPage from "@/pages/admin/news/AdminNewsNewPage";
 import AdminNewsEditPage from "@/pages/admin/news/AdminNewsEditPage";
-import SellNumberPage from "@/pages/sellNumber/SellNumber";
+import SellCombinedPage from "@/pages/sell/SellCombinedPage";
+import SellFormPage from "@/pages/sell/SellFormPage";
+import { ProtectedRoute } from "@/shared/routes/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -37,7 +39,15 @@ export const router = createBrowserRouter([
       { path: paths.numberDetails(), element: <NumberDetailsPage /> },
       { path: paths.news, element: <NewsListPage /> },
       { path: paths.newsDetails(), element: <NewsDetailsPage /> },
-      { path: paths.sellNumber, element: <SellNumberPage /> },
+      { path: paths.sell, element: <SellCombinedPage /> },
+      {
+        path: paths.sellNew,
+        element: (
+          <ProtectedRoute>
+            <SellFormPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: paths.profile, element: <ProfilePage /> },
       { path: paths.contacts, element: <ContactsPage /> },
       { path: paths.auth.login, element: <LoginPage /> },

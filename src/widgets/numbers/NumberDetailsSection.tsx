@@ -6,7 +6,7 @@ import PlateStaticLg from "@/shared/components/plate/PlateStaticLg"
 import { formatPrice } from "@/shared/lib/format"
 import { buildContactPrefill, formatPlateLabel } from "@/shared/lib/plate"
 import { paths } from "@/shared/routes/paths"
-import { numbersApi } from "@/shared/services/numbersApi"
+import { legacyNumbersApi } from "@/shared/services/legacyNumbersApi"
 import type { NumberItem } from "@/entities/number/types"
 
 export default function NumberDetailsSection() {
@@ -22,7 +22,7 @@ export default function NumberDetailsSection() {
     setLoading(true)
     setError(null)
 
-    numbersApi
+    legacyNumbersApi
       .get(id)
       .then((data) => {
         if (!mounted) return

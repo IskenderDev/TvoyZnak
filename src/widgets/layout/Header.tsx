@@ -5,18 +5,16 @@ import { LuCircleUserRound } from "react-icons/lu";
 import { paths } from "@/shared/routes/paths";
 import Container from "@/shared/components/Container";
 import Button from "@/shared/components/Button";
-import LegacyModal from "@/shared/components/Modal";
 import RegisterModal from "@/features/auth/RegisterModal";
 import { useAuth } from "@/shared/hooks/useAuth";
 
 export default function Header() {
   const navigate = useNavigate();
-  const [sellOpen, setSellOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const { user } = useAuth();
 
   const handleSellClick = () => {
-    navigate(paths.sellNumber);
+    navigate(paths.sell);
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -85,7 +83,6 @@ export default function Header() {
         </div>
       </Container>
 
-      <LegacyModal open={sellOpen} onClose={() => setSellOpen(false)} />
       {!user && (
         <RegisterModal open={isRegisterOpen} onClose={() => setRegisterOpen(false)} />
       )}
