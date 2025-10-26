@@ -5,7 +5,7 @@ const baseURL = ((): string => {
   if (url && typeof url === "string" && url.trim()) {
     return url;
   }
-  return "http://localhost:8081";
+  return "http://192.168.60.107:8081";
 })();
 
 export const API_BASE_URL = baseURL;

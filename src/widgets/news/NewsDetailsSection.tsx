@@ -88,7 +88,7 @@ export default function NewsDetailsSection() {
             )}
           </div>
         </div>
-
+            <h1 className="text-4xl font-extrabold my-12 mx-10 font-actay-wide">Другие новости</h1>
         {related.length > 0 && (
           <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {related.map((news) => (
