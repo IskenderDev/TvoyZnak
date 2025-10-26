@@ -8,6 +8,8 @@ const baseURL = ((): string => {
   return "http://localhost:8081";
 })();
 
+export const API_BASE_URL = baseURL;
+
 const apiClient = axios.create({
   baseURL,
   headers: {

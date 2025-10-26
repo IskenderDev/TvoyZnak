@@ -1,5 +1,5 @@
 import { z } from "zod";
-import apiClient from "@/shared/api/client";
+import apiClient, { API_BASE_URL } from "@/shared/api/client";
 import type { NewsItem } from "@/entities/news/types";
 
 export interface NewsListParams {
@@ -62,7 +62,9 @@ const toNewsItem = (dto: PostDto): NewsItem => {
   const title = pickString([dto.title, dto.name, dto.description, dto.text, "Новость"]);
   const excerpt = pickString([dto.excerpt, dto.previewText, dto.shortDescription, dto.description, dto.text]);
   const content = pickString([dto.content, dto.body, dto.text, excerpt]);
-  const cover = pickString([dto.cover, dto.coverUrl, dto.imageUrl, dto.thumbnailUrl, dto.mainImageUrl, FALLBACK_COVER]);
+  const cover = normalizeCover(
+    pickString([dto.cover, dto.coverUrl, dto.imageUrl, dto.thumbnailUrl, dto.mainImageUrl]),
+  ) || FALLBACK_COVER;
   const rawDate = pickString([dto.publishedAt, dto.createdAt, dto.updatedAt]);
 
   return {
@@ -101,6 +103,28 @@ const normalizeDate = (value: string): string | undefined => {
   const date = new Date(value);
   if (Number.isNaN(+date)) return undefined;
   return date.toISOString();
+};
+
+const normalizeCover = (value: string): string => {
+  const cover = value?.trim();
+  if (!cover) return "";
+
+  if (/^https?:\/\//i.test(cover) || cover.startsWith("data:")) {
+    return cover;
+  }
+
+  try {
+    if (cover.startsWith("/")) {
+      return new URL(cover, API_BASE_URL).toString();
+    }
+
+    const url = new URL("/api/files", API_BASE_URL);
+    url.searchParams.set("path", cover);
+    return url.toString();
+  } catch (error) {
+    console.error("Failed to normalize cover", error);
+    return cover;
+  }
 };
 
 const request = async <T>(fn: () => Promise<{ data: unknown }>, map: (payload: unknown) => T): Promise<T> => {
