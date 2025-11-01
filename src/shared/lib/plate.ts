@@ -1,4 +1,4 @@
-import type { NumberItem, PlateInfo } from "@/entities/number/types";
+import type { CarNumberLot, CarNumberPlate } from "@/entities/car-number-lot/types";
 import { formatPrice } from "./format";
 
 const sanitizeLetter = (value?: string): string => {
@@ -27,7 +27,7 @@ const sanitizeRegion = (value?: string | number): string => {
   return "";
 };
 
-const buildSeriesFromPlate = (plate?: PlateInfo | null): string => {
+const buildSeriesFromPlate = (plate?: CarNumberPlate | null): string => {
   if (!plate) return "";
 
   const letters = [
@@ -49,9 +49,9 @@ const buildSeriesFromPlate = (plate?: PlateInfo | null): string => {
 };
 
 export const formatPlateLabel = (
-  item: Pick<NumberItem, "series" | "plate" | "region"> | {
+  item: Pick<CarNumberLot, "series" | "plate" | "region"> | {
     series?: string;
-    plate?: PlateInfo | null;
+    plate?: CarNumberPlate | null;
     region?: string | number | null;
   },
 ): string => {
@@ -64,7 +64,9 @@ export const formatPlateLabel = (
   return [series, region].filter(Boolean).join(" ");
 };
 
-export const buildContactPrefill = (item: Pick<NumberItem, "series" | "plate" | "region" | "price" | "seller">) => {
+export const buildContactPrefill = (
+  item: Pick<CarNumberLot, "series" | "plate" | "region" | "price" | "seller">,
+) => {
   const numberLabel = formatPlateLabel(item);
   const priceLabel = typeof item.price === "number" && item.price > 0 ? formatPrice(item.price) : "";
   const descriptionParts = [numberLabel, priceLabel, item.seller].filter(Boolean);

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
-import { numbersApi } from "@/shared/services/numbersApi";
+import { useCarNumberLots } from "@/shared/hooks/useCarNumberLots";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -37,11 +38,25 @@ const INITIAL_FORM: FormState = {
 const INITIAL_PLATE: PlateSelectValue = { ...DEFAULT_PLATE_VALUE };
 
 export default function PlaceAdForm() {
-  const [form, setForm] = useState<FormState>(INITIAL_FORM);
+  const { isAuthenticated, user } = useAuth();
+  const { create, createAndRegister } = useCarNumberLots();
+
+  const initialForm = useMemo<FormState>(() => ({
+    ...INITIAL_FORM,
+    name: isAuthenticated ? user?.fullName ?? "" : "",
+    phone: isAuthenticated ? user?.phoneNumber ?? "" : "",
+    email: isAuthenticated ? user?.email ?? "" : "",
+  }), [isAuthenticated, user]);
+
+  const [form, setForm] = useState<FormState>(initialForm);
   const [plate, setPlate] = useState<PlateSelectValue>(INITIAL_PLATE);
   const [toast, setToast] = useState<ToastState>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setForm(initialForm);
+  }, [initialForm]);
 
   useEffect(() => {
     if (!toast) return;
@@ -63,20 +78,32 @@ export default function PlaceAdForm() {
     setForm((prev) => ({ ...prev, type: value }));
   };
 
+  const normalizedName = form.name.trim();
+  const normalizedPrice = form.price.trim();
+  const normalizedPhone = ((isAuthenticated ? user?.phoneNumber : form.phone) ?? "").trim();
+  const normalizedEmail = ((isAuthenticated ? user?.email : form.email) ?? "").trim();
+  const normalizedPassword = form.password.trim();
+  const requireCredentials = !isAuthenticated;
+
+  const showPhoneField = !isAuthenticated || !user?.phoneNumber;
+  const showEmailField = !isAuthenticated || !user?.email;
+  const showPasswordField = !isAuthenticated;
+
   const isSubmitDisabled =
     loading ||
     !form.consent ||
-    !form.name.trim() ||
-    !form.phone.trim() ||
-    !form.price.trim() ||
+    !normalizedName ||
+    !normalizedPhone ||
+    !normalizedPrice ||
+    (requireCredentials && (!normalizedEmail || normalizedPassword.length < 6)) ||
     plate.text.includes("*") ||
     !plate.region ||
     plate.region === "*";
 
   const resetForm = useCallback(() => {
-    setForm(INITIAL_FORM);
+    setForm(initialForm);
     setPlate(INITIAL_PLATE);
-  }, []);
+  }, [initialForm]);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -110,33 +137,48 @@ export default function PlaceAdForm() {
       return;
     }
 
-    const trimmedPassword = form.password.trim();
-    if (trimmedPassword.length < 6) {
+    if (requireCredentials && normalizedPassword.length < 6) {
       setToast({ type: "error", msg: "Пароль должен содержать минимум 6 символов" });
       return;
     }
 
     const plateParts = extractPlateParts(plate);
+    const comment = form.comment.trim() ? form.comment.trim() : undefined;
+    const sellerName = normalizedName || user?.fullName || "Продавец";
+    const phoneValue = normalizedPhone;
+    const emailValue = normalizedEmail || undefined;
 
     setLoading(true);
     setError(null);
 
     try {
-      await numbersApi.createAndRegister({
-        price: priceValue,
-        firstLetter: plateParts.firstLetter,
-        secondLetter: plateParts.secondLetter,
-        thirdLetter: plateParts.thirdLetter,
-        firstDigit: plateParts.firstDigit,
-        secondDigit: plateParts.secondDigit,
-        thirdDigit: plateParts.thirdDigit,
-        comment: form.comment.trim() ? form.comment.trim() : undefined,
-        regionId,
-        fullName: form.name.trim(),
-        phoneNumber: form.phone.trim(),
-        email: form.email.trim() ? form.email.trim() : undefined,
-        password: trimmedPassword,
-      });
+      if (isAuthenticated) {
+        await create({
+          series,
+          regionCode,
+          price: priceValue,
+          sellerName,
+          phone: phoneValue,
+          description: comment,
+          email: user?.email ?? undefined,
+        });
+      } else {
+        await createAndRegister({
+          price: priceValue,
+          firstLetter: plateParts.firstLetter,
+          secondLetter: plateParts.secondLetter,
+          thirdLetter: plateParts.thirdLetter,
+          firstDigit: plateParts.firstDigit,
+          secondDigit: plateParts.secondDigit,
+          thirdDigit: plateParts.thirdDigit,
+          comment,
+          regionId,
+          fullName: sellerName,
+          phoneNumber: phoneValue,
+          email: emailValue,
+          password: normalizedPassword,
+        });
+      }
       setToast({ type: "success", msg: "Объявление успешно отправлено" });
       resetForm();
     } catch (error: unknown) {
@@ -186,38 +228,56 @@ export default function PlaceAdForm() {
               required
             />
 
-            <input
-              type="tel"
-              inputMode="tel"
-              className={INPUT_BASE}
-              placeholder="Телефон *"
-              aria-label="Телефон"
-              name="phone"
-              value={form.phone}
-              onChange={handleInputChange}
-              required
-            />
+            {showPhoneField ? (
+              <input
+                type="tel"
+                inputMode="tel"
+                className={INPUT_BASE}
+                placeholder="Телефон *"
+                aria-label="Телефон"
+                name="phone"
+                value={form.phone}
+                onChange={handleInputChange}
+                required
+              />
+            ) : (
+              <div className="flex flex-col justify-center rounded-[10px] bg-white/5 px-4 py-3 text-left text-sm text-white/80">
+                <span className="text-xs uppercase text-white/40">Телефон</span>
+                <span>{user?.phoneNumber ?? "—"}</span>
+              </div>
+            )}
 
-            <input
-              type="email"
-              inputMode="email"
-              className={INPUT_BASE}
-              placeholder="Почта"
-              aria-label="Почта"
-              name="email"
-              value={form.email}
-              onChange={handleInputChange}
-            />
+            {showEmailField ? (
+              <input
+                type="email"
+                inputMode="email"
+                className={INPUT_BASE}
+                placeholder="Почта"
+                aria-label="Почта"
+                name="email"
+                value={form.email}
+                onChange={handleInputChange}
+                required={requireCredentials}
+              />
+            ) : (
+              <div className="flex flex-col justify-center rounded-[10px] bg-white/5 px-4 py-3 text-left text-sm text-white/80">
+                <span className="text-xs uppercase text-white/40">Почта</span>
+                <span>{user?.email ?? "—"}</span>
+              </div>
+            )}
 
-            <input
-              type="password"
-              className={INPUT_BASE}
-              placeholder="Пароль"
-              aria-label="Пароль"
-              name="password"
-              value={form.password}
-              onChange={handleInputChange}
-            />
+            {showPasswordField ? (
+              <input
+                type="password"
+                className={INPUT_BASE}
+                placeholder="Пароль"
+                aria-label="Пароль"
+                name="password"
+                value={form.password}
+                onChange={handleInputChange}
+                required={requireCredentials}
+              />
+            ) : null}
 
             <input
               type="text"

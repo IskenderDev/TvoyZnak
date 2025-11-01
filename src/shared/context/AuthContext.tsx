@@ -1,34 +1,29 @@
 import {
   createContext,
   useCallback,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-export type Role = "admin" | "user";
-
-export interface AuthUser {
-  id?: string | number;
-  fullName: string;
-  email?: string;
-  phoneNumber?: string;
-  role?: Role;
-  token?: string;
-}
+import type { AuthCredentials, AuthUser, RegisterPayload } from "@/entities/auth/types";
+import type { UserRole } from "@/entities/user/types";
+import { apiService, type AuthResult } from "@/shared/api/apiService";
+import { clearAuthToken, getAuthToken, setAuthToken } from "@/shared/api/tokenStorage";
 
 export interface AuthContextValue {
   user: AuthUser | null;
   isAuthenticated: boolean;
-  role?: Role;
+  role?: UserRole;
+  login: (credentials: AuthCredentials) => Promise<AuthUser>;
+  register: (payload: RegisterPayload) => Promise<AuthUser>;
+  refresh: () => Promise<AuthUser | null>;
+  logout: () => Promise<void>;
   setUser: (user: AuthUser | null) => void;
-  logout: () => void;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined,
-);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const STORAGE_KEY = "authUser";
 
@@ -66,26 +61,100 @@ const persistUser = (user: AuthUser | null) => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<AuthUser | null>(() => readStoredUser());
 
+  const applyAuthResult = useCallback((result: AuthResult): AuthUser => {
+    const nextUser: AuthUser = {
+      ...result.user,
+      token: result.token ?? result.user.token,
+    };
+    setAuthToken(nextUser.token ?? null);
+    persistUser(nextUser);
+    setUserState(nextUser);
+    return nextUser;
+  }, []);
+
   const setUser = useCallback((value: AuthUser | null) => {
     setUserState(value);
     persistUser(value);
+    if (value?.token) {
+      setAuthToken(value.token);
+    } else if (!value) {
+      clearAuthToken();
+    }
   }, []);
 
-  const logout = useCallback(() => {
+  const login = useCallback(
+    async (credentials: AuthCredentials) => {
+      const result = await apiService.auth.login(credentials);
+      return applyAuthResult(result);
+    },
+    [applyAuthResult],
+  );
+
+  const register = useCallback(
+    async (payload: RegisterPayload) => {
+      const result = await apiService.auth.register(payload);
+      return applyAuthResult(result);
+    },
+    [applyAuthResult],
+  );
+
+  const refresh = useCallback(async () => {
+    const token = getAuthToken();
+    if (!token) {
+      setUser(null);
+      return null;
+    }
+
+    const result = await apiService.auth.me();
+    if (!result) {
+      setUser(null);
+      return null;
+    }
+
+    return applyAuthResult({ ...result, token: result.token ?? token });
+  }, [applyAuthResult, setUser]);
+
+  const logout = useCallback(async () => {
+    await apiService.auth.logout();
     setUser(null);
+    clearAuthToken();
+  }, [setUser]);
+
+  useEffect(() => {
+    const token = getAuthToken();
+    if (token && !user) {
+      void refresh();
+    }
+  }, [refresh, user]);
+
+  useEffect(() => {
+    const handler = () => {
+      setUser(null);
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("auth:unauthorized", handler);
+      return () => {
+        window.removeEventListener("auth:unauthorized", handler);
+      };
+    }
+
+    return undefined;
   }, [setUser]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
-      isAuthenticated: Boolean(user),
-      role: user?.role ?? "admin",
-      setUser,
+      isAuthenticated: Boolean(user?.token),
+      role: user?.role ?? "user",
+      login,
+      register,
+      refresh,
       logout,
+      setUser,
     }),
-    [logout, setUser, user],
+    [login, logout, refresh, register, setUser, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

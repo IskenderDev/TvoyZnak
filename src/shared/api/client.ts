@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearAuthToken, getAuthToken } from "@/shared/api/tokenStorage";
 
 const baseURL = ((): string => {
   const url = import.meta?.env?.VITE_API_BASE_URL;
@@ -19,6 +20,17 @@ const apiClient = axios.create({
   withCredentials: false,
 });
 
+apiClient.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers = config.headers ?? {};
+    if (!config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -28,6 +40,12 @@ apiClient.interceptors.response.use(
         error.response.status,
         error.response.data ?? error.message,
       );
+      if (error.response.status === 401) {
+        clearAuthToken();
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+        }
+      }
     } else {
       console.error("Network error:", error.message);
     }

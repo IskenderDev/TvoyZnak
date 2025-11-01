@@ -2,15 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Seo from "@/shared/components/Seo";
 import NewsCard from "@/shared/components/NewsCard";
-import { newsApi } from "@/shared/services/newsApi";
-import type { NewsItem } from "@/entities/news/types";
+import { postsApi } from "@/shared/services/postsApi";
+import type { Post } from "@/entities/post/types";
 
 const PER_PAGE = 6;
 
 export default function NewsDetailsSection() {
   const { id } = useParams<{ id: string }>();
-  const [item, setItem] = useState<NewsItem | null>(null);
-  const [related, setRelated] = useState<NewsItem[]>([]);
+  const [item, setItem] = useState<Post | null>(null);
+  const [related, setRelated] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +20,7 @@ export default function NewsDetailsSection() {
     setLoading(true);
     setError(null);
 
-    Promise.all([newsApi.get(id), newsApi.list({})])
+    Promise.all([postsApi.get(id), postsApi.list({})])
       .then(([current, list]) => {
         if (!mounted) return;
         setItem(current);

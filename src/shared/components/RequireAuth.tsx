@@ -6,7 +6,7 @@ export function RequireAuth() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   if (!isAuthenticated) {
-    return <Navigate to={paths.auth.register} replace state={{ from: location }} />;
+    return <Navigate to={paths.auth.login} replace state={{ from: location }} />;
   }
   return <Outlet />;
 }
