@@ -1,15 +1,16 @@
 // shared/components/plate/MobilePlateCard.tsx
 import { Link } from "react-router-dom";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
-import type { NumberItem } from "@/entities/number/types";
+import type { CarNumberLot } from "@/entities/car-number-lot/types";
 
 type PlateLike = Partial<PlateData> & {
   region?: string | number;
   regionId?: number;
 };
 
-type PlateRowLike = Partial<NumberItem> & {
+type PlateRowLike = Partial<CarNumberLot> & {
   createdAt?: string;
+  date?: string;
   owner?: string;
   ownerName?: string;
   user?: string;

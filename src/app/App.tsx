@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Header from "@/widgets/layout/Header";
 import Footer from "@/widgets/layout/Footer";
 import Container from "@/shared/components/Container";
+import { UnauthorizedRedirect } from "@/shared/components/UnauthorizedRedirect";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Header />
       <main className="flex-1">
         <Container>
+          <UnauthorizedRedirect />
           <Outlet />
         </Container>
       </main>

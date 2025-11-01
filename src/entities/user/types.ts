@@ -1,6 +1,13 @@
+export type UserRole = "admin" | "user";
+
 export interface User {
   id: string;
-  role: "admin" | "user";
-  name: string;
-  email: string;
+  fullName: string;
+  email?: string;
+  phoneNumber?: string;
+  role: UserRole;
+  isActive?: boolean;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -1,0 +1,205 @@
+import { z } from "zod";
+import apiClient, { API_BASE_URL } from "@/shared/api/client";
+import type { Post } from "@/entities/post/types";
+
+export interface PostsListParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
+export interface CreatePostPayload {
+  title: string;
+  excerpt?: string;
+  content?: string;
+  cover?: string;
+  status?: string;
+}
+
+export type UpdatePostPayload = Partial<CreatePostPayload>;
+
+export interface PostsApi {
+  list(params?: PostsListParams): Promise<Post[]>;
+  get(id: string): Promise<Post>;
+  create(payload: CreatePostPayload): Promise<Post>;
+  update(id: string, payload: UpdatePostPayload): Promise<Post>;
+  delete(id: string): Promise<void>;
+}
+
+type PostDto = z.infer<typeof postSchema>;
+
+const postSchema = z
+  .object({
+    id: z.union([z.string(), z.number()]),
+    title: z.string().optional(),
+    name: z.string().optional(),
+    slug: z.string().optional(),
+    code: z.string().optional(),
+    previewText: z.string().optional(),
+    excerpt: z.string().optional(),
+    description: z.string().optional(),
+    shortDescription: z.string().optional(),
+    content: z.string().optional(),
+    body: z.string().optional(),
+    text: z.string().optional(),
+    cover: z.string().optional(),
+    coverUrl: z.string().optional(),
+    imageUrl: z.string().optional(),
+    thumbnailUrl: z.string().optional(),
+    mainImageUrl: z.string().optional(),
+    publishedAt: z.string().optional(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
+    status: z.string().optional(),
+  })
+  .passthrough();
+
+const listResponseSchema = z.array(postSchema);
+
+const FALLBACK_COVER = "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80";
+
+const toPost = (dto: PostDto): Post => {
+  const title = pickString([dto.title, dto.name, dto.description, dto.text, "Новость"]);
+  const excerpt = pickString([dto.excerpt, dto.previewText, dto.shortDescription, dto.description, dto.text]);
+  const content = pickString([dto.content, dto.body, dto.text, excerpt]);
+  const cover = normalizeCover(
+    pickString([dto.cover, dto.coverUrl, dto.imageUrl, dto.thumbnailUrl, dto.mainImageUrl]),
+  ) || FALLBACK_COVER;
+  const rawDate = pickString([dto.publishedAt, dto.createdAt, dto.updatedAt]);
+
+  return {
+    id: String(dto.id),
+    slug: normalizeSlug(pickString([dto.slug, dto.code]) || title),
+    title,
+    cover,
+    excerpt,
+    content,
+    status: pickString([dto.status]) || "published",
+    publishedAt: normalizeDate(rawDate),
+  };
+};
+
+const pickString = (values: Array<unknown | undefined>): string => {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return "";
+};
+
+const normalizeSlug = (value: string): string => {
+  if (!value) return "post";
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\p{sc=Cyrl}]+/gu, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-")
+    .slice(0, 80) || "post";
+};
+
+const normalizeDate = (value: string): string | undefined => {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(+date)) return undefined;
+  return date.toISOString();
+};
+
+const normalizeCover = (value: string): string => {
+  const cover = value?.trim();
+  if (!cover) return "";
+
+  if (/^https?:\/\//i.test(cover) || cover.startsWith("data:")) {
+    return cover;
+  }
+
+  try {
+    if (cover.startsWith("/")) {
+      return new URL(cover, API_BASE_URL).toString();
+    }
+
+    const url = new URL("/api/files", API_BASE_URL);
+    url.searchParams.set("path", cover);
+    return url.toString();
+  } catch (error) {
+    console.error("Failed to normalize cover", error);
+    return cover;
+  }
+};
+
+const request = async <T>(fn: () => Promise<{ data: unknown }>, map: (payload: unknown) => T): Promise<T> => {
+  const response = await fn();
+  return map(response.data);
+};
+
+const postsApi: PostsApi = {
+  async list(params) {
+    return request(() => apiClient.get("/api/posts", { params }), (payload) => {
+      const parsed = listResponseSchema.safeParse(payload);
+      if (!parsed.success) {
+        console.error("Failed to parse posts", parsed.error);
+        return [];
+      }
+      return parsed.data.map(toPost);
+    });
+  },
+
+  async get(id) {
+    return request(() => apiClient.get(`/api/posts/${id}`), (payload) => {
+      const parsed = postSchema.safeParse(payload);
+      if (!parsed.success) {
+        console.error("Failed to parse post", parsed.error);
+        throw new Error("Не удалось получить новость");
+      }
+      return toPost(parsed.data);
+    });
+  },
+
+  async create(payload) {
+    return request(
+      () =>
+        apiClient.post("/api/posts", {
+          title: payload.title,
+          excerpt: payload.excerpt,
+          content: payload.content,
+          cover: payload.cover,
+          status: payload.status,
+        }),
+      (data) => {
+        const parsed = postSchema.safeParse(data);
+        if (!parsed.success) {
+          console.error("Failed to parse post after create", parsed.error);
+          throw new Error("Неверный ответ сервера при создании новости");
+        }
+        return toPost(parsed.data);
+      },
+    );
+  },
+
+  async update(id, payload) {
+    return request(
+      () =>
+        apiClient.post(`/api/posts/${id}`, {
+          title: payload.title,
+          excerpt: payload.excerpt,
+          content: payload.content,
+          cover: payload.cover,
+          status: payload.status,
+        }),
+      (data) => {
+        const parsed = postSchema.safeParse(data);
+        if (!parsed.success) {
+          console.error("Failed to parse post after update", parsed.error);
+          throw new Error("Неверный ответ сервера при обновлении новости");
+        }
+        return toPost(parsed.data);
+      },
+    );
+  },
+
+  async delete(id) {
+    await apiClient.delete(`/api/posts/${id}`);
+  },
+};
+
+export { postsApi };

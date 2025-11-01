@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import Seo from "@/shared/components/Seo";
 import Pagination from "@/shared/components/Pagination";
 import NewsCard from "@/shared/components/NewsCard";
-import { newsApi } from "@/shared/services/newsApi";
-import type { NewsItem } from "@/entities/news/types";
+import { postsApi } from "@/shared/services/postsApi";
+import type { Post } from "@/entities/post/types";
 
 const PER_PAGE = 6;
 
 export default function NewsListSection() {
-  const [items, setItems] = useState<NewsItem[]>([]);
+  const [items, setItems] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +18,7 @@ export default function NewsListSection() {
     setLoading(true);
     setError(null);
 
-    newsApi
+    postsApi
       .list({})
       .then((data) => {
         if (!mounted) return;
@@ -65,8 +65,8 @@ export default function NewsListSection() {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pagedItems.map((news) => (
-              <NewsCard key={news.id} news={news} />
+            {pagedItems.map((post) => (
+              <NewsCard key={post.id} news={post} />
             ))}
 
             {!loading && items.length === 0 && !error && (

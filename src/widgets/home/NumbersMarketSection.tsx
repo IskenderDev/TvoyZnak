@@ -1,9 +1,9 @@
 import {
-  PlateMarketFilters,
-  PlateMarketMobileList,
-  PlateMarketTable,
-  usePlateMarket,
-} from "@/features/plate-market";
+  CarNumberLotsFilters,
+  CarNumberLotsMobileList,
+  CarNumberLotsTable,
+  useCarNumberLotsMarket,
+} from "@/features/car-number-lots";
 
 const GRID_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px";
 
@@ -25,12 +25,12 @@ export default function NumbersMarketSection() {
     toggleSortDir,
     resetFilters,
     showMore,
-  } = usePlateMarket();
+  } = useCarNumberLotsMarket();
 
   return (
     <section className="min-h-screen bg-[#0B0B0C] py-10 text-white">
       <div className="mx-auto px-4 sm:px-6">
-        <PlateMarketFilters
+        <CarNumberLotsFilters
           className="mb-6"
           region={region}
           category={category}
@@ -51,7 +51,7 @@ export default function NumbersMarketSection() {
           </p>
         ) : (
           <>
-            <PlateMarketTable
+            <CarNumberLotsTable
               className="hidden md:block"
               rows={visibleRows}
               sortDir={sortDir}
@@ -60,7 +60,7 @@ export default function NumbersMarketSection() {
               onReset={resetFilters}
             />
 
-            <PlateMarketMobileList className="mt-6 md:hidden" rows={visibleRows} />
+            <CarNumberLotsMobileList className="mt-6 md:hidden" rows={visibleRows} />
 
             {canShowMore && (
               <div className="mt-6 flex justify-center">

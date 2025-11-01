@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom"
 import { FaVk, FaTelegramPlane, FaWhatsapp } from "react-icons/fa"
 import Container from "../../shared/components/Container"
-import { paths } from '../../shared/routes/paths'
+import { paths } from "../../shared/routes/paths"
 
 export default function Footer() {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -31,7 +31,7 @@ export default function Footer() {
                 <ul className="flex flex-col gap-2">
                   <li><NavLink to="/" className={linkClass}>Главная</NavLink></li>
                   <li><NavLink to="/about" className={linkClass}>О компании</NavLink></li>
-                  <li><NavLink to="/numbers" className={linkClass}>Номера</NavLink></li>
+                  <li><NavLink to={paths.carNumberLots} className={linkClass}>Номера</NavLink></li>
                   <li><NavLink to="/blog" className={linkClass}>Блог</NavLink></li>
                   <li><NavLink to="/contacts" className={linkClass}>Контакты</NavLink></li>
                 </ul>

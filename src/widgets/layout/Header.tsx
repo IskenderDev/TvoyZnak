@@ -42,7 +42,7 @@ export default function Header() {
             <NavLink to={paths.services} className={linkClass}>
               Услуги
             </NavLink>
-            <NavLink to={paths.numbers} className={linkClass}>
+            <NavLink to={paths.carNumberLots} className={linkClass}>
               Номера
             </NavLink>
             <NavLink to={paths.news} className={linkClass}>
