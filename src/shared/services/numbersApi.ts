@@ -165,7 +165,7 @@ const numbersApi: NumbersApi = {
 
   async createAuthorized(payload) {
     const response = await http.post(
-      "/api/car-number-lots/create",
+      "/api/car-number-lots",
       {
         price: payload.price,
         firstLetter: payload.firstLetter,

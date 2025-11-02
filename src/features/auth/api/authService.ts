@@ -39,6 +39,66 @@ const dedupeRoles = (roles: Role[]): Role[] => Array.from(new Set(roles));
 
 type UnknownRecord = Record<string, unknown>;
 
+const TOKEN_KEYS = [
+  "token",
+  "accessToken",
+  "access_token",
+  "jwt",
+  "jwtToken",
+  "idToken",
+  "id_token",
+  "authToken",
+  "authorization",
+  "bearer",
+];
+
+const TOKEN_CONTAINERS = ["data", "result", "response", "payload", "body"] as const;
+
+const normalizeTokenValue = (value: string): string => {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  if (trimmed.toLowerCase().startsWith("bearer ")) {
+    return trimmed.slice(7).trim();
+  }
+  return trimmed;
+};
+
+const extractToken = (payload: unknown): string | null => {
+  if (!payload) return null;
+  if (typeof payload === "string") {
+    const token = normalizeTokenValue(payload);
+    return token ? token : null;
+  }
+  if (Array.isArray(payload)) {
+    for (const item of payload) {
+      const token = extractToken(item);
+      if (token) return token;
+    }
+    return null;
+  }
+  if (typeof payload !== "object") {
+    return null;
+  }
+
+  const source = payload as UnknownRecord;
+
+  for (const key of TOKEN_KEYS) {
+    const value = source[key];
+    if (typeof value === "string") {
+      const token = normalizeTokenValue(value);
+      if (token) return token;
+    }
+  }
+
+  for (const containerKey of TOKEN_CONTAINERS) {
+    const nested = source[containerKey];
+    const token = extractToken(nested);
+    if (token) return token;
+  }
+
+  return null;
+};
+
 const pickUserSource = (payload: unknown): UnknownRecord | null => {
   if (!payload || typeof payload !== "object") return null;
   const record = payload as UnknownRecord;
@@ -214,8 +274,13 @@ export async function login(payload: LoginPayload): Promise<AuthSession> {
     const user = toAuthUser(response.data, payload);
     saveUserToStorage(user);
 
-    // Маркер режима: токена нет, но тип требует строку
-    return { token: "session", user };
+    const token = extractToken(response.data) ?? extractToken(response.headers);
+
+    if (!token) {
+      throw new Error("Не удалось получить токен авторизации");
+    }
+
+    return { token, user };
   } catch (error) {
     throw toApiError(error, "Не удалось войти");
   }
