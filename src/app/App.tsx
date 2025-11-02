@@ -9,8 +9,8 @@ import Container from "@/shared/components/Container";
 
 export default function App() {
   return (
-    <AuthDialogProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <AuthDialogProvider>
         <div className="min-h-dvh flex flex-col">
           <Header />
           <main className="flex-1">
@@ -21,7 +21,7 @@ export default function App() {
           <Footer />
           <Toaster position="top-right" />
         </div>
-      </AuthProvider>
-    </AuthDialogProvider>
+      </AuthDialogProvider>
+    </AuthProvider>
   );
 }
