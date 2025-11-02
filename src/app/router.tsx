@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "@/app/App";
 import { paths } from "@/shared/routes/paths";
-import { RequireRole } from "@/shared/components/RequireRole";
+import { RequireAuth, RequireRole } from "@/routes/guards";
 
 import HomePage from "@/pages/home/HomePage";
 import AboutPage from "@/pages/about/AboutPage";
@@ -38,7 +38,10 @@ export const router = createBrowserRouter([
       { path: paths.news, element: <NewsListPage /> },
       { path: paths.newsDetails(), element: <NewsDetailsPage /> },
       { path: paths.sellNumber, element: <SellNumberPage /> },
-      { path: paths.profile, element: <ProfilePage /> },
+      {
+        element: <RequireAuth />,
+        children: [{ path: paths.profile, element: <ProfilePage /> }],
+      },
       { path: paths.contacts, element: <ContactsPage /> },
       { path: paths.auth.login, element: <LoginPage /> },
       { path: paths.auth.register, element: <RegisterPage /> },

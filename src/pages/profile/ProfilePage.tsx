@@ -4,7 +4,7 @@ import { LuPlus, LuTrash2 } from "react-icons/lu";
 
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             <ProfileField label="Имя" value={user.fullName} />
             <ProfileField label="Email" value={user.email ?? "—"} />
             <ProfileField label="Телефон" value={user.phoneNumber ?? "—"} />
-            <ProfileField label="Роль" value={formatRole(user.role)} />
+            <ProfileField label="Роль" value={formatRole(user.roles)} />
           </dl>
         </div>
 
@@ -239,10 +239,20 @@ export default function ProfilePage() {
   );
 }
 
-const formatRole = (role?: string) => {
-  if (role === "admin") return "Администратор";
-  if (role === "user") return "Пользователь";
-  return "—";
+const formatRole = (roles?: string[] | string) => {
+  const normalize = (value: string | undefined) => {
+    if (!value) return "—";
+    if (value === "admin") return "Администратор";
+    if (value === "user") return "Пользователь";
+    return value;
+  };
+
+  if (Array.isArray(roles)) {
+    if (roles.length === 0) return "—";
+    return roles.map((role) => normalize(role)).join(", ");
+  }
+
+  return normalize(roles);
 };
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {

@@ -1,4 +1,4 @@
-import apiClient from "@/shared/api/client";
+import http from "@/api/http";
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
 
 export interface NumbersListParams {
@@ -85,19 +85,19 @@ const arrayLikeKeys = ["content", "items", "data", "results", "rows"] as const;
 
 const numbersApi: NumbersApi = {
   async list(params) {
-    const response = await apiClient.get("/api/car-number-lots", { params });
+    const response = await http.get("/api/car-number-lots", { params });
     const lots = extractList(response.data);
     return lots.map(toNumberItem);
   },
 
   async listMy() {
-    const response = await apiClient.get("/api/car-number-lots/my");
+    const response = await http.get("/api/car-number-lots/my");
     const lots = extractList(response.data);
     return lots.map(toNumberItem);
   },
 
   async get(id) {
-    const response = await apiClient.get(`/api/car-number-lots/${id}`);
+    const response = await http.get(`/api/car-number-lots/${id}`);
     const lot = extractSingle(response.data);
     if (!lot) {
       throw new Error("Не удалось получить информацию о номере");
@@ -106,7 +106,7 @@ const numbersApi: NumbersApi = {
   },
 
   async create(payload) {
-    const response = await apiClient.post("/api/car-number-lots", {
+    const response = await http.post("/api/car-number-lots", {
       price: payload.price,
       sellerName: payload.sellerName,
       phone: payload.phone,
@@ -127,7 +127,7 @@ const numbersApi: NumbersApi = {
   },
 
   async createAndRegister(payload) {
-    const response = await apiClient.post("/api/car-number-lots/create-and-register", {
+    const response = await http.post("/api/car-number-lots/create-and-register", {
       price: payload.price,
       firstLetter: payload.firstLetter,
       secondLetter: payload.secondLetter,
@@ -151,7 +151,7 @@ const numbersApi: NumbersApi = {
   },
 
   async delete(id) {
-    await apiClient.delete(`/api/car-number-lots/${id}`);
+    await http.delete(`/api/car-number-lots/${id}`);
   },
 };
 
