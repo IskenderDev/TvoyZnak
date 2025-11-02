@@ -1,4 +1,4 @@
-import type { AuthSession } from "@/types/auth";
+import type { AuthSession } from "@/entities/session/model/auth";
 
 const STORAGE_KEY = "auth:session";
 const LOGOUT_EVENT = "auth:logout";

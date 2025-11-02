@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { authStorage } from "@/services/authStorage";
+import { authStorage } from "@/features/auth/lib/authStorage";
 
 const baseURL = ((): string => {
   const url = import.meta?.env?.VITE_API_BASE_URL;

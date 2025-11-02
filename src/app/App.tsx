@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "@/app/providers/auth/AuthProvider";
 import Header from "@/widgets/layout/Header";
 import Footer from "@/widgets/layout/Footer";
 import Container from "@/shared/components/Container";

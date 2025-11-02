@@ -1,5 +1,5 @@
 import { z } from "zod";
-import http, { API_BASE_URL } from "@/api/http";
+import http, { API_BASE_URL } from "@/shared/api/http";
 import type { NewsItem } from "@/entities/news/types";
 
 export interface NewsListParams {
