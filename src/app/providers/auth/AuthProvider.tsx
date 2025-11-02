@@ -6,9 +6,6 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { paths } from "@/shared/routes/paths";
 import { authStorage } from "@/features/auth/lib/authStorage";
 import {
   login as loginRequest,
@@ -20,6 +17,7 @@ import type {
   RegisterPayload,
 } from "@/features/auth/api/authService";
 import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
+import { useAuthDialog } from "@/shared/lib/hooks/useAuthDialog";
 
 export interface AuthContextValue {
   user: AuthUser | null;
@@ -35,8 +33,8 @@ export interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const navigate = useNavigate();
   const [session, setSession] = useState<AuthSession | null>(() => authStorage.load());
+  const { openLogin } = useAuthDialog();
 
   const applySession = useCallback((next: AuthSession | null) => {
     setSession(next);
@@ -46,9 +44,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     return authStorage.subscribe(() => {
       applySession(null);
-      navigate(paths.auth.login, { replace: true });
+      const currentLocation = (() => {
+        if (typeof window === "undefined") {
+          return null;
+        }
+        const { pathname, search, hash } = window.location;
+        const target = `${pathname}${search}${hash}`;
+        return target && target.trim() ? target : null;
+      })();
+      openLogin({ redirectTo: currentLocation });
     });
-  }, [applySession, navigate]);
+  }, [applySession, openLogin]);
 
   const login = useCallback(
     async (payload: LoginPayload) => {

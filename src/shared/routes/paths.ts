@@ -9,10 +9,6 @@ export const paths = {
   contacts: "/contacts",
   sellNumber: "/sellNumber",
   profile: "/profile",
-  auth: {
-    login: "/auth/login",
-    register: "/auth/register"
-  },
   admin: {
     root: "/admin",
     numbers: "/admin/numbers",

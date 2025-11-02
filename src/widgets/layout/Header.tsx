@@ -7,11 +7,13 @@ import Container from "@/shared/components/Container";
 import Button from "@/shared/components/Button";
 import LegacyModal from "@/shared/components/Modal";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
+import { useAuthDialog } from "@/shared/lib/hooks/useAuthDialog";
 
 export default function Header() {
   const navigate = useNavigate();
   const [sellOpen, setSellOpen] = useState(false);
   const { user } = useAuth();
+  const { openLogin } = useAuthDialog();
 
   const handleSellClick = () => {
     navigate(paths.sellNumber);
@@ -70,13 +72,14 @@ export default function Header() {
                 </span>
               </Link>
             ) : (
-              <Link
-                to={paths.auth.login}
+              <button
+                type="button"
+                onClick={() => openLogin({ redirectTo: paths.profile })}
                 className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
               >
                 <LuCircleUserRound className="h-6 w-6 text-white" />
                 <span className="hidden text-sm font-medium md:block">Войти</span>
-              </Link>
+              </button>
             )}
           </div>
         </div>
