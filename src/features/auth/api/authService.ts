@@ -198,6 +198,33 @@ export const getUserFromStorage = (): AuthUser | undefined => {
   }
 };
 
+const clearBrowserCookies = () => {
+  if (typeof document === "undefined") return;
+
+  try {
+    const cookiePairs = document.cookie ? document.cookie.split(";") : [];
+    if (cookiePairs.length === 0) return;
+
+    const hostname = typeof window !== "undefined" ? window.location.hostname : "";
+    const domainVariants = hostname ? [hostname, `.${hostname}`] : [];
+
+    for (const pair of cookiePairs) {
+      const [rawName] = pair.split("=");
+      const name = rawName?.trim();
+      if (!name) continue;
+
+      const expiry = "Thu, 01 Jan 1970 00:00:00 GMT";
+      const base = `${name}=;expires=${expiry};path=/`;
+      document.cookie = base;
+      for (const domain of domainVariants) {
+        document.cookie = `${base};domain=${domain}`;
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to clear cookies on logout", error);
+  }
+};
+
 /** ===== Public API (без /auth/me) =====
  * Бэк НЕ возвращает токен, /auth/me нет.
  * Берём пользователя прямо из ответа /api/auth/login.
@@ -253,10 +280,13 @@ export async function refreshSession(): Promise<AuthSession | null> {
 /** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
   try {
-    await http.post("/api/auth/logout", {}, { withCredentials: true }).catch((requestError) => {
-      console.warn("Failed to call logout endpoint", requestError);
-    });
+    await http
+      .post("/api/auth/logout", {}, { withCredentials: true })
+      .catch((requestError) => {
+        console.warn("Failed to call logout endpoint", requestError);
+      });
   } finally {
+    clearBrowserCookies();
     saveUserToStorage(undefined);
   }
 }

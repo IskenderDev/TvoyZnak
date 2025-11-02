@@ -43,6 +43,7 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     mode: "onBlur",
@@ -58,6 +59,7 @@ export default function RegisterPage() {
         phoneNumber: values.phoneNumber.trim(),
         password: values.password,
       });
+      reset();
       setSuccessMessage("Регистрация успешна. Вы вошли в систему.");
       navigate(paths.profile, { replace: true });
     } catch (error) {

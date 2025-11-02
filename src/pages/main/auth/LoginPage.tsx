@@ -30,6 +30,7 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
@@ -39,6 +40,7 @@ export default function LoginPage() {
     setServerError(null);
     try {
       await login(values);
+      reset();
       const state = location.state as { from?: Location } | undefined;
       const redirectTo = state?.from?.pathname ?? paths.profile;
       navigate(redirectTo, { replace: true });
