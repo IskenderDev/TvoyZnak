@@ -1,11 +1,30 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/shared/hooks/useAuth";
-import type { Role } from "@/shared/hooks/useAuth"; 
-import { paths } from "@/shared/routes/paths";
+import type { PropsWithChildren } from "react";
 
-export function RequireRole({ role }: { role: Role }) {
-  const { isAuthenticated, role: currentRole } = useAuth();
-  if (!isAuthenticated) return <Navigate to={paths.auth.register} replace />;
-  if (currentRole !== role) return <Navigate to={paths.home} replace />;
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { paths } from "@/shared/routes/paths";
+import type { UserRole } from "@/shared/types";
+
+interface RequireRoleProps extends PropsWithChildren {
+  role?: UserRole;
+}
+
+export function RequireRole({ role, children }: RequireRoleProps) {
+  const { isAuthenticated, role: userRole } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Navigate to={paths.auth.login} replace />;
+  }
+
+  if (role && userRole !== role) {
+    return <Navigate to={paths.home} replace />;
+  }
+
+  if (children) {
+    return <>{children}</>;
+  }
+
   return <Outlet />;
 }
+
+export default RequireRole;

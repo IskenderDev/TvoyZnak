@@ -1,91 +1,79 @@
 import {
   createContext,
   useCallback,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-export type Role = "admin" | "user";
+import { authStorage, AUTH_EVENTS } from "@/shared/lib/authStorage";
+import type { User, UserRole } from "@/shared/types";
 
-export interface AuthUser {
-  id?: string | number;
-  fullName: string;
-  email?: string;
-  phoneNumber?: string;
-  role?: Role;
-  token?: string;
+interface AuthState {
+  user: User | null;
+  token: string | null;
 }
 
 export interface AuthContextValue {
-  user: AuthUser | null;
+  user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
-  role?: Role;
-  setUser: (user: AuthUser | null) => void;
+  role: UserRole | null;
+  setAuthState: (state: AuthState) => void;
   logout: () => void;
+  updateUser: (user: User) => void;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined,
-);
-
-const STORAGE_KEY = "authUser";
-
-const readStoredUser = (): AuthUser | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as AuthUser;
-    if (parsed && typeof parsed.fullName === "string") {
-      return parsed;
-    }
-  } catch (error) {
-    console.warn("Failed to parse stored user", error);
-  }
-
-  return null;
-};
-
-const persistUser = (user: AuthUser | null) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  if (user) {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  } else {
-    window.localStorage.removeItem(STORAGE_KEY);
-  }
-};
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUserState] = useState<AuthUser | null>(() => readStoredUser());
+  const [authState, setAuthStateInternal] = useState<AuthState>(() => ({
+    user: authStorage.getUser<User>(),
+    token: authStorage.getToken(),
+  }));
 
-  const setUser = useCallback((value: AuthUser | null) => {
-    setUserState(value);
-    persistUser(value);
+  const setAuthState = useCallback((state: AuthState) => {
+    setAuthStateInternal(state);
+    authStorage.setToken(state.token);
+    authStorage.setUser(state.user);
   }, []);
 
   const logout = useCallback(() => {
-    setUser(null);
-  }, [setUser]);
+    authStorage.clear();
+    setAuthStateInternal({ user: null, token: null });
+  }, []);
 
-  const value = useMemo<AuthContextValue>(
-    () => ({
+  const updateUser = useCallback((user: User) => {
+    setAuthStateInternal((prev) => {
+      const next: AuthState = { ...prev, user };
+      authStorage.setUser(user);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      setAuthStateInternal({ user: null, token: null });
+    };
+
+    window.addEventListener(AUTH_EVENTS.UNAUTHORIZED, handler);
+    return () => window.removeEventListener(AUTH_EVENTS.UNAUTHORIZED, handler);
+  }, []);
+
+  const value = useMemo<AuthContextValue>(() => {
+    const { user, token } = authState;
+    return {
       user,
-      isAuthenticated: Boolean(user),
-      role: user?.role ?? "admin",
-      setUser,
+      token,
+      isAuthenticated: Boolean(user && token),
+      role: user?.role ?? null,
+      setAuthState,
       logout,
-    }),
-    [logout, setUser, user],
-  );
+      updateUser,
+    };
+  }, [authState, logout, setAuthState, updateUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

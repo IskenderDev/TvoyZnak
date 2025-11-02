@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import Header from "@/widgets/layout/Header";
-import Footer from "@/widgets/layout/Footer";
-import Container from "@/shared/components/Container";
+import Header from "@/shared/components/layout/Header";
+import Footer from "@/shared/components/layout/Footer";
+import Container from "@/shared/components/layout/Container";
 
-export default function App() {
+export function App() {
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="flex min-h-dvh flex-col bg-[#0b0b0c] text-white">
       <Header />
       <main className="flex-1">
         <Container>
@@ -19,3 +19,5 @@ export default function App() {
     </div>
   );
 }
+
+export default App;
