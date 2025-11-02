@@ -11,6 +11,7 @@ import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
 import { paths } from "@/shared/routes/paths";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
+import { isPasswordCompromised } from "@/shared/lib/security/passwordLeakCheck";
 
 const registerSchema = z
   .object({
@@ -53,6 +54,14 @@ export default function RegisterPage() {
     setServerError(null);
     setSuccessMessage(null);
     try {
+      const compromised = await isPasswordCompromised(values.password);
+      if (compromised) {
+        setServerError(
+          "Этот пароль уже фигурирует в базах утечек. Пожалуйста, придумайте новый надёжный пароль.",
+        );
+        return;
+      }
+
       await registerUser({
         fullName: values.fullName.trim(),
         email: values.email.trim(),

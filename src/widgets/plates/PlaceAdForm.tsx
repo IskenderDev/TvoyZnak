@@ -5,6 +5,7 @@ import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
+import { isPasswordCompromised } from "@/shared/lib/security/passwordLeakCheck";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -119,6 +120,17 @@ export default function PlaceAdForm() {
       return;
     }
 
+    if (requiresContactInfo) {
+      const compromised = await isPasswordCompromised(trimmedPassword);
+      if (compromised) {
+        setToast({
+          type: "error",
+          msg: "Этот пароль найден в базах утечек. Пожалуйста, выберите другой пароль.",
+        });
+        return;
+      }
+    }
+
     const plateParts = extractPlateParts(plate);
     const comment = form.comment.trim();
 
@@ -231,6 +243,7 @@ export default function PlaceAdForm() {
 
                 <input
                   type="password"
+                  autoComplete="new-password"
                   className={INPUT_BASE}
                   placeholder="Пароль"
                   aria-label="Пароль"
