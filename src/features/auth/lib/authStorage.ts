@@ -54,11 +54,6 @@ export const authStorage = {
     }
   },
 
-  getToken(): string | null {
-    const session = this.load();
-    return session?.token ?? null;
-  },
-
   clear() {
     const storage = getStorage();
     if (!storage) return;
