@@ -225,6 +225,46 @@ const clearBrowserCookies = () => {
   }
 };
 
+type LogoutMethod = "post" | "get" | "delete";
+
+interface LogoutAttempt {
+  method: LogoutMethod;
+  url: string;
+}
+
+const LOGOUT_ATTEMPTS: readonly LogoutAttempt[] = [
+  { method: "post", url: "/api/auth/logout" },
+  { method: "delete", url: "/api/auth/logout" },
+  { method: "get", url: "/api/auth/logout" },
+  { method: "post", url: "/logout" },
+  { method: "delete", url: "/logout" },
+  { method: "get", url: "/logout" },
+];
+
+const invalidateServerSession = async (): Promise<boolean> => {
+  for (const attempt of LOGOUT_ATTEMPTS) {
+    try {
+      const response = await http.request({
+        method: attempt.method,
+        url: attempt.url,
+        withCredentials: true,
+      });
+      const status = response?.status;
+      if (typeof status !== "number" || (status >= 200 && status < 400)) {
+        return true;
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status && [404, 405, 500, 501].includes(status)) {
+          continue;
+        }
+      }
+    }
+  }
+  return false;
+};
+
 /** ===== Public API (без /auth/me) =====
  * Бэк НЕ возвращает токен, /auth/me нет.
  * Берём пользователя прямо из ответа /api/auth/login.
@@ -232,6 +272,7 @@ const clearBrowserCookies = () => {
  */
 export async function login(payload: LoginPayload): Promise<AuthSession> {
   try {
+    await invalidateServerSession();
     const response = await http.post(
       "/api/auth/login",
       { email: payload.email, password: payload.password },
@@ -280,11 +321,10 @@ export async function refreshSession(): Promise<AuthSession | null> {
 /** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
   try {
-    await http
-      .post("/api/auth/logout", {}, { withCredentials: true })
-      .catch((requestError) => {
-        console.warn("Failed to call logout endpoint", requestError);
-      });
+    const ok = await invalidateServerSession();
+    if (!ok) {
+      console.warn("Unable to reach logout endpoint to invalidate session");
+    }
   } finally {
     clearBrowserCookies();
     saveUserToStorage(undefined);
