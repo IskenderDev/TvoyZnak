@@ -12,7 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 const loginSchema = z.object({
   email: z.string().email("Введите корректный e-mail"),
-  password: z.string().min(6, "Минимум 6 символов"),
+  password: z.string().min(3, "Минимум 3 символа"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -35,7 +35,7 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginFormValues) => {
     setServerError(null);
     try {
-      await login(values);
+      await login(values); // вернёт { token: "session", user } из /api/auth/login
       const state = location.state as { from?: Location } | undefined;
       const redirectTo = state?.from?.pathname ?? paths.profile;
       navigate(redirectTo, { replace: true });
@@ -98,7 +98,7 @@ export default function LoginPage() {
           </Button>
 
           <p className="text-center text-xs text-white/60">
-            Нет аккаунта? {" "}
+            Нет аккаунта?{" "}
             <Link to={paths.auth.register} className="text-primary underline-offset-4 hover:underline">
               Зарегистрируйтесь
             </Link>

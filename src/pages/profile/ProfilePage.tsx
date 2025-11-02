@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const { user, logout } = useAuth();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error,   setError]   = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(LIMIT_STEP);
 
@@ -45,7 +45,7 @@ export default function ProfilePage() {
     setError(null);
 
     numbersApi
-      .listMy()
+      .listMy() // GET /api/car-number-lots/my
       .then((data) => {
         if (!isActive) return;
         setNumbers(data);
@@ -70,12 +70,18 @@ export default function ProfilePage() {
     setVisibleCount(LIMIT_STEP);
   }, [numbers.length]);
 
-  const visibleLots = useMemo(
-    () => numbers.slice(0, Math.min(visibleCount, numbers.length)),
-    [numbers, visibleCount],
+  // Продавец = всегда имя залогиненного пользователя
+  const myLots = useMemo<NumberItem[]>(
+    () => numbers.map((n) => ({ ...n, sellerName: user?.fullName ?? n.sellerName ?? n.seller })),
+    [numbers, user?.fullName]
   );
 
-  const canShowMore = visibleCount < numbers.length;
+  const visibleLots = useMemo(
+    () => myLots.slice(0, Math.min(visibleCount, myLots.length)),
+    [myLots, visibleCount],
+  );
+
+  const canShowMore = visibleCount < myLots.length;
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
@@ -153,14 +159,8 @@ export default function ProfilePage() {
             </Link>
           </div>
 
-          {error ? (
-            <p className="px-6 py-4 text-sm text-red-200">{error}</p>
-          ) : null}
-
-          {loading ? (
-            <p className="px-6 py-6 text-sm text-white/70">Загружаем список номеров…</p>
-          ) : null}
-
+          {error ? <p className="px-6 py-4 text-sm text-red-200">{error}</p> : null}
+          {loading ? <p className="px-6 py-6 text-sm text-white/70">Загружаем список номеров…</p> : null}
           {!loading && visibleLots.length === 0 ? (
             <p className="px-6 py-6 text-sm text-white/70">У вас пока нет добавленных номеров.</p>
           ) : null}
@@ -174,6 +174,7 @@ export default function ProfilePage() {
                 <span>Продавец</span>
                 <span className="text-right">Действия</span>
               </div>
+
               {visibleLots.map((item) => (
                 <article
                   key={item.id}
@@ -183,6 +184,7 @@ export default function ProfilePage() {
                     <span className="text-xs uppercase text-white/40 md:hidden">Дата</span>
                     <span>{item.date ? formatDate(item.date) : "—"}</span>
                   </div>
+
                   <div className="flex flex-col gap-2">
                     <span className="text-xs uppercase text-white/40 md:hidden">Номер</span>
                     <PlateStaticSm
@@ -200,14 +202,17 @@ export default function ProfilePage() {
                       showCaption={false}
                     />
                   </div>
+
                   <div className="flex flex-col gap-1">
                     <span className="text-xs uppercase text-white/40 md:hidden">Цена</span>
                     <span>{formatPrice(item.price)}</span>
                   </div>
+
                   <div className="flex flex-col gap-1">
                     <span className="text-xs uppercase text-white/40 md:hidden">Продавец</span>
-                    <span>{item.sellerName ?? item.seller ?? "—"}</span>
+                    <span>{user.fullName || "—"}</span>
                   </div>
+
                   <div className="flex justify-end">
                     <Button
                       onClick={() => handleDelete(item.id)}
@@ -256,9 +261,7 @@ const formatRole = (roles?: string[] | string) => {
 };
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {
-  if (typeof error === "string" && error.trim()) {
-    return error;
-  }
+  if (typeof error === "string" && error.trim()) return error;
 
   if (error && typeof error === "object") {
     const withMessage = error as {
@@ -270,17 +273,9 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
     const responseError = withMessage.response?.data?.error;
     const message = withMessage.message;
 
-    if (typeof responseMessage === "string" && responseMessage.trim()) {
-      return responseMessage;
-    }
-
-    if (typeof responseError === "string" && responseError.trim()) {
-      return responseError;
-    }
-
-    if (typeof message === "string" && message.trim()) {
-      return message;
-    }
+    if (typeof responseMessage === "string" && responseMessage.trim()) return responseMessage;
+    if (typeof responseError === "string" && responseError.trim()) return responseError;
+    if (typeof message === "string" && message.trim()) return message;
   }
 
   return fallback;

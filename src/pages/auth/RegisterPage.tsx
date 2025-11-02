@@ -19,8 +19,8 @@ const registerSchema = z
       .min(8, "Введите телефон")
       .max(18, "Введите телефон")
       .refine((value) => /^[+\d][\d\s()+-]{7,}$/u.test(value), "Введите телефон"),
-    password: z.string().min(6, "Минимум 6 символов"),
-    confirmPassword: z.string().min(6, "Минимум 6 символов"),
+    password: z.string().min(3, "Минимум 3 символа"),
+    confirmPassword: z.string().min(3, "Минимум 3 символа"),
     agree: z.literal(true, { errorMap: () => ({ message: "Подтвердите согласие с обработкой" }) }),
   })
   .refine((values) => values.password === values.confirmPassword, {

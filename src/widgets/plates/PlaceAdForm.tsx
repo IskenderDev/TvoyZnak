@@ -111,8 +111,8 @@ export default function PlaceAdForm() {
     }
 
     const trimmedPassword = form.password.trim();
-    if (trimmedPassword.length < 6) {
-      setToast({ type: "error", msg: "Пароль должен содержать минимум 6 символов" });
+    if (trimmedPassword.length < 3) {
+      setToast({ type: "error", msg: "Пароль должен содержать минимум 3 символа" });
       return;
     }
 
