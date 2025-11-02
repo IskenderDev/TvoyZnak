@@ -1,5 +1,5 @@
 import { z } from "zod";
-import http from "@/api/http";
+import http from "@/shared/api/http";
 
 export interface FeedbackRequestPayload {
   fullName: string;

@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "@/app/App";
 import { paths } from "@/shared/routes/paths";
-import { RequireAuth, RequireRole } from "@/routes/guards";
+import { RequireAuth, RequireRole } from "@/app/providers/router/guards";
 
 import HomePage from "@/pages/main/home/HomePage";
 import AboutPage from "@/pages/main/about/AboutPage";

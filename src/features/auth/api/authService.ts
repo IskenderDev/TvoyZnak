@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios";
-import http from "@/api/http";
-import type { AuthSession, AuthUser, Role } from "@/types/auth";
+import http from "@/shared/api/http";
+import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
 
 /** ===== Payloads ===== */
 export interface LoginPayload {
@@ -37,17 +37,74 @@ const normalizeRole = (value: unknown): Role | null => {
 
 const dedupeRoles = (roles: Role[]): Role[] => Array.from(new Set(roles));
 
-const pickUserSource = (payload: unknown): Record<string, unknown> | null => {
+type UnknownRecord = Record<string, unknown>;
+
+const pickUserSource = (payload: unknown): UnknownRecord | null => {
   if (!payload || typeof payload !== "object") return null;
-  const r = payload as Record<string, unknown>;
-  if ("user" in r && r.user && typeof r.user === "object") return r.user as Record<string, unknown>;
-  if ("data" in r && r.data && typeof r.data === "object") {
-    const d = r.data as Record<string, unknown>;
-    if ("user" in d && d.user && typeof d.user === "object") return d.user as Record<string, unknown>;
-    return d;
+  const record = payload as UnknownRecord;
+  const userCandidate = record.user;
+  if (userCandidate && typeof userCandidate === "object") {
+    return userCandidate as UnknownRecord;
   }
-  if ("profile" in r && r.profile && typeof r.profile === "object") return r.profile as Record<string, unknown>;
-  return r;
+  const dataCandidate = record.data;
+  if (dataCandidate && typeof dataCandidate === "object") {
+    const dataRecord = dataCandidate as UnknownRecord;
+    const nestedUser = dataRecord.user;
+    if (nestedUser && typeof nestedUser === "object") {
+      return nestedUser as UnknownRecord;
+    }
+    return dataRecord;
+  }
+  const profileCandidate = record.profile;
+  if (profileCandidate && typeof profileCandidate === "object") {
+    return profileCandidate as UnknownRecord;
+  }
+  return record;
+};
+
+const readValue = (source: UnknownRecord, keys: string[]): unknown => {
+  for (const key of keys) {
+    if (key in source) {
+      return source[key];
+    }
+  }
+  return undefined;
+};
+
+const readTrimmedString = (source: UnknownRecord, keys: string[]): string | undefined => {
+  const value = readValue(source, keys);
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+  return undefined;
+};
+
+const readIdCandidate = (source: UnknownRecord, keys: string[]): string | number | undefined => {
+  const value = readValue(source, keys);
+  if (typeof value === "string" || typeof value === "number") {
+    return value;
+  }
+  return undefined;
+};
+
+const collectRoles = (source: UnknownRecord, keys: string[]): Role[] => {
+  const raw = readValue(source, keys);
+  const roles: Role[] = [];
+  if (Array.isArray(raw)) {
+    for (const item of raw) {
+      const normalized = normalizeRole(item);
+      if (normalized) roles.push(normalized);
+    }
+    return roles;
+  }
+  if (raw) {
+    const normalized = normalizeRole(raw);
+    if (normalized) roles.push(normalized);
+  }
+  return roles;
 };
 
 const toAuthUser = (
@@ -56,50 +113,26 @@ const toAuthUser = (
 ): AuthUser => {
   const src = pickUserSource(payload) ?? {};
 
-  const fullNameCandidate = (src as any).fullName ?? (src as any).name ?? (src as any).username;
-  const emailCandidate    = (src as any).email    ?? (src as any).mail ?? (src as any).login;
-  const phoneCandidate    = (src as any).phoneNumber ?? (src as any).phone ?? (src as any).phone_number;
-  const idCandidate       = (src as any).id ?? (src as any).userId ?? (src as any).userID ?? (src as any)._id;
+  const fullNameCandidate = readTrimmedString(src, ["fullName", "name", "username"]);
+  const emailCandidate = readTrimmedString(src, ["email", "mail", "login"]);
+  const phoneCandidate = readTrimmedString(src, ["phoneNumber", "phone", "phone_number"]);
+  const idCandidate = readIdCandidate(src, ["id", "userId", "userID", "_id"]);
 
-  const rawRoles = (src as any).roles ?? (src as any).role ?? (src as any).authorities;
-  const roles: Role[] = [];
-  if (Array.isArray(rawRoles)) {
-    for (const item of rawRoles) {
-      const n = normalizeRole(item);
-      if (n) roles.push(n);
-    }
-  } else if (rawRoles) {
-    const n = normalizeRole(rawRoles);
-    if (n) roles.push(n);
-  }
-
-    // было:
-  // const finalRoles = dedupeRoles(roles);
-  // const primaryRole = finalRoles[0] ?? "user";
-
-  // стало:
-  const finalRoles = (roles.length > 0 ? dedupeRoles(roles) : inferAdminByEmail(emailCandidate));
+  const roles = collectRoles(src, ["roles", "role", "authorities"]);
+  const finalRoles = roles.length > 0 ? dedupeRoles(roles) : inferAdminByEmail(emailCandidate);
   const primaryRole = finalRoles[0] ?? "user";
 
-
   return {
-    id: typeof idCandidate === "string" || typeof idCandidate === "number" ? idCandidate : undefined,
-    fullName:
-      (typeof fullNameCandidate === "string" && fullNameCandidate.trim())
-        ? fullNameCandidate.trim()
-        : fallback?.fullName?.trim() ?? "",
-    email:
-      (typeof emailCandidate === "string" && emailCandidate.trim())
-        ? emailCandidate.trim()
-        : fallback?.email?.trim(),
-    phoneNumber:
-      (typeof phoneCandidate === "string" && phoneCandidate.trim())
-        ? phoneCandidate.trim()
-        : fallback?.phoneNumber?.trim(),
+    id: idCandidate,
+    fullName: fullNameCandidate ?? fallback?.fullName?.trim() ?? "",
+    email: emailCandidate ?? fallback?.email?.trim(),
+    phoneNumber: phoneCandidate ?? fallback?.phoneNumber?.trim(),
     roles: finalRoles.length > 0 ? finalRoles : [primaryRole],
     role: primaryRole,
   };
-};// --- Админы (белый список) ---
+};
+
+// --- Админы (белый список) ---
 // Можно прокидывать из .env: VITE_ADMIN_EMAILS="admin@admin.admin,you@domain.tld"
 const ADMIN_EMAILS = new Set<string>(
   (import.meta?.env?.VITE_ADMIN_EMAILS ?? "admin@admin.admin")
@@ -120,17 +153,20 @@ const inferAdminByEmail = (email?: unknown): Role[] => {
 const toApiError = (error: unknown, fallback: string): Error => {
   if (isAxiosError(error)) {
     const data = error.response?.data;
-    if (typeof data === "string" && data.trim()) return new Error(data);
+    if (typeof data === "string" && data.trim()) return new Error(data.trim());
     if (data && typeof data === "object") {
-      const m =
-        (typeof (data as any).message === "string" && (data as any).message.trim())
-          ? (data as any).message
-          : (typeof (data as any).error === "string" && (data as any).error.trim())
-            ? (data as any).error
-            : null;
-      if (m) return new Error(m);
+      const message = (data as { message?: unknown }).message;
+      if (typeof message === "string" && message.trim()) {
+        return new Error(message.trim());
+      }
+      const fallbackMessage = (data as { error?: unknown }).error;
+      if (typeof fallbackMessage === "string" && fallbackMessage.trim()) {
+        return new Error(fallbackMessage.trim());
+      }
     }
-    if (error.message) return new Error(error.message);
+    if (typeof error.message === "string" && error.message.trim()) {
+      return new Error(error.message.trim());
+    }
   }
   if (error instanceof Error) return error;
   return new Error(fallback);
@@ -145,7 +181,9 @@ const saveUserToStorage = (user: AuthUser | undefined) => {
       return;
     }
     localStorage.setItem(LS_KEY, JSON.stringify(user));
-  } catch {}
+  } catch (storageError) {
+    console.warn("Failed to persist auth user", storageError);
+  }
 };
 
 export const getUserFromStorage = (): AuthUser | undefined => {
@@ -153,7 +191,8 @@ export const getUserFromStorage = (): AuthUser | undefined => {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return undefined;
     return JSON.parse(raw) as AuthUser;
-  } catch {
+  } catch (storageError) {
+    console.warn("Failed to read auth user", storageError);
     return undefined;
   }
 };
@@ -214,7 +253,9 @@ export async function refreshSession(): Promise<AuthSession | null> {
 /** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
   try {
-    await http.post("/api/auth/logout", {}, { withCredentials: true }).catch(() => {});
+    await http.post("/api/auth/logout", {}, { withCredentials: true }).catch((requestError) => {
+      console.warn("Failed to call logout endpoint", requestError);
+    });
   } finally {
     saveUserToStorage(undefined);
   }

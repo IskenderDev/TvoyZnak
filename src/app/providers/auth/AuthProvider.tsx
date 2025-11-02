@@ -9,10 +9,13 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { paths } from "@/shared/routes/paths";
-import { authStorage } from "@/services/authStorage";
-import { login as loginRequest, register as registerRequest } from "@/services/authService";
-import type { LoginPayload, RegisterPayload } from "@/services/authService";
-import type { AuthSession, AuthUser, Role } from "@/types/auth";
+import { authStorage } from "@/features/auth/lib/authStorage";
+import { login as loginRequest, register as registerRequest } from "@/features/auth/api/authService";
+import type {
+  LoginPayload,
+  RegisterPayload,
+} from "@/features/auth/api/authService";
+import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
 
 export interface AuthContextValue {
   user: AuthUser | null;

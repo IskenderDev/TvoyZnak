@@ -4,7 +4,7 @@ import { LuPlus, LuTrash2 } from "react-icons/lu";
 
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { useAuth } from "@/hooks/useAuth";
-import type { Role } from "@/types/auth";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
+import type { Role } from "@/entities/session/model/auth";
 import { paths } from "@/shared/routes/paths";
 
 export function RequireAuth() {

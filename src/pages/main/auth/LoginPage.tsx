@@ -4,11 +4,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import AuthPageLayout from "@/components/auth/AuthPageLayout";
+import AuthPageLayout from "@/pages/main/auth/ui/AuthPageLayout";
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
 import { paths } from "@/shared/routes/paths";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
 
 const loginSchema = z.object({
   email: z.string().email("Введите корректный e-mail"),

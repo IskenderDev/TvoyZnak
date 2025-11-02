@@ -6,7 +6,7 @@ import { paths } from "@/shared/routes/paths";
 import Container from "@/shared/components/Container";
 import Button from "@/shared/components/Button";
 import LegacyModal from "@/shared/components/Modal";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
 
 export default function Header() {
   const navigate = useNavigate();
