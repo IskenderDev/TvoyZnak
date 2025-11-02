@@ -3,18 +3,18 @@ import App from "@/app/App";
 import { paths } from "@/shared/routes/paths";
 import { RequireAuth, RequireRole } from "@/routes/guards";
 
-import HomePage from "@/pages/home/HomePage";
-import AboutPage from "@/pages/about/AboutPage";
-import ServicesPage from "@/pages/services/ServicesPage";
-import NumbersPage from "@/pages/numbers/NumbersPage";
-import NumberDetailsPage from "@/pages/numbers/NumberDetailsPage";
-import NewsListPage from "@/pages/news/NewsListPage";
-import NewsDetailsPage from "@/pages/news/NewsDetailsPage";
-import ContactsPage from "@/pages/contacts/ContactsPage";
-import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
-import NotFoundPage from "@/pages/not-found/NotFoundPage";
-import ProfilePage from "@/pages/profile/ProfilePage";
+import HomePage from "@/pages/main/home/HomePage";
+import AboutPage from "@/pages/main/about/AboutPage";
+import ServicesPage from "@/pages/main/services/ServicesPage";
+import NumbersPage from "@/pages/main/numbers/NumbersPage";
+import NumberDetailsPage from "@/pages/main/numbers/NumberDetailsPage";
+import NewsListPage from "@/pages/main/news/NewsListPage";
+import NewsDetailsPage from "@/pages/main/news/NewsDetailsPage";
+import ContactsPage from "@/pages/main/contacts/ContactsPage";
+import LoginPage from "@/pages/main/auth/LoginPage";
+import RegisterPage from "@/pages/main/auth/RegisterPage";
+import NotFoundPage from "@/pages/main/not-found/NotFoundPage";
+import ProfilePage from "@/pages/main/profile/ProfilePage";
 
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminNumbersListPage from "@/pages/admin/numbers/AdminNumbersListPage";
@@ -23,7 +23,7 @@ import AdminNumberEditPage from "@/pages/admin/numbers/AdminNumberEditPage";
 import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
 import AdminNewsNewPage from "@/pages/admin/news/AdminNewsNewPage";
 import AdminNewsEditPage from "@/pages/admin/news/AdminNewsEditPage";
-import SellNumberPage from "@/pages/sellNumber/SellNumber";
+import SellNumberPage from "@/pages/main/sellNumber/SellNumber";
 
 export const router = createBrowserRouter([
   {
