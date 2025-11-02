@@ -4,6 +4,7 @@ import Toast from "@/shared/components/Toast";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -37,11 +38,14 @@ const INITIAL_FORM: FormState = {
 const INITIAL_PLATE: PlateSelectValue = { ...DEFAULT_PLATE_VALUE };
 
 export default function PlaceAdForm() {
+  const { isAuthenticated } = useAuth();
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [plate, setPlate] = useState<PlateSelectValue>(INITIAL_PLATE);
   const [toast, setToast] = useState<ToastState>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const requiresContactInfo = !isAuthenticated;
 
   useEffect(() => {
     if (!toast) return;
@@ -66,12 +70,11 @@ export default function PlaceAdForm() {
   const isSubmitDisabled =
     loading ||
     !form.consent ||
-    !form.name.trim() ||
-    !form.phone.trim() ||
     !form.price.trim() ||
     plate.text.includes("*") ||
     !plate.region ||
-    plate.region === "*";
+    plate.region === "*" ||
+    (requiresContactInfo && (!form.name.trim() || !form.phone.trim()));
 
   const resetForm = useCallback(() => {
     setForm(INITIAL_FORM);
@@ -111,32 +114,47 @@ export default function PlaceAdForm() {
     }
 
     const trimmedPassword = form.password.trim();
-    if (trimmedPassword.length < 3) {
+    if (requiresContactInfo && trimmedPassword.length < 3) {
       setToast({ type: "error", msg: "Пароль должен содержать минимум 3 символа" });
       return;
     }
 
     const plateParts = extractPlateParts(plate);
+    const comment = form.comment.trim();
 
     setLoading(true);
     setError(null);
 
     try {
-      await numbersApi.createAndRegister({
-        price: priceValue,
-        firstLetter: plateParts.firstLetter,
-        secondLetter: plateParts.secondLetter,
-        thirdLetter: plateParts.thirdLetter,
-        firstDigit: plateParts.firstDigit,
-        secondDigit: plateParts.secondDigit,
-        thirdDigit: plateParts.thirdDigit,
-        comment: form.comment.trim() ? form.comment.trim() : undefined,
-        regionId,
-        fullName: form.name.trim(),
-        phoneNumber: form.phone.trim(),
-        email: form.email.trim() ? form.email.trim() : undefined,
-        password: trimmedPassword,
-      });
+      if (isAuthenticated) {
+        await numbersApi.createAuthorized({
+          price: priceValue,
+          firstLetter: plateParts.firstLetter,
+          secondLetter: plateParts.secondLetter,
+          thirdLetter: plateParts.thirdLetter,
+          firstDigit: plateParts.firstDigit,
+          secondDigit: plateParts.secondDigit,
+          thirdDigit: plateParts.thirdDigit,
+          comment: comment ? comment : undefined,
+          regionId,
+        });
+      } else {
+        await numbersApi.createAndRegister({
+          price: priceValue,
+          firstLetter: plateParts.firstLetter,
+          secondLetter: plateParts.secondLetter,
+          thirdLetter: plateParts.thirdLetter,
+          firstDigit: plateParts.firstDigit,
+          secondDigit: plateParts.secondDigit,
+          thirdDigit: plateParts.thirdDigit,
+          comment: comment ? comment : undefined,
+          regionId,
+          fullName: form.name.trim(),
+          phoneNumber: form.phone.trim(),
+          email: form.email.trim() ? form.email.trim() : undefined,
+          password: trimmedPassword,
+        });
+      }
       setToast({ type: "success", msg: "Объявление успешно отправлено" });
       resetForm();
     } catch (error: unknown) {
@@ -174,50 +192,54 @@ export default function PlaceAdForm() {
 
         <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              inputMode="text"
-              className={INPUT_BASE}
-              placeholder="Имя *"
-              aria-label="Имя"
-              name="name"
-              value={form.name}
-              onChange={handleInputChange}
-              required
-            />
+            {requiresContactInfo && (
+              <>
+                <input
+                  type="text"
+                  inputMode="text"
+                  className={INPUT_BASE}
+                  placeholder="Имя *"
+                  aria-label="Имя"
+                  name="name"
+                  value={form.name}
+                  onChange={handleInputChange}
+                  required
+                />
 
-            <input
-              type="tel"
-              inputMode="tel"
-              className={INPUT_BASE}
-              placeholder="Телефон *"
-              aria-label="Телефон"
-              name="phone"
-              value={form.phone}
-              onChange={handleInputChange}
-              required
-            />
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  className={INPUT_BASE}
+                  placeholder="Телефон *"
+                  aria-label="Телефон"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleInputChange}
+                  required
+                />
 
-            <input
-              type="email"
-              inputMode="email"
-              className={INPUT_BASE}
-              placeholder="Почта"
-              aria-label="Почта"
-              name="email"
-              value={form.email}
-              onChange={handleInputChange}
-            />
+                <input
+                  type="email"
+                  inputMode="email"
+                  className={INPUT_BASE}
+                  placeholder="Почта"
+                  aria-label="Почта"
+                  name="email"
+                  value={form.email}
+                  onChange={handleInputChange}
+                />
 
-            <input
-              type="password"
-              className={INPUT_BASE}
-              placeholder="Пароль"
-              aria-label="Пароль"
-              name="password"
-              value={form.password}
-              onChange={handleInputChange}
-            />
+                <input
+                  type="password"
+                  className={INPUT_BASE}
+                  placeholder="Пароль"
+                  aria-label="Пароль"
+                  name="password"
+                  value={form.password}
+                  onChange={handleInputChange}
+                />
+              </>
+            )}
 
             <input
               type="text"

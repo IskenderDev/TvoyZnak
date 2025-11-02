@@ -13,6 +13,7 @@ export interface NumbersApi {
   get(id: string): Promise<NumberItem>;
   create(payload: CreateNumberLotPayload): Promise<NumberItem>;
   createAndRegister(payload: CreateAndRegisterPayload): Promise<NumberItem>;
+  createAuthorized(payload: CreateAuthorizedNumberLotPayload): Promise<NumberItem>;
   delete(id: string): Promise<void>;
 }
 
@@ -41,6 +42,18 @@ export interface CreateAndRegisterPayload {
   phoneNumber: string;
   email?: string;
   password: string;
+}
+
+export interface CreateAuthorizedNumberLotPayload {
+  price: number;
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string | number;
+  secondDigit: string | number;
+  thirdDigit: string | number;
+  comment?: string;
+  regionId: string | number;
 }
 
 type UnknownRecord = Record<string, unknown>;
@@ -146,6 +159,26 @@ const numbersApi: NumbersApi = {
     const lot = extractSingle(response.data);
     if (!lot) {
       throw new Error("Неверный ответ сервера при регистрации объявления");
+    }
+    return toNumberItem(lot);
+  },
+
+  async createAuthorized(payload) {
+    const response = await http.post("/api/car-number-lots/create", {
+      price: payload.price,
+      firstLetter: payload.firstLetter,
+      secondLetter: payload.secondLetter,
+      thirdLetter: payload.thirdLetter,
+      firstDigit: payload.firstDigit,
+      secondDigit: payload.secondDigit,
+      thirdDigit: payload.thirdDigit,
+      comment: payload.comment,
+      regionId: payload.regionId,
+    });
+
+    const lot = extractSingle(response.data);
+    if (!lot) {
+      throw new Error("Неверный ответ сервера при создании объявления");
     }
     return toNumberItem(lot);
   },
