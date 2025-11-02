@@ -6,13 +6,11 @@ import { paths } from "@/shared/routes/paths";
 import Container from "@/shared/components/Container";
 import Button from "@/shared/components/Button";
 import LegacyModal from "@/shared/components/Modal";
-import RegisterModal from "@/features/auth/RegisterModal";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Header() {
   const navigate = useNavigate();
   const [sellOpen, setSellOpen] = useState(false);
-  const [isRegisterOpen, setRegisterOpen] = useState(false);
   const { user } = useAuth();
 
   const handleSellClick = () => {
@@ -72,23 +70,19 @@ export default function Header() {
                 </span>
               </Link>
             ) : (
-              <button
-                type="button"
-                onClick={() => setRegisterOpen(true)}
-                aria-haspopup="dialog"
-                aria-expanded={isRegisterOpen}
+              <Link
+                to={paths.auth.login}
+                className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
               >
-                <LuCircleUserRound color="white" className="h-8 w-8" />
-              </button>
+                <LuCircleUserRound className="h-6 w-6 text-white" />
+                <span className="hidden text-sm font-medium md:block">Войти</span>
+              </Link>
             )}
           </div>
         </div>
       </Container>
 
       <LegacyModal open={sellOpen} onClose={() => setSellOpen(false)} />
-      {!user && (
-        <RegisterModal open={isRegisterOpen} onClose={() => setRegisterOpen(false)} />
-      )}
     </header>
   );
 }

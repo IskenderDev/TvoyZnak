@@ -1,5 +1,5 @@
 import { z } from "zod";
-import apiClient from "@/shared/api/client";
+import http from "@/api/http";
 
 export interface FeedbackRequestPayload {
   fullName: string;
@@ -62,7 +62,7 @@ const formatLabel = (value: string): string => {
 
 export const feedbacksApi = {
   async getTypes(): Promise<FeedbackTypeOption[]> {
-    const response = await apiClient.get("/api/feedbacks/types");
+    const response = await http.get("/api/feedbacks/types");
     const parsed = typesListSchema.safeParse(response.data);
     if (!parsed.success) {
       console.error("Failed to parse feedback types", parsed.error);
@@ -80,7 +80,7 @@ export const feedbacksApi = {
   },
 
   async create(payload: FeedbackRequestPayload) {
-    const response = await apiClient.post("/api/feedbacks", payload);
+    const response = await http.post("/api/feedbacks", payload);
     const parsed = feedbackRequestSchema.safeParse(response.data);
     if (!parsed.success) {
       console.error("Failed to parse feedback response", parsed.error);

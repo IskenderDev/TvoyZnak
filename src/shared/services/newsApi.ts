@@ -1,5 +1,5 @@
 import { z } from "zod";
-import apiClient, { API_BASE_URL } from "@/shared/api/client";
+import http, { API_BASE_URL } from "@/api/http";
 import type { NewsItem } from "@/entities/news/types";
 
 export interface NewsListParams {
@@ -134,7 +134,7 @@ const request = async <T>(fn: () => Promise<{ data: unknown }>, map: (payload: u
 
 const newsApi: NewsApi = {
   async list(params) {
-    return request(() => apiClient.get("/api/posts", { params }), (payload) => {
+    return request(() => http.get("/api/posts", { params }), (payload) => {
       const parsed = listResponseSchema.safeParse(payload);
       if (!parsed.success) {
         console.error("Failed to parse posts", parsed.error);
@@ -145,7 +145,7 @@ const newsApi: NewsApi = {
   },
 
   async get(id) {
-    return request(() => apiClient.get(`/api/posts/${id}`), (payload) => {
+    return request(() => http.get(`/api/posts/${id}`), (payload) => {
       const parsed = postSchema.safeParse(payload);
       if (!parsed.success) {
         console.error("Failed to parse post", parsed.error);
@@ -158,7 +158,7 @@ const newsApi: NewsApi = {
   async create(payload) {
     return request(
       () =>
-        apiClient.post("/api/posts", {
+        http.post("/api/posts", {
           title: payload.title,
           excerpt: payload.excerpt,
           content: payload.content,
@@ -179,7 +179,7 @@ const newsApi: NewsApi = {
   async update(id, payload) {
     return request(
       () =>
-        apiClient.post(`/api/posts/${id}`, {
+        http.post(`/api/posts/${id}`, {
           title: payload.title,
           excerpt: payload.excerpt,
           content: payload.content,
@@ -198,7 +198,7 @@ const newsApi: NewsApi = {
   },
 
   async delete(id) {
-    await apiClient.delete(`/api/posts/${id}`);
+    await http.delete(`/api/posts/${id}`);
   },
 };
 
