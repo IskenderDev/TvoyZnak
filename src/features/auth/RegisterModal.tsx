@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { isAxiosError } from "axios";
 
 import Modal from "@/shared/ui/Modal";
-import apiClient from "@/shared/api/client";
-import { useAuth, type AuthUser } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Укажите имя"),
@@ -34,9 +32,9 @@ type RegisterModalProps = {
 const rememberKey = "registerRemember";
 
 export default function RegisterModal({ open, onClose }: RegisterModalProps) {
-  const { setUser } = useAuth();
+  const { register: registerUser } = useAuth();
   const {
-    register,
+    register: formRegister,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -54,11 +52,7 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
   });
 
   useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    if (typeof window === "undefined") {
+    if (!open || typeof window === "undefined") {
       return;
     }
 
@@ -85,51 +79,12 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      const response = await apiClient.post("/api/auth/register", {
-        fullName: values.fullName,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
+      await registerUser({
+        fullName: values.fullName.trim(),
+        email: values.email.trim(),
+        phoneNumber: values.phoneNumber.trim(),
         password: values.password,
       });
-
-      const rawData = (response?.data as { user?: unknown } | undefined) ?? undefined;
-      const userData = (rawData && typeof rawData === "object" && "user" in rawData
-        ? (rawData as { user?: AuthUser | Record<string, unknown> }).user
-        : response?.data) as AuthUser | Record<string, unknown> | undefined;
-
-      const normalizedUser: AuthUser = {
-        id:
-          userData && typeof userData === "object" && "id" in userData
-            ? (userData as { id?: AuthUser["id"] }).id
-            : undefined,
-        fullName:
-          (userData && typeof userData === "object" && "fullName" in userData
-            ? (userData as { fullName?: string }).fullName
-            : undefined) ?? values.fullName,
-        email:
-          userData && typeof userData === "object" && "email" in userData
-            ? (userData as { email?: string }).email
-            : values.email,
-        phoneNumber:
-          userData && typeof userData === "object" && "phoneNumber" in userData
-            ? (userData as { phoneNumber?: string }).phoneNumber
-            : values.phoneNumber,
-        role:
-          userData && typeof userData === "object" && "role" in userData
-            ? normalizeRole((userData as { role?: unknown }).role)
-            : undefined,
-        token:
-          userData && typeof userData === "object" && "token" in userData
-            ? (userData as { token?: string }).token
-            : undefined,
-      };
-
-      normalizedUser.fullName = normalizedUser.fullName?.trim() ?? values.fullName.trim();
-      normalizedUser.email = normalizedUser.email?.trim() ?? values.email.trim();
-      normalizedUser.phoneNumber =
-        normalizedUser.phoneNumber?.trim() ?? values.phoneNumber.trim();
-
-      setUser(normalizedUser);
 
       if (typeof window !== "undefined") {
         if (values.remember) {
@@ -142,18 +97,7 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
       toast.success("Регистрация успешна");
       handleClose();
     } catch (error) {
-      let message = "Не удалось зарегистрироваться";
-
-      if (isAxiosError(error)) {
-        const data = error.response?.data as { message?: string; error?: string } | string | undefined;
-        if (typeof data === "string" && data.trim()) {
-          message = data;
-        } else if (data && typeof data === "object") {
-          message = data.message || data.error || message;
-        }
-      }
-
-      toast.error(message);
+      toast.error(extractErrorMessage(error));
     }
   };
 
@@ -184,7 +128,7 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
                 type="text"
                 placeholder="Введите имя"
                 className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
-                {...register("fullName")}
+                {...formRegister("fullName")}
               />
               {errors.fullName ? (
                 <p className="mt-2 text-xs text-red-400">{errors.fullName.message}</p>
@@ -198,25 +142,23 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
               <input
                 id="email"
                 type="email"
-                placeholder="example@mail.com"
+                placeholder="example@mail.ru"
                 className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
-                {...register("email")}
+                {...formRegister("email")}
               />
-              {errors.email ? (
-                <p className="mt-2 text-xs text-red-400">{errors.email.message}</p>
-              ) : null}
+              {errors.email ? <p className="mt-2 text-xs text-red-400">{errors.email.message}</p> : null}
             </div>
 
             <div>
               <label htmlFor="phoneNumber" className="mb-2 block text-sm font-medium text-white/80">
-                Телефон <span className="text-red-400">*</span>
+                Телефон
               </label>
               <input
                 id="phoneNumber"
                 type="tel"
-                placeholder="+996 700 000 000"
+                placeholder="+7 (999) 123-45-67"
                 className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
-                {...register("phoneNumber")}
+                {...formRegister("phoneNumber")}
               />
               {errors.phoneNumber ? (
                 <p className="mt-2 text-xs text-red-400">{errors.phoneNumber.message}</p>
@@ -225,14 +167,14 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
 
             <div>
               <label htmlFor="password" className="mb-2 block text-sm font-medium text-white/80">
-                Пароль <span className="text-red-400">*</span>
+                Пароль
               </label>
               <input
                 id="password"
                 type="password"
-                placeholder="Введите пароль"
+                placeholder="Минимум 6 символов"
                 className="h-11 w-full rounded-[10px] bg-white px-4 text-[14px] text-black placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-primary"
-                {...register("password")}
+                {...formRegister("password")}
               />
               {errors.password ? (
                 <p className="mt-2 text-xs text-red-400">{errors.password.message}</p>
@@ -240,80 +182,72 @@ export default function RegisterModal({ open, onClose }: RegisterModalProps) {
             </div>
           </div>
 
-          <div className="space-y-3">
-            <label className="flex items-start gap-3 text-sm text-white/80">
-              <input
-                type="checkbox"
-                className="mt-1 h-5 w-5 accent-[#0177FF]"
-                {...register("agree")}
-              />
-              <span>
-                Я согласен на обработку персональных данных <span className="text-red-400">*</span>
-              </span>
-            </label>
-            {errors.agree ? <p className="text-xs text-red-400">{errors.agree.message}</p> : null}
+          <label htmlFor="agree" className="flex items-start gap-3 text-sm text-white/70">
+            <input
+              type="checkbox"
+              id="agree"
+              className="mt-1 h-4 w-4 rounded border border-white/30 bg-transparent text-primary focus:ring-2 focus:ring-primary"
+              {...formRegister("agree")}
+            />
+            <span>
+              Я соглашаюсь на обработку персональных данных и подтверждаю согласие с политикой конфиденциальности.
+            </span>
+          </label>
 
-            <label className="flex items-center gap-3 text-sm text-white/80">
-              <input type="checkbox" className="h-5 w-5 accent-[#0177FF]" {...register("remember")} />
-              <span>Запомнить меня</span>
-            </label>
-          </div>
+          <label htmlFor="remember" className="flex items-center gap-2 text-xs text-white/60">
+            <input
+              type="checkbox"
+              id="remember"
+              className="h-4 w-4 rounded border border-white/30 bg-transparent text-primary focus:ring-2 focus:ring-primary"
+              {...formRegister("remember")}
+            />
+            Запомнить выбор при следующем открытии
+          </label>
 
-          <div className="space-y-3 pt-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-primary text-[15px] font-medium text-white transition disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSubmitting ? (
-                <>
-                  <svg
-                    className="h-4 w-4 animate-spin"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    />
-                  </svg>
-                  Регистрация…
-                </>
-              ) : (
-                "Зарегистрироваться"
-              )}
-            </button>
-
-            <button
-              type="button"
-              className="flex h-11 w-full items-center justify-center rounded-[10px] bg-[#3D3D3D] text-[15px] font-medium text-white transition hover:bg-[#4A4A4A]"
-            >
-              Вход
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isSubmitting ? "Регистрация..." : "Зарегистрироваться"}
+          </button>
         </form>
       </div>
     </Modal>
   );
 }
 
-const normalizeRole = (value: unknown): AuthUser["role"] => {
-  if (typeof value === "string") {
-    const normalized = value.toLowerCase();
-    if (normalized === "admin" || normalized === "user") {
-      return normalized;
+function extractErrorMessage(error: unknown): string {
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  if (error && typeof error === "object") {
+    const record = error as {
+      message?: unknown;
+      response?: { data?: { message?: unknown; error?: unknown } | string };
+    };
+
+    const responseData = record.response?.data;
+    if (typeof responseData === "string" && responseData.trim()) {
+      return responseData;
+    }
+
+    if (responseData && typeof responseData === "object") {
+      const message = (responseData as { message?: unknown; error?: unknown }).message;
+      const apiError = (responseData as { message?: unknown; error?: unknown }).error;
+      if (typeof message === "string" && message.trim()) {
+        return message;
+      }
+      if (typeof apiError === "string" && apiError.trim()) {
+        return apiError;
+      }
+    }
+
+    if (typeof record.message === "string" && record.message.trim()) {
+      return record.message;
     }
   }
-  return undefined;
-};
+
+  return "Не удалось зарегистрироваться. Попробуйте снова.";
+}

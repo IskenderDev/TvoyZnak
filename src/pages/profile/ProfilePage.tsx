@@ -87,6 +87,25 @@ export default function ProfilePage() {
             </Link>
           </div>
         </div>
+
+        {user.role === "admin" ? (
+          <div className="rounded-3xl border border-white/10 bg-[#0F1624] p-6 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-2xl font-actay-wide uppercase">Админ-панель</h2>
+                <p className="mt-1 text-sm text-white/60">
+                  Перейдите в панель администратора, чтобы подтверждать объявления и управлять пользователями.
+                </p>
+              </div>
+              <Link
+                to={paths.admin.carNumberLots}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
+              >
+                Открыть админку
+              </Link>
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

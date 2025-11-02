@@ -38,7 +38,7 @@ const INITIAL_FORM: FormState = {
 const INITIAL_PLATE: PlateSelectValue = { ...DEFAULT_PLATE_VALUE };
 
 export default function PlaceAdForm() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, login } = useAuth();
   const { create, createAndRegister } = useCarNumberLots();
 
   const initialForm = useMemo<FormState>(() => ({
@@ -178,6 +178,10 @@ export default function PlaceAdForm() {
           email: emailValue,
           password: normalizedPassword,
         });
+
+        if (emailValue) {
+          await login({ email: emailValue, password: normalizedPassword });
+        }
       }
       setToast({ type: "success", msg: "Объявление успешно отправлено" });
       resetForm();

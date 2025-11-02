@@ -93,7 +93,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = useCallback(
     async (payload: RegisterPayload) => {
       const result = await apiService.auth.register(payload);
-      return applyAuthResult(result);
+      const user = applyAuthResult(result);
+
+      if (user.token) {
+        return user;
+      }
+
+      try {
+        const loginResult = await apiService.auth.login({
+          email: payload.email,
+          password: payload.password,
+        });
+        return applyAuthResult(loginResult);
+      } catch (error) {
+        console.warn("Auto login after register failed", error);
+        return user;
+      }
     },
     [applyAuthResult],
   );

@@ -1,5 +1,9 @@
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-export default function PageTitle({ children }: PropsWithChildren) {
-  return <h1 className="text-2xl font-semibold mb-4">{children}</h1>;
+type PageTitleProps = PropsWithChildren<{ className?: string }>;
+
+export default function PageTitle({ children, className }: PageTitleProps) {
+  return (
+    <h1 className={`mb-4 text-2xl font-semibold ${className ?? ""}`.trim()}>{children}</h1>
+  );
 }
