@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from "axios";
+import axios from "axios";
 
 import { authStorage } from "@/features/auth/lib/authStorage";
 
@@ -12,23 +12,11 @@ const baseURL = ((): string => {
 
 const http = axios.create({
   baseURL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-});
-
-http.interceptors.request.use((config) => {
-  const token = authStorage.getToken();
-  if (token) {
-    config.headers = config.headers ?? {};
-    if (config.headers instanceof AxiosHeaders) {
-      config.headers.set("Authorization", `Bearer ${token}`);
-    } else {
-      (config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
-    }
-  }
-  return config;
 });
 
 http.interceptors.response.use(
