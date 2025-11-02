@@ -164,17 +164,21 @@ const numbersApi: NumbersApi = {
   },
 
   async createAuthorized(payload) {
-    const response = await http.post("/api/car-number-lots/create", {
-      price: payload.price,
-      firstLetter: payload.firstLetter,
-      secondLetter: payload.secondLetter,
-      thirdLetter: payload.thirdLetter,
-      firstDigit: payload.firstDigit,
-      secondDigit: payload.secondDigit,
-      thirdDigit: payload.thirdDigit,
-      comment: payload.comment,
-      regionId: payload.regionId,
-    });
+    const response = await http.post(
+      "/api/car-number-lots/create",
+      {
+        price: payload.price,
+        firstLetter: payload.firstLetter,
+        secondLetter: payload.secondLetter,
+        thirdLetter: payload.thirdLetter,
+        firstDigit: payload.firstDigit,
+        secondDigit: payload.secondDigit,
+        thirdDigit: payload.thirdDigit,
+        comment: payload.comment,
+        regionId: payload.regionId,
+      },
+      { withCredentials: true },
+    );
 
     const lot = extractSingle(response.data);
     if (!lot) {
