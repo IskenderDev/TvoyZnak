@@ -19,11 +19,17 @@ const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
-  const token = authStorage.getToken();
+  const session = authStorage.load();
+  const token = session?.token;
+
   if (token) {
-    config.headers = config.headers ?? {};
-    config.headers.Authorization = `Bearer ${token}`;
+    if (!config.headers) {
+      config.headers = {};
+    }
+
+    (config.headers as Record<string, string>)["Authorization"] = token;
   }
+
   return config;
 });
 

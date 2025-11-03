@@ -1,5 +1,7 @@
 import { isAxiosError } from "axios";
+
 import http from "@/shared/api/http";
+import { authStorage } from "@/features/auth/lib/authStorage";
 import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
 
 /** ===== Payloads ===== */
@@ -38,6 +40,10 @@ const normalizeRole = (value: unknown): Role | null => {
 const dedupeRoles = (roles: Role[]): Role[] => Array.from(new Set(roles));
 
 type UnknownRecord = Record<string, unknown>;
+type BufferLike = {
+  from(input: string, encoding: string): { toString(encoding: string): string };
+};
+const BASIC_PREFIX = "Basic ";
 
 const pickUserSource = (payload: unknown): UnknownRecord | null => {
   if (!payload || typeof payload !== "object") return null;
@@ -172,50 +178,68 @@ const toApiError = (error: unknown, fallback: string): Error => {
   return new Error(fallback);
 };
 
-const LS_KEY = "auth:user";
+const toBase64 = (value: string): string => {
+  const globalObject = typeof globalThis !== "undefined" ? globalThis : undefined;
 
-const saveUserToStorage = (user: AuthUser | undefined) => {
-  try {
-    if (!user) {
-      localStorage.removeItem(LS_KEY);
-      return;
+  if (globalObject) {
+    const maybeBtoa = (globalObject as typeof globalThis & { btoa?: typeof btoa }).btoa;
+    if (typeof maybeBtoa === "function") {
+      try {
+        return maybeBtoa(value);
+      } catch {
+        if (typeof TextEncoder !== "undefined") {
+          const encoder = new TextEncoder();
+          const bytes = encoder.encode(value);
+          let binary = "";
+          bytes.forEach((byte) => {
+            binary += String.fromCharCode(byte);
+          });
+          return maybeBtoa(binary);
+        }
+      }
     }
-    localStorage.setItem(LS_KEY, JSON.stringify(user));
-  } catch (storageError) {
-    console.warn("Failed to persist auth user", storageError);
+
+    const maybeBuffer = (globalObject as typeof globalThis & { Buffer?: BufferLike }).Buffer;
+    if (typeof maybeBuffer !== "undefined") {
+      return maybeBuffer.from(value, "utf-8").toString("base64");
+    }
   }
+
+  throw new Error("Base64 encoding is not supported in this environment");
 };
 
-export const getUserFromStorage = (): AuthUser | undefined => {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return undefined;
-    return JSON.parse(raw) as AuthUser;
-  } catch (storageError) {
-    console.warn("Failed to read auth user", storageError);
-    return undefined;
-  }
+const createBasicToken = (email: string, password: string): string => {
+  const login = email.trim();
+  const raw = `${login}:${password}`;
+  const encoded = toBase64(raw);
+  return `${BASIC_PREFIX}${encoded}`;
 };
+
 
 /** ===== Public API (без /auth/me) =====
  * Бэк НЕ возвращает токен, /auth/me нет.
- * Берём пользователя прямо из ответа /api/auth/login.
- * withCredentials: true — чтобы установить cookie для /api/car-number-lots/my.
+ * Берём пользователя прямо из ответа /api/auth/login и собираем Basic-token для следующих запросов.
+ * Cookies не используются: авторизация живёт целиком в заголовке Authorization.
  */
 export async function login(payload: LoginPayload): Promise<AuthSession> {
   try {
-    const response = await http.post(
-      "/api/auth/login",
-      { email: payload.email, password: payload.password },
-      { withCredentials: true }
-    );
+    const response = await http.post("/api/auth/login", {
+      email: payload.email,
+      password: payload.password,
+    });
 
-    // Swagger: { id, fullName, email } — этого достаточно
     const user = toAuthUser(response.data, payload);
-    saveUserToStorage(user);
 
-    // Маркер режима: токена нет, но тип требует строку
-    return { token: "session", user };
+    const token = (() => {
+      try {
+        return createBasicToken(payload.email, payload.password);
+      } catch (encodingError) {
+        console.error("Failed to encode credentials for basic auth", encodingError);
+        throw new Error("Не удалось подготовить данные для авторизации");
+      }
+    })();
+
+    return { token, user };
   } catch (error) {
     throw toApiError(error, "Не удалось войти");
   }
@@ -223,18 +247,13 @@ export async function login(payload: LoginPayload): Promise<AuthSession> {
 
 export async function register(payload: RegisterPayload): Promise<AuthSession> {
   try {
-    await http.post(
-      "/api/auth/register",
-      {
-        fullName: payload.fullName,
-        email: payload.email,
-        phoneNumber: payload.phoneNumber,
-        password: payload.password,
-      },
-      { withCredentials: true }
-    );
+    await http.post("/api/auth/register", {
+      fullName: payload.fullName,
+      email: payload.email,
+      phoneNumber: payload.phoneNumber,
+      password: payload.password,
+    });
 
-    // После регистрации логинимся, чтобы получить {id, fullName, email}
     return await login({ email: payload.email, password: payload.password });
   } catch (error) {
     throw toApiError(error, "Не удалось зарегистрироваться");
@@ -243,20 +262,10 @@ export async function register(payload: RegisterPayload): Promise<AuthSession> {
 
 /** Гидратация после F5 — только из localStorage (т.к. /auth/me отсутствует) */
 export async function refreshSession(): Promise<AuthSession | null> {
-  const user = getUserFromStorage();
-  if (user?.fullName) {
-    return { token: "session", user };
-  }
-  return null;
+  return authStorage.load();
 }
 
 /** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
-  try {
-    await http.post("/api/auth/logout", {}, { withCredentials: true }).catch((requestError) => {
-      console.warn("Failed to call logout endpoint", requestError);
-    });
-  } finally {
-    saveUserToStorage(undefined);
-  }
+  authStorage.clear();
 }
