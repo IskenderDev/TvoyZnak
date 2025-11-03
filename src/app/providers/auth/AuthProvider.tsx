@@ -10,7 +10,11 @@ import { useNavigate } from "react-router-dom";
 
 import { paths } from "@/shared/routes/paths";
 import { authStorage } from "@/features/auth/lib/authStorage";
-import { login as loginRequest, register as registerRequest } from "@/features/auth/api/authService";
+import {
+  login as loginRequest,
+  register as registerRequest,
+  logout as logoutRequest,
+} from "@/features/auth/api/authService";
 import type {
   LoginPayload,
   RegisterPayload,
@@ -65,6 +69,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   );
 
   const logout = useCallback(() => {
+    logoutRequest().catch((error) => {
+      console.warn("Failed to call logout endpoint", error);
+    });
     authStorage.clear();
     authStorage.emitLogout();
   }, []);

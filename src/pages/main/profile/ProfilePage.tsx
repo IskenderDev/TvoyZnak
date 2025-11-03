@@ -30,7 +30,7 @@ export default function ProfilePage() {
   const { user, logout } = useAuth();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(LIMIT_STEP);
 

@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import http from "@/shared/api/http";
+import http, { API_BASE_URL } from "@/shared/api/http";
 import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
 
 /** ===== Payloads ===== */
@@ -38,6 +38,7 @@ const normalizeRole = (value: unknown): Role | null => {
 const dedupeRoles = (roles: Role[]): Role[] => Array.from(new Set(roles));
 
 type UnknownRecord = Record<string, unknown>;
+const SESSION_TOKEN = "session";
 
 const pickUserSource = (payload: unknown): UnknownRecord | null => {
   if (!payload || typeof payload !== "object") return null;
@@ -197,6 +198,162 @@ export const getUserFromStorage = (): AuthUser | undefined => {
   }
 };
 
+const clearBrowserCookies = () => {
+  if (typeof document === "undefined") return;
+
+  try {
+    const cookiePairs = document.cookie ? document.cookie.split(";") : [];
+    if (cookiePairs.length === 0) return;
+
+    const hostname = typeof window !== "undefined" ? window.location.hostname : "";
+    const domainVariants = hostname ? [hostname, `.${hostname}`] : [];
+
+    for (const pair of cookiePairs) {
+      const [rawName] = pair.split("=");
+      const name = rawName?.trim();
+      if (!name) continue;
+
+      const expiry = "Thu, 01 Jan 1970 00:00:00 GMT";
+      const base = `${name}=;expires=${expiry};path=/`;
+      document.cookie = base;
+      for (const domain of domainVariants) {
+        document.cookie = `${base};domain=${domain}`;
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to clear cookies on logout", error);
+  }
+};
+
+type LogoutMethod = "post" | "get" | "delete";
+
+type LogoutTransport = "ajax" | "form";
+
+interface LogoutAttempt {
+  method: LogoutMethod;
+  url: string;
+  transport: LogoutTransport;
+}
+
+const parseCustomLogoutPaths = (): string[] => {
+  const raw = import.meta?.env?.VITE_AUTH_LOGOUT_PATHS;
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  return raw
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+};
+
+const DEFAULT_LOGOUT_PATHS = ["/api/auth/logout", "/logout", "/api/logout", "/auth/logout"] as const;
+
+const LOGOUT_PATHS: readonly string[] = [...new Set([...DEFAULT_LOGOUT_PATHS, ...parseCustomLogoutPaths()])];
+
+const buildLogoutAttempts = (): LogoutAttempt[] => {
+  const attempts: LogoutAttempt[] = [];
+  for (const path of LOGOUT_PATHS) {
+    attempts.push({ method: "post", url: path, transport: "ajax" });
+    attempts.push({ method: "delete", url: path, transport: "ajax" });
+    attempts.push({ method: "get", url: path, transport: "ajax" });
+    attempts.push({ method: "post", url: path, transport: "form" });
+    attempts.push({ method: "get", url: path, transport: "form" });
+  }
+  return attempts;
+};
+
+const LOGOUT_ATTEMPTS: readonly LogoutAttempt[] = buildLogoutAttempts();
+
+const requestViaAjax = async (attempt: LogoutAttempt): Promise<boolean> => {
+  try {
+    const response = await http.request({
+      method: attempt.method,
+      url: attempt.url,
+      withCredentials: true,
+    });
+    const status = response?.status;
+    if (typeof status !== "number" || (status >= 200 && status < 400)) {
+      return true;
+    }
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status && [404, 405, 500, 501].includes(status)) {
+        return false;
+      }
+    }
+  }
+  return false;
+};
+
+const ensureLogoutBridge = (): HTMLIFrameElement | null => {
+  if (typeof document === "undefined") return null;
+
+  const id = "auth-logout-bridge";
+  const existing = document.getElementById(id) as HTMLIFrameElement | null;
+  if (existing) return existing;
+
+  const iframe = document.createElement("iframe");
+  iframe.id = id;
+  iframe.name = id;
+  iframe.style.display = "none";
+  iframe.setAttribute("aria-hidden", "true");
+  iframe.tabIndex = -1;
+
+  document.body?.appendChild(iframe);
+  return iframe;
+};
+
+const submitLogoutForm = (attempt: LogoutAttempt): boolean => {
+  if (typeof document === "undefined") return false;
+  if (typeof window === "undefined") return false;
+  if (!document.body) return false;
+
+  const bridge = ensureLogoutBridge();
+  if (!bridge) return false;
+
+  try {
+    const action = new URL(attempt.url, API_BASE_URL).toString();
+    const form = document.createElement("form");
+    form.style.display = "none";
+    form.method = attempt.method === "get" ? "GET" : "POST";
+    form.action = action;
+    form.target = bridge.name;
+
+    if (attempt.method === "delete") {
+      const methodOverride = document.createElement("input");
+      methodOverride.type = "hidden";
+      methodOverride.name = "_method";
+      methodOverride.value = "DELETE";
+      form.appendChild(methodOverride);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    window.setTimeout(() => {
+      form.remove();
+    }, 1000);
+    return true;
+  } catch (error) {
+    console.warn("Logout form submission failed", error);
+    return false;
+  }
+};
+
+const invalidateServerSession = async (): Promise<boolean> => {
+  for (const attempt of LOGOUT_ATTEMPTS) {
+    if (attempt.transport === "ajax") {
+      const ok = await requestViaAjax(attempt);
+      if (ok) return true;
+      continue;
+    }
+
+    const ok = submitLogoutForm(attempt);
+    if (ok) {
+      return true;
+    }
+  }
+  return false;
+};
+
 /** ===== Public API (без /auth/me) =====
  * Бэк НЕ возвращает токен, /auth/me нет.
  * Берём пользователя прямо из ответа /api/auth/login.
@@ -204,6 +361,7 @@ export const getUserFromStorage = (): AuthUser | undefined => {
  */
 export async function login(payload: LoginPayload): Promise<AuthSession> {
   try {
+    await invalidateServerSession();
     const response = await http.post(
       "/api/auth/login",
       { email: payload.email, password: payload.password },
@@ -214,8 +372,7 @@ export async function login(payload: LoginPayload): Promise<AuthSession> {
     const user = toAuthUser(response.data, payload);
     saveUserToStorage(user);
 
-    // Маркер режима: токена нет, но тип требует строку
-    return { token: "session", user };
+    return { token: SESSION_TOKEN, user };
   } catch (error) {
     throw toApiError(error, "Не удалось войти");
   }
@@ -245,7 +402,7 @@ export async function register(payload: RegisterPayload): Promise<AuthSession> {
 export async function refreshSession(): Promise<AuthSession | null> {
   const user = getUserFromStorage();
   if (user?.fullName) {
-    return { token: "session", user };
+    return { token: SESSION_TOKEN, user };
   }
   return null;
 }
@@ -253,10 +410,12 @@ export async function refreshSession(): Promise<AuthSession | null> {
 /** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
   try {
-    await http.post("/api/auth/logout", {}, { withCredentials: true }).catch((requestError) => {
-      console.warn("Failed to call logout endpoint", requestError);
-    });
+    const ok = await invalidateServerSession();
+    if (!ok) {
+      console.warn("Unable to reach logout endpoint to invalidate session");
+    }
   } finally {
+    clearBrowserCookies();
     saveUserToStorage(undefined);
   }
 }
