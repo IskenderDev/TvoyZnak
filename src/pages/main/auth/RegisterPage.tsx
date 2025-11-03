@@ -1,22 +1,14 @@
-import { useId, useState } from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import AuthModal from "@/pages/main/auth/ui/AuthModal";
 import AuthPageLayout from "@/pages/main/auth/ui/AuthPageLayout";
+import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
+import { paths } from "@/shared/routes/paths";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
-import { isPasswordCompromised } from "@/shared/lib/security/passwordLeakCheck";
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
-interface RegisterDialogProps {
-  onClose: () => void;
-  onSwitchToLogin: () => void;
-  onSuccess: (redirectTo?: string | null) => void;
-  redirectTo: string | null;
-}
 
 const registerSchema = z
   .object({
@@ -36,21 +28,18 @@ const registerSchema = z
     path: ["confirmPassword"],
   });
 
-export default function RegisterDialog({
-  onClose,
-  onSwitchToLogin,
-  onSuccess,
-  redirectTo,
-}: RegisterDialogProps) {
-  const titleId = useId();
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export default function RegisterPage() {
+  const navigate = useNavigate();
   const { register: registerUser } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     mode: "onBlur",
@@ -58,23 +47,16 @@ export default function RegisterDialog({
 
   const onSubmit = async (values: RegisterFormValues) => {
     setServerError(null);
+    setSuccessMessage(null);
     try {
-      const compromised = await isPasswordCompromised(values.password);
-      if (compromised) {
-        setServerError(
-          "Этот пароль уже фигурирует в базах утечек. Пожалуйста, придумайте новый надёжный пароль.",
-        );
-        return;
-      }
-
       await registerUser({
         fullName: values.fullName.trim(),
         email: values.email.trim(),
         phoneNumber: values.phoneNumber.trim(),
         password: values.password,
       });
-      reset();
-      onSuccess(redirectTo ?? undefined);
+      setSuccessMessage("Регистрация успешна. Вы вошли в систему.");
+      navigate(paths.profile, { replace: true });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не удалось зарегистрироваться";
       setServerError(message);
@@ -82,7 +64,8 @@ export default function RegisterDialog({
   };
 
   return (
-    <AuthModal onClose={onClose} labelledBy={titleId}>
+    <>
+      <Seo title="Регистрация — Знак отличия" description="Создание нового аккаунта для покупки и продажи номеров." />
       <AuthPageLayout
         title="Регистрация"
         subtitle={
@@ -90,16 +73,14 @@ export default function RegisterDialog({
             Заполните форму, чтобы получить доступ к личному кабинету. После регистрации вы автоматически будете авторизованы.
           </span>
         }
-        onClose={onClose}
-        titleId={titleId}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label htmlFor="register-fullName" className="text-sm font-medium text-white/80">
+            <label htmlFor="fullName" className="text-sm font-medium text-white/80">
               Имя и фамилия
             </label>
             <input
-              id="register-fullName"
+              id="fullName"
               type="text"
               autoComplete="name"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -110,11 +91,11 @@ export default function RegisterDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="register-email" className="text-sm font-medium text-white/80">
+            <label htmlFor="email" className="text-sm font-medium text-white/80">
               E-mail
             </label>
             <input
-              id="register-email"
+              id="email"
               type="email"
               autoComplete="email"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -125,11 +106,11 @@ export default function RegisterDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="register-phoneNumber" className="text-sm font-medium text-white/80">
+            <label htmlFor="phoneNumber" className="text-sm font-medium text-white/80">
               Телефон
             </label>
             <input
-              id="register-phoneNumber"
+              id="phoneNumber"
               type="tel"
               autoComplete="tel"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -140,11 +121,11 @@ export default function RegisterDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="register-password" className="text-sm font-medium text-white/80">
+            <label htmlFor="password" className="text-sm font-medium text-white/80">
               Пароль
             </label>
             <input
-              id="register-password"
+              id="password"
               type="password"
               autoComplete="new-password"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -155,11 +136,11 @@ export default function RegisterDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="register-confirmPassword" className="text-sm font-medium text-white/80">
+            <label htmlFor="confirmPassword" className="text-sm font-medium text-white/80">
               Подтверждение пароля
             </label>
             <input
-              id="register-confirmPassword"
+              id="confirmPassword"
               type="password"
               autoComplete="new-password"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -191,6 +172,8 @@ export default function RegisterDialog({
             </p>
           ) : null}
 
+          {successMessage ? <p className="text-sm text-emerald-300">{successMessage}</p> : null}
+
           <Button
             type="submit"
             disabled={isSubmitting}
@@ -201,16 +184,12 @@ export default function RegisterDialog({
 
           <p className="text-center text-xs text-white/60">
             Уже есть аккаунт? {" "}
-            <button
-              type="button"
-              onClick={onSwitchToLogin}
-              className="text-primary underline-offset-4 hover:underline"
-            >
+            <Link to={paths.auth.login} className="text-primary underline-offset-4 hover:underline">
               Войдите
-            </button>
+            </Link>
           </p>
         </form>
       </AuthPageLayout>
-    </AuthModal>
+    </>
   );
 }

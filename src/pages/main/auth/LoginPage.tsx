@@ -1,34 +1,25 @@
-import { useId, useState } from "react";
+import { useState } from "react";
+import { Link, useLocation, useNavigate, type Location } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import AuthModal from "@/pages/main/auth/ui/AuthModal";
 import AuthPageLayout from "@/pages/main/auth/ui/AuthPageLayout";
+import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
+import { paths } from "@/shared/routes/paths";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
-interface LoginDialogProps {
-  onClose: () => void;
-  onSwitchToRegister: () => void;
-  onSuccess: (redirectTo?: string | null) => void;
-  redirectTo: string | null;
-}
 
 const loginSchema = z.object({
   email: z.string().email("Введите корректный e-mail"),
   password: z.string().min(3, "Минимум 3 символа"),
 });
 
-export default function LoginDialog({
-  onClose,
-  onSwitchToRegister,
-  onSuccess,
-  redirectTo,
-}: LoginDialogProps) {
-  const titleId = useId();
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -36,7 +27,6 @@ export default function LoginDialog({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
@@ -45,9 +35,10 @@ export default function LoginDialog({
   const onSubmit = async (values: LoginFormValues) => {
     setServerError(null);
     try {
-      await login(values);
-      reset();
-      onSuccess(redirectTo ?? undefined);
+      await login(values); // вернёт { token: "session", user } из /api/auth/login
+      const state = location.state as { from?: Location } | undefined;
+      const redirectTo = state?.from?.pathname ?? paths.profile;
+      navigate(redirectTo, { replace: true });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не удалось войти";
       setServerError(message);
@@ -55,20 +46,19 @@ export default function LoginDialog({
   };
 
   return (
-    <AuthModal onClose={onClose} labelledBy={titleId}>
+    <>
+      <Seo title="Вход — Знак отличия" description="Авторизация для зарегистрированных пользователей." />
       <AuthPageLayout
         title="Вход"
         subtitle={<span>Введите e-mail и пароль, чтобы управлять объявлениями.</span>}
-        onClose={onClose}
-        titleId={titleId}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label htmlFor="login-email" className="text-sm font-medium text-white/80">
+            <label htmlFor="email" className="text-sm font-medium text-white/80">
               E-mail
             </label>
             <input
-              id="login-email"
+              id="email"
               type="email"
               autoComplete="email"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -79,11 +69,11 @@ export default function LoginDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="login-password" className="text-sm font-medium text-white/80">
+            <label htmlFor="password" className="text-sm font-medium text-white/80">
               Пароль
             </label>
             <input
-              id="login-password"
+              id="password"
               type="password"
               autoComplete="current-password"
               className="h-11 w-full rounded-[10px] border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -109,16 +99,12 @@ export default function LoginDialog({
 
           <p className="text-center text-xs text-white/60">
             Нет аккаунта?{" "}
-            <button
-              type="button"
-              onClick={onSwitchToRegister}
-              className="text-primary underline-offset-4 hover:underline"
-            >
+            <Link to={paths.auth.register} className="text-primary underline-offset-4 hover:underline">
               Зарегистрируйтесь
-            </button>
+            </Link>
           </p>
         </form>
       </AuthPageLayout>
-    </AuthModal>
+    </>
   );
 }

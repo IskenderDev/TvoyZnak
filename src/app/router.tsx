@@ -11,6 +11,8 @@ import NumberDetailsPage from "@/pages/main/numbers/NumberDetailsPage";
 import NewsListPage from "@/pages/main/news/NewsListPage";
 import NewsDetailsPage from "@/pages/main/news/NewsDetailsPage";
 import ContactsPage from "@/pages/main/contacts/ContactsPage";
+import LoginPage from "@/pages/main/auth/LoginPage";
+import RegisterPage from "@/pages/main/auth/RegisterPage";
 import NotFoundPage from "@/pages/main/not-found/NotFoundPage";
 import ProfilePage from "@/pages/main/profile/ProfilePage";
 
@@ -41,6 +43,9 @@ export const router = createBrowserRouter([
         children: [{ path: paths.profile, element: <ProfilePage /> }],
       },
       { path: paths.contacts, element: <ContactsPage /> },
+      { path: paths.auth.login, element: <LoginPage /> },
+      { path: paths.auth.register, element: <RegisterPage /> },
+
       { path: paths.admin.root, element: <Navigate to={paths.admin.numbers} replace /> },
 
       {

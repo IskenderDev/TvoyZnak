@@ -5,7 +5,6 @@ import { LuPlus, LuTrash2 } from "react-icons/lu";
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/components/Button";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
-import { useAuthDialog } from "@/shared/lib/hooks/useAuthDialog";
 import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
@@ -29,7 +28,6 @@ const LIMIT_STEP = 6;
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
-  const { openLogin } = useAuthDialog();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -108,13 +106,12 @@ export default function ProfilePage() {
           <p className="mt-3 text-sm text-white/70">
             Авторизуйтесь, чтобы увидеть свои данные и управлять объявлениями.
           </p>
-          <button
-            type="button"
-            onClick={() => openLogin({ redirectTo: paths.profile })}
+          <Link
+            to={paths.auth.login}
             className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
           >
             Войти
-          </button>
+          </Link>
         </div>
       </section>
     );
