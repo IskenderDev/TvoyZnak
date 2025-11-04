@@ -133,15 +133,6 @@ export default function PlateSelectForm({
 
   const mainFontLetter = isXs ? 48 : 140 * k;
   const mainFontNumber = isXs ? 60 : 180 * k;
-<<<<<<< HEAD
-  const mainGap = isXs ? 14 : 20 * k;
-  const mainPx = isXs ? 6 : 32 * k;
-  const mainPb = isXs ? 0 : 1;
-  const slotW = isXs ? 30 : 90 * k;
-  const slotH = isXs ? 72 : mainFontNumber;
-  const digitGap = isXs ? 0 : 2 * k;
-  const digitGapLetter = isXs ? 1 : 4 * k;
-=======
   const mainGap = isXs ? 15 : 20 * k;
   const mainPx = isXs ? 6 : 32 * k;
   const mainPb = isXs ? 0 : 1;
@@ -149,7 +140,6 @@ export default function PlateSelectForm({
   const slotH = isXs ? 68 : mainFontNumber;
   const digitGap = isXs ? 3 : 4 * k;
   const digitGapLetter = isXs ? 7 : 4 * k;
->>>>>>> 42428fa3349c5b624b01aed44437c01e09b2b8d5
 
   const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -158,11 +148,8 @@ export default function PlateSelectForm({
   const rusPb = isXs ? 2 : 4 * k;
   const flagH = isXs ? 12 : rusRowH * 0.9;
   const flagBorder = isXs ? 1 : Math.max(1, 2 * k);
-<<<<<<< HEAD
-  const regionGap = isXs ? 6 : 6 * k;
-=======
+
   const regionGap = isXs ? 10 : 4 * k;
->>>>>>> 42428fa3349c5b624b01aed44437c01e09b2b8d5
 
   const captionFs = isXs ? 0 : Math.max(10, 24 * k);
   const captionMt = isXs ? 0 : Math.max(4, 8 * k);
