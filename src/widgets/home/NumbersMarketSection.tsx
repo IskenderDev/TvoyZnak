@@ -45,20 +45,20 @@ export default function NumbersMarketSection() {
         {error && <p className="mb-4 rounded-xl bg-[#1E1E1E] px-4 py-3 text-[#FF6B6B]">{error}</p>}
         {loading && <p className="mb-4 text-neutral-300">Загрузка предложений...</p>}
 
+        <PlateMarketTable
+          className="hidden md:block"
+          rows={visibleRows}
+          sortDir={sortDir}
+          gridCols={GRID_COLS}
+          onToggleSort={toggleSortDir}
+          onReset={resetFilters}
+        />
         {!loading && !visibleRows.length && !error ? (
           <p className="rounded-xl bg-[#1E1E1E] px-6 py-10 text-center text-neutral-300">
             Номера не найдены. Измените фильтры.
           </p>
         ) : (
           <>
-            <PlateMarketTable
-              className="hidden md:block"
-              rows={visibleRows}
-              sortDir={sortDir}
-              gridCols={GRID_COLS}
-              onToggleSort={toggleSortDir}
-              onReset={resetFilters}
-            />
 
             <PlateMarketMobileList className="mt-6 md:hidden" rows={visibleRows} />
 

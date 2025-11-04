@@ -133,22 +133,22 @@ export default function PlateSelectForm({
 
   const mainFontLetter = isXs ? 48 : 140 * k;
   const mainFontNumber = isXs ? 60 : 180 * k;
-  const mainGap = isXs ? 16 : 20 * k;
+  const mainGap = isXs ? 14 : 20 * k;
   const mainPx = isXs ? 6 : 32 * k;
   const mainPb = isXs ? 0 : 1;
-  const slotW = isXs ? 34 : 90 * k;
+  const slotW = isXs ? 30 : 90 * k;
   const slotH = isXs ? 72 : mainFontNumber;
-  const digitGap = isXs ? 4 : 4 * k;
-  const digitGapLetter = isXs ? 8 : 4 * k;
+  const digitGap = isXs ? 0 : 2 * k;
+  const digitGapLetter = isXs ? 1 : 4 * k;
 
-  const regionFont = isXs ? 32 : 128 * k;
+  const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
   const rusRowH = isXs ? 16 : 40 * k;
   const rusGap = isXs ? 6 : 10 * k;
   const rusPb = isXs ? 2 : 4 * k;
   const flagH = isXs ? 12 : rusRowH * 0.9;
   const flagBorder = isXs ? 1 : Math.max(1, 2 * k);
-  const regionGap = isXs ? 6 : 8 * k;
+  const regionGap = isXs ? 6 : 6 * k;
 
   const captionFs = isXs ? 0 : Math.max(10, 24 * k);
   const captionMt = isXs ? 0 : Math.max(4, 8 * k);

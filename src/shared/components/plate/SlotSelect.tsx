@@ -80,6 +80,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   forwardedRef,
 ) {
   const normalizedOptions = useMemo(() => normalizeOptions(options), [options]);
+
   const [open, setOpen] = useState(false);
   const [appear, setAppear] = useState(false);
   const [filter, setFilter] = useState("");
@@ -90,31 +91,23 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const listboxRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
-  const optionRefs = useRef<Array<HTMLButtonElement | null>>([]);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const typeBufferRef = useRef("");
   const typeTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
-  const autoScrollRef = useRef(true);
+
   const normalizedFilter = searchable ? filter.trim().toLowerCase() : "";
 
   const filteredOptions = useMemo(() => {
     if (!searchable || !normalizedFilter) {
       return normalizedOptions;
     }
-
     return normalizedOptions.filter((opt) => {
       if (!opt.keywords?.length) {
         return opt.value.toLowerCase().includes(normalizedFilter);
       }
-
       return opt.keywords.some((keyword) => keyword.toLowerCase().includes(normalizedFilter));
     });
   }, [normalizedFilter, normalizedOptions, searchable]);
-
-  useEffect(() => {
-    optionRefs.current = new Array(filteredOptions.length).fill(null);
-  }, [filteredOptions.length]);
 
   const assignTriggerRef = useCallback(
     (node: HTMLButtonElement | null) => {
@@ -122,27 +115,21 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (typeof forwardedRef === "function") {
         forwardedRef(node);
       } else if (forwardedRef) {
-        forwardedRef.current = node;
+        (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
       }
     },
     [forwardedRef],
   );
 
-  const scrollActiveIntoView = useCallback(() => {
-    if (activeIndex < 0) return;
-    if (!autoScrollRef.current) return;
-    const el = optionRefs.current[activeIndex];
-    el?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
-
   useEffect(() => {
     const onDoc = (event: MouseEvent) => {
-      if (!wrapperRef.current) return;
-      if (!wrapperRef.current.contains(event.target as Node)) {
+      if (!event.target) return;
+      const wrapper = triggerRef.current?.parentElement;
+      if (!wrapper) return;
+      if (!wrapper.contains(event.target as Node)) {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
@@ -154,58 +141,33 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       const selectedIndex = filteredOptions.findIndex((opt) => opt.value === value);
       const nextIndex = selectedIndex >= 0 ? selectedIndex : filteredOptions.length ? 0 : -1;
       setActiveIndex(nextIndex);
-      autoScrollRef.current = true;
 
+      // Фокус без автоскролла
       window.setTimeout(() => {
         if (searchable) {
+          searchRef.current?.focus();
           if (filter) {
-            searchRef.current?.focus();
             searchRef.current?.setSelectionRange(filter.length, filter.length);
-          } else {
-            searchRef.current?.focus();
           }
         } else {
           listboxRef.current?.focus();
         }
-        scrollActiveIntoView();
       }, 0);
 
       return () => cancelAnimationFrame(frame);
     }
 
+    // Сброс при закрытии
     setAppear(false);
     setFilter("");
     setActiveIndex(0);
     typeBufferRef.current = "";
-    autoScrollRef.current = true;
-    if (triggerRef.current) {
-      triggerRef.current.focus({ preventScroll: true });
-    }
-  }, [filter, filteredOptions, open, scrollActiveIntoView, searchable, value]);
-
-  useEffect(() => {
-    if (!open) return;
-    scrollActiveIntoView();
-  }, [activeIndex, open, scrollActiveIntoView]);
-
-  useEffect(() => {
-    if (!open) return;
-    const listbox = listboxRef.current;
-    if (!listbox) return;
-
-    const handleScroll = () => {
-      autoScrollRef.current = false;
-    };
-
-    listbox.addEventListener("scroll", handleScroll, { passive: true });
-    return () => listbox.removeEventListener("scroll", handleScroll);
-  }, [open]);
+    if (triggerRef.current) triggerRef.current.focus({ preventScroll: true });
+  }, [open, filteredOptions, searchable, value, filter]);
 
   const resetTypeTimer = useCallback(() => {
     if (!searchable) return;
-    if (typeTimerRef.current) {
-      window.clearTimeout(typeTimerRef.current);
-    }
+    if (typeTimerRef.current) window.clearTimeout(typeTimerRef.current);
     typeTimerRef.current = window.setTimeout(() => {
       typeBufferRef.current = "";
     }, 700);
@@ -227,9 +189,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (!searchable) return;
       if (!normalizedOptions.length) return;
 
-      if (typeTimerRef.current) {
-        window.clearTimeout(typeTimerRef.current);
-      }
+      if (typeTimerRef.current) window.clearTimeout(typeTimerRef.current);
 
       typeBufferRef.current = `${typeBufferRef.current}${key}`.slice(-6);
       const buffer = typeBufferRef.current;
@@ -239,7 +199,6 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         (opt) =>
           opt.value.toLowerCase() === bufferLower || opt.label.toLowerCase() === bufferLower,
       );
-
       if (exactMatch) {
         selectOption(exactMatch);
         return;
@@ -251,16 +210,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           opt.label.toLowerCase().startsWith(bufferLower),
       );
 
-      if (partialMatch.length) {
-        setOpen(true);
-        setFilter(buffer.toUpperCase());
-        setActiveIndex(0);
-      } else {
-        onInvalidKey?.(buffer.toUpperCase());
-        setOpen(true);
-        setFilter(buffer.toUpperCase());
-        setActiveIndex(-1);
-      }
+      setOpen(true);
+      setFilter(buffer.toUpperCase());
+      setActiveIndex(partialMatch.length ? 0 : -1);
+      if (!partialMatch.length) onInvalidKey?.(buffer.toUpperCase());
 
       resetTypeTimer();
     },
@@ -274,11 +227,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         applyTypeahead(char);
         return;
       }
-
       const directMatch = normalizedOptions.find(
         (opt) => opt.value.toUpperCase() === char || opt.label.toUpperCase() === char,
       );
-
       if (directMatch) {
         selectOption(directMatch);
       } else {
@@ -298,9 +249,8 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen(true);
           return;
         }
-
         if (!filteredOptions.length) return;
-        autoScrollRef.current = true;
+
         setActiveIndex((index) => {
           if (index < 0) return 0;
           if (event.key === "ArrowDown") {
@@ -330,7 +280,6 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "ArrowDown") {
         event.preventDefault();
         if (!filteredOptions.length) return;
-        autoScrollRef.current = true;
         setActiveIndex((index) => {
           const next = index + 1;
           return next >= filteredOptions.length ? 0 : next;
@@ -341,7 +290,6 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "ArrowUp") {
         event.preventDefault();
         if (!filteredOptions.length) return;
-        autoScrollRef.current = true;
         setActiveIndex((index) => {
           const next = index - 1;
           return next < 0 ? filteredOptions.length - 1 : next;
@@ -351,28 +299,20 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       if (event.key === "Home") {
         event.preventDefault();
-        if (filteredOptions.length) {
-          autoScrollRef.current = true;
-          setActiveIndex(0);
-        }
+        if (filteredOptions.length) setActiveIndex(0);
         return;
       }
 
       if (event.key === "End") {
         event.preventDefault();
-        if (filteredOptions.length) {
-          autoScrollRef.current = true;
-          setActiveIndex(filteredOptions.length - 1);
-        }
+        if (filteredOptions.length) setActiveIndex(filteredOptions.length - 1);
         return;
       }
 
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         const option = filteredOptions[activeIndex];
-        if (option) {
-          selectOption(option);
-        }
+        if (option) selectOption(option);
         return;
       }
 
@@ -392,7 +332,6 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const next = event.target.value.toUpperCase();
     setFilter(next);
-    autoScrollRef.current = true;
     setActiveIndex(0);
   };
 
@@ -400,22 +339,17 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     if (event.key === "ArrowDown") {
       event.preventDefault();
       if (filteredOptions.length) {
-        autoScrollRef.current = true;
         setActiveIndex(0);
         listboxRef.current?.focus();
       }
       return;
     }
-
     if (event.key === "Enter" && filteredOptions.length === 1) {
       event.preventDefault();
       const option = filteredOptions[0];
-      if (option) {
-        selectOption(option);
-      }
+      if (option) selectOption(option);
       return;
     }
-
     if (event.key === "Escape") {
       event.preventDefault();
       setOpen(false);
@@ -430,7 +364,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0;
 
   return (
-    <div ref={wrapperRef} className="relative" style={{ width: slotW, height: slotH }}>
+    <div className="relative" style={{ width: slotW, height: slotH }}>
       <button
         ref={assignTriggerRef}
         type="button"
@@ -526,9 +460,6 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                       <li key={`${option.value}-${option.label}`} className="w-full">
                         <button
                           id={`${listboxId}-opt-${index}`}
-                          ref={(node) => {
-                            optionRefs.current[index] = node;
-                          }}
                           role="option"
                           aria-selected={selected}
                           type="button"
