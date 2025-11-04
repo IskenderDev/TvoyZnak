@@ -133,13 +133,13 @@ export default function PlateSelectForm({
 
   const mainFontLetter = isXs ? 48 : 140 * k;
   const mainFontNumber = isXs ? 60 : 180 * k;
-  const mainGap = isXs ? 15 : 20 * k;
+  const mainGap = isXs ? 16 : 20 * k;
   const mainPx = isXs ? 6 : 32 * k;
   const mainPb = isXs ? 0 : 1;
-  const slotW = isXs ? 22 : 90 * k;
-  const slotH = isXs ? 68 : mainFontNumber;
-  const digitGap = isXs ? 3 : 4 * k;
-  const digitGapLetter = isXs ? 7 : 4 * k;
+  const slotW = isXs ? 34 : 90 * k;
+  const slotH = isXs ? 72 : mainFontNumber;
+  const digitGap = isXs ? 4 : 4 * k;
+  const digitGapLetter = isXs ? 8 : 4 * k;
 
   const regionFont = isXs ? 32 : 128 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -208,9 +208,7 @@ export default function PlateSelectForm({
     () =>
       regions.map((region) => ({
         value: region.regionCode,
-        label: region.regionName
-          ? `${region.regionCode} — ${region.regionName}`
-          : region.regionCode,
+        label: region.regionCode,
         keywords: region.regionName
           ? [region.regionCode, region.regionName]
           : [region.regionCode],
@@ -339,7 +337,7 @@ export default function PlateSelectForm({
                 ariaLabel="Буква 1"
                 value={firstLetter}
                 onChange={handleFirstLetterChange}
-                options={LETTERS as unknown as string[]}
+                options={LETTER_OPTIONS as unknown as string[]}
                 fontSize={mainFontLetter}
                 slotW={slotW}
                 slotH={slotH}
@@ -347,6 +345,7 @@ export default function PlateSelectForm({
                 dropdownMaxHeight={240}
                 onCommit={createCommitHandler(0)}
                 onInvalidKey={handleInvalidLetter}
+                searchable={false}
               />
 
               <div className="flex" style={{ gap: digitGap }}>
@@ -355,7 +354,7 @@ export default function PlateSelectForm({
                   ariaLabel="Цифра 1"
                   value={firstDigit}
                   onChange={handleFirstDigitChange}
-                  options={DIGITS as unknown as string[]}
+                  options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -363,13 +362,14 @@ export default function PlateSelectForm({
                   dropdownMaxHeight={280}
                   onCommit={createCommitHandler(1)}
                   onInvalidKey={handleInvalidDigit}
+                  searchable={false}
                 />
                 <SlotSelect
                   ref={registerSlot(2)}
                   ariaLabel="Цифра 2"
                   value={secondDigit}
                   onChange={handleSecondDigitChange}
-                  options={DIGITS as unknown as string[]}
+                  options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -377,13 +377,14 @@ export default function PlateSelectForm({
                   dropdownMaxHeight={280}
                   onCommit={createCommitHandler(2)}
                   onInvalidKey={handleInvalidDigit}
+                  searchable={false}
                 />
                 <SlotSelect
                   ref={registerSlot(3)}
                   ariaLabel="Цифра 3"
                   value={thirdDigit}
                   onChange={handleThirdDigitChange}
-                  options={DIGITS as unknown as string[]}
+                  options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
                   slotW={slotW}
                   slotH={slotH}
@@ -391,6 +392,7 @@ export default function PlateSelectForm({
                   dropdownMaxHeight={280}
                   onCommit={createCommitHandler(3)}
                   onInvalidKey={handleInvalidDigit}
+                  searchable={false}
                 />
               </div>
 
@@ -400,7 +402,7 @@ export default function PlateSelectForm({
                   ariaLabel="Буква 2"
                   value={secondLetter}
                   onChange={handleSecondLetterChange}
-                  options={LETTERS as unknown as string[]}
+                  options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
                   slotH={slotH}
@@ -408,13 +410,14 @@ export default function PlateSelectForm({
                   dropdownMaxHeight={240}
                   onCommit={createCommitHandler(4)}
                   onInvalidKey={handleInvalidLetter}
+                  searchable={false}
                 />
                 <SlotSelect
                   ref={registerSlot(5)}
                   ariaLabel="Буква 3"
                   value={thirdLetter}
                   onChange={handleThirdLetterChange}
-                  options={LETTERS as unknown as string[]}
+                  options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
                   slotW={slotW}
                   slotH={slotH}
@@ -422,6 +425,7 @@ export default function PlateSelectForm({
                   dropdownMaxHeight={240}
                   onCommit={createCommitHandler(5)}
                   onInvalidKey={handleInvalidLetter}
+                  searchable={false}
                 />
               </div>
             </div>
@@ -447,8 +451,8 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
-                slotH={isXs ? 22 : regionFont * 1.05}
+                slotW={isXs ? 52 : Math.max(120 * k, 150)}
+                slotH={isXs ? 28 : regionFont * 1.05}
                 color={glyphColor(regionDisplayValue)}
                 centerText
                 dropdownMaxHeight={240}
@@ -470,12 +474,6 @@ export default function PlateSelectForm({
                 >
                   Повторить загрузку регионов
                 </button>
-              )}
-
-              {activeRegion && activeRegion.regionName && (
-                <span className="text-[10px] text-[#0D1A72] font-semibold text-center leading-[1.2] px-1">
-                  {activeRegion.regionName}
-                </span>
               )}
 
               <p

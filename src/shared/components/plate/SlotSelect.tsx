@@ -29,6 +29,7 @@ type Props = {
   onInvalidKey?: (query: string) => void;
   disabled?: boolean;
   searchPlaceholder?: string;
+  searchable?: boolean;
 };
 
 const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelectOption[] =>
@@ -74,6 +75,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     onInvalidKey,
     disabled = false,
     searchPlaceholder = "Поиск",
+    searchable = true,
   },
   forwardedRef,
 ) {
@@ -93,11 +95,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
   const typeBufferRef = useRef("");
   const typeTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
-
-  const normalizedFilter = filter.trim().toLowerCase();
+  const autoScrollRef = useRef(true);
+  const normalizedFilter = searchable ? filter.trim().toLowerCase() : "";
 
   const filteredOptions = useMemo(() => {
-    if (!normalizedFilter) {
+    if (!searchable || !normalizedFilter) {
       return normalizedOptions;
     }
 
@@ -108,7 +110,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       return opt.keywords.some((keyword) => keyword.toLowerCase().includes(normalizedFilter));
     });
-  }, [normalizedFilter, normalizedOptions]);
+  }, [normalizedFilter, normalizedOptions, searchable]);
 
   useEffect(() => {
     optionRefs.current = new Array(filteredOptions.length).fill(null);
@@ -128,6 +130,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
   const scrollActiveIntoView = useCallback(() => {
     if (activeIndex < 0) return;
+    if (!autoScrollRef.current) return;
     const el = optionRefs.current[activeIndex];
     el?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
@@ -151,13 +154,18 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       const selectedIndex = filteredOptions.findIndex((opt) => opt.value === value);
       const nextIndex = selectedIndex >= 0 ? selectedIndex : filteredOptions.length ? 0 : -1;
       setActiveIndex(nextIndex);
+      autoScrollRef.current = true;
 
       window.setTimeout(() => {
-        if (filter) {
-          searchRef.current?.focus();
-          searchRef.current?.setSelectionRange(filter.length, filter.length);
+        if (searchable) {
+          if (filter) {
+            searchRef.current?.focus();
+            searchRef.current?.setSelectionRange(filter.length, filter.length);
+          } else {
+            searchRef.current?.focus();
+          }
         } else {
-          searchRef.current?.focus();
+          listboxRef.current?.focus();
         }
         scrollActiveIntoView();
       }, 0);
@@ -169,24 +177,39 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     setFilter("");
     setActiveIndex(0);
     typeBufferRef.current = "";
+    autoScrollRef.current = true;
     if (triggerRef.current) {
       triggerRef.current.focus({ preventScroll: true });
     }
-  }, [filter, filteredOptions, open, scrollActiveIntoView, value]);
+  }, [filter, filteredOptions, open, scrollActiveIntoView, searchable, value]);
 
   useEffect(() => {
     if (!open) return;
     scrollActiveIntoView();
   }, [activeIndex, open, scrollActiveIntoView]);
 
+  useEffect(() => {
+    if (!open) return;
+    const listbox = listboxRef.current;
+    if (!listbox) return;
+
+    const handleScroll = () => {
+      autoScrollRef.current = false;
+    };
+
+    listbox.addEventListener("scroll", handleScroll, { passive: true });
+    return () => listbox.removeEventListener("scroll", handleScroll);
+  }, [open]);
+
   const resetTypeTimer = useCallback(() => {
+    if (!searchable) return;
     if (typeTimerRef.current) {
       window.clearTimeout(typeTimerRef.current);
     }
     typeTimerRef.current = window.setTimeout(() => {
       typeBufferRef.current = "";
     }, 700);
-  }, []);
+  }, [searchable]);
 
   const selectOption = useCallback(
     (option: SlotSelectOption) => {
@@ -201,6 +224,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
   const applyTypeahead = useCallback(
     (key: string) => {
+      if (!searchable) return;
       if (!normalizedOptions.length) return;
 
       if (typeTimerRef.current) {
@@ -240,7 +264,28 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       resetTypeTimer();
     },
-    [normalizedOptions, onInvalidKey, resetTypeTimer, selectOption],
+    [normalizedOptions, onInvalidKey, resetTypeTimer, searchable, selectOption],
+  );
+
+  const handlePrintableKey = useCallback(
+    (key: string) => {
+      const char = key.toUpperCase();
+      if (searchable) {
+        applyTypeahead(char);
+        return;
+      }
+
+      const directMatch = normalizedOptions.find(
+        (opt) => opt.value.toUpperCase() === char || opt.label.toUpperCase() === char,
+      );
+
+      if (directMatch) {
+        selectOption(directMatch);
+      } else {
+        onInvalidKey?.(char);
+      }
+    },
+    [applyTypeahead, normalizedOptions, onInvalidKey, searchable, selectOption],
   );
 
   const onTriggerKeyDown = useCallback(
@@ -255,6 +300,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         }
 
         if (!filteredOptions.length) return;
+        autoScrollRef.current = true;
         setActiveIndex((index) => {
           if (index < 0) return 0;
           if (event.key === "ArrowDown") {
@@ -273,11 +319,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       if (isPrintableKey(event)) {
         event.preventDefault();
-        const char = event.key.toUpperCase();
-        applyTypeahead(char);
+        handlePrintableKey(event.key);
       }
     },
-    [applyTypeahead, disabled, filteredOptions.length, open],
+    [disabled, filteredOptions.length, handlePrintableKey, open],
   );
 
   const onListboxKeyDown = useCallback(
@@ -285,6 +330,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "ArrowDown") {
         event.preventDefault();
         if (!filteredOptions.length) return;
+        autoScrollRef.current = true;
         setActiveIndex((index) => {
           const next = index + 1;
           return next >= filteredOptions.length ? 0 : next;
@@ -295,6 +341,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "ArrowUp") {
         event.preventDefault();
         if (!filteredOptions.length) return;
+        autoScrollRef.current = true;
         setActiveIndex((index) => {
           const next = index - 1;
           return next < 0 ? filteredOptions.length - 1 : next;
@@ -305,6 +352,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "Home") {
         event.preventDefault();
         if (filteredOptions.length) {
+          autoScrollRef.current = true;
           setActiveIndex(0);
         }
         return;
@@ -313,6 +361,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "End") {
         event.preventDefault();
         if (filteredOptions.length) {
+          autoScrollRef.current = true;
           setActiveIndex(filteredOptions.length - 1);
         }
         return;
@@ -334,16 +383,16 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       }
 
       if (isPrintableKey(event)) {
-        const char = event.key.toUpperCase();
-        applyTypeahead(char);
+        handlePrintableKey(event.key);
       }
     },
-    [activeIndex, applyTypeahead, filteredOptions, selectOption],
+    [activeIndex, filteredOptions, handlePrintableKey, selectOption],
   );
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const next = event.target.value.toUpperCase();
     setFilter(next);
+    autoScrollRef.current = true;
     setActiveIndex(0);
   };
 
@@ -351,6 +400,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     if (event.key === "ArrowDown") {
       event.preventDefault();
       if (filteredOptions.length) {
+        autoScrollRef.current = true;
         setActiveIndex(0);
         listboxRef.current?.focus();
       }
@@ -374,6 +424,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
   const displayText = displayValue ?? value ?? "";
   const hasValue = Boolean(displayText);
+  const placeholderChar = "*";
+  const shownText = displayText || placeholderChar;
+  const highlightLength = searchable ? filter.length : 0;
+  const shouldHighlight = searchable && normalizedFilter && highlightLength > 0;
 
   return (
     <div ref={wrapperRef} className="relative" style={{ width: slotW, height: slotH }}>
@@ -393,14 +447,14 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           disabled ? "cursor-not-allowed opacity-60" : "hover:bg-black/5"
         }`}
         style={{
-          lineHeight: 0.9,
+          lineHeight: 1,
           fontWeight: 700,
           fontSize,
           color: hasValue ? color : "#9AA0A6",
         }}
         disabled={disabled}
       >
-        {displayText || "—"}
+        {shownText}
       </button>
 
       {open && (
@@ -417,17 +471,19 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               maxHeight: dropdownMaxHeight,
             }}
           >
-            <div className="p-2 border-b border-white/20">
-              <input
-                ref={searchRef}
-                type="text"
-                value={filter}
-                onChange={onSearchChange}
-                onKeyDown={onSearchKeyDown}
-                placeholder={searchPlaceholder}
-                className="w-full rounded-md bg-white/20 px-3 py-2 text-sm font-semibold text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#33D9FF]"
-              />
-            </div>
+            {searchable && (
+              <div className="p-2 border-b border-white/20">
+                <input
+                  ref={searchRef}
+                  type="text"
+                  value={filter}
+                  onChange={onSearchChange}
+                  onKeyDown={onSearchKeyDown}
+                  placeholder={searchPlaceholder}
+                  className="w-full rounded-md bg-white/20 px-3 py-2 text-sm font-semibold text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#33D9FF]"
+                />
+              </div>
+            )}
 
             <div
               id={listboxId}
@@ -448,12 +504,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                   filteredOptions.map((option, index) => {
                     const selected = option.value === value;
                     const highlighted = index === activeIndex;
-                    const highlightLength = filter.length;
                     const lowerLabel = option.label.toLowerCase();
-                    const highlightIndex =
-                      normalizedFilter && highlightLength
-                        ? lowerLabel.indexOf(normalizedFilter)
-                        : -1;
+                    const highlightIndex = shouldHighlight
+                      ? lowerLabel.indexOf(normalizedFilter)
+                      : -1;
 
                     const before =
                       highlightIndex >= 0
