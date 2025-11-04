@@ -27,37 +27,59 @@ const safeParse = (value: string | null): StoredValue | null => {
   }
 };
 
-const getStorage = (): Storage | null => {
+const getStorage = (type: "local" | "session"): Storage | null => {
   if (!isBrowser) return null;
   try {
-    return window.localStorage;
+    return type === "session" ? window.sessionStorage : window.localStorage;
   } catch (error) {
-    console.warn("LocalStorage is unavailable", error);
+    console.warn(`${type === "session" ? "SessionStorage" : "LocalStorage"} is unavailable`, error);
     return null;
   }
 };
 
+const loadFrom = (storage: Storage | null): StoredValue | null => {
+  if (!storage) return null;
+  return safeParse(storage.getItem(STORAGE_KEY));
+};
+
+interface SaveOptions {
+  remember?: boolean;
+}
+
 export const authStorage = {
   load(): AuthSession | null {
-    const storage = getStorage();
-    if (!storage) return null;
-    return safeParse(storage.getItem(STORAGE_KEY));
+    const local = loadFrom(getStorage("local"));
+    if (local) {
+      return local;
+    }
+    return loadFrom(getStorage("session"));
   },
 
-  save(session: AuthSession | null) {
-    const storage = getStorage();
-    if (!storage) return;
-    if (session) {
-      storage.setItem(STORAGE_KEY, JSON.stringify(session));
-    } else {
-      storage.removeItem(STORAGE_KEY);
+  save(session: AuthSession | null, options: SaveOptions = {}) {
+    const preferSession = options.remember === false;
+    const primary = getStorage(preferSession ? "session" : "local");
+    const secondary = getStorage(preferSession ? "local" : "session");
+
+    if (!primary && !secondary) {
+      return;
     }
+
+    if (!session) {
+      primary?.removeItem(STORAGE_KEY);
+      secondary?.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    const serialized = JSON.stringify(session);
+    primary?.setItem(STORAGE_KEY, serialized);
+    secondary?.removeItem(STORAGE_KEY);
   },
 
   clear() {
-    const storage = getStorage();
-    if (!storage) return;
-    storage.removeItem(STORAGE_KEY);
+    const local = getStorage("local");
+    const session = getStorage("session");
+    local?.removeItem(STORAGE_KEY);
+    session?.removeItem(STORAGE_KEY);
   },
 
   emitLogout() {

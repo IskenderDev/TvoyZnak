@@ -9,7 +9,20 @@ export function RequireAuth() {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to={paths.auth.login} replace state={{ from: location }} />;
+    const params = new URLSearchParams();
+    params.set("auth", "login");
+    const redirectTo = `${location.pathname}${location.search}${location.hash}`;
+    if (redirectTo) {
+      params.set("redirectTo", redirectTo);
+    }
+
+    return (
+      <Navigate
+        to={{ pathname: paths.home, search: `?${params.toString()}` }}
+        replace
+        state={{ from: location }}
+      />
+    );
   }
 
   return <Outlet />;
@@ -19,7 +32,9 @@ export function RequireRole({ role }: { role: Role }) {
   const { isAuthenticated, roles } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to={paths.auth.login} replace />;
+    const params = new URLSearchParams();
+    params.set("auth", "login");
+    return <Navigate to={{ pathname: paths.home, search: `?${params.toString()}` }} replace />;
   }
 
   const hasRole = roles.some((current) => current === role);
