@@ -11,9 +11,9 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  fullName: string;
+  fullName?: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   password: string;
 }
 
@@ -143,7 +143,7 @@ const toAuthUser = (
 const ADMIN_EMAILS = new Set<string>(
   (import.meta?.env?.VITE_ADMIN_EMAILS ?? "admin@admin.admin")
     .split(",")
-    .map((s) => s.trim().toLowerCase())
+    .map((s: string) => s.trim().toLowerCase())
     .filter(Boolean)
 );
 
@@ -247,12 +247,20 @@ export async function login(payload: LoginPayload): Promise<AuthSession> {
 
 export async function register(payload: RegisterPayload): Promise<AuthSession> {
   try {
-    await http.post("/api/auth/register", {
-      fullName: payload.fullName,
+    const requestBody: Record<string, string> = {
       email: payload.email,
-      phoneNumber: payload.phoneNumber,
       password: payload.password,
-    });
+    };
+
+    if (payload.fullName?.trim()) {
+      requestBody.fullName = payload.fullName.trim();
+    }
+
+    if (payload.phoneNumber?.trim()) {
+      requestBody.phoneNumber = payload.phoneNumber.trim();
+    }
+
+    await http.post("/api/auth/register", requestBody);
 
     return await login({ email: payload.email, password: payload.password });
   } catch (error) {

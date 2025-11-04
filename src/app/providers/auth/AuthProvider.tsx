@@ -21,12 +21,16 @@ import type {
 } from "@/features/auth/api/authService";
 import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
 
+interface ExtendedLoginPayload extends LoginPayload {
+  remember?: boolean;
+}
+
 export interface AuthContextValue {
   user: AuthUser | null;
   token: string | null;
   roles: Role[];
   isAuthenticated: boolean;
-  login: (payload: LoginPayload) => Promise<AuthSession>;
+  login: (payload: ExtendedLoginPayload) => Promise<AuthSession>;
   register: (payload: RegisterPayload) => Promise<AuthSession>;
   logout: () => void;
 }
@@ -38,22 +42,23 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const navigate = useNavigate();
   const [session, setSession] = useState<AuthSession | null>(() => authStorage.load());
 
-  const applySession = useCallback((next: AuthSession | null) => {
+  const applySession = useCallback((next: AuthSession | null, options?: { remember?: boolean }) => {
     setSession(next);
-    authStorage.save(next);
+    authStorage.save(next, { remember: options?.remember });
   }, []);
 
   useEffect(() => {
     return authStorage.subscribe(() => {
       applySession(null);
-      navigate(paths.auth.login, { replace: true });
+      navigate({ pathname: paths.home, search: "?auth=login" }, { replace: true });
     });
   }, [applySession, navigate]);
 
   const login = useCallback(
-    async (payload: LoginPayload) => {
-      const nextSession = await loginRequest(payload);
-      applySession(nextSession);
+    async (payload: ExtendedLoginPayload) => {
+      const { remember, ...credentials } = payload;
+      const nextSession = await loginRequest(credentials);
+      applySession(nextSession, { remember });
       return nextSession;
     },
     [applySession],

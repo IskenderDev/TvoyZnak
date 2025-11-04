@@ -1,11 +1,12 @@
 import { useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LuCircleUserRound, LuMenu } from "react-icons/lu";
 
 import Button from "@/shared/components/Button";
 import Container from "@/shared/components/Container";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
+import { useAuthModal } from "@/features/auth/lib/useAuthModal";
 
 import HeaderNav from "./HeaderNav";
 import MobileMenu from "./MobileMenu";
@@ -14,12 +15,18 @@ const MOBILE_MENU_ID = "mobile-navigation-panel";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
+  const { openLogin } = useAuthModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleSellClick = useCallback(() => {
     navigate(paths.sellNumber);
   }, [navigate]);
+
+  const handleLoginClick = useCallback(() => {
+    openLogin({ redirectTo: `${location.pathname}${location.search}${location.hash}` || paths.profile });
+  }, [location.hash, location.pathname, location.search, openLogin]);
 
   const openMenu = () => setIsMobileMenuOpen(true);
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -65,13 +72,14 @@ export default function Header() {
                   <span className="hidden text-sm font-medium md:block">{user.fullName}</span>
                 </Link>
               ) : (
-                <Link
-                  to={paths.auth.login}
+                <button
+                  type="button"
+                  onClick={handleLoginClick}
                   className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
                   <span className="hidden text-sm font-medium md:block">Войти</span>
-                </Link>
+                </button>
               )}
             </div>
           </div>
@@ -83,6 +91,7 @@ export default function Header() {
         onClose={closeMenu}
         onSellClick={handleSellClick}
         user={user}
+        onLoginClick={handleLoginClick}
         menuId={MOBILE_MENU_ID}
       />
     </header>

@@ -16,6 +16,7 @@ type MobileMenuProps = {
   onSellClick: () => void;
   user: AuthUser | null;
   menuId: string;
+  onLoginClick: () => void;
 };
 
 const focusableSelectors = [
@@ -29,7 +30,14 @@ const focusableSelectors = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-export default function MobileMenu({ isOpen, onClose, onSellClick, user, menuId }: MobileMenuProps) {
+export default function MobileMenu({
+  isOpen,
+  onClose,
+  onSellClick,
+  user,
+  menuId,
+  onLoginClick,
+}: MobileMenuProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedElement = useRef<Element | null>(null);
 
@@ -147,21 +155,34 @@ export default function MobileMenu({ isOpen, onClose, onSellClick, user, menuId 
         </div>
 
         <div className="flex flex-col gap-6 overflow-y-auto pb-6">
-          <Link
-            to={user ? paths.profile : paths.auth.login}
-            onClick={onClose}
-            className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
-          >
-            <LuCircleUserRound className="h-7 w-7" />
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">
-                {user ? user.fullName : "Войти"}
-              </span>
-              <span className="text-xs text-white/70">
-                {user ? "Перейти в профиль" : "Авторизация"}
-              </span>
-            </div>
-          </Link>
+          {user ? (
+            <Link
+              to={paths.profile}
+              onClick={onClose}
+              className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
+            >
+              <LuCircleUserRound className="h-7 w-7" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">{user.fullName}</span>
+                <span className="text-xs text-white/70">Перейти в профиль</span>
+              </div>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                onLoginClick();
+                onClose();
+              }}
+              className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
+            >
+              <LuCircleUserRound className="h-7 w-7" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Войти</span>
+                <span className="text-xs text-white/70">Авторизация</span>
+              </div>
+            </button>
+          )}
 
           <Button
             onClick={() => {
