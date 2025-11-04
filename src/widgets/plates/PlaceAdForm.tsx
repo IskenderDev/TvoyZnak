@@ -192,7 +192,7 @@ export default function PlaceAdForm() {
 
         <div className="mt-6 md:mt-8">
           <PlateSelectForm
-            size="lg"
+            size={window.innerWidth < 640 ? 'xs' : 'lg'}
             responsive
             flagSrc="/flag-russia.svg"
             showCaption={false}
