@@ -133,6 +133,7 @@ export default function PlateSelectForm({
 
   const mainFontLetter = isXs ? 48 : 140 * k;
   const mainFontNumber = isXs ? 60 : 180 * k;
+<<<<<<< HEAD
   const mainGap = isXs ? 14 : 20 * k;
   const mainPx = isXs ? 6 : 32 * k;
   const mainPb = isXs ? 0 : 1;
@@ -140,6 +141,15 @@ export default function PlateSelectForm({
   const slotH = isXs ? 72 : mainFontNumber;
   const digitGap = isXs ? 0 : 2 * k;
   const digitGapLetter = isXs ? 1 : 4 * k;
+=======
+  const mainGap = isXs ? 15 : 20 * k;
+  const mainPx = isXs ? 6 : 32 * k;
+  const mainPb = isXs ? 0 : 1;
+  const slotW = isXs ? 22 : 90 * k;
+  const slotH = isXs ? 68 : mainFontNumber;
+  const digitGap = isXs ? 3 : 4 * k;
+  const digitGapLetter = isXs ? 7 : 4 * k;
+>>>>>>> 42428fa3349c5b624b01aed44437c01e09b2b8d5
 
   const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -148,7 +158,11 @@ export default function PlateSelectForm({
   const rusPb = isXs ? 2 : 4 * k;
   const flagH = isXs ? 12 : rusRowH * 0.9;
   const flagBorder = isXs ? 1 : Math.max(1, 2 * k);
+<<<<<<< HEAD
   const regionGap = isXs ? 6 : 6 * k;
+=======
+  const regionGap = isXs ? 10 : 4 * k;
+>>>>>>> 42428fa3349c5b624b01aed44437c01e09b2b8d5
 
   const captionFs = isXs ? 0 : Math.max(10, 24 * k);
   const captionMt = isXs ? 0 : Math.max(4, 8 * k);
@@ -193,8 +207,13 @@ export default function PlateSelectForm({
       const data = await regionsApi.list();
       const sorted = [...data].sort(sortRegions);
       setRegions(sorted);
+      setError((prev) =>
+        prev && prev.startsWith("Не удалось загрузить регионы") ? null : prev,
+      );
     } catch {
-      setRegionsError("Не удалось загрузить регионы");
+      const message = "Не удалось загрузить регионы";
+      setRegionsError(message);
+      setError((prev) => prev ?? `${message}. Повторите попытку.`);
     } finally {
       setRegionsLoading(false);
     }
@@ -451,8 +470,8 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 52 : Math.max(120 * k, 150)}
-                slotH={isXs ? 28 : regionFont * 1.05}
+                slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
+                slotH={isXs ? 22 : regionFont * 1.05}
                 color={glyphColor(regionDisplayValue)}
                 centerText
                 dropdownMaxHeight={240}
@@ -461,20 +480,6 @@ export default function PlateSelectForm({
                 disabled={regionsLoading}
                 searchPlaceholder="Код или название"
               />
-
-              {regionsLoading && (
-                <span className="text-[10px] text-[#0D1A72] uppercase tracking-wide">Загрузка...</span>
-              )}
-
-              {regionsError && (
-                <button
-                  type="button"
-                  onClick={() => void fetchRegions()}
-                  className="text-[10px] text-[#EB5757] underline decoration-dotted decoration-1 underline-offset-2 focus:outline-none focus:ring-2 focus:ring-[#1E63FF] rounded-sm px-1"
-                >
-                  Повторить загрузку регионов
-                </button>
-              )}
 
               <p
                 className="flex items-center justify-center m-0"
@@ -507,6 +512,19 @@ export default function PlateSelectForm({
         <p className="mt-3 text-center text-sm text-[#EB5757] font-semibold" role="alert">
           {error}
         </p>
+      )}
+
+      {regionsError && (
+        <div className="mt-2 text-center text-xs text-[#EB5757]">
+          <span>{regionsError}. </span>
+          <button
+            type="button"
+            onClick={() => void fetchRegions()}
+            className="underline decoration-dotted decoration-1 underline-offset-2 focus:outline-none focus:ring-2 focus:ring-[#1E63FF] rounded-sm px-1"
+          >
+            Повторить загрузку
+          </button>
+        </div>
       )}
     </figure>
   );

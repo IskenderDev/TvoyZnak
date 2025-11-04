@@ -378,10 +378,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         }}
         onKeyDown={onTriggerKeyDown}
         className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 ${
-          disabled ? "cursor-not-allowed opacity-60" : "hover:bg-black/5"
+          disabled ? "cursor-not-allowed opacity-60" : ""
         }`}
         style={{
-          lineHeight: 1,
+          lineHeight: 0.9,
           fontWeight: 700,
           fontSize,
           color: hasValue ? color : "#9AA0A6",
@@ -399,9 +399,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
-            className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)] overflow-hidden"
+            className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
             style={{
-              width: Math.max(48, slotW * 1.1),
+              width: Math.max(40, slotW),
               maxHeight: dropdownMaxHeight,
             }}
           >
@@ -429,7 +429,12 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               onKeyDown={onListboxKeyDown}
               className="outline-none"
             >
-              <ul className="max-h-[200px] overflow-y-auto no-scrollbar">
+              <ul
+                className={`overflow-y-auto no-scrollbar ${
+                  searchable ? "" : "flex flex-col items-center"
+                }`}
+                style={{ maxHeight: dropdownMaxHeight }}
+              >
                 {filteredOptions.length === 0 ? (
                   <li className="px-4 py-3 text-center text-white/80 text-sm">
                     {normalizedOptions.length === 0 ? "Нет доступных значений" : "Ничего не найдено"}
@@ -465,9 +470,19 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           type="button"
                           onMouseEnter={() => setActiveIndex(index)}
                           onClick={() => selectOption(option)}
-                          className={`w-full px-4 py-3 text-left text-white font-semibold transition-colors duration-150 ${
+                          className={`${
+                            searchable
+                              ? "w-full px-4 py-3 text-left text-white font-semibold"
+                              : "w-full grid place-items-center text-white font-bold"
+                          } transition-colors duration-150 ${
                             highlighted ? "bg-[#0177FF]" : ""
                           } ${selected ? "bg-white/20" : ""}`}
+                          style={{
+                            paddingTop: searchable ? undefined : 12,
+                            paddingBottom: searchable ? undefined : 12,
+                            lineHeight: searchable ? undefined : 1,
+                            fontSize: searchable ? undefined : Math.max(14),
+                          }}
                         >
                           {highlightIndex >= 0 ? (
                             <span>
