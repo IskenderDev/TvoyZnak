@@ -12,11 +12,25 @@ const baseURL = ((): string => {
 
 const http = axios.create({
   baseURL,
-  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+});
+
+http.interceptors.request.use((config) => {
+  const session = authStorage.load();
+  const token = session?.token;
+
+  if (token) {
+    if (!config.headers) {
+      config.headers = {};
+    }
+
+    (config.headers as Record<string, string>)["Authorization"] = token;
+  }
+
+  return config;
 });
 
 http.interceptors.response.use(
