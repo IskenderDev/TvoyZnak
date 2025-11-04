@@ -24,7 +24,7 @@ http.interceptors.request.use((config) => {
 
   if (token) {
     if (!config.headers) {
-      config.headers = {};
+      config.headers = new axios.AxiosHeaders();
     }
 
     (config.headers as Record<string, string>)["Authorization"] = token;
