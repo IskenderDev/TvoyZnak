@@ -200,15 +200,6 @@ export default function PlaceAdForm() {
             value={plate}
             onChange={setPlate}
           />
-            <PlateSelectForm
-            size='xs'
-            responsive
-            flagSrc="/flag-russia.svg"
-            showCaption={false}
-            className="mx-auto"
-            value={plate}
-            onChange={setPlate}
-          />
         </div>
 
         <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
