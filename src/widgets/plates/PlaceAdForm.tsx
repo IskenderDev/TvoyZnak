@@ -73,8 +73,8 @@ export default function PlaceAdForm() {
     !form.consent ||
     !form.price.trim() ||
     plate.text.includes("*") ||
-    !plate.region ||
-    plate.region === "*" ||
+    !plate.regionCode.trim() ||
+    plate.regionId == null ||
     (requiresContactInfo && (!form.name.trim() || !form.phone.trim()));
 
   const resetForm = useCallback(() => {
@@ -90,7 +90,7 @@ export default function PlaceAdForm() {
     }
 
     const series = plate.text.replace(/\*/g, "");
-    const regionCode = plate.region.replace(/\*/g, "");
+    const regionCode = plate.regionCode.trim();
     const priceValue = normalizePrice(form.price);
 
     if (!series || series.length !== 6) {
@@ -108,8 +108,8 @@ export default function PlaceAdForm() {
       return;
     }
 
-    const regionId = Number(regionCode);
-    if (!Number.isFinite(regionId) || regionId <= 0) {
+    const regionId = plate.regionId;
+    if (regionId == null || !Number.isFinite(regionId) || regionId <= 0) {
       setToast({ type: "error", msg: "Укажите корректный регион" });
       return;
     }

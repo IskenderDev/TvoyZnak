@@ -1,9 +1,11 @@
 export type PlateSelectValue = {
   text: string;
-  region: string;
+  regionCode: string;
+  regionId: number | null;
 };
 
 export const DEFAULT_PLATE_VALUE: PlateSelectValue = {
   text: "******",
-  region: "*",
+  regionCode: "",
+  regionId: null,
 };
