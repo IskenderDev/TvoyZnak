@@ -1,4 +1,4 @@
-import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { LuX } from "react-icons/lu";
@@ -18,13 +18,8 @@ const focusableSelectors =
 const ANIMATION_MS = 200;
 
 const VIEW_TITLE: Record<AuthModalView, string> = {
-  login: "Вход",
-  register: "Регистрация",
-};
-
-const VIEW_DESCRIPTION: Record<AuthModalView, string> = {
-  login: "Введите данные, чтобы управлять объявлениями и сохранять избранное.",
-  register: "Заполните форму, чтобы открыть доступ к личному кабинету и быстрому оформлению сделок.",
+  login: "ВОЙТИ В СИСТЕМУ",
+  register: "ЗАРЕГИСТРИРОВАТЬСЯ",
 };
 
 export default function AuthModal() {
@@ -157,8 +152,6 @@ export default function AuthModal() {
     }
   }, [renderState]);
 
-  const description = VIEW_DESCRIPTION[view];
-
   if (typeof document === "undefined" || !shouldRender) {
     return null;
   }
@@ -168,7 +161,7 @@ export default function AuthModal() {
   return createPortal(
     <div className="fixed inset-0 z-50 flex min-h-dvh items-center justify-center px-4 py-6 sm:py-10">
       <div
-        className="absolute inset-0 bg-black/70 transition-opacity duration-200 data-[state=open]:opacity-100 data-[state=opening]:opacity-0 data-[state=closing]:opacity-0"
+        className="absolute inset-0 bg-[rgba(0,0,0,0.70)] transition-opacity duration-200 data-[state=open]:opacity-100 data-[state=opening]:opacity-0 data-[state=closing]:opacity-0"
         data-state={stateAttribute}
         onMouseDown={handleOverlayMouseDown}
         onMouseUp={handleOverlayMouseUp}
@@ -183,17 +176,23 @@ export default function AuthModal() {
         aria-describedby="auth-modal-description"
         tabIndex={-1}
         data-state={stateAttribute}
-        className="relative z-10 flex h-full w-full max-w-lg flex-col overflow-hidden rounded-none bg-gradient-to-br from-[#041027] via-[#072046] to-[#0B2F6B] text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-8 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-8 data-[state=closing]:opacity-0 sm:h-auto sm:max-h-[90vh] sm:rounded-3xl"
+        className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-3xl bg-[#0B0B0C] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 sm:px-8 sm:py-8 max-h-[90vh]"
       >
-        <div className="flex items-center justify-between px-6 py-4 sm:px-8 sm:py-6">
-          <div className="flex flex-col gap-1">
-            <h2 id="auth-modal-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {showAuthenticatedMessage ? "Вы уже вошли" : VIEW_TITLE[view]}
+        <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-3">
+            <h2
+              id="auth-modal-title"
+              className="text-[22px] font-extrabold uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
+            >
+              {showAuthenticatedMessage ? "ВЫ УЖЕ В СИСТЕМЕ" : VIEW_TITLE[view]}
             </h2>
-            <p id="auth-modal-description" className="text-sm text-white/70 sm:text-base">
+            <p
+              id="auth-modal-description"
+              className={showAuthenticatedMessage ? "text-sm text-white/60" : "sr-only"}
+            >
               {showAuthenticatedMessage
                 ? `Аккаунт ${user?.fullName ?? ""} уже авторизован.`
-                : description}
+                : "Модальное окно авторизации"}
             </p>
           </div>
           <button
@@ -207,34 +206,15 @@ export default function AuthModal() {
         </div>
 
         {!showAuthenticatedMessage ? (
-          <div className="flex flex-col gap-6 overflow-y-auto px-6 pb-6 sm:px-8 sm:pb-8">
-            <div className="flex items-center justify-center gap-2 rounded-full bg-white/10 p-1 text-sm sm:text-base">
-              <TabButton active={view === "login"} onClick={() => switchTo("login")}>Вход</TabButton>
-              <TabButton active={view === "register"} onClick={() => switchTo("register")}>
-                Регистрация
-              </TabButton>
-            </div>
-
+          <div className="mt-6 flex flex-1 flex-col overflow-y-auto">
             {view === "login" ? (
-              <LoginForm
-                onSuccess={handleSuccess}
-                onSwitchToRegister={() => switchTo("register")}
-                onForgotPassword={() => console.info("Запрос восстановления пароля пока недоступен")}
-              />
+              <LoginForm onSuccess={handleSuccess} onSwitchToRegister={() => switchTo("register")} />
             ) : (
               <RegisterForm onSuccess={handleSuccess} onSwitchToLogin={() => switchTo("login")} />
             )}
-
-            <button
-              type="button"
-              onClick={() => close()}
-              className="inline-flex w-full items-center justify-center rounded-full border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              Продолжить без входа
-            </button>
           </div>
         ) : (
-          <div className="flex flex-1 flex-col gap-5 px-6 pb-8 pt-4 sm:px-8">
+          <div className="mt-6 flex flex-1 flex-col gap-6">
             <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
               Вы уже авторизованы. Если хотите использовать другой аккаунт, выйдите из текущего профиля.
             </p>
@@ -247,14 +227,14 @@ export default function AuthModal() {
                     navigate(paths.profile);
                   }
                 }}
-                className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
+                className="inline-flex h-12 items-center justify-center rounded-[10px] bg-[#1E66FF] px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
               >
                 В профиль
               </button>
               <button
                 type="button"
                 onClick={() => close()}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
+                className="inline-flex h-12 items-center justify-center rounded-[10px] border border-white/20 px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
               >
                 Продолжить просмотр
               </button>
@@ -264,28 +244,5 @@ export default function AuthModal() {
       </div>
     </div>,
     document.body,
-  );
-}
-
-function TabButton({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex-1 rounded-full px-5 py-2 font-medium transition ${
-        active ? "bg-white text-[#072046] shadow" : "text-white/70 hover:text-white"
-      }`}
-      aria-pressed={active}
-    >
-      {children}
-    </button>
   );
 }
