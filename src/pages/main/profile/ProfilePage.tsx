@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LuPlus } from "react-icons/lu";
 
 import Seo from "@/shared/components/Seo";
@@ -9,6 +9,7 @@ import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
 import { formatPrice } from "@/shared/lib/format";
 import ProfileLayoutLikeCatalog, { type ProfileLotRow } from "@/components/profile/ProfileLayoutLikeCatalog";
+import EditNumberModal from "@/components/profile/EditNumberModal";
 
 const formatDate = (value: string): string => {
   if (!value) return "—";
@@ -27,12 +28,13 @@ const LIMIT_STEP = 6;
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(LIMIT_STEP);
+  const [editingLotId, setEditingLotId] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -82,6 +84,21 @@ export default function ProfilePage() {
   );
 
   const canShowMore = visibleCount < myLots.length;
+
+  const editingLot = useMemo(
+    () => (editingLotId ? numbers.find((item) => item.id === editingLotId) ?? null : null),
+    [editingLotId, numbers],
+  );
+
+  const openEditModal = (id: string) => {
+    setEditingLotId(id);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingLotId(null);
+  };
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
@@ -142,7 +159,7 @@ export default function ProfilePage() {
     isDeleting: deletingId === item.id,
     deleteLabel: "Удалить",
     deletingLabel: "Удаляем…",
-    onEdit: () => navigate(`${paths.sellNumber}?edit=${item.id}`),
+    onEdit: () => openEditModal(item.id),
     editLabel: "Изменить номер",
   }));
 
@@ -151,6 +168,14 @@ export default function ProfilePage() {
   return (
     <>
       <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
+      <EditNumberModal
+        open={isEditModalOpen && Boolean(editingLot)}
+        lot={editingLot}
+        onClose={closeEditModal}
+        onUpdated={(updated) => {
+          setNumbers((prev) => prev.map((lot) => (lot.id === updated.id ? updated : lot)));
+        }}
+      />
       <ProfileLayoutLikeCatalog
         pageTitle="Профиль"
         profileCard={{
