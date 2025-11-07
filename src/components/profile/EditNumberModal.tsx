@@ -180,7 +180,7 @@ export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditN
           <button
             type="button"
             onClick={handleClose}
-            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-black transition hover:bg-white/20"
             aria-label="Закрыть окно редактирования"
           >
             <FiX className="h-5 w-5" />
@@ -189,7 +189,7 @@ export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditN
           <div className="max-h-[90vh] overflow-y-auto px-6 pb-8 pt-10 sm:px-10 sm:pb-10 sm:pt-12">
             <div className="mx-auto w-full max-w-[640px]">
               <h2 className="text-center font-actay-wide text-3xl uppercase md:text-4xl">Изменение объявления</h2>
-              <p className="mt-3 text-center text-sm text-neutral-300 md:text-base">
+              <p className="mt-3 text-center text-sm text-black/70 md:text-base">
                 Обновите данные номера и сохраните изменения.
               </p>
 
