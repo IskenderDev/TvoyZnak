@@ -10,7 +10,7 @@ import type { AuthSession } from "@/entities/session/model/auth";
 
 const passwordSchema = z
   .string({ required_error: "Введите пароль" })
-  .min(6, "Минимум 6 символов")
+  .min(3, "Минимум 3 символов")
   .max(64, "Максимум 64 символа");
 
 const optionalNameSchema = z
