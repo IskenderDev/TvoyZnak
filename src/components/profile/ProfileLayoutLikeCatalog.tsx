@@ -1,4 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
+import { LuPencilLine } from "react-icons/lu";
+
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
 
 const GRID_COLS = "140px minmax(260px,1fr) 200px minmax(220px,1fr) 180px";
@@ -18,6 +20,8 @@ export type ProfileLotRow = {
   isDeleting: boolean;
   deleteLabel: string;
   deletingLabel: string;
+  onEdit?: () => void;
+  editLabel?: string;
 };
 
 export type ProfileLayoutLikeCatalogProps = {
@@ -27,7 +31,7 @@ export type ProfileLayoutLikeCatalogProps = {
     title: string;
     description?: string;
     actions?: ReactNode;
-    fields: ProfileInfoField[];
+    fields?: ProfileInfoField[];
   };
   lotsCard: {
     title: string;
@@ -69,9 +73,11 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
     showMoreLabel,
   } = lotsCard;
 
+  const hasFields = Boolean(fields && fields.length);
+
   return (
     <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto w-full px-4 sm:px-6">
         <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">{pageTitle}</h1>
 
         <div className="grid gap-6">
@@ -89,14 +95,16 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
               {actions ? <div className="md:pt-2">{actions}</div> : null}
             </div>
 
-            <dl className="mt-6 grid gap-4 md:grid-cols-2">
-              {fields.map((field) => (
-                <div key={field.label} className="rounded-2xl bg-black/5 px-4 py-3">
-                  <dt className="text-xs uppercase tracking-wide text-black/50">{field.label}</dt>
-                  <dd className="mt-1 text-sm font-medium text-black md:text-base">{field.value}</dd>
-                </div>
-              ))}
-            </dl>
+            {hasFields ? (
+              <dl className="mt-6 grid gap-4 md:grid-cols-2">
+                {fields!.map((field) => (
+                  <div key={field.label} className="rounded-2xl bg-black/5 px-4 py-3">
+                    <dt className="text-xs uppercase tracking-wide text-black/50">{field.label}</dt>
+                    <dd className="mt-1 text-sm font-medium text-black md:text-base">{field.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
           </article>
 
           <article className="overflow-hidden rounded-2xl bg-white text-black shadow-sm">
@@ -142,14 +150,26 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                         <span className="font-actay-druk text-base font-medium text-black">{item.priceLabel}</span>
                         <span className="text-black/80">{item.sellerLabel}</span>
                         <div className="justify-self-end">
-                          <button
-                            type="button"
-                            onClick={item.onDelete}
-                            disabled={item.isDeleting}
-                            className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
-                          >
-                            {item.isDeleting ? item.deletingLabel : item.deleteLabel}
-                          </button>
+                          <div className="flex items-center justify-end gap-2">
+                            {item.onEdit ? (
+                              <button
+                                type="button"
+                                onClick={item.onEdit}
+                                className="flex h-9 w-9 items-center justify-center rounded-full border border-black/20 text-black transition hover:bg-black/5"
+                                aria-label={item.editLabel ?? "Изменить номер"}
+                              >
+                                <LuPencilLine className="h-4 w-4" />
+                              </button>
+                            ) : null}
+                            <button
+                              type="button"
+                              onClick={item.onDelete}
+                              disabled={item.isDeleting}
+                              className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                              {item.isDeleting ? item.deletingLabel : item.deleteLabel}
+                            </button>
+                          </div>
                         </div>
                       </li>
                     ))}
@@ -179,14 +199,26 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                         </div>
                       </dl>
 
-                      <button
-                        type="button"
-                        onClick={item.onDelete}
-                        disabled={item.isDeleting}
-                        className="mt-4 w-full rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {item.isDeleting ? item.deletingLabel : item.deleteLabel}
-                      </button>
+                      <div className="mt-4 flex items-center gap-2">
+                        {item.onEdit ? (
+                          <button
+                            type="button"
+                            onClick={item.onEdit}
+                            className="flex h-10 w-10 items-center justify-center rounded-full border border-black/20 text-black transition hover:bg-black/5"
+                            aria-label={item.editLabel ?? "Изменить номер"}
+                          >
+                            <LuPencilLine className="h-4 w-4" />
+                          </button>
+                        ) : null}
+                        <button
+                          type="button"
+                          onClick={item.onDelete}
+                          disabled={item.isDeleting}
+                          className="flex-1 rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          {item.isDeleting ? item.deletingLabel : item.deleteLabel}
+                        </button>
+                      </div>
                     </li>
                   ))}
                 </ul>

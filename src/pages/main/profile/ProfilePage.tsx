@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuPlus } from "react-icons/lu";
 
 import Seo from "@/shared/components/Seo";
@@ -8,10 +8,7 @@ import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
 import { formatPrice } from "@/shared/lib/format";
-import ProfileLayoutLikeCatalog, {
-  type ProfileInfoField,
-  type ProfileLotRow,
-} from "@/components/profile/ProfileLayoutLikeCatalog";
+import ProfileLayoutLikeCatalog, { type ProfileLotRow } from "@/components/profile/ProfileLayoutLikeCatalog";
 
 const formatDate = (value: string): string => {
   if (!value) return "—";
@@ -30,6 +27,7 @@ const LIMIT_STEP = 6;
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +102,7 @@ export default function ProfilePage() {
       <>
         <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
         <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto w-full px-4 sm:px-6">
             <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">Профиль</h1>
             <div className="mx-auto max-w-xl rounded-2xl bg-white px-10 py-12 text-center text-black shadow-sm">
               <h2 className="text-2xl font-actay-wide uppercase md:text-3xl">Требуется авторизация</h2>
@@ -123,13 +121,6 @@ export default function ProfilePage() {
       </>
     );
   }
-
-  const profileFields: ProfileInfoField[] = [
-    { label: "Имя", value: user.fullName || "—" },
-    { label: "Email", value: user.email ?? "—" },
-    { label: "Телефон", value: user.phoneNumber ?? "—" },
-    { label: "Роль", value: formatRole(user.roles) },
-  ];
 
   const lotRows: ProfileLotRow[] = visibleLots.map((item) => ({
     id: item.id,
@@ -151,6 +142,8 @@ export default function ProfilePage() {
     isDeleting: deletingId === item.id,
     deleteLabel: "Удалить",
     deletingLabel: "Удаляем…",
+    onEdit: () => navigate(`${paths.sellNumber}?edit=${item.id}`),
+    editLabel: "Изменить номер",
   }));
 
   const showMoreHandler = canShowMore ? () => setVisibleCount((prev) => prev + LIMIT_STEP) : undefined;
@@ -163,7 +156,6 @@ export default function ProfilePage() {
         profileCard={{
           eyebrow: "Личный кабинет",
           title: user.fullName,
-          description: "Здесь отображаются ваши данные и список добавленных номеров.",
           actions: (
             <button
               type="button"
@@ -173,7 +165,6 @@ export default function ProfilePage() {
               Выйти
             </button>
           ),
-          fields: profileFields,
         }}
         lotsCard={{
           title: "Мои номера",
@@ -199,22 +190,6 @@ export default function ProfilePage() {
     </>
   );
 }
-
-const formatRole = (roles?: string[] | string) => {
-  const normalize = (value: string | undefined) => {
-    if (!value) return "—";
-    if (value === "admin") return "Администратор";
-    if (value === "user") return "Пользователь";
-    return value;
-  };
-
-  if (Array.isArray(roles)) {
-    if (roles.length === 0) return "—";
-    return roles.map((role) => normalize(role)).join(", ");
-  }
-
-  return normalize(roles);
-};
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === "string" && error.trim()) return error;
