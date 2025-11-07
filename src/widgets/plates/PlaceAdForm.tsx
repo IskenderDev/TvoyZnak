@@ -267,8 +267,8 @@ export default function PlaceAdForm() {
             />
           </div>
 
-          <p className="text-[12px] text-[#FF6B6B]">
-            * При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
+          <p className="text-[12px] text-[#0177FF]">
+            <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
           <UiSelect
@@ -294,14 +294,15 @@ export default function PlaceAdForm() {
             <input
               id="consent"
               type="checkbox"
-              className="mt-1 h-4 w-4 rounded border border-white/30 bg-white/10 focus:ring-2 focus:ring-[#1E63FF]"
+              className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
               checked={form.consent}
               onChange={handleInputChange}
               name="consent"
               required
             />
-            <label htmlFor="consent" className="text-[13px] leading-[1.4]">
-              Я согласен на обработку персональных данных *
+            <label htmlFor="consent" className="text-[13px] text-[#1E66FF]">
+               Я согласен на обработку персональных данных{" "}
+              <span className="text-red-700">*</span>
             </label>
           </div>
 

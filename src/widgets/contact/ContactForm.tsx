@@ -161,7 +161,7 @@ export default function ContactForm() {
           onChange={handleChange}
           className="accent-[#0177FF] w-4 h-4 "
         />
-        Я согласен на обработку персональных данных<span className="text-[#EB5757]">*</span>
+        <p>Я согласен на обработку персональных данных<span className="text-[#EB5757] m-2">*</span></p>
       </label>
 
       <button

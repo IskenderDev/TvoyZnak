@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-import Button from "@/shared/components/Button";
-import { useAuth } from "@/shared/lib/hooks/useAuth";
-import type { AuthSession } from "@/entities/session/model/auth";
+import Button from "@/shared/components/Button"
+import { useAuth } from "@/shared/lib/hooks/useAuth"
+import type { AuthSession } from "@/entities/session/model/auth"
+import { useNavigate } from 'react-router-dom'
 
 const loginSchema = z.object({
   email: z
@@ -21,18 +22,18 @@ const loginSchema = z.object({
     .boolean()
     .default(false)
     .refine((value) => value, "Необходимо согласие"),
-});
+})
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>
 
 interface LoginFormProps {
-  onSuccess: (session: AuthSession) => void;
-  onSwitchToRegister: () => void;
+  onSuccess: (session: AuthSession) => void
+  onSwitchToRegister: () => void
 }
 
 export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
-  const { login } = useAuth();
-  const [serverError, setServerError] = useState<string | null>(null);
+  const { login } = useAuth()
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const {
     register,
@@ -49,24 +50,29 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
     },
     mode: "onChange",
     reValidateMode: "onChange",
-  });
+  })
+
+
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (values) => {
-    setServerError(null);
+    setServerError(null)
 
     try {
       const session = await login({
         email: values.email.trim(),
         password: values.password,
         remember: values.remember,
-      });
-      onSuccess(session);
+      })
+
+      onSuccess(session)
+      navigate("/profile") // ✅ переход на страницу профиля
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Не удалось войти";
-      setServerError(message);
-      setFocus("password");
+      const message = error instanceof Error ? error.message : "Не удалось войти"
+      setServerError(message)
+      setFocus("password")
     }
-  });
+  })
 
   return (
     <form onSubmit={onSubmit} className="flex flex-1 flex-col gap-6" noValidate>
@@ -108,26 +114,15 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
 
       <div className="flex flex-col gap-3 text-[13px] text-slate-300">
         <div>
-          <label className="flex items-start gap-3">
-            <input type="checkbox" className="peer sr-only" {...register("consent")} />
-            <span className="mt-0.5 flex h-4 w-4 items-center justify-center rounded-[4px] border border-[#94A3B8] bg-transparent transition peer-checked:border-[#1E66FF] peer-checked:bg-[#1E66FF]">
-              <svg
-                className="h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M13.5 4.5L6.5 11.5L3 8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register("consent")}
+              className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200 "
+            />
             <span className="leading-snug">
-              Я согласен на обработку персональных данных *
+              Я согласен на обработку персональных данных{" "}
+              <span className="text-red-700">*</span>
             </span>
           </label>
           {errors.consent ? (
@@ -137,27 +132,17 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
           ) : null}
         </div>
 
-        <label className="flex items-start gap-3">
-          <input type="checkbox" className="peer sr-only" {...register("remember")} />
-          <span className="mt-0.5 flex h-4 w-4 items-center justify-center rounded-[4px] border border-[#94A3B8] bg-transparent transition peer-checked:border-[#1E66FF] peer-checked:bg-[#1E66FF]">
-            <svg
-              className="h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100"
-              viewBox="0 0 16 16"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M13.5 4.5L6.5 11.5L3 8"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            {...register("remember")}
+            className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
+          />
           <span className="leading-snug">Запомнить меня</span>
         </label>
       </div>
+
+
 
       {serverError ? (
         <p className="rounded-[12px] border border-[#EF4444]/40 bg-[#EF4444]/10 px-4 py-3 text-sm text-[#FCA5A5]" role="alert">
@@ -193,5 +178,5 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
         </button>
       </div>
     </form>
-  );
+  )
 }

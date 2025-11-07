@@ -176,13 +176,13 @@ export default function AuthModal() {
         aria-describedby="auth-modal-description"
         tabIndex={-1}
         data-state={stateAttribute}
-        className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-3xl bg-[#0B0B0C] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 sm:px-8 sm:py-8 max-h-[90vh]"
+        className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-3xl bg-[#1B1B1B] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 sm:px-8 sm:py-8 max-h-[90vh]"
       >
         <div className="flex items-start justify-between">
           <div className="flex flex-col gap-3">
             <h2
               id="auth-modal-title"
-              className="text-[22px] font-extrabold uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
+              className="text-[36px] font-extrabold font-actay-wide uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
             >
               {showAuthenticatedMessage ? "ВЫ УЖЕ В СИСТЕМЕ" : VIEW_TITLE[view]}
             </h2>
