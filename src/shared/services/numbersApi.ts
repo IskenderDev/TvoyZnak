@@ -14,6 +14,7 @@ export interface NumbersApi {
   create(payload: CreateNumberLotPayload): Promise<NumberItem>;
   createAndRegister(payload: CreateAndRegisterPayload): Promise<NumberItem>;
   createAuthorized(payload: CreateAuthorizedNumberLotPayload): Promise<NumberItem>;
+  updateAuthorized(id: string, payload: UpdateAuthorizedNumberLotPayload): Promise<NumberItem>;
   delete(id: string): Promise<void>;
 }
 
@@ -45,6 +46,18 @@ export interface CreateAndRegisterPayload {
 }
 
 export interface CreateAuthorizedNumberLotPayload {
+  price: number;
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string | number;
+  secondDigit: string | number;
+  thirdDigit: string | number;
+  comment?: string;
+  regionId: string | number;
+}
+
+export interface UpdateAuthorizedNumberLotPayload {
   price: number;
   firstLetter: string;
   secondLetter: string;
@@ -179,6 +192,26 @@ const numbersApi: NumbersApi = {
     const lot = extractSingle(response.data);
     if (!lot) {
       throw new Error("Неверный ответ сервера при создании объявления");
+    }
+    return toNumberItem(lot);
+  },
+
+  async updateAuthorized(id, payload) {
+    const response = await http.put(`/api/car-number-lots/${id}`, {
+      price: payload.price,
+      firstLetter: payload.firstLetter,
+      secondLetter: payload.secondLetter,
+      thirdLetter: payload.thirdLetter,
+      firstDigit: payload.firstDigit,
+      secondDigit: payload.secondDigit,
+      thirdDigit: payload.thirdDigit,
+      comment: payload.comment,
+      regionId: payload.regionId,
+    });
+
+    const lot = extractSingle(response.data);
+    if (!lot) {
+      throw new Error("Неверный ответ сервера при обновлении объявления");
     }
     return toNumberItem(lot);
   },

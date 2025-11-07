@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { LuPlus, LuTrash2 } from "react-icons/lu";
+import { LuPlus } from "react-icons/lu";
 
 import Seo from "@/shared/components/Seo";
-import Button from "@/shared/components/Button";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
 import { formatPrice } from "@/shared/lib/format";
-import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
+import ProfileLayoutLikeCatalog, { type ProfileLotRow } from "@/components/profile/ProfileLayoutLikeCatalog";
+import EditNumberModal from "@/components/profile/EditNumberModal";
 
 const formatDate = (value: string): string => {
   if (!value) return "—";
@@ -33,6 +33,8 @@ export default function ProfilePage() {
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(LIMIT_STEP);
+  const [editingLotId, setEditingLotId] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -83,6 +85,21 @@ export default function ProfilePage() {
 
   const canShowMore = visibleCount < myLots.length;
 
+  const editingLot = useMemo(
+    () => (editingLotId ? numbers.find((item) => item.id === editingLotId) ?? null : null),
+    [editingLotId, numbers],
+  );
+
+  const openEditModal = (id: string) => {
+    setEditingLotId(id);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingLotId(null);
+  };
+
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     setError(null);
@@ -99,166 +116,105 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <section className="py-16 text-white">
+      <>
         <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
-        <div className="mx-auto max-w-xl rounded-3xl border border-white/10 bg-[#0F1624] px-10 py-12 text-center">
-          <h1 className="text-3xl font-actay-wide uppercase">Профиль</h1>
-          <p className="mt-3 text-sm text-white/70">
-            Авторизуйтесь, чтобы увидеть свои данные и управлять объявлениями.
-          </p>
-          <Link
-            to={paths.auth.login}
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
-          >
-            Войти
-          </Link>
-        </div>
-      </section>
+        <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
+          <div className="mx-auto w-full px-4 sm:px-6">
+            <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">Профиль</h1>
+            <div className="mx-auto max-w-xl rounded-2xl bg-white px-10 py-12 text-center text-black shadow-sm">
+              <h2 className="text-2xl font-actay-wide uppercase md:text-3xl">Требуется авторизация</h2>
+              <p className="mt-3 text-sm text-black/70 md:text-base">
+                Авторизуйтесь, чтобы увидеть свои данные и управлять объявлениями.
+              </p>
+              <Link
+                to={paths.auth.login}
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-[#0177FF] px-6 py-3 text-sm font-medium uppercase tracking-wide text-white transition hover:brightness-95"
+              >
+                Войти
+              </Link>
+            </div>
+          </div>
+        </section>
+      </>
     );
   }
 
+  const lotRows: ProfileLotRow[] = visibleLots.map((item) => ({
+    id: item.id,
+    dateLabel: item.date ? formatDate(item.date) : "—",
+    plate: {
+      price: item.price,
+      firstLetter: item.plate.firstLetter,
+      secondLetter: item.plate.secondLetter,
+      thirdLetter: item.plate.thirdLetter,
+      firstDigit: item.plate.firstDigit,
+      secondDigit: item.plate.secondDigit,
+      thirdDigit: item.plate.thirdDigit,
+      comment: item.plate.comment ?? item.description ?? "",
+      regionId: Number(item.plate.regionId ?? item.region ?? 0) || 0,
+    },
+    priceLabel: formatPrice(item.price),
+    sellerLabel: user.fullName || "—",
+    onDelete: () => handleDelete(item.id),
+    isDeleting: deletingId === item.id,
+    deleteLabel: "Удалить",
+    deletingLabel: "Удаляем…",
+    onEdit: () => openEditModal(item.id),
+    editLabel: "Изменить номер",
+  }));
+
+  const showMoreHandler = canShowMore ? () => setVisibleCount((prev) => prev + LIMIT_STEP) : undefined;
+
   return (
-    <section className="py-12 text-white">
+    <>
       <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
-      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4">
-        <div className="rounded-3xl border border-white/10 bg-[#0F1624] p-6 sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/50">Личный кабинет</p>
-              <h1 className="mt-2 text-3xl font-actay-wide uppercase">{user.fullName}</h1>
-              <p className="mt-3 text-sm text-white/60">
-                Здесь отображаются ваши данные и список добавленных номеров.
-              </p>
-            </div>
-            <Button
+      <EditNumberModal
+        open={isEditModalOpen && Boolean(editingLot)}
+        lot={editingLot}
+        onClose={closeEditModal}
+        onUpdated={(updated) => {
+          setNumbers((prev) => prev.map((lot) => (lot.id === updated.id ? updated : lot)));
+        }}
+      />
+      <ProfileLayoutLikeCatalog
+        pageTitle="Профиль"
+        profileCard={{
+          eyebrow: "Личный кабинет",
+          title: user.fullName,
+          actions: (
+            <button
+              type="button"
               onClick={logout}
-              className="self-start rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-full border border-black/20 px-5 py-2 text-sm font-medium uppercase tracking-wide text-black transition hover:bg-black/5"
             >
               Выйти
-            </Button>
-          </div>
-          <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-            <ProfileField label="Имя" value={user.fullName} />
-            <ProfileField label="Email" value={user.email ?? "—"} />
-            <ProfileField label="Телефон" value={user.phoneNumber ?? "—"} />
-            <ProfileField label="Роль" value={formatRole(user.roles)} />
-          </dl>
-        </div>
-
-        <div className="rounded-3xl border border-white/10 bg-[#0F1624]">
-          <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-2xl font-actay-wide uppercase">Мои номера</h2>
-              <p className="mt-1 text-sm text-white/60">Добавляйте, просматривайте и удаляйте объявления.</p>
-            </div>
+            </button>
+          ),
+        }}
+        lotsCard={{
+          title: "Мои номера",
+          subtitle: "Добавляйте, просматривайте и удаляйте объявления.",
+          headerActions: (
             <Link
               to={paths.sellNumber}
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium uppercase tracking-wide text-white transition hover:brightness-95"
             >
               <LuPlus className="h-4 w-4" /> Добавить номер
             </Link>
-          </div>
-
-          {error ? <p className="px-6 py-4 text-sm text-red-200">{error}</p> : null}
-          {loading ? <p className="px-6 py-6 text-sm text-white/70">Загружаем список номеров…</p> : null}
-          {!loading && visibleLots.length === 0 ? (
-            <p className="px-6 py-6 text-sm text-white/70">У вас пока нет добавленных номеров.</p>
-          ) : null}
-
-          {visibleLots.length > 0 ? (
-            <div className="flex flex-col gap-3 px-4 py-6">
-              <div className="hidden text-xs uppercase tracking-wide text-white/40 md:grid md:grid-cols-[120px_minmax(0,1fr)_160px_180px_auto] md:px-2">
-                <span>Дата</span>
-                <span>Номер</span>
-                <span>Цена</span>
-                <span>Продавец</span>
-                <span className="text-right">Действия</span>
-              </div>
-
-              {visibleLots.map((item) => (
-                <article
-                  key={item.id}
-                  className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/80 md:grid-cols-[120px_minmax(0,1fr)_160px_180px_auto] md:items-center"
-                >
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs uppercase text-white/40 md:hidden">Дата</span>
-                    <span>{item.date ? formatDate(item.date) : "—"}</span>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <span className="text-xs uppercase text-white/40 md:hidden">Номер</span>
-                    <PlateStaticSm
-                      data={{
-                        price: item.price,
-                        firstLetter: item.plate.firstLetter,
-                        secondLetter: item.plate.secondLetter,
-                        thirdLetter: item.plate.thirdLetter,
-                        firstDigit: item.plate.firstDigit,
-                        secondDigit: item.plate.secondDigit,
-                        thirdDigit: item.plate.thirdDigit,
-                        comment: item.plate.comment ?? item.description ?? "",
-                        regionId: Number(item.plate.regionId ?? item.region ?? 0) || 0,
-                      }}
-                      showCaption={false}
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs uppercase text-white/40 md:hidden">Цена</span>
-                    <span>{formatPrice(item.price)}</span>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs uppercase text-white/40 md:hidden">Продавец</span>
-                    <span>{user.fullName || "—"}</span>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Button
-                      onClick={() => handleDelete(item.id)}
-                      disabled={deletingId === item.id}
-                      className="flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-red-100 transition hover:bg-red-500/20 disabled:opacity-60"
-                    >
-                      <LuTrash2 className="h-4 w-4" />
-                      {deletingId === item.id ? "Удаляем…" : "Удалить"}
-                    </Button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : null}
-
-          {canShowMore ? (
-            <div className="border-t border-white/10 px-6 py-5 text-center">
-              <Button
-                onClick={() => setVisibleCount((prev) => prev + LIMIT_STEP)}
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-2 text-xs font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
-              >
-                Показать еще
-              </Button>
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </section>
+          ),
+          items: lotRows,
+          loading,
+          loadingLabel: "Загружаем список номеров…",
+          error,
+          emptyLabel: "У вас пока нет добавленных номеров.",
+          canShowMore,
+          onShowMore: showMoreHandler,
+          showMoreLabel: "Показать ещё",
+        }}
+      />
+    </>
   );
 }
-
-const formatRole = (roles?: string[] | string) => {
-  const normalize = (value: string | undefined) => {
-    if (!value) return "—";
-    if (value === "admin") return "Администратор";
-    if (value === "user") return "Пользователь";
-    return value;
-  };
-
-  if (Array.isArray(roles)) {
-    if (roles.length === 0) return "—";
-    return roles.map((role) => normalize(role)).join(", ");
-  }
-
-  return normalize(roles);
-};
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === "string" && error.trim()) return error;
@@ -280,12 +236,3 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
 
   return fallback;
 };
-
-function ProfileField({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-      <dt className="text-xs uppercase tracking-wide text-white/40">{label}</dt>
-      <dd className="mt-1 text-sm font-medium text-white">{value || "—"}</dd>
-    </div>
-  );
-}
