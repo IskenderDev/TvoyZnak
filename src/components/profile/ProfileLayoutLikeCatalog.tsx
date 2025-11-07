@@ -159,6 +159,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                                 aria-label={item.editLabel ?? "Изменить номер"}
                               >
                                 <LuPencilLine className="h-4 w-4" />
+                                
                               </button>
                             ) : null}
                             <button

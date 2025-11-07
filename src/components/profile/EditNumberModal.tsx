@@ -12,7 +12,7 @@ import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
 
 const INPUT_BASE =
-  "bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]";
+  "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border";
 
 type ToastState = { type: "success" | "error"; msg: string } | null;
 
@@ -176,7 +176,7 @@ export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditN
     <>
       {toast ? <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} /> : null}
       <Modal open={open && Boolean(lot)} onClose={handleClose}>
-        <div className="relative max-h-[90vh] overflow-hidden rounded-[32px] bg-[#0B0B0C] text-white shadow-2xl">
+        <div className="relative max-h-[90vh] overflow-hidden rounded-[32px] bg-[#fff] text-black shadow-2xl">
           <button
             type="button"
             onClick={handleClose}
