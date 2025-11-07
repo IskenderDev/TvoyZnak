@@ -17,6 +17,7 @@ import NotFoundPage from "@/pages/main/not-found/NotFoundPage";
 import ProfilePage from "@/pages/main/profile/ProfilePage";
 
 import AdminLayout from "@/pages/admin/AdminLayout";
+import AdminLotsPage from "@/pages/admin/AdminLotsPage";
 import AdminNumbersListPage from "@/pages/admin/numbers/AdminNumbersListPage";
 import AdminNumberNewPage from "@/pages/admin/numbers/AdminNumberNewPage";
 import AdminNumberEditPage from "@/pages/admin/numbers/AdminNumberEditPage";
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
       { path: paths.auth.login, element: <LoginPage /> },
       { path: paths.auth.register, element: <RegisterPage /> },
 
-      { path: paths.admin.root, element: <Navigate to={paths.admin.numbers} replace /> },
+      { path: paths.admin.root, element: <Navigate to={paths.admin.lots} replace /> },
 
       {
         path: paths.admin.root,
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
           {
             element: <RequireRole role="admin" />,
             children: [
+              { path: paths.admin.lots, element: <AdminLotsPage /> },
               { path: paths.admin.numbers, element: <AdminNumbersListPage /> },
               { path: paths.admin.numbersNew, element: <AdminNumberNewPage /> },
               { path: paths.admin.numbersEdit(), element: <AdminNumberEditPage /> },
