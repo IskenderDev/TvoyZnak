@@ -122,7 +122,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
             {loading ? <p className="mx-6 mt-4 text-neutral-500">{loadingLabel ?? "Загрузка..."}</p> : null}
 
             {!loading && !items.length && !error ? (
-              <p className="mx-6 mt-6 rounded-xl bg-[#1E1E1E] px-6 py-10 text-center text-neutral-300">{emptyLabel}</p>
+              <p className="mx-6 mt-6 rounded-xl bg-white px-6 py-10 text-center text-black">{emptyLabel}</p>
             ) : null}
 
             {items.length ? (

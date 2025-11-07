@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-import Button from "@/shared/components/Button";
-import { useAuth } from "@/shared/lib/hooks/useAuth";
-import type { AuthSession } from "@/entities/session/model/auth";
+import Button from "@/shared/components/Button"
+import { useAuth } from "@/shared/lib/hooks/useAuth"
+import type { AuthSession } from "@/entities/session/model/auth"
+import { useNavigate } from 'react-router-dom'
 
 const loginSchema = z.object({
   email: z
@@ -16,161 +16,167 @@ const loginSchema = z.object({
     .email("Введите корректный e-mail"),
   password: z
     .string({ required_error: "Введите пароль" })
-    .min(3, "Минимум 3 символов"),
-  remember: z.boolean().default(true),
-});
+    .min(6, "Минимум 6 символов"),
+  remember: z.boolean().default(false),
+  consent: z
+    .boolean()
+    .default(false)
+    .refine((value) => value, "Необходимо согласие"),
+})
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>
 
 interface LoginFormProps {
-  onSuccess: (session: AuthSession) => void;
-  onSwitchToRegister: () => void;
-  onForgotPassword?: () => void;
+  onSuccess: (session: AuthSession) => void
+  onSwitchToRegister: () => void
 }
 
-export default function LoginForm({
-  onSuccess,
-  onSwitchToRegister,
-  onForgotPassword,
-}: LoginFormProps) {
-  const { login } = useAuth();
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
+export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormProps) {
+  const { login } = useAuth()
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
     setFocus,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      remember: true,
+      email: "",
+      password: "",
+      remember: false,
+      consent: false,
     },
-    mode: "onBlur",
-  });
+    mode: "onChange",
+    reValidateMode: "onChange",
+  })
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+
+  const navigate = useNavigate()
 
   const onSubmit = handleSubmit(async (values) => {
-    setServerError(null);
+    setServerError(null)
 
     try {
       const session = await login({
         email: values.email.trim(),
         password: values.password,
         remember: values.remember,
-      });
-      onSuccess(session);
+      })
+
+      onSuccess(session)
+      navigate("/profile") // ✅ переход на страницу профиля
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Не удалось войти";
-      setServerError(message);
-      setFocus("password");
+      const message = error instanceof Error ? error.message : "Не удалось войти"
+      setServerError(message)
+      setFocus("password")
     }
-  });
+  })
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
-      <div className="flex flex-col gap-2">
-        <label htmlFor="login-email" className="text-sm font-medium text-white/80">
-          E-mail
-        </label>
-        <input
-          id="login-email"
-          type="email"
-          autoComplete="email"
-          className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-          placeholder="example@mail.ru"
-          {...register("email")}
-        />
-        {errors.email ? (
-          <p className="text-xs text-rose-300" role="alert">
-            {errors.email.message}
-          </p>
-        ) : null}
-      </div>
+    <form onSubmit={onSubmit} className="flex flex-1 flex-col gap-6" noValidate>
+      <div className="flex flex-col gap-4">
+        <div>
+          <input
+            id="login-email"
+            type="email"
+            autoComplete="email"
+            placeholder="Почта *"
+            aria-invalid={errors.email ? "true" : "false"}
+            className="h-11 w-full rounded-[10px] border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            {...register("email")}
+          />
+          {errors.email ? (
+            <p className="mt-1 text-xs text-[#EF4444]" role="alert">
+              {errors.email.message}
+            </p>
+          ) : null}
+        </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="login-password" className="text-sm font-medium text-white/80">
-          Пароль
-        </label>
-        <div className="relative">
+        <div>
           <input
             id="login-password"
-            type={showPassword ? "text" : "password"}
+            type="password"
             autoComplete="current-password"
-            className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 pr-12 text-sm text-white placeholder:text-white/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
-            placeholder="Введите пароль"
+            placeholder="Пароль *"
+            aria-invalid={errors.password ? "true" : "false"}
+            className="h-11 w-full rounded-[10px] border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
             {...register("password")}
           />
-          <button
-            type="button"
-            onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-3 flex items-center text-white/60 transition hover:text-white"
-            aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
-            aria-pressed={showPassword}
-          >
-            {showPassword ? <LuEyeOff className="h-5 w-5" /> : <LuEye className="h-5 w-5" />}
-          </button>
+          {errors.password ? (
+            <p className="mt-1 text-xs text-[#EF4444]" role="alert">
+              {errors.password.message}
+            </p>
+          ) : null}
         </div>
-        {errors.password ? (
-          <p className="text-xs text-rose-300" role="alert">
-            {errors.password.message}
-          </p>
-        ) : null}
       </div>
 
-      <div className="flex flex-col gap-3 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between">
-        <label className="inline-flex items-center gap-3">
+      <div className="flex flex-col gap-3 text-[13px] text-slate-300">
+        <div>
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register("consent")}
+              className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200 "
+            />
+            <span className="leading-snug">
+              Я согласен на обработку персональных данных{" "}
+              <span className="text-red-700">*</span>
+            </span>
+          </label>
+          {errors.consent ? (
+            <p className="mt-1 text-xs text-[#EF4444]" role="alert">
+              {errors.consent.message}
+            </p>
+          ) : null}
+        </div>
+
+        <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-white/20 bg-white/10 text-primary focus:ring-primary/60"
             {...register("remember")}
+            className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
           />
-          <span>Запомнить меня</span>
+          <span className="leading-snug">Запомнить меня</span>
         </label>
-        <button
-          type="button"
-          onClick={onForgotPassword}
-          className="self-start text-primary underline-offset-4 transition hover:underline"
-        >
-          Забыли пароль?
-        </button>
       </div>
 
+
+
       {serverError ? (
-        <p className="rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200" role="alert">
+        <p className="rounded-[12px] border border-[#EF4444]/40 bg-[#EF4444]/10 px-4 py-3 text-sm text-[#FCA5A5]" role="alert">
           {serverError}
         </p>
       ) : null}
 
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="inline-flex h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold uppercase tracking-wide text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {isSubmitting ? (
-          <span className="flex items-center gap-2">
-            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />
-            Входим…
-          </span>
-        ) : (
-          "Войти"
-        )}
-      </Button>
+      <div className="mt-auto flex flex-col gap-3">
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isValid}
+          className="h-12 w-full rounded-[10px] bg-[#1E66FF] text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? (
+            <span className="flex items-center justify-center gap-2">
+              <span
+                className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                aria-hidden="true"
+              />
+              Подождите…
+            </span>
+          ) : (
+            "Войти"
+          )}
+        </Button>
 
-      <p className="text-center text-sm text-white/70">
-        Нет аккаунта?{" "}
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="text-primary underline-offset-4 transition hover:underline"
+          className="h-12 w-full rounded-[10px] bg-[#3B3B3B] text-sm font-semibold text-[#E5E7EB] transition hover:bg-[#4B4B4B]"
         >
-          Зарегистрируйтесь
+          Зарегистрироваться
         </button>
-      </p>
+      </div>
     </form>
-  );
+  )
 }

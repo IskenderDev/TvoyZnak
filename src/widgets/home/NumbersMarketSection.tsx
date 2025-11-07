@@ -54,7 +54,7 @@ export default function NumbersMarketSection() {
           onReset={resetFilters}
         />
         {!loading && !visibleRows.length && !error ? (
-          <p className="rounded-xl bg-[#1E1E1E] px-6 py-10 text-center text-neutral-300">
+          <p className="rounded-xl md:-mt-10 bg-white px-6 py-10 pt-20 text-center text-black">
             Номера не найдены. Измените фильтры.
           </p>
         ) : (
