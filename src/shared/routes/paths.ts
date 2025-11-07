@@ -18,6 +18,7 @@ export const paths = {
     numbers: "/admin/numbers",
     numbersNew: "/admin/numbers/new",
     numbersEdit: (id = ":id") => `/admin/numbers/${id}/edit`,
+    lots: "/admin/lots",
     news: "/admin/news",
     newsNew: "/admin/news/new",
     newsEdit: (id = ":id") => `/admin/news/${id}/edit`

@@ -11,6 +11,9 @@ export default function AdminLayout() {
         <div className="sticky top-4 p-4 rounded-md bg-neutral-900 border border-neutral-800">
           <PageTitle>Админка</PageTitle>
           <nav className="flex flex-col gap-2">
+            <NavLink to={paths.admin.lots} className={link}>
+              Лоты номеров
+            </NavLink>
             <NavLink to={paths.admin.numbers} className={link}>Номера</NavLink>
             <NavLink to={paths.admin.news} className={link}>Новости</NavLink>
           </nav>
