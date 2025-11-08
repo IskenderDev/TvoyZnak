@@ -15,9 +15,6 @@ export const paths = {
   },
   admin: {
     root: "/admin",
-    numbers: "/admin/numbers",
-    numbersNew: "/admin/numbers/new",
-    numbersEdit: (id = ":id") => `/admin/numbers/${id}/edit`,
     lots: "/admin/lots",
     news: "/admin/news",
     newsNew: "/admin/news/new",
