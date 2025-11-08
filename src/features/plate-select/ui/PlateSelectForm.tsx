@@ -131,15 +131,15 @@ export default function PlateSelectForm({
   const radius = isXs ? 10 : Math.max(6, 14 * k);
   const outerPadY = isXs ? 4 : 6 * k;
 
-  const mainFontLetter = isXs ? 48 : 140 * k;
-  const mainFontNumber = isXs ? 60 : 180 * k;
+  const mainFontLetter = isXs ? 40 : 140 * k;
+  const mainFontNumber = isXs ? 55 : 180 * k;
   const mainGap = isXs ? 15 : 20 * k;
   const mainPx = isXs ? 6 : 32 * k;
-  const mainPb = isXs ? 0 : 1;
+  const mainPb = isXs ? 5 : 1;
   const slotW = isXs ? 22 : 90 * k;
   const slotH = isXs ? 68 : mainFontNumber;
-  const digitGap = isXs ? 3 : 4 * k;
-  const digitGapLetter = isXs ? 7 : 4 * k;
+  const digitGap = isXs ? 10 : 4 * k;
+  const digitGapLetter = isXs ? 4 : 4 * k;
 
   const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -457,7 +457,7 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 38 : Math.max(110 * k, 130 * 1.35)}
+                slotW={isXs ? 90 : Math.max(110 * k, 130 * 1.35)}
                 slotH={isXs ? 22 : regionFont * 1.05}
                 color={glyphColor(regionDisplayValue)}
                 centerText
