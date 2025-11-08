@@ -10,35 +10,78 @@ import {
 } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
+import type { AdminLot } from "@/api/adminLots";
 
 const INPUT_BASE =
   "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border";
 
 type ToastState = { type: "success" | "error"; msg: string } | null;
 
-type EditNumberModalProps = {
-  open: boolean;
-  lot: NumberItem | null;
-  onClose: () => void;
-  onUpdated: (lot: NumberItem) => void;
+export type EditNumberModalSubmitPayload = {
+  price: number;
+  firstLetter: string;
+  secondLetter: string;
+  thirdLetter: string;
+  firstDigit: string;
+  secondDigit: string;
+  thirdDigit: string;
+  comment?: string;
+  regionId: number;
 };
 
-const toPlateValue = (lot: NumberItem | null): PlateSelectValue => {
+type EditNumberModalLot = NumberItem | AdminLot;
+
+type EditNumberModalSubmitHandler<TLot extends EditNumberModalLot> = (
+  lot: TLot,
+  payload: EditNumberModalSubmitPayload,
+) => Promise<TLot>;
+
+type EditNumberModalProps<TLot extends EditNumberModalLot> = {
+  open: boolean;
+  lot: TLot | null;
+  onClose: () => void;
+  onUpdated: (lot: TLot) => void;
+  onSubmit?: (lot: TLot, payload: EditNumberModalSubmitPayload) => Promise<TLot>;
+};
+
+const isNumberItem = (lot: EditNumberModalLot): lot is NumberItem => {
+  return (lot as NumberItem).plate !== undefined;
+};
+
+const toPlateValue = (lot: EditNumberModalLot | null): PlateSelectValue => {
   if (!lot) return { ...DEFAULT_PLATE_VALUE };
-  const { plate, region } = lot;
+
+  if (isNumberItem(lot)) {
+    const { plate, region } = lot;
+    const text = [
+      plate.firstLetter || "*",
+      plate.firstDigit || "*",
+      plate.secondDigit || "*",
+      plate.thirdDigit || "*",
+      plate.secondLetter || "*",
+      plate.thirdLetter || "*",
+    ].join("");
+
+    return {
+      text,
+      regionCode: region || "",
+      regionId: plate.regionId ?? null,
+    };
+  }
+
   const text = [
-    plate.firstLetter || "*",
-    plate.firstDigit || "*",
-    plate.secondDigit || "*",
-    plate.thirdDigit || "*",
-    plate.secondLetter || "*",
-    plate.thirdLetter || "*",
+    lot.firstLetter || "*",
+    lot.firstDigit || "*",
+    lot.secondDigit || "*",
+    lot.thirdDigit || "*",
+    lot.secondLetter || "*",
+    lot.thirdLetter || "*",
   ].join("");
 
   return {
     text,
-    regionCode: region || "",
-    regionId: plate.regionId ?? null,
+    regionCode: lot.regionCode || "",
+    regionId: lot.regionId ?? null,
   };
 };
 
@@ -62,18 +105,28 @@ const normalizePrice = (value: string): number => {
   return Number.isFinite(parsed) ? parsed : NaN;
 };
 
-const getInitialPrice = (lot: NumberItem | null) => {
+const getInitialPrice = (lot: EditNumberModalLot | null) => {
   if (!lot) return "";
-  if (!Number.isFinite(lot.price) || lot.price <= 0) return "";
-  return String(lot.price);
+  const value = isNumberItem(lot) ? lot.price : lot.markupPrice;
+  if (!Number.isFinite(value) || value <= 0) return "";
+  return String(value);
 };
 
-const getInitialComment = (lot: NumberItem | null) => {
+const getInitialComment = (lot: EditNumberModalLot | null) => {
   if (!lot) return "";
-  return lot.plate.comment ?? lot.description ?? "";
+  if (isNumberItem(lot)) {
+    return lot.plate.comment ?? lot.description ?? "";
+  }
+  return lot.comment ?? "";
 };
 
-export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditNumberModalProps) {
+export default function EditNumberModal<TLot extends EditNumberModalLot>({
+  open,
+  lot,
+  onClose,
+  onUpdated,
+  onSubmit,
+}: EditNumberModalProps<TLot>) {
   const [plate, setPlate] = useState<PlateSelectValue>(() => toPlateValue(lot));
   const [price, setPrice] = useState<string>(() => getInitialPrice(lot));
   const [comment, setComment] = useState<string>(() => getInitialComment(lot));
@@ -149,7 +202,7 @@ export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditN
     setError(null);
 
     try {
-      const updated = await numbersApi.updateAuthorized(lot.id, {
+      const payload: EditNumberModalSubmitPayload = {
         price: priceValue,
         firstLetter: parts.firstLetter,
         firstDigit: parts.firstDigit,
@@ -158,8 +211,12 @@ export default function EditNumberModal({ open, lot, onClose, onUpdated }: EditN
         secondLetter: parts.secondLetter,
         thirdLetter: parts.thirdLetter,
         comment: comment.trim() ? comment.trim() : undefined,
-        regionId: plate.regionId ?? plate.regionCode,
-      });
+        regionId: Number(plate.regionId ?? plate.regionCode),
+      };
+      const submit: EditNumberModalSubmitHandler<TLot> = onSubmit
+        ? onSubmit
+        : ((defaultSubmit as unknown) as EditNumberModalSubmitHandler<TLot>);
+      const updated = await submit(lot, payload);
       onUpdated(updated);
       setToast({ type: "success", msg: "Изменения сохранены" });
       onClose();
@@ -272,4 +329,21 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
   }
 
   return fallback;
+};
+
+const defaultSubmit: EditNumberModalSubmitHandler<NumberItem> = async (
+  lot,
+  payload,
+) => {
+  return numbersApi.updateAuthorized(lot.id, {
+    price: payload.price,
+    firstLetter: payload.firstLetter,
+    firstDigit: payload.firstDigit,
+    secondDigit: payload.secondDigit,
+    thirdDigit: payload.thirdDigit,
+    secondLetter: payload.secondLetter,
+    thirdLetter: payload.thirdLetter,
+    comment: payload.comment,
+    regionId: payload.regionId,
+  });
 };
