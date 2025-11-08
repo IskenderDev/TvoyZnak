@@ -25,6 +25,7 @@ import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
 import AdminNewsNewPage from "@/pages/admin/news/AdminNewsNewPage";
 import AdminNewsEditPage from "@/pages/admin/news/AdminNewsEditPage";
 import SellNumberPage from "@/pages/main/sellNumber/SellNumber";
+import AdminPostsPage from "@/features/posts/AdminPostsPage";
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +63,8 @@ export const router = createBrowserRouter([
               { path: paths.admin.numbersEdit(), element: <AdminNumberEditPage /> },
               { path: paths.admin.news, element: <AdminNewsListPage /> },
               { path: paths.admin.newsNew, element: <AdminNewsNewPage /> },
-              { path: paths.admin.newsEdit(), element: <AdminNewsEditPage /> }
+              { path: paths.admin.newsEdit(), element: <AdminNewsEditPage /> },
+              { path: paths.admin.posts, element: <AdminPostsPage /> }
             ]
           }
         ]

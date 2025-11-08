@@ -18,7 +18,8 @@ const matchesTextQuery = (query: PlateSelectValue, row: NumberItem) => {
 }
 
 const matchesRegion = (query: PlateSelectValue, row: NumberItem) => {
-  const normalizedRegion = query.region && query.region !== "*" ? query.region : ""
+  const normalizedRegion =
+    query.regionCode && query.regionCode !== "*" ? query.regionCode : ""
   if (!normalizedRegion) return true
   return String(row.plate.regionId) === normalizedRegion || row.region === normalizedRegion
 }

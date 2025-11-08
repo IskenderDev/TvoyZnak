@@ -2,18 +2,22 @@ import axios from "axios";
 
 import { authStorage } from "@/features/auth/lib/authStorage";
 
-const baseURL = ((): string => {
-  const url = import.meta?.env?.VITE_API_BASE_URL;
-  if (typeof url === "string" && url.trim()) {
-    return url;
+const baseURL = (() => {
+  const env = import.meta?.env ?? {};
+  const candidate =
+    (env.VITE_API_URL as string | undefined) ??
+    (env.VITE_API_BASE_URL as string | undefined);
+
+  if (typeof candidate === "string" && candidate.trim()) {
+    return candidate;
   }
+
   return "http://localhost:8081/";
 })();
 
 const http = axios.create({
   baseURL,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
   },
 });
@@ -40,9 +44,44 @@ http.interceptors.response.use(
       authStorage.clear();
       authStorage.emitLogout();
     }
-    return Promise.reject(error);
+
+    const normalized = new Error(
+      extractErrorMessage(error, "Неизвестная ошибка запроса"),
+    );
+    return Promise.reject(normalized);
   },
 );
+
+const extractErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  if (error && typeof error === "object") {
+    const axiosError = error as {
+      message?: unknown;
+      response?: { data?: { message?: unknown; error?: unknown } };
+    };
+
+    const responseMessage = axiosError.response?.data?.message;
+    const responseError = axiosError.response?.data?.error;
+    const message = axiosError.message;
+
+    if (typeof responseMessage === "string" && responseMessage.trim()) {
+      return responseMessage;
+    }
+
+    if (typeof responseError === "string" && responseError.trim()) {
+      return responseError;
+    }
+
+    if (typeof message === "string" && message.trim()) {
+      return message;
+    }
+  }
+
+  return fallback;
+};
 
 export { baseURL as API_BASE_URL };
 export default http;

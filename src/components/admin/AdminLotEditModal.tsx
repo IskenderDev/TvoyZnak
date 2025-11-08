@@ -154,10 +154,11 @@ export default function AdminLotEditModal({
     const loadRegions = async () => {
       setRegionsLoading(true);
       setRegionsError(null);
+      let currentPromise: Promise<Region[]> | null = null;
       try {
-        const promise = regionsPromise ?? regionsApi.list();
-        regionsPromise = promise;
-        const data = await promise;
+        currentPromise = regionsPromise ?? regionsApi.list();
+        regionsPromise = currentPromise;
+        const data = await currentPromise;
         if (!active) {
           return;
         }
@@ -169,7 +170,7 @@ export default function AdminLotEditModal({
         }
         setRegionsError(extractErrorMessage(error, "Не удалось загрузить регионы"));
       } finally {
-        if (regionsPromise === promise) {
+        if (regionsPromise === currentPromise) {
           regionsPromise = null;
         }
         if (active) {
