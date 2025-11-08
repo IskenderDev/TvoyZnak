@@ -20,6 +20,10 @@ export default function Header() {
   const { openLogin } = useAuthModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const userRoles = user?.roles?.length ? user.roles : user?.role ? [user.role] : [];
+  const isAdmin = userRoles.includes("admin");
+  const userDestination = isAdmin ? paths.admin.lots : paths.profile;
+
   const handleSellClick = useCallback(() => {
     navigate(paths.sellNumber);
   }, [navigate]);
@@ -64,9 +68,9 @@ export default function Header() {
               </Button>
               {user ? (
                 <Link
-                  to={paths.profile}
+                  to={userDestination}
                   className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
-                  aria-label="Открыть профиль"
+                  aria-label={isAdmin ? "Открыть админку" : "Открыть профиль"}
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
                   <span className="hidden text-sm font-medium md:block">{user.fullName}</span>

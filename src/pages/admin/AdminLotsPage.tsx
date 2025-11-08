@@ -7,7 +7,8 @@ import ConfirmDialog from "@/components/common/ConfirmDialog";
 import type { AdminLot } from "@/api/adminLots";
 import type { UpdateAdminLotPayload } from "@/api/adminLots";
 import Seo from "@/shared/components/Seo";
-import PageTitle from "@/shared/components/PageTitle";
+import Button from "@/shared/ui/Button";
+import Input from "@/shared/ui/Input";
 import { useAdminLots, type AdminLotSortKey, type AdminLotStatusFilter } from "@/hooks/useAdminLots";
 
 const STATUS_OPTIONS: { value: AdminLotStatusFilter; label: string }[] = [
@@ -87,37 +88,39 @@ export default function AdminLotsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 py-2">
       <Seo title="Админка — Лоты" description="Управление лотами номеров" />
-      <PageTitle>Админка: лоты номеров</PageTitle>
 
-      <section className="rounded-3xl border border-white/10 bg-neutral-950 px-4 py-5 text-white shadow-2xl sm:px-6">
-        <header className="flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex-1">
-            <label className="relative block">
-              <span className="absolute inset-y-0 left-3 flex items-center text-neutral-500">
-                <FiSearch className="h-4 w-4" />
-              </span>
-              <input
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold text-slate-900">Лоты номеров</h1>
+        <p className="text-sm text-slate-600">
+          Управляйте поступающими заявками: подтверждайте, редактируйте и удаляйте лоты номеров.
+        </p>
+      </header>
+
+      <section className="flex flex-col gap-6 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="w-full md:max-w-sm">
+            <div className="relative">
+              <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Input
                 type="search"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Поиск по номеру, ФИО, телефону или региону"
-                className="w-full rounded-2xl border border-white/10 bg-neutral-900 py-2 pl-10 pr-4 text-sm text-white placeholder:text-neutral-500 focus:border-emerald-500 focus:outline-none"
+                className="pl-11"
+                aria-label="Поиск по лотам"
               />
-            </label>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            <div className="flex items-center gap-2">
-              <label htmlFor="admin-lots-page-size" className="text-xs uppercase tracking-wide text-neutral-400">
-                На странице
-              </label>
+          <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            <ControlGroup label="На странице" htmlFor="admin-lots-page-size">
               <select
                 id="admin-lots-page-size"
                 value={pageSize}
                 onChange={(event) => setPageSize(Number(event.target.value))}
-                className="rounded-xl border border-white/10 bg-neutral-900 px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                className="h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               >
                 {pageSizeOptions.map((size) => (
                   <option key={size} value={size}>
@@ -125,17 +128,14 @@ export default function AdminLotsPage() {
                   </option>
                 ))}
               </select>
-            </div>
+            </ControlGroup>
 
-            <div className="flex items-center gap-2">
-              <label htmlFor="admin-lots-sort" className="text-xs uppercase tracking-wide text-neutral-400">
-                Сортировка
-              </label>
+            <ControlGroup label="Сортировка" htmlFor="admin-lots-sort">
               <select
                 id="admin-lots-sort"
                 value={sortBy}
                 onChange={(event) => setSortBy(event.target.value as AdminLotSortKey)}
-                className="rounded-xl border border-white/10 bg-neutral-900 px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                className="h-11 rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-700 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               >
                 {SORT_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -143,26 +143,30 @@ export default function AdminLotsPage() {
                   </option>
                 ))}
               </select>
-              <button
+              <Button
                 type="button"
+                variant="secondary"
+                size="sm"
                 onClick={toggleSortDirection}
-                className="rounded-xl border border-white/10 bg-neutral-900 px-3 py-1.5 text-sm font-medium uppercase tracking-wide text-neutral-200 transition hover:bg-white/10"
               >
-                {sortDir === "asc" ? "▲" : "▼"}
-              </button>
-            </div>
+                {sortDir === "asc" ? "По возрастанию" : "По убыванию"}
+              </Button>
+            </ControlGroup>
 
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={resetFilters}
-              className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-neutral-900 px-3 py-1.5 text-sm font-medium text-neutral-200 transition hover:bg-white/10"
+              className="md:self-end"
             >
-              <FiRefreshCw className="h-4 w-4" /> Сбросить
-            </button>
+              <FiRefreshCw className="h-4 w-4" />
+              Сбросить
+            </Button>
           </div>
-        </header>
+        </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {STATUS_OPTIONS.map((option) => (
             <FilterPill
               key={option.value}
@@ -174,28 +178,26 @@ export default function AdminLotsPage() {
           ))}
         </div>
 
-        <div className="mt-6">
-          <AdminLotsTable
-            lots={paginatedLots}
-            loading={loading}
-            error={error}
-            totalItems={totalItems}
-            page={page}
-            pageSize={pageSize}
-            totalPages={totalPages}
-            sortBy={sortBy}
-            sortDir={sortDir}
-            confirmingIds={confirmingIds}
-            deletingIds={deletingIds}
-            updatingIds={updatingIds}
-            onConfirm={handleConfirm}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onPageChange={setPage}
-            onSortChange={setSortBy}
-            onToggleSortDir={toggleSortDirection}
-          />
-        </div>
+        <AdminLotsTable
+          lots={paginatedLots}
+          loading={loading}
+          error={error}
+          totalItems={totalItems}
+          page={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          sortBy={sortBy}
+          sortDir={sortDir}
+          confirmingIds={confirmingIds}
+          deletingIds={deletingIds}
+          updatingIds={updatingIds}
+          onConfirm={handleConfirm}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onPageChange={setPage}
+          onSortChange={setSortBy}
+          onToggleSortDir={toggleSortDirection}
+        />
       </section>
 
       <AdminLotEditModal
@@ -235,13 +237,30 @@ function FilterPill({ active, children, onClick }: FilterPillProps) {
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-4 py-1.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+      className={`rounded-full px-4 py-1.5 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40 ${
         active
-          ? "bg-emerald-500 text-black shadow-lg"
-          : "border border-white/10 bg-neutral-900 text-neutral-200 hover:bg-white/10"
+          ? "bg-blue-100 text-blue-700 shadow-sm"
+          : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-100"
       }`}
     >
       {children}
     </button>
+  );
+}
+
+type ControlGroupProps = {
+  label: string;
+  htmlFor?: string;
+  children: ReactNode;
+};
+
+function ControlGroup({ label, htmlFor, children }: ControlGroupProps) {
+  return (
+    <div className="flex flex-col gap-2 text-sm font-medium text-slate-600">
+      <label htmlFor={htmlFor} className="uppercase tracking-wide text-xs text-slate-500">
+        {label}
+      </label>
+      <div className="flex items-center gap-3">{children}</div>
+    </div>
   );
 }

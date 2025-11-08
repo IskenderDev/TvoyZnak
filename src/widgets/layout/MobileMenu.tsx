@@ -41,6 +41,10 @@ export default function MobileMenu({
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedElement = useRef<Element | null>(null);
 
+  const userRoles = user?.roles?.length ? user.roles : user?.role ? [user.role] : [];
+  const isAdmin = userRoles.includes("admin");
+  const profileDestination = isAdmin ? paths.admin.lots : paths.profile;
+
   useLockBodyScroll(isOpen);
 
   useEffect(() => {
@@ -157,14 +161,14 @@ export default function MobileMenu({
         <div className="flex flex-col gap-6 overflow-y-auto pb-6">
           {user ? (
             <Link
-              to={paths.profile}
+              to={profileDestination}
               onClick={onClose}
               className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
             >
               <LuCircleUserRound className="h-7 w-7" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{user.fullName}</span>
-                <span className="text-xs text-white/70">Перейти в профиль</span>
+                <span className="text-xs text-white/70">{isAdmin ? "Перейти в админку" : "Перейти в профиль"}</span>
               </div>
             </Link>
           ) : (
