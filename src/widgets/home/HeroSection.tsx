@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 
 export default function HeroSection() {
   const tags = ["Юридическая гарантия", "Быстрый выкуп", "Уникальные комбинации"];
@@ -34,7 +35,7 @@ export default function HeroSection() {
             type="button"
             className="mt-6 rounded-full bg-[#0177FF] px-6 py-3 font-medium text-white transition-colors duration-300 hover:brightness-110"
           >
-            Запросить список
+            <Link to="/contacts">Запросить список</Link>
           </button>
         </div>
 

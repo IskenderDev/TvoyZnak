@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function ServicesSection() {
   return (
     <section aria-labelledby="services-title">
@@ -73,7 +75,7 @@ export default function ServicesSection() {
                        focus:outline-none focus:ring-2 focus:ring-white/50
 "
           >
-            Узнать больше
+            <Link to="/contacts">Узнать больше</Link>
           </button>
         </div>
       </div>

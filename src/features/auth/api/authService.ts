@@ -138,8 +138,6 @@ const toAuthUser = (
   };
 };
 
-// --- Админы (белый список) ---
-// Можно прокидывать из .env: VITE_ADMIN_EMAILS="admin@admin.admin,you@domain.tld"
 const ADMIN_EMAILS = new Set<string>(
   (import.meta?.env?.VITE_ADMIN_EMAILS ?? "admin@admin.admin")
     .split(",")
