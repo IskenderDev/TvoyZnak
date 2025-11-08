@@ -1,4 +1,3 @@
-// shared/components/plate/MobilePlateCard.tsx
 import { Link } from "react-router-dom";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
 import { formatRegionCode } from "@/shared/lib/plate";
@@ -35,7 +34,6 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
 
   return (
     <li className={`rounded-2xl bg-white p-3 text-black shadow-sm ${className}`}>
-      {/* верх: номер + дата */}
       <div className="flex items-start justify-between gap-3">
         {detailsHref ? (
           <Link

@@ -99,7 +99,6 @@ export default function PlateStaticLg({
           style={{ border: `${borderW}px solid #000`, borderRadius: radius }}
         >
           <div className="flex w-full bg-black rounded-xl font-road">
-            {/* Левая зона */}
             <div
               className="flex items-end justify-center bg-white font-bold lowercase"
               style={{
@@ -169,7 +168,6 @@ export default function PlateStaticLg({
             </div>
           </div>
 
-          {/* подпись (масштабируемая) */}
           {showCaption && (
             <div
               className="w-full text-white text-center uppercase font-actay-druk italic font-extrabold"

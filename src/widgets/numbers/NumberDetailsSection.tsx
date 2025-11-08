@@ -120,7 +120,6 @@ export default function NumberDetailsSection() {
             </h1>
           </div>
 
-          {/* Plate + Buy */}
           <div className="mt-6">
             <div className="flex items-center">
               <PlateStaticLg

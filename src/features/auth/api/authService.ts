@@ -3,8 +3,6 @@ import { isAxiosError } from "axios";
 import http from "@/shared/api/http";
 import { authStorage } from "@/features/auth/lib/authStorage";
 import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
-
-/** ===== Payloads ===== */
 export interface LoginPayload {
   email: string;
   password: string;
@@ -17,7 +15,6 @@ export interface RegisterPayload {
   password: string;
 }
 
-/** ===== Roles & user helpers ===== */
 const KNOWN_ROLE_MAP: Record<string, Role> = {
   admin: "admin",
   user: "user",
@@ -151,9 +148,6 @@ const inferAdminByEmail = (email?: unknown): Role[] => {
   return ADMIN_EMAILS.has(v) ? ["admin"] : ["user"];
 };
 
-
-
-/** ===== Errors ===== */
 const toApiError = (error: unknown, fallback: string): Error => {
   if (isAxiosError(error)) {
     const data = error.response?.data;
@@ -214,11 +208,6 @@ const createBasicToken = (email: string, password: string): string => {
 };
 
 
-/** ===== Public API (без /auth/me) =====
- * Бэк НЕ возвращает токен, /auth/me нет.
- * Берём пользователя прямо из ответа /api/auth/login и собираем Basic-token для следующих запросов.
- * Cookies не используются: авторизация живёт целиком в заголовке Authorization.
- */
 export async function login(payload: LoginPayload): Promise<AuthSession> {
   try {
     const response = await http.post("/api/auth/login", {
@@ -266,12 +255,10 @@ export async function register(payload: RegisterPayload): Promise<AuthSession> {
   }
 }
 
-/** Гидратация после F5 — только из localStorage (т.к. /auth/me отсутствует) */
 export async function refreshSession(): Promise<AuthSession | null> {
   return authStorage.load();
 }
 
-/** Выход: если есть /api/auth/logout — дергаем, иначе просто чистим фронт */
 export async function logout(): Promise<void> {
   authStorage.clear();
 }

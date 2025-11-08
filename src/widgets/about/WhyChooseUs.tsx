@@ -1,5 +1,3 @@
-// components/WhyChooseUs.tsx
-
 export default function WhyChooseUs() {
 	const cardBase =
 		"rounded-xl border border-[#D2D2D2] bg-[#FFFFFF1A] backdrop-blur-[2px] " +
