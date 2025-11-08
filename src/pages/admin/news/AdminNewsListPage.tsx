@@ -291,8 +291,8 @@ export default function AdminNewsListPage() {
     <div className="space-y-8">
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-semibold text-slate-900">Новости</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-3xl font-extrabold font-actay-wide text-white">Новости</h1>
+          <p className="text-lg text-white/90">
             Управляйте новостями: создавайте, редактируйте и удаляйте публикации.
           </p>
         </div>
