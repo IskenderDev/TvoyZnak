@@ -15,13 +15,24 @@ export type PostViewDrawerProps = {
   onEdit: (post: Post) => void;
 };
 
-const formatter = new Intl.DateTimeFormat("ru-RU", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-});
+const formatDateTime = (value?: string | null) => {
+  if (!value) {
+    return "—";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+};
 
 export default function PostViewDrawer({
   open,
@@ -38,15 +49,15 @@ export default function PostViewDrawer({
 
   const currentPost = data ?? post ?? null;
 
-  const createdAt = useMemo(() => {
-    if (!currentPost) return "";
-    return formatter.format(new Date(currentPost.createdAt));
-  }, [currentPost]);
+  const createdAt = useMemo(
+    () => formatDateTime(currentPost?.createdAt),
+    [currentPost?.createdAt],
+  );
 
-  const updatedAt = useMemo(() => {
-    if (!currentPost) return "";
-    return formatter.format(new Date(currentPost.updatedAt));
-  }, [currentPost]);
+  const updatedAt = useMemo(
+    () => formatDateTime(currentPost?.updatedAt),
+    [currentPost?.updatedAt],
+  );
 
   return (
     <Modal open={open} onClose={onClose}>

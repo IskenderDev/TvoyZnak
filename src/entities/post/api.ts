@@ -21,13 +21,27 @@ const resolveImageUrl = (value?: string | null): string | undefined => {
   }
 };
 
+const normalizeDate = (value?: string | null): string | null => {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    console.warn("Received invalid date value", value);
+    return null;
+  }
+
+  return date.toISOString();
+};
+
 const mapPost = (dto: PostDTO): Post => ({
   id: dto.id,
   title: dto.title,
   description: dto.description,
   imageUrl: resolveImageUrl(dto.imageUrl ?? dto.image ?? undefined),
-  createdAt: dto.createdAt,
-  updatedAt: dto.updatedAt,
+  createdAt: normalizeDate(dto.createdAt),
+  updatedAt: normalizeDate(dto.updatedAt),
 });
 
 const normalizePaginated = (payload: {
@@ -49,6 +63,15 @@ const normalizePaginated = (payload: {
   };
 };
 
+const getTimestamp = (value?: string | null): number => {
+  if (!value) {
+    return 0;
+  }
+
+  const timestamp = Date.parse(value);
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+};
+
 const applyClientPagination = (
   posts: PostDTO[],
   params: PostsListParams,
@@ -63,9 +86,7 @@ const applyClientPagination = (
 
   const sorted = [...filtered].sort((a, b) => {
     const direction = params.sort === "createdAt.asc" ? 1 : -1;
-    return (
-      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    ) * direction;
+    return (getTimestamp(a.createdAt) - getTimestamp(b.createdAt)) * direction;
   });
 
   const page = params.page ?? 1;

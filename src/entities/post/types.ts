@@ -4,8 +4,8 @@ export type PostDTO = {
   description: string;
   imageUrl?: string | null;
   image?: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 };
 
 export type Post = {
@@ -13,8 +13,8 @@ export type Post = {
   title: string;
   description: string;
   imageUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | null;
+  updatedAt: string | null;
 };
 
 export type Paginated<T> = {
