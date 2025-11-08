@@ -1,4 +1,9 @@
-import { type PropsWithChildren } from "react";
+import {
+  type HTMLAttributes,
+  type PropsWithChildren,
+  type TdHTMLAttributes,
+  type ThHTMLAttributes,
+} from "react";
 import { twMerge } from "tailwind-merge";
 
 type TableRootProps = PropsWithChildren<{
@@ -13,38 +18,41 @@ const TableRoot = ({ className, children }: TableRootProps) => (
   </div>
 );
 
-const TableHead = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
+const TableHead = ({ children, className, ...props }: PropsWithChildren<HTMLAttributes<HTMLTableSectionElement>>) => (
   <thead
     className={twMerge(
       "bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500",
       className,
     )}
+    {...props}
   >
     <tr>{children}</tr>
   </thead>
 );
 
-const TableHeaderCell = ({
-  children,
-  className,
-}: PropsWithChildren<{ className?: string }>) => (
-  <th scope="col" className={twMerge("px-6 py-4", className)}>
+const TableHeaderCell = ({ children, className, ...props }: PropsWithChildren<ThHTMLAttributes<HTMLTableCellElement>>) => (
+  <th scope="col" className={twMerge("px-6 py-4", className)} {...props}>
     {children}
   </th>
 );
 
-const TableBody = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
-  <tbody className={twMerge("divide-y divide-slate-100 text-sm text-slate-700", className)}>
+const TableBody = ({ children, className, ...props }: PropsWithChildren<HTMLAttributes<HTMLTableSectionElement>>) => (
+  <tbody
+    className={twMerge("divide-y divide-slate-100 text-sm text-slate-700", className)}
+    {...props}
+  >
     {children}
   </tbody>
 );
 
-const TableRow = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
-  <tr className={twMerge("bg-white transition hover:bg-slate-50", className)}>{children}</tr>
+const TableRow = ({ children, className, ...props }: PropsWithChildren<HTMLAttributes<HTMLTableRowElement>>) => (
+  <tr className={twMerge("bg-white transition hover:bg-slate-50", className)} {...props}>
+    {children}
+  </tr>
 );
 
-const TableCell = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
-  <td className={twMerge("px-6 py-4 align-top text-sm text-slate-700", className)}>
+const TableCell = ({ children, className, ...props }: PropsWithChildren<TdHTMLAttributes<HTMLTableCellElement>>) => (
+  <td className={twMerge("px-6 py-4 align-top text-sm text-slate-700", className)} {...props}>
     {children}
   </td>
 );

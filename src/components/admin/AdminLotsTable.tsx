@@ -1,8 +1,14 @@
 import type { ComponentType } from "react";
-import type { AdminLot } from "@/api/adminLots";
-import type { AdminLotSortKey, SortDirection } from "@/hooks/useAdminLots";
 import { FiCheck, FiEdit2, FiLoader, FiTrash2 } from "react-icons/fi";
 import { LuChevronDown } from "react-icons/lu";
+import { twMerge } from "tailwind-merge";
+
+import type { AdminLot } from "@/api/adminLots";
+import type { AdminLotSortKey, SortDirection } from "@/hooks/useAdminLots";
+import Button from "@/shared/ui/Button";
+import IconButton from "@/shared/ui/IconButton";
+import Spinner from "@/shared/ui/Spinner";
+import Table from "@/shared/ui/Table";
 
 const currency = new Intl.NumberFormat("ru-RU", {
   style: "currency",
@@ -59,177 +65,193 @@ export default function AdminLotsTable({
   onSortChange,
   onToggleSortDir,
 }: AdminLotsTableProps) {
-  const renderSortIcon = (key: AdminLotSortKey) => (
-    <button
-      type="button"
-      onClick={() => (sortBy === key ? onToggleSortDir() : onSortChange(key))}
-      className="flex items-center gap-1 text-left text-sm font-medium text-neutral-100 hover:text-white"
-    >
-      <span>{SORT_LABELS[key]}</span>
-      <LuChevronDown
-        className={`h-4 w-4 transition ${sortBy === key ? (sortDir === "desc" ? "rotate-180" : "") : "opacity-40"}`}
-      />
-    </button>
+  const renderSortableHeader = (key: AdminLotSortKey) => {
+    const isActive = sortBy === key;
+    const directionClass = isActive && sortDir === "asc" ? "rotate-180" : "";
+
+    return (
+      <button
+        type="button"
+        onClick={() => (isActive ? onToggleSortDir() : onSortChange(key))}
+        className={twMerge(
+          "inline-flex items-center gap-1 text-left text-xs font-semibold uppercase tracking-wide transition",
+          isActive ? "text-blue-600" : "text-slate-500 hover:text-blue-500",
+        )}
+      >
+        <span>{SORT_LABELS[key]}</span>
+        <LuChevronDown className={twMerge("h-4 w-4 transition", isActive ? directionClass : "opacity-50")} />
+      </button>
+    );
+  };
+
+  const renderStatusRow = (message: string, withSpinner = false) => (
+    <Table.Row>
+      <Table.Cell colSpan={10} className="px-6 py-10 text-center">
+        <div className="flex items-center justify-center gap-3 text-sm text-slate-500">
+          {withSpinner ? <Spinner size="sm" /> : null}
+          <span>{message}</span>
+        </div>
+      </Table.Cell>
+    </Table.Row>
   );
 
+  const shownCount = Math.min(totalItems, (page - 1) * pageSize + lots.length);
+
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 text-white shadow-2xl">
-      <div className="hidden md:block">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-neutral-900/80 text-xs uppercase tracking-wide text-neutral-300">
-            <tr>
-              <th className="px-4 py-3 text-left font-semibold">Номер</th>
-              <th className="px-4 py-3 text-left font-semibold">Регион</th>
-              <th className="px-4 py-3 text-left font-semibold">{renderSortIcon("originalPrice")}</th>
-              <th className="px-4 py-3 text-left font-semibold">{renderSortIcon("markupPrice")}</th>
-              <th className="px-4 py-3 text-left font-semibold">Продавец</th>
-              <th className="px-4 py-3 text-left font-semibold">Телефон</th>
-              <th className="px-4 py-3 text-left font-semibold">{renderSortIcon("createdDate")}</th>
-              <th className="px-4 py-3 text-left font-semibold">Статус</th>
-              <th className="px-4 py-3 text-left font-semibold">Комментарий</th>
-              <th className="px-4 py-3 text-right font-semibold">Действия</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {loading ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-6 text-center text-neutral-400">
-                  Загрузка лотов...
-                </td>
-              </tr>
-            ) : error ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-6 text-center text-red-400">
-                  {error}
-                </td>
-              </tr>
-            ) : lots.length === 0 ? (
-              <tr>
-                <td colSpan={10} className="px-4 py-6 text-center text-neutral-400">
-                  Лоты не найдены.
-                </td>
-              </tr>
-            ) : (
-              lots.map((lot) => {
-                const isConfirming = confirmingIds.has(lot.id);
-                const isDeleting = deletingIds.has(lot.id);
-                const isUpdating = updatingIds.has(lot.id);
-                return (
-                  <tr key={lot.id} className="hover:bg-white/5">
-                    <td className="px-4 py-3 font-semibold">{lot.fullCarNumber}</td>
-                    <td className="px-4 py-3 text-neutral-300">{lot.regionCode}</td>
-                    <td className="px-4 py-3 text-neutral-100">{currency.format(lot.originalPrice)}</td>
-                    <td className="px-4 py-3 text-neutral-100">{currency.format(lot.markupPrice)}</td>
-                    <td className="px-4 py-3 text-neutral-100">{lot.fullName || lot.author?.fullName || "—"}</td>
-                    <td className="px-4 py-3 text-neutral-300">{lot.phoneNumber || lot.author?.phoneNumber || "—"}</td>
-                    <td className="px-4 py-3 text-neutral-300">{formatDate(lot.createdDate)}</td>
-                    <td className="px-4 py-3">
-                      <StatusBadge confirmed={lot.isConfirm} />
-                    </td>
-                    <td className="px-4 py-3 text-neutral-300">{lot.comment || "—"}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-2">
-                        <RowActionButton
-                          icon={FiCheck}
-                          label={lot.isConfirm ? "Лот подтверждён" : "Подтвердить лот"}
-                          onClick={() => onConfirm(lot)}
-                          disabled={lot.isConfirm || isConfirming || isDeleting}
-                          loading={isConfirming}
-                          tone="success"
-                        />
-                        <RowActionButton
-                          icon={FiEdit2}
-                          label="Редактировать"
-                          onClick={() => onEdit(lot)}
-                          disabled={isDeleting}
-                          loading={isUpdating}
-                        />
-                        <RowActionButton
-                          icon={FiTrash2}
-                          label="Удалить"
-                          onClick={() => onDelete(lot)}
-                          disabled={isDeleting}
-                          loading={isDeleting}
-                          tone="danger"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+    <div className="space-y-4">
+      <Table>
+        <Table.Head>
+          <Table.HeaderCell>Номер</Table.HeaderCell>
+          <Table.HeaderCell>Регион</Table.HeaderCell>
+          <Table.HeaderCell>{renderSortableHeader("originalPrice")}</Table.HeaderCell>
+          <Table.HeaderCell>{renderSortableHeader("markupPrice")}</Table.HeaderCell>
+          <Table.HeaderCell>Продавец</Table.HeaderCell>
+          <Table.HeaderCell>Телефон</Table.HeaderCell>
+          <Table.HeaderCell>{renderSortableHeader("createdDate")}</Table.HeaderCell>
+          <Table.HeaderCell>Статус</Table.HeaderCell>
+          <Table.HeaderCell className="max-w-xs">Комментарий</Table.HeaderCell>
+          <Table.HeaderCell className="text-right">Действия</Table.HeaderCell>
+        </Table.Head>
+        <Table.Body>
+          {loading
+            ? renderStatusRow("Загрузка лотов…", true)
+            : error
+              ? renderStatusRow(error)
+              : lots.length === 0
+                ? renderStatusRow("Лоты не найдены")
+                : lots.map((lot) => {
+                    const isConfirming = confirmingIds.has(lot.id);
+                    const isDeleting = deletingIds.has(lot.id);
+                    const isUpdating = updatingIds.has(lot.id);
+                    return (
+                      <Table.Row key={lot.id}>
+                        <Table.Cell className="font-semibold text-slate-900">{lot.fullCarNumber}</Table.Cell>
+                        <Table.Cell>{lot.regionCode}</Table.Cell>
+                        <Table.Cell>{currency.format(lot.originalPrice)}</Table.Cell>
+                        <Table.Cell>{currency.format(lot.markupPrice)}</Table.Cell>
+                        <Table.Cell>{lot.fullName || lot.author?.fullName || "—"}</Table.Cell>
+                        <Table.Cell>{lot.phoneNumber || lot.author?.phoneNumber || "—"}</Table.Cell>
+                        <Table.Cell>{formatDate(lot.createdDate)}</Table.Cell>
+                        <Table.Cell>
+                          <StatusBadge confirmed={lot.isConfirm} />
+                        </Table.Cell>
+                        <Table.Cell className="text-sm text-slate-600">
+                          {lot.comment?.trim() ? lot.comment : "—"}
+                        </Table.Cell>
+                        <Table.Cell className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <ActionIconButton
+                              label={lot.isConfirm ? "Лот подтверждён" : "Подтвердить лот"}
+                              icon={FiCheck}
+                              tone="success"
+                              disabled={lot.isConfirm || isConfirming || isDeleting}
+                              loading={isConfirming}
+                              onClick={() => onConfirm(lot)}
+                            />
+                            <ActionIconButton
+                              label="Редактировать"
+                              icon={FiEdit2}
+                              disabled={isDeleting}
+                              loading={isUpdating}
+                              onClick={() => onEdit(lot)}
+                            />
+                            <ActionIconButton
+                              label="Удалить"
+                              icon={FiTrash2}
+                              tone="danger"
+                              disabled={isDeleting}
+                              loading={isDeleting}
+                              onClick={() => onDelete(lot)}
+                            />
+                          </div>
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+        </Table.Body>
+      </Table>
 
-      <div className="md:hidden">
+      <Table.Mobile>
         {loading ? (
-          <p className="px-4 py-6 text-center text-neutral-400">Загрузка лотов...</p>
+          <Table.Card>
+            <div className="flex items-center justify-center gap-3 text-sm text-slate-500">
+              <Spinner size="sm" />
+              <span>Загрузка лотов…</span>
+            </div>
+          </Table.Card>
         ) : error ? (
-          <p className="px-4 py-6 text-center text-red-400">{error}</p>
+          <Table.Card>
+            <p className="text-center text-sm text-red-500">{error}</p>
+          </Table.Card>
         ) : lots.length === 0 ? (
-          <p className="px-4 py-6 text-center text-neutral-400">Лоты не найдены.</p>
+          <Table.Card>
+            <p className="text-center text-sm text-slate-500">Лоты не найдены</p>
+          </Table.Card>
         ) : (
-          <ul className="flex flex-col divide-y divide-white/10">
-            {lots.map((lot) => {
-              const isConfirming = confirmingIds.has(lot.id);
-              const isDeleting = deletingIds.has(lot.id);
-              const isUpdating = updatingIds.has(lot.id);
-              return (
-                <li key={lot.id} className="px-4 py-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg font-semibold">{lot.fullCarNumber}</p>
-                      <p className="text-xs text-neutral-400">{formatDate(lot.createdDate)}</p>
-                    </div>
-                    <StatusBadge confirmed={lot.isConfirm} />
+          lots.map((lot) => {
+            const isConfirming = confirmingIds.has(lot.id);
+            const isDeleting = deletingIds.has(lot.id);
+            const isUpdating = updatingIds.has(lot.id);
+            return (
+              <Table.Card key={lot.id}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-base font-semibold text-slate-900">{lot.fullCarNumber}</p>
+                    <p className="text-xs text-slate-500">{formatDate(lot.createdDate)}</p>
                   </div>
+                  <StatusBadge confirmed={lot.isConfirm} />
+                </div>
 
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-neutral-300">
-                    <InfoRow label="Регион" value={lot.regionCode} />
-                    <InfoRow label="Оригинальная цена" value={currency.format(lot.originalPrice)} />
-                    <InfoRow label="Наценка" value={currency.format(lot.markupPrice)} />
-                    <InfoRow label="Продавец" value={lot.fullName || lot.author?.fullName || "—"} />
-                    <InfoRow label="Телефон" value={lot.phoneNumber || lot.author?.phoneNumber || "—"} />
-                    <InfoRow label="Комментарий" value={lot.comment || "—"} fullWidth />
-                  </div>
+                <div className="grid gap-3">
+                  <Table.CardField label="Регион">{lot.regionCode}</Table.CardField>
+                  <Table.CardField label="Оригинальная цена">
+                    {currency.format(lot.originalPrice)}
+                  </Table.CardField>
+                  <Table.CardField label="Наценка">
+                    {currency.format(lot.markupPrice)}
+                  </Table.CardField>
+                  <Table.CardField label="Продавец">{lot.fullName || lot.author?.fullName || "—"}</Table.CardField>
+                  <Table.CardField label="Телефон">{lot.phoneNumber || lot.author?.phoneNumber || "—"}</Table.CardField>
+                  <Table.CardField label="Комментарий">
+                    {lot.comment?.trim() ? lot.comment : "—"}
+                  </Table.CardField>
+                </div>
 
-                  <div className="mt-4 flex items-center justify-end gap-2">
-                    <RowActionButton
-                      icon={FiCheck}
-                      label={lot.isConfirm ? "Лот подтверждён" : "Подтвердить"}
-                      onClick={() => onConfirm(lot)}
-                      disabled={lot.isConfirm || isConfirming || isDeleting}
-                      loading={isConfirming}
-                      tone="success"
-                    />
-                    <RowActionButton
-                      icon={FiEdit2}
-                      label="Редактировать"
-                      onClick={() => onEdit(lot)}
-                      disabled={isDeleting}
-                      loading={isUpdating}
-                    />
-                    <RowActionButton
-                      icon={FiTrash2}
-                      label="Удалить"
-                      onClick={() => onDelete(lot)}
-                      disabled={isDeleting}
-                      loading={isDeleting}
-                      tone="danger"
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                <div className="mt-2 flex items-center justify-end gap-2">
+                  <ActionIconButton
+                    label={lot.isConfirm ? "Лот подтверждён" : "Подтвердить"}
+                    icon={FiCheck}
+                    tone="success"
+                    disabled={lot.isConfirm || isConfirming || isDeleting}
+                    loading={isConfirming}
+                    onClick={() => onConfirm(lot)}
+                  />
+                  <ActionIconButton
+                    label="Редактировать"
+                    icon={FiEdit2}
+                    disabled={isDeleting}
+                    loading={isUpdating}
+                    onClick={() => onEdit(lot)}
+                  />
+                  <ActionIconButton
+                    label="Удалить"
+                    icon={FiTrash2}
+                    tone="danger"
+                    disabled={isDeleting}
+                    loading={isDeleting}
+                    onClick={() => onDelete(lot)}
+                  />
+                </div>
+              </Table.Card>
+            );
+          })
         )}
-      </div>
+      </Table.Mobile>
 
-      <div className="flex flex-col gap-2 border-t border-white/10 bg-neutral-900/70 px-4 py-3 text-xs text-neutral-300 sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          Показано {Math.min(totalItems, (page - 1) * pageSize + lots.length)} из {totalItems}
-        </p>
+      <div className="flex flex-col gap-3 border-t border-slate-100 pt-4 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+        <span>
+          Показано {shownCount} из {totalItems}
+        </span>
         <Pagination page={page} totalPages={totalPages} onPageChange={onPageChange} />
       </div>
     </div>
@@ -249,56 +271,63 @@ function Pagination({ page, totalPages, onPageChange }: PaginationProps) {
 
   return (
     <nav className="flex items-center justify-end gap-2" aria-label="Пагинация">
-      <button
-        type="button"
+      <Button
+        variant="secondary"
+        size="sm"
         onClick={() => onPageChange(Math.max(1, page - 1))}
-        className="rounded-full px-3 py-1 text-sm text-neutral-300 transition hover:bg-white/10 hover:text-white disabled:opacity-40"
         disabled={page === 1}
       >
         Назад
-      </button>
-      <span className="text-neutral-400">
+      </Button>
+      <span className="text-xs font-medium text-slate-500">
         Страница {page} из {totalPages}
       </span>
-      <button
-        type="button"
+      <Button
+        variant="secondary"
+        size="sm"
         onClick={() => onPageChange(Math.min(totalPages, page + 1))}
-        className="rounded-full px-3 py-1 text-sm text-neutral-300 transition hover:bg-white/10 hover:text-white disabled:opacity-40"
         disabled={page === totalPages}
       >
         Вперёд
-      </button>
+      </Button>
     </nav>
   );
 }
 
-type RowActionButtonProps = {
-  icon: ComponentType<{ size?: number }>;
+type ActionIconButtonProps = {
   label: string;
+  icon: ComponentType<{ className?: string }>;
   onClick: () => void;
   disabled?: boolean;
   loading?: boolean;
   tone?: "default" | "danger" | "success";
 };
 
-function RowActionButton({ icon: Icon, label, onClick, disabled = false, loading = false, tone = "default" }: RowActionButtonProps) {
+function ActionIconButton({
+  label,
+  icon: Icon,
+  onClick,
+  disabled = false,
+  loading = false,
+  tone = "default",
+}: ActionIconButtonProps) {
   return (
-    <button
-      type="button"
+    <IconButton
+      label={label}
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${
+      className={twMerge(
+        "h-9 w-9 rounded-xl",
         tone === "danger"
-          ? "bg-red-500/20 text-red-200 hover:bg-red-500/30 disabled:text-red-300/60"
+          ? "bg-red-50 text-red-600 hover:bg-red-100"
           : tone === "success"
-            ? "bg-emerald-500/20 text-emerald-200 hover:bg-emerald-500/30 disabled:text-emerald-200/50"
-            : "bg-neutral-800 text-neutral-200 hover:bg-neutral-700 disabled:text-neutral-500"
-      } ${loading ? "cursor-wait" : ""}`}
-      aria-label={label}
-      title={label}
+            ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-100"
+            : "bg-slate-100 text-slate-600 hover:bg-slate-200",
+        loading ? "cursor-wait" : "",
+      )}
     >
-      {loading ? <FiLoader className="h-4 w-4 animate-spin" /> : <Icon size={16} />}
-    </button>
+      {loading ? <FiLoader className="h-4 w-4 animate-spin" /> : <Icon className="h-4 w-4" />}
+    </IconButton>
   );
 }
 
@@ -307,29 +336,15 @@ type StatusBadgeProps = {
 };
 
 function StatusBadge({ confirmed }: StatusBadgeProps) {
-  return confirmed ? (
-    <span className="inline-flex items-center rounded-full bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-200">
-      Подтверждено
-    </span>
-  ) : (
-    <span className="inline-flex items-center rounded-full bg-amber-500/20 px-2.5 py-1 text-xs font-semibold text-amber-200">
-      Ожидает
-    </span>
-  );
-}
-
-type InfoRowProps = {
-  label: string;
-  value: string;
-  fullWidth?: boolean;
-};
-
-function InfoRow({ label, value, fullWidth = false }: InfoRowProps) {
   return (
-    <div className={fullWidth ? "col-span-2" : undefined}>
-      <p className="text-neutral-500">{label}</p>
-      <p className="font-medium text-white">{value}</p>
-    </div>
+    <span
+      className={twMerge(
+        "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold",
+        confirmed ? "bg-emerald-50 text-emerald-600" : "bg-amber-50 text-amber-600",
+      )}
+    >
+      {confirmed ? "Подтверждено" : "Ожидает"}
+    </span>
   );
 }
 

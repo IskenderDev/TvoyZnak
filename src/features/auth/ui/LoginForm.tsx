@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "@/shared/components/Button"
 import { useAuth } from "@/shared/lib/hooks/useAuth"
 import type { AuthSession } from "@/entities/session/model/auth"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
+import { paths } from "@/shared/routes/paths"
 
 const loginSchema = z.object({
   email: z
@@ -66,7 +67,13 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
       })
 
       onSuccess(session)
-      navigate("/profile") // ✅ переход на страницу профиля
+      const roleList = session.user.roles?.length
+        ? session.user.roles
+        : session.user.role
+          ? [session.user.role]
+          : []
+      const isAdmin = roleList.includes("admin")
+      navigate(isAdmin ? paths.admin.lots : paths.profile)
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не удалось войти"
       setServerError(message)

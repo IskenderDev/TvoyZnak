@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "@/shared/components/Button"
 import { useAuth } from "@/shared/lib/hooks/useAuth"
 import type { AuthSession } from "@/entities/session/model/auth"
+import { useNavigate } from "react-router-dom"
+import { paths } from "@/shared/routes/paths"
 
 const registerSchema = z.object({
   fullName: z
@@ -41,6 +43,7 @@ interface RegisterFormProps {
 export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) {
   const { register: registerUser } = useAuth()
   const [serverError, setServerError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const defaultValues = useMemo<RegisterFormValues>(
     () => ({
@@ -77,6 +80,13 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
         password: values.password,
       })
       onSuccess(session)
+      const roleList = session.user.roles?.length
+        ? session.user.roles
+        : session.user.role
+          ? [session.user.role]
+          : []
+      const isAdmin = roleList.includes("admin")
+      navigate(isAdmin ? paths.admin.lots : paths.profile)
     } catch (error) {
       const message = error instanceof Error ? error.message : "Не удалось зарегистрироваться"
       setServerError(message)

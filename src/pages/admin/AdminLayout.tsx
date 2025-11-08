@@ -1,25 +1,49 @@
 import { NavLink, Outlet } from "react-router-dom";
+
 import { paths } from "@/shared/routes/paths";
-import PageTitle from "@/shared/components/PageTitle";
+import { useAuth } from "@/shared/lib/hooks/useAuth";
+
+const navItems = [
+  { to: paths.admin.lots, label: "Лоты" },
+  { to: paths.admin.news, label: "Новости" },
+];
 
 export default function AdminLayout() {
-  const link = ({ isActive }: { isActive: boolean }) =>
-    "px-3 py-2 rounded-md text-sm " + (isActive ? "bg-neutral-800" : "hover:bg-neutral-800");
+  const { logout } = useAuth();
+  const getLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition ${
+      isActive ? "bg-white text-blue-600 shadow-sm" : "bg-white/10 text-white hover:bg-white/20"
+    }`;
+
   return (
-    <div className="grid grid-cols-12 gap-6 mt-6">
-      <aside className="col-span-12 md:col-span-3 lg:col-span-2">
-        <div className="sticky top-4 p-4 rounded-md bg-neutral-900 border border-neutral-800">
-          <PageTitle>Админка</PageTitle>
-          <nav className="flex flex-col gap-2">
-            <NavLink to={paths.admin.lots} className={link}>
-              Лоты номеров
-            </NavLink>
-            <NavLink to={paths.admin.numbers} className={link}>Номера</NavLink>
-            <NavLink to={paths.admin.news} className={link}>Новости</NavLink>
+    <div className="space-y-10 py-6">
+      <section className="-mx-4 rounded-3xl bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] px-4 py-8 text-white shadow-xl sm:px-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/70">Панель администратора</p>
+            <h1 className="text-2xl font-semibold">Управление контентом</h1>
+            <p className="max-w-2xl text-sm text-white/80">
+              Управляйте лотами и новостями — всё в одном месте с обновлённой панелью управления.
+            </p>
+          </div>
+          <nav className="flex flex-wrap items-center gap-2">
+            {navItems.map((item) => (
+              <NavLink key={item.to} to={item.to} className={getLinkClass}>
+                {item.label}
+              </NavLink>
+            ))}
+            <button
+              type="button"
+              onClick={logout}
+              className="inline-flex items-center rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white transition hover:border-white/40 hover:bg-white/10"
+            >
+              Выйти
+            </button>
           </nav>
         </div>
-      </aside>
-      <section className="col-span-12 md:col-span-9 lg:col-span-10">
+      </section>
+
+      <section>
         <Outlet />
       </section>
     </div>

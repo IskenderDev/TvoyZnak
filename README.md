@@ -69,10 +69,11 @@ src/
     api.ts
     hooks.ts
     types.ts
-  features/posts/
-    AdminPostsPage.tsx
-    PostFormModal.tsx
-    PostViewDrawer.tsx
+  pages/admin/news/
+    AdminNewsListPage.tsx
+    components/
+      PostFormModal.tsx
+      PostViewDrawer.tsx
   shared/
     api/http.ts
     lib/debounce.ts
