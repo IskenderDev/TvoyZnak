@@ -136,7 +136,7 @@ export default function NumberDetailsSection() {
                   regionId: item.plate.regionId,
                 }}
                 responsive
-                showCaption={false}
+                showCaption={true}
                 className="w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
               />
             </div>

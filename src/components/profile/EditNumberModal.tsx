@@ -65,7 +65,10 @@ const toPlateValue = (lot: EditNumberModalLot | null): PlateSelectValue => {
     return {
       text,
       regionCode: region || "",
-      regionId: plate.regionId ?? null,
+      regionId: (() => {
+        const numeric = Number(plate.regionId);
+        return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
+      })(),
     };
   }
 
@@ -255,7 +258,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
                   size={plateSize}
                   responsive
                   flagSrc="/flag-russia.svg"
-                  showCaption={false}
+                  showCaption={true}
                   className="mx-auto"
                   value={plate}
                   onChange={setPlate}

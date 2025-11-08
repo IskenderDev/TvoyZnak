@@ -1,11 +1,12 @@
 // shared/components/plate/MobilePlateCard.tsx
 import { Link } from "react-router-dom";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import { formatRegionCode } from "@/shared/lib/plate";
 import type { NumberItem } from "@/entities/number/types";
 
 type PlateLike = Partial<PlateData> & {
   region?: string | number;
-  regionId?: number;
+  regionId?: string | number;
 };
 
 type PlateRowLike = Partial<NumberItem> & {
@@ -88,7 +89,9 @@ function pickPlate(row: PlateRowLike): PlateData {
     thirdDigit: ensureChar(src.thirdDigit ?? row.plate?.thirdDigit),
     secondLetter: ensureChar(src.secondLetter ?? row.plate?.secondLetter),
     thirdLetter: ensureChar(src.thirdLetter ?? row.plate?.thirdLetter),
-    regionId: Number(src.regionId ?? src.region ?? row.plate?.regionId ?? row.region ?? 0) || 0,
+    regionId: formatRegionCode(
+      src.regionId ?? src.region ?? row.plate?.regionId ?? row.region ?? "",
+    ),
   };
 }
 

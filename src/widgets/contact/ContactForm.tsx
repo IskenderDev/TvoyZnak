@@ -39,16 +39,12 @@ export default function ContactForm() {
     const fromParams: Partial<Record<PrefillKey, string>> = {}
     allowedKeys.forEach((key) => {
       const value = params.get(key)
-      if (value) {
-        fromParams[key] = value
-      }
+      if (value) fromParams[key] = value
     })
 
     const fromState = allowedKeys.reduce<Partial<Record<PrefillKey, string>>>((acc, key) => {
       const value = state[key]
-      if (typeof value === "string" && value.trim()) {
-        acc[key] = value
-      }
+      if (typeof value === "string" && value.trim()) acc[key] = value
       return acc
     }, {})
 
@@ -58,18 +54,14 @@ export default function ContactForm() {
       return typeof value === "string" && value.trim()
     })
 
-    if (!hasValues) {
-      return
-    }
+    if (!hasValues) return
 
     setFormData((prev) => ({
       ...prev,
-      ...(typeof merged.fullName === "string" && merged.fullName.trim() ? { fullName: merged.fullName } : {}),
-      ...(typeof merged.phoneNumber === "string" && merged.phoneNumber.trim() ? { phoneNumber: merged.phoneNumber } : {}),
-      ...(typeof merged.carNumber === "string" && merged.carNumber.trim() ? { carNumber: merged.carNumber } : {}),
-      ...(typeof merged.feedbackType === "string" && merged.feedbackType.trim()
-        ? { feedbackType: merged.feedbackType }
-        : {}),
+      ...(merged.fullName ? { fullName: merged.fullName } : {}),
+      ...(merged.phoneNumber ? { phoneNumber: merged.phoneNumber } : {}),
+      ...(merged.carNumber ? { carNumber: merged.carNumber } : {}),
+      ...(merged.feedbackType ? { feedbackType: merged.feedbackType } : {}),
     }))
   }, [location.key, location.search, location.state])
 
@@ -132,13 +124,13 @@ export default function ContactForm() {
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
+      {/* теперь не обязательное поле */}
       <input
         type="text"
         name="carNumber"
         value={formData.carNumber}
         onChange={handleChange}
-        placeholder="Гос. номер *"
-        required
+        placeholder="Гос. номер (необязательно)"
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
@@ -161,7 +153,10 @@ export default function ContactForm() {
           onChange={handleChange}
           className="accent-[#0177FF] w-4 h-4 "
         />
-        <p>Я согласен на обработку персональных данных<span className="text-[#EB5757] m-2">*</span></p>
+        <p>
+          Я согласен на обработку персональных данных
+          <span className="text-[#EB5757] m-2">*</span>
+        </p>
       </label>
 
       <button

@@ -14,17 +14,36 @@ const sanitizeDigit = (value?: string): string => {
   return match ? match[0] : "";
 };
 
-const sanitizeRegion = (value?: string | number): string => {
+export const formatRegionCode = (value?: string | number | null): string => {
   if (typeof value === "number" && Number.isFinite(value)) {
-    return value.toString();
+    const int = Math.trunc(value);
+    const absolute = Math.abs(int);
+    const stringValue = absolute.toString();
+    const padded = stringValue.padStart(Math.max(2, stringValue.length), "0");
+    return int < 0 ? `-${padded}` : padded;
   }
 
   if (typeof value === "string") {
     const cleaned = value.trim();
+    if (!cleaned) {
+      return "";
+    }
+
+    if (/^-?\d+$/.test(cleaned)) {
+      const isNegative = cleaned.startsWith("-");
+      const numericPart = isNegative ? cleaned.slice(1) : cleaned;
+      const padded = numericPart.padStart(Math.max(2, numericPart.length), "0");
+      return isNegative ? `-${padded}` : padded;
+    }
+
     return cleaned;
   }
 
   return "";
+};
+
+const sanitizeRegion = (value?: string | number): string => {
+  return formatRegionCode(value ?? "");
 };
 
 const buildSeriesFromPlate = (plate?: PlateInfo | null): string => {

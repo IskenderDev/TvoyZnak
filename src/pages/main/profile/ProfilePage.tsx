@@ -9,6 +9,7 @@ import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
 import { formatPrice } from "@/shared/lib/format";
 import ProfileLayoutLikeCatalog, { type ProfileLotRow } from "@/components/profile/ProfileLayoutLikeCatalog";
+import { formatRegionCode } from "@/shared/lib/plate";
 import EditNumberModal from "@/components/profile/EditNumberModal";
 
 const formatDate = (value: string): string => {
@@ -151,7 +152,7 @@ export default function ProfilePage() {
       secondDigit: item.plate.secondDigit,
       thirdDigit: item.plate.thirdDigit,
       comment: item.plate.comment ?? item.description ?? "",
-      regionId: Number(item.plate.regionId ?? item.region ?? 0) || 0,
+      regionId: formatRegionCode(item.plate.regionId || item.region || ""),
     },
     priceLabel: formatPrice(item.price),
     sellerLabel: user.fullName || "—",
