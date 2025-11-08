@@ -14,6 +14,10 @@ const buildFileUrl = (fileKey: string): string => {
   return url.toString();
 };
 
+const isAbsoluteUrl = (value: string): boolean => /^https?:\/\//i.test(value);
+
+const includesApiFilesPath = (value: string): boolean => value.includes("/api/files");
+
 const resolveImageUrl = (value?: string | null): string | undefined => {
   if (!value) {
     return undefined;
@@ -24,13 +28,11 @@ const resolveImageUrl = (value?: string | null): string | undefined => {
     return undefined;
   }
 
-  // Бэкенд возвращает идентификатор файла (например, POST-2025-10-17-photo.jpg).
-  // Чтобы браузер всегда запрашивал реальный файл, формируем ссылку на /api/files.
-  if (/^https?:\/\//i.test(trimmed)) {
+  if (isAbsoluteUrl(trimmed)) {
     return trimmed;
   }
 
-  if (trimmed.includes("/api/files")) {
+  if (includesApiFilesPath(trimmed)) {
     try {
       return new URL(trimmed, API_BASE_URL).toString();
     } catch (error) {
@@ -172,9 +174,8 @@ const buildFormData = (
   if (payload.imageFile instanceof File) {
     form.append("image", payload.imageFile);
   } else if (payload.clearImage) {
-    // Для надёжной передачи "пустого" файла используем Blob без содержимого.
-    // Это гарантирует multipart-часть, которую бэкенд может интерпретировать как команду удалить изображение.
-    form.append("image", new Blob([], { type: "application/octet-stream" }), "");
+    const emptyImage = new Blob([], { type: "application/octet-stream" });
+    form.append("image", emptyImage, "");
   }
 
   return form;

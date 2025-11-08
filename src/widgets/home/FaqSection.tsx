@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { faqs } from "./faqs";
 import type { FaqItem } from "./faqs";
-import { FaSquareMinus, FaSquarePlus } from 'react-icons/fa6'
-import { LuInfo } from 'react-icons/lu'
+import { FaSquareMinus, FaSquarePlus } from "react-icons/fa6";
+import { LuInfo } from "react-icons/lu";
+
+const DEFAULT_OPEN_INDEX = 1;
 
 function FaqRow({
   item,
@@ -46,7 +48,6 @@ function FaqRow({
             </span>
           </button>
 
-          {/* Ответ */}
           <div
             id={`faq-panel-${item.id}`}
             role="region"
@@ -68,7 +69,7 @@ function FaqRow({
 
 export default function FaqSection({
   items = faqs,
-  defaultOpenIndex = 1 // как на скрине: второй открыт
+  defaultOpenIndex = DEFAULT_OPEN_INDEX,
 }: {
   items?: FaqItem[];
   defaultOpenIndex?: number;

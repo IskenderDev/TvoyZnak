@@ -124,7 +124,6 @@ export default function ContactForm() {
         className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
-      {/* теперь не обязательное поле */}
       <input
         type="text"
         name="carNumber"

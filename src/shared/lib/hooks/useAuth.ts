@@ -3,7 +3,7 @@ import { useContext } from "react";
 import {
   AuthContext,
   type AuthContextValue,
-} from "@/app/providers/auth/AuthProvider";
+} from "@/app/providers/auth/AuthContext";
 
 export { type Role, type AuthUser, type AuthSession } from "@/entities/session/model/auth";
 export { type LoginPayload, type RegisterPayload } from "@/features/auth/api/authService";

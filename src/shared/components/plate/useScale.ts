@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-
-/** Масштабирует внутреннюю вёрстку под доступную ширину контейнера */
 export function useScale(baseWidth: number) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [k, setK] = useState(1);

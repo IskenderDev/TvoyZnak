@@ -48,7 +48,7 @@ export default function ProfilePage() {
     setError(null);
 
     numbersApi
-      .listMy() // GET /api/car-number-lots/my
+      .listMy()
       .then((data) => {
         if (!isActive) return;
         setNumbers(data);
@@ -73,7 +73,6 @@ export default function ProfilePage() {
     setVisibleCount(LIMIT_STEP);
   }, [numbers.length]);
 
-  // Продавец = всегда имя залогиненного пользователя
   const myLots = useMemo<NumberItem[]>(
     () => numbers.map((n) => ({ ...n, sellerName: user?.fullName ?? n.sellerName ?? n.seller })),
     [numbers, user?.fullName]

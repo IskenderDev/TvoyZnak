@@ -142,8 +142,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       const nextIndex = selectedIndex >= 0 ? selectedIndex : filteredOptions.length ? 0 : -1
       setActiveIndex(nextIndex)
 
-      // Фокус без автоскролла
-      window.setTimeout(() => {
+      const focusActiveControl = () => {
         if (searchable) {
           searchRef.current?.focus()
           if (filter) {
@@ -152,12 +151,13 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         } else {
           listboxRef.current?.focus()
         }
-      }, 0)
+      }
+
+      window.setTimeout(focusActiveControl, 0)
 
       return () => cancelAnimationFrame(frame)
     }
 
-    // Сброс при закрытии
     setAppear(false)
     setFilter("")
     setActiveIndex(0)

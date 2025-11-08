@@ -1,4 +1,3 @@
-// components/HeroStats.tsx
 import { BsArrowUpRightCircleFill } from "react-icons/bs"
 
 type Props = {

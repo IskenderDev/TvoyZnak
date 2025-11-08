@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type PropsWithChildren,
-} from "react";
+import { useCallback, useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { paths } from "@/shared/routes/paths";
@@ -14,29 +7,14 @@ import {
   login as loginRequest,
   register as registerRequest,
   logout as logoutRequest,
+  type RegisterPayload,
 } from "@/features/auth/api/authService";
-import type {
-  LoginPayload,
-  RegisterPayload,
-} from "@/features/auth/api/authService";
-import type { AuthSession, AuthUser, Role } from "@/entities/session/model/auth";
-
-interface ExtendedLoginPayload extends LoginPayload {
-  remember?: boolean;
-}
-
-export interface AuthContextValue {
-  user: AuthUser | null;
-  token: string | null;
-  roles: Role[];
-  isAuthenticated: boolean;
-  login: (payload: ExtendedLoginPayload) => Promise<AuthSession>;
-  register: (payload: RegisterPayload) => Promise<AuthSession>;
-  logout: () => void;
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import type { AuthSession } from "@/entities/session/model/auth";
+import {
+  AuthContext,
+  type AuthContextValue,
+  type ExtendedLoginPayload,
+} from "./AuthContext";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const navigate = useNavigate();
