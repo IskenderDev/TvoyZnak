@@ -42,7 +42,7 @@ export default function NumbersMarketSection() {
           onPlateQueryChange={setPlateQuery}
         />
 
-        {error && <p className="mb-4 rounded-xl bg-[#1E1E1E] px-4 py-3 text-[#FF6B6B]">{error}</p>}
+        {error && <p className="mb-4 rounded-xl bg-white px-4 py-3 text-[#FF6B6B]">{error}</p>}
         {loading && <p className="mb-4 text-neutral-300">Загрузка предложений...</p>}
 
         <PlateMarketTable

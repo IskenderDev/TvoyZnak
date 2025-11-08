@@ -120,7 +120,7 @@ const normalizeCover = (value: string): string => {
     }
 
     const url = new URL("/api/files", API_BASE_URL);
-    url.searchParams.set("arg0", cover);
+    url.searchParams.set("path", cover);
     return url.toString();
   } catch (error) {
     console.error("Failed to normalize cover", error);

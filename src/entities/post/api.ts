@@ -10,7 +10,7 @@ import type {
 
 const buildFileUrl = (fileKey: string): string => {
   const url = new URL("/api/files", API_BASE_URL);
-  url.searchParams.set("arg0", fileKey);
+  url.searchParams.set("path", fileKey);
   return url.toString();
 };
 
