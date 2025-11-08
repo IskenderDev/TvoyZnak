@@ -4,6 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { QueryKey } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import {
@@ -47,8 +48,8 @@ export const usePostQuery = (postId: string, enabled = true) =>
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (payload: PostCreatePayload) => createPost(payload),
+  return useMutation<Post, unknown, PostCreatePayload>({
+    mutationFn: (payload) => createPost(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: postsKeys.lists() });
     },
@@ -62,8 +63,8 @@ export const useCreatePost = () => {
 export const useUpdatePost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (payload: PostUpdatePayload) => updatePost(payload),
+  return useMutation<Post, unknown, PostUpdatePayload>({
+    mutationFn: (payload) => updatePost(payload),
     onSuccess: (post) => {
       queryClient.invalidateQueries({ queryKey: postsKeys.lists() });
       queryClient.invalidateQueries({ queryKey: postsKeys.detail(post.id) });
@@ -75,11 +76,19 @@ export const useUpdatePost = () => {
   });
 };
 
+type DeleteOptimisticSnapshot = Array<
+  [QueryKey, Paginated<Post> | undefined]
+>;
+
+type DeleteContext = {
+  previous: DeleteOptimisticSnapshot;
+};
+
 export const useDeletePost = () => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: (postId: string) => deletePost(postId),
+  return useMutation<void, unknown, string, DeleteContext>({
+    mutationFn: (postId) => deletePost(postId),
     onMutate: async (postId) => {
       await queryClient.cancelQueries({ queryKey: postsKeys.lists() });
       const previous = queryClient.getQueriesData<Paginated<Post>>({
@@ -99,7 +108,7 @@ export const useDeletePost = () => {
     },
     onError: (error: unknown, _postId, context) => {
       context?.previous.forEach(([key, data]) => {
-        queryClient.setQueryData(key, data);
+        queryClient.setQueryData<Paginated<Post> | undefined>(key, data);
       });
       const message = extractErrorMessage(error, "Не удалось удалить пост");
       toast.error(message);

@@ -8,17 +8,38 @@ import type {
   PostsListParams,
 } from "./types";
 
+const buildFileUrl = (fileKey: string): string => {
+  const url = new URL("/api/files", API_BASE_URL);
+  url.searchParams.set("arg0", fileKey);
+  return url.toString();
+};
+
 const resolveImageUrl = (value?: string | null): string | undefined => {
   if (!value) {
     return undefined;
   }
 
-  try {
-    return new URL(value, API_BASE_URL).toString();
-  } catch (error) {
-    console.warn("Failed to resolve image URL", error);
-    return value;
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
   }
+
+  // Бэкенд возвращает идентификатор файла (например, POST-2025-10-17-photo.jpg).
+  // Чтобы браузер всегда запрашивал реальный файл, формируем ссылку на /api/files.
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (trimmed.includes("/api/files")) {
+    try {
+      return new URL(trimmed, API_BASE_URL).toString();
+    } catch (error) {
+      console.warn("Failed to normalize file URL", error);
+      return trimmed;
+    }
+  }
+
+  return buildFileUrl(trimmed);
 };
 
 const normalizeDate = (value?: string | null): string | null => {
