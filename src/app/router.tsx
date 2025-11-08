@@ -20,7 +20,7 @@ import ProfilePage from "@/pages/main/profile/ProfilePage";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminLotsPage from "@/pages/admin/AdminLotsPage";
 import SellNumberPage from "@/pages/main/sellNumber/SellNumber";
-import AdminPostsPage from "@/features/posts/AdminPostsPage";
+import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
 
 export const router = createBrowserRouter([
   {
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
             element: <RequireRole role="admin" />,
             children: [
               { path: paths.admin.lots, element: <AdminLotsPage /> },
-              { path: paths.admin.news, element: <AdminPostsPage /> },
+              { path: paths.admin.news, element: <AdminNewsListPage /> },
               { path: paths.admin.newsNew, element: <Navigate to={paths.admin.news} replace /> },
               { path: paths.admin.newsEdit(), element: <Navigate to={paths.admin.news} replace /> },
               { path: "/admin/posts", element: <Navigate to={paths.admin.news} replace /> }

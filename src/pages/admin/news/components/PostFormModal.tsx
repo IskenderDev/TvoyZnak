@@ -115,7 +115,7 @@ export default function PostFormModal({
       toast.success("Сохранено");
       onClose();
     } catch (error) {
-      const message = extractErrorMessage(error, "Не удалось сохранить пост");
+      const message = extractErrorMessage(error, "Не удалось сохранить новость");
       setFormError(message);
     }
   }, [createMutation, mode, onClose, post, updateMutation]);
@@ -154,7 +154,7 @@ export default function PostFormModal({
         <div className="flex flex-col gap-6">
           <header className="space-y-2">
             <h2 className="text-2xl font-semibold text-slate-900">
-              {mode === "create" ? "Создание поста" : "Редактирование поста"}
+              {mode === "create" ? "Создание новости" : "Редактирование новости"}
             </h2>
             <p className="text-sm text-slate-600">
               Заполните форму и нажмите «Сохранить». Ctrl/⌘ + Enter тоже сработает.
@@ -183,7 +183,7 @@ export default function PostFormModal({
                 <Textarea
                   {...field}
                   label="Описание"
-                  placeholder="Расскажите подробнее о посте"
+                  placeholder="Расскажите подробнее о новости"
                   maxLength={5000}
                   error={errors.description?.message}
                 />

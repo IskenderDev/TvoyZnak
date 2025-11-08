@@ -65,13 +65,13 @@ export default function PostViewDrawer({
         {isLoading && !currentPost ? (
           <div className="flex min-h-[240px] flex-col items-center justify-center gap-4 text-slate-500">
             <Spinner />
-            <span>Загружаем пост...</span>
+            <span>Загружаем новость...</span>
           </div>
         ) : null}
 
         {isError ? (
           <ErrorState
-            title="Не удалось загрузить пост"
+            title="Не удалось загрузить новость"
             onRetry={() => void refetch()}
           />
         ) : null}
