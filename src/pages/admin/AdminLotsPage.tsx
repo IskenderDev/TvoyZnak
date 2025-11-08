@@ -2,10 +2,9 @@ import { useMemo, useState, type ReactNode } from "react";
 import { FiRefreshCw, FiSearch } from "react-icons/fi";
 
 import AdminLotsTable from "@/components/admin/AdminLotsTable";
-import AdminLotEditModal from "@/components/admin/AdminLotEditModal";
+import EditNumberModal, { type EditNumberModalSubmitPayload } from "@/components/profile/EditNumberModal";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import type { AdminLot } from "@/api/adminLots";
-import type { UpdateAdminLotPayload } from "@/api/adminLots";
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/ui/Button";
 import Input from "@/shared/ui/Input";
@@ -68,12 +67,35 @@ export default function AdminLotsPage() {
     setDeleteCandidate(lot);
   };
 
-  const handleEditSubmit = async (payload: UpdateAdminLotPayload) => {
-    if (!editingLot) {
-      return;
-    }
-    await update(editingLot.id, payload);
-    setEditingLot(null);
+  const handleEditSubmit = async (
+    lot: AdminLot,
+    payload: EditNumberModalSubmitPayload,
+  ): Promise<AdminLot> => {
+    const updated = await update(lot.id, {
+      firstLetter: payload.firstLetter,
+      secondLetter: payload.secondLetter,
+      thirdLetter: payload.thirdLetter,
+      firstDigit: payload.firstDigit,
+      secondDigit: payload.secondDigit,
+      thirdDigit: payload.thirdDigit,
+      regionId: payload.regionId,
+      markupPrice: payload.price,
+      comment: payload.comment ?? null,
+    });
+
+    return {
+      ...lot,
+      ...updated,
+      markupPrice: updated.markupPrice ?? payload.price,
+      comment: updated.comment ?? payload.comment ?? "",
+      regionId: updated.regionId ?? payload.regionId,
+      firstLetter: updated.firstLetter ?? payload.firstLetter,
+      secondLetter: updated.secondLetter ?? payload.secondLetter,
+      thirdLetter: updated.thirdLetter ?? payload.thirdLetter,
+      firstDigit: updated.firstDigit ?? payload.firstDigit,
+      secondDigit: updated.secondDigit ?? payload.secondDigit,
+      thirdDigit: updated.thirdDigit ?? payload.thirdDigit,
+    };
   };
 
   const handleDeleteConfirm = async () => {
@@ -200,11 +222,13 @@ export default function AdminLotsPage() {
         />
       </section>
 
-      <AdminLotEditModal
+      <EditNumberModal
         open={Boolean(editingLot)}
         lot={editingLot}
-        submitting={editingLot ? updatingIds.has(editingLot.id) : false}
         onClose={() => setEditingLot(null)}
+        onUpdated={(updated) => {
+          setEditingLot(updated);
+        }}
         onSubmit={handleEditSubmit}
       />
 
