@@ -16,7 +16,7 @@ const loginSchema = z.object({
     .email("Введите корректный e-mail"),
   password: z
     .string({ required_error: "Введите пароль" })
-    .min(6, "Минимум 6 символов"),
+    .min(3, "Минимум 6 символов"),
   remember: z.boolean().default(false),
   consent: z
     .boolean()

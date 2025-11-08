@@ -1,73 +1,98 @@
-# React + TypeScript + Vite
+# TvoyZnak Admin Posts
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Панель администратора для управления постами: просмотр, создание, обновление и удаление записей с поддержкой изображений и файловой валидации.
 
-Currently, two official plugins are available:
+## Стек
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19 + TypeScript + Vite
+- TailwindCSS
+- Axios
+- @tanstack/react-query
+- react-hook-form + zod
+- react-hot-toast для уведомлений
 
-## React Compiler
+## Быстрый старт
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Установите зависимости:
 
-## Expanding the ESLint configuration
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. Скопируйте файл окружения и укажите базовый URL API:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+   ```bash
+   cp .env.example .env
+   # при необходимости измените значение VITE_API_URL
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. Запустите dev-сервер:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+   ```bash
+   npm run dev
+   ```
+
+4. Сборка прод-версии:
+
+   ```bash
+   npm run build
+   ```
+
+## Админ-страница постов
+
+- Поиск с debounce (400 мс) по заголовку и описанию.
+- Сортировка по дате создания (по умолчанию по убыванию).
+- Пагинация с отображением счётчика «Показано N из M».
+- Просмотр поста в боковом модальном окне и переход к редактированию.
+- Создание/редактирование через модальное окно с валидацией (заголовок, описание, изображение, размер ≤ 5 МБ, форматы JPG/PNG/WebP).
+- Поддержка трёх режимов работы с изображением при обновлении: оставить без изменений, заменить новым файлом, отправить «пустое значение» для очистки на сервере.
+- Удаление с подтверждением и оптимистичным обновлением списка.
+
+## Multipart и очистка изображения
+
+Создание и обновление постов выполняется через `FormData`. Чтобы сбросить изображение на сервере, мы добавляем в форму пустой `Blob` без содержимого:
+
+```ts
+form.append("image", new Blob([], { type: "application/octet-stream" }), "");
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Это гарантирует, что сервер увидит multipart-часть `image` даже без файла и корректно удалит изображение.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Структура
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  app/
+    queryClient.ts
+    router.tsx
+  entities/post/
+    api.ts
+    hooks.ts
+    types.ts
+  features/posts/
+    AdminPostsPage.tsx
+    PostFormModal.tsx
+    PostViewDrawer.tsx
+  shared/
+    api/http.ts
+    lib/debounce.ts
+    ui/
+      Button.tsx
+      ConfirmDialog.tsx
+      EmptyState.tsx
+      ErrorState.tsx
+      FileDropzone.tsx
+      IconButton.tsx
+      Input.tsx
+      Modal.tsx
+      Spinner.tsx
+      Table.tsx
+      Textarea.tsx
+```
+
+## Проверка качества
+
+- Линтер: `npm run lint`
+- Сборка: `npm run build`
+
+Убедитесь, что указанный API доступен и поддерживает эндпоинты `/api/posts` для корректной работы страницы.

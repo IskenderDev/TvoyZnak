@@ -105,6 +105,7 @@ const normalizeDate = (value: string): string | undefined => {
   return date.toISOString();
 };
 
+
 const normalizeCover = (value: string): string => {
   const cover = value?.trim();
   if (!cover) return "";
@@ -119,13 +120,14 @@ const normalizeCover = (value: string): string => {
     }
 
     const url = new URL("/api/files", API_BASE_URL);
-    url.searchParams.set("path", cover);
+    url.searchParams.set("arg0", cover);
     return url.toString();
   } catch (error) {
     console.error("Failed to normalize cover", error);
     return cover;
   }
 };
+
 
 const request = async <T>(fn: () => Promise<{ data: unknown }>, map: (payload: unknown) => T): Promise<T> => {
   const response = await fn();
