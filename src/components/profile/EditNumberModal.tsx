@@ -258,7 +258,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
                   size={plateSize}
                   responsive
                   flagSrc="/flag-russia.svg"
-                  showCaption={false}
+                  showCaption={true}
                   className="mx-auto"
                   value={plate}
                   onChange={setPlate}
