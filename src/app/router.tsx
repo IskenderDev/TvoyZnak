@@ -21,9 +21,6 @@ import AdminLotsPage from "@/pages/admin/AdminLotsPage";
 import AdminNumbersListPage from "@/pages/admin/numbers/AdminNumbersListPage";
 import AdminNumberNewPage from "@/pages/admin/numbers/AdminNumberNewPage";
 import AdminNumberEditPage from "@/pages/admin/numbers/AdminNumberEditPage";
-import AdminNewsListPage from "@/pages/admin/news/AdminNewsListPage";
-import AdminNewsNewPage from "@/pages/admin/news/AdminNewsNewPage";
-import AdminNewsEditPage from "@/pages/admin/news/AdminNewsEditPage";
 import SellNumberPage from "@/pages/main/sellNumber/SellNumber";
 import AdminPostsPage from "@/features/posts/AdminPostsPage";
 
@@ -61,10 +58,10 @@ export const router = createBrowserRouter([
               { path: paths.admin.numbers, element: <AdminNumbersListPage /> },
               { path: paths.admin.numbersNew, element: <AdminNumberNewPage /> },
               { path: paths.admin.numbersEdit(), element: <AdminNumberEditPage /> },
-              { path: paths.admin.news, element: <AdminNewsListPage /> },
-              { path: paths.admin.newsNew, element: <AdminNewsNewPage /> },
-              { path: paths.admin.newsEdit(), element: <AdminNewsEditPage /> },
-              { path: paths.admin.posts, element: <AdminPostsPage /> }
+              { path: paths.admin.news, element: <AdminPostsPage /> },
+              { path: paths.admin.newsNew, element: <Navigate to={paths.admin.news} replace /> },
+              { path: paths.admin.newsEdit(), element: <Navigate to={paths.admin.news} replace /> },
+              { path: "/admin/posts", element: <Navigate to={paths.admin.news} replace /> }
             ]
           }
         ]

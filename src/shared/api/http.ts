@@ -40,6 +40,17 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
+    if (
+      axios.isAxiosError(error) &&
+      (error.code === "ERR_CANCELED" || error.name === "CanceledError")
+    ) {
+      return Promise.reject(error);
+    }
+
     if (error?.response?.status === 401) {
       authStorage.clear();
       authStorage.emitLogout();
