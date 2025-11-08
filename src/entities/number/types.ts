@@ -9,7 +9,7 @@ export interface PlateInfo {
   firstDigit: string;
   secondDigit: string;
   thirdDigit: string;
-  regionId: number;
+  regionId: string;
   comment?: string;
 }
 

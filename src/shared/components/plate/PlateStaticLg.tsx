@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { formatRegionCode } from "@/shared/lib/plate";
 
 export type PlateData = {
   price: number;
@@ -9,7 +10,7 @@ export type PlateData = {
   secondDigit: string;
   thirdDigit: string;
   comment: string;
-  regionId: number;
+  regionId: string | number;
 };
 
 type PlateSize = "sm" | "lg";
@@ -38,7 +39,8 @@ export default function PlateStaticLg({
 }: Props) {
   const preset = PRESETS[size];
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const [k, setK] = useState(1); 
+  const [k, setK] = useState(1);
+  const regionLabel = formatRegionCode(data.regionId) || "";
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -141,7 +143,7 @@ export default function PlateStaticLg({
               }}
             >
               <p className="font-bold" style={{ fontSize: regionFont, lineHeight: 1, margin: 0 }}>
-                {String(data.regionId ?? "")}
+                {regionLabel || "*"}
               </p>
 
               <p

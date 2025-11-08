@@ -1,5 +1,6 @@
 import http from "@/shared/api/http";
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
+import { formatRegionCode } from "@/shared/lib/plate";
 
 export interface NumbersListParams {
   page?: number;
@@ -306,6 +307,8 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     plateSource.region,
   ]);
 
+  const formattedRegion = formatRegionCode(regionCode);
+
   const plate: PlateInfo = {
     firstLetter: letters[0],
     secondLetter: letters[1],
@@ -313,7 +316,7 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     firstDigit: digits[0],
     secondDigit: digits[1],
     thirdDigit: digits[2],
-    regionId: toNumber(regionCode, 0),
+    regionId: formattedRegion,
     comment: pickString([dto.comment, plateSource.comment]) || undefined,
   };
 
@@ -339,7 +342,7 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
   return {
     id: String(dto.id),
     series,
-    region: regionCode || "",
+    region: formattedRegion,
     price: toNumber(dto.price, 0),
     seller: sellerDisplay,
     sellerLogin,
