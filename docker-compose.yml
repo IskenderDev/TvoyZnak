@@ -1,0 +1,11 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: "http://localhost:8081"
+    image: my-vite-web:latest
+    ports:
+      - "5173:80"  # снаружи 5173 -> внутри nginx:80
+    restart: unless-stopped
