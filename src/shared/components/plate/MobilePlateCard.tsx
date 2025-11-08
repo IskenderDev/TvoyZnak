@@ -5,7 +5,7 @@ import type { NumberItem } from "@/entities/number/types";
 
 type PlateLike = Partial<PlateData> & {
   region?: string | number;
-  regionId?: number;
+  regionId?: string | number;
 };
 
 type PlateRowLike = Partial<NumberItem> & {
@@ -88,7 +88,7 @@ function pickPlate(row: PlateRowLike): PlateData {
     thirdDigit: ensureChar(src.thirdDigit ?? row.plate?.thirdDigit),
     secondLetter: ensureChar(src.secondLetter ?? row.plate?.secondLetter),
     thirdLetter: ensureChar(src.thirdLetter ?? row.plate?.thirdLetter),
-    regionId: Number(src.regionId ?? src.region ?? row.plate?.regionId ?? row.region ?? 0) || 0,
+    regionId: ensureRegion(src.regionId ?? src.region ?? row.plate?.regionId ?? row.region),
   };
 }
 
@@ -100,6 +100,16 @@ function ensureChar(value: unknown): string {
     return String(value).slice(0, 1);
   }
   return "*";
+}
+
+function ensureRegion(value: unknown): string {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+  return "";
 }
 
 function fmtDate(v?: string) {

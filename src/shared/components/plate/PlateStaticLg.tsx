@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import { format2 } from "@/shared/lib/format/format2";
+
 export type PlateData = {
   price: number;
   firstLetter: string;
@@ -9,7 +11,7 @@ export type PlateData = {
   secondDigit: string;
   thirdDigit: string;
   comment: string;
-  regionId: number;
+  regionId: string | number;
 };
 
 type PlateSize = "sm" | "lg";
@@ -115,10 +117,13 @@ export default function PlateStaticLg({
                 {data.firstLetter ?? ""}
               </span>
 
-              <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.9, gap: digitGap }}>
-                <span>{data.firstDigit ?? ""}</span>
-                <span>{data.secondDigit ?? ""}</span>
-                <span>{data.thirdDigit ?? ""}</span>
+              <div
+                className="flex num"
+                style={{ fontSize: mainFont, lineHeight: 0.9, gap: digitGap }}
+              >
+                <span>{format2(data.firstDigit ?? "")}</span>
+                <span>{format2(data.secondDigit ?? "")}</span>
+                <span>{format2(data.thirdDigit ?? "")}</span>
               </div>
 
               <div className="flex" style={{ fontSize: mainFontLetter, lineHeight: 0.9, gap: digitGap }}>
@@ -140,8 +145,11 @@ export default function PlateStaticLg({
                 boxSizing: "border-box",
               }}
             >
-              <p className="font-bold" style={{ fontSize: regionFont, lineHeight: 1, margin: 0 }}>
-                {String(data.regionId ?? "")}
+              <p
+                className="font-bold num"
+                style={{ fontSize: regionFont, lineHeight: 1, margin: 0 }}
+              >
+                {format2(data.regionId ?? "")}
               </p>
 
               <p

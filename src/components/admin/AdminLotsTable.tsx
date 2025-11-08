@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 
 import type { AdminLot } from "@/api/adminLots";
 import type { AdminLotSortKey, SortDirection } from "@/hooks/useAdminLots";
+import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import { format2 } from "@/shared/lib/format/format2";
 import Button from "@/shared/ui/Button";
 import IconButton from "@/shared/ui/IconButton";
 import Spinner from "@/shared/ui/Spinner";
@@ -22,6 +24,18 @@ const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
   year: "numeric",
   hour: "2-digit",
   minute: "2-digit",
+});
+
+const toPlateData = (lot: AdminLot): PlateData => ({
+  price: lot.originalPrice,
+  comment: lot.comment ?? "",
+  firstLetter: lot.firstLetter ?? "",
+  secondLetter: lot.secondLetter ?? "",
+  thirdLetter: lot.thirdLetter ?? "",
+  firstDigit: lot.firstDigit ?? "",
+  secondDigit: lot.secondDigit ?? "",
+  thirdDigit: lot.thirdDigit ?? "",
+  regionId: lot.regionCode ?? "",
 });
 
 type AdminLotsTableProps = {
@@ -123,10 +137,21 @@ export default function AdminLotsTable({
                     const isConfirming = confirmingIds.has(lot.id);
                     const isDeleting = deletingIds.has(lot.id);
                     const isUpdating = updatingIds.has(lot.id);
+                    const plateData = toPlateData(lot);
                     return (
                       <Table.Row key={lot.id}>
-                        <Table.Cell className="font-semibold text-slate-900">{lot.fullCarNumber}</Table.Cell>
-                        <Table.Cell>{lot.regionCode}</Table.Cell>
+                        <Table.Cell>
+                          <div className="flex flex-col items-center gap-2">
+                            <PlateStaticSm
+                              data={plateData}
+                              responsive
+                              showCaption={false}
+                              className="w-full max-w-[200px]"
+                            />
+                            <span className="text-xs text-slate-500">{lot.fullCarNumber}</span>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell className="num">{format2(lot.regionCode)}</Table.Cell>
                         <Table.Cell>{currency.format(lot.originalPrice)}</Table.Cell>
                         <Table.Cell>{currency.format(lot.markupPrice)}</Table.Cell>
                         <Table.Cell>{lot.fullName || lot.author?.fullName || "—"}</Table.Cell>
@@ -192,18 +217,27 @@ export default function AdminLotsTable({
             const isConfirming = confirmingIds.has(lot.id);
             const isDeleting = deletingIds.has(lot.id);
             const isUpdating = updatingIds.has(lot.id);
+            const plateData = toPlateData(lot);
             return (
               <Table.Card key={lot.id}>
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base font-semibold text-slate-900">{lot.fullCarNumber}</p>
-                    <p className="text-xs text-slate-500">{formatDate(lot.createdDate)}</p>
+                  <div className="flex flex-col items-start gap-2">
+                    <PlateStaticSm
+                      data={plateData}
+                      responsive
+                      showCaption={false}
+                      className="w-32"
+                    />
+                    <p className="text-xs text-slate-500">{lot.fullCarNumber}</p>
                   </div>
+                  <p className="text-xs text-slate-500">{formatDate(lot.createdDate)}</p>
                   <StatusBadge confirmed={lot.isConfirm} />
                 </div>
 
                 <div className="grid gap-3">
-                  <Table.CardField label="Регион">{lot.regionCode}</Table.CardField>
+                  <Table.CardField label="Регион">
+                    <span className="num">{format2(lot.regionCode)}</span>
+                  </Table.CardField>
                   <Table.CardField label="Оригинальная цена">
                     {currency.format(lot.originalPrice)}
                   </Table.CardField>

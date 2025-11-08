@@ -28,7 +28,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
     firstDigit: row.plate.firstDigit,
     secondDigit: row.plate.secondDigit,
     thirdDigit: row.plate.thirdDigit,
-    regionId: row.plate.regionId,
+    regionId: row.region || String(row.plate.regionId ?? ""),
   };
 
   const style = { "--cols": gridCols } as CSSProperties;

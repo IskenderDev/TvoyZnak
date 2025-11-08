@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
+import { format2 } from "@/shared/lib/format/format2";
 import type { PlateMarketFiltersState, SortDir } from "./types";
 import { filterPlates } from "../lib/filterPlates";
 import type { NumberItem } from "@/entities/number/types";
@@ -59,11 +60,13 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
       }
     });
 
+    const normalize = (code: string) => code.trim().padStart(3, "0");
+
     return [
       { label: "Все регионы", value: "" },
       ...Array.from(base)
-        .sort((a, b) => a.localeCompare(b, "ru"))
-        .map((value) => ({ label: value, value })),
+        .sort((a, b) => normalize(a).localeCompare(normalize(b), "ru"))
+        .map((value) => ({ label: format2(value), value })),
     ];
   }, [items]);
 

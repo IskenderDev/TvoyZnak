@@ -363,6 +363,21 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const highlightLength = searchable ? filter.length : 0;
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0;
 
+  const dropdownWidthClass = searchable
+    ? "w-[min(92vw,640px)] sm:w-[min(80vw,720px)]"
+    : "";
+  const dropdownStyle = searchable
+    ? undefined
+    : ({
+        width: Math.max(40, slotW),
+        maxHeight: dropdownMaxHeight,
+      } satisfies React.CSSProperties);
+  const listWrapperClass = searchable
+    ? "max-h-[60vh] sm:max-h-[70dvh] overflow-y-auto"
+    : "overflow-y-auto";
+  const listWrapperStyle = searchable ? undefined : ({ maxHeight: dropdownMaxHeight } satisfies React.CSSProperties);
+  const listLayoutClass = searchable ? "py-1" : "flex flex-col items-center";
+
   return (
     <div className="relative" style={{ width: slotW, height: slotH }}>
       <button
@@ -399,14 +414,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
-            className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)]"
-            style={{
-              width: Math.max(40, slotW),
-              maxHeight: dropdownMaxHeight,
-            }}
+            className={`overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-900/95 shadow-2xl backdrop-blur-md ${dropdownWidthClass}`}
+            style={dropdownStyle}
           >
             {searchable && (
-              <div className="p-2 border-b border-white/20">
+              <div className="border-b border-white/10 p-3">
                 <input
                   ref={searchRef}
                   type="text"
@@ -414,7 +426,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                   onChange={onSearchChange}
                   onKeyDown={onSearchKeyDown}
                   placeholder={searchPlaceholder}
-                  className="w-full rounded-md bg-white/20 px-3 py-2 text-sm font-semibold text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#33D9FF]"
+                  className="w-full rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold text-white placeholder-white/60 transition focus:outline-none focus:ring-2 focus:ring-[#33D9FF] focus:bg-white/15"
                 />
               </div>
             )}
@@ -429,12 +441,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               onKeyDown={onListboxKeyDown}
               className="outline-none"
             >
-              <ul
-                className={`overflow-y-auto no-scrollbar ${
-                  searchable ? "" : "flex flex-col items-center"
-                }`}
-                style={{ maxHeight: dropdownMaxHeight }}
-              >
+              <ul className={`no-scrollbar ${listLayoutClass} ${listWrapperClass}`} style={listWrapperStyle}>
                 {filteredOptions.length === 0 ? (
                   <li className="px-4 py-3 text-center text-white/80 text-sm">
                     {normalizedOptions.length === 0 ? "Нет доступных значений" : "Ничего не найдено"}
@@ -474,8 +481,8 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                             searchable
                               ? "w-full px-4 py-3 text-left text-white font-semibold"
                               : "w-full grid place-items-center text-white font-bold"
-                          } transition-colors duration-150 ${
-                            highlighted ? "bg-[#0177FF]" : ""
+                          } transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#33D9FF] ${
+                            highlighted ? "bg-white/10" : ""
                           } ${selected ? "bg-white/20" : ""}`}
                           style={{
                             paddingTop: searchable ? undefined : 12,

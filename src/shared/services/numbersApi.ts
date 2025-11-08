@@ -91,6 +91,7 @@ interface RawCarNumberLot extends UnknownRecord {
   number?: unknown;
   region?: unknown;
   regionCode?: unknown;
+  regionId?: unknown;
   createdAt?: unknown;
   createdDate?: unknown;
   created?: unknown;
@@ -306,6 +307,10 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     plateSource.region,
   ]);
 
+  const regionIdNumber = [dto.regionId, plateSource.regionId].find(
+    (value): value is number => typeof value === "number" && Number.isFinite(value),
+  );
+
   const plate: PlateInfo = {
     firstLetter: letters[0],
     secondLetter: letters[1],
@@ -313,7 +318,7 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     firstDigit: digits[0],
     secondDigit: digits[1],
     thirdDigit: digits[2],
-    regionId: toNumber(regionCode, 0),
+    regionId: regionIdNumber ?? (regionCode || ""),
     comment: pickString([dto.comment, plateSource.comment]) || undefined,
   };
 

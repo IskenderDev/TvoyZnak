@@ -69,20 +69,10 @@ const LETTERS_HINT = LETTER_OPTIONS.join(", ");
 const DIGITS_HINT = DIGIT_OPTIONS.join(", ");
 
 const sortRegions = (a: Region, b: Region) => {
-  const codeA = Number.parseInt(a.regionCode, 10);
-  const codeB = Number.parseInt(b.regionCode, 10);
-
-  const hasNumericA = Number.isFinite(codeA);
-  const hasNumericB = Number.isFinite(codeB);
-
-  if (hasNumericA && hasNumericB) {
-    return (codeA as number) - (codeB as number);
-  }
-
-  if (hasNumericA) return -1;
-  if (hasNumericB) return 1;
-
-  return a.regionCode.localeCompare(b.regionCode, "ru");
+  const normalize = (code: string) => code.trim().padStart(3, "0");
+  const codeA = normalize(a.regionCode);
+  const codeB = normalize(b.regionCode);
+  return codeA.localeCompare(codeB, "ru");
 };
 
 export default function PlateSelectForm({

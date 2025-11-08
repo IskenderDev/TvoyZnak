@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { FiX } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { AdminLot, UpdateAdminLotPayload } from "@/api/adminLots";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
 import { DIGITS, LETTERS } from "@/shared/components/plate/constants";
+import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import Modal from "@/shared/ui/Modal";
+import { format2 } from "@/shared/lib/format/format2";
 
 const letterValues = new Set(LETTERS.map((letter) => letter.toUpperCase()));
 const digitValues = new Set(DIGITS.map((digit) => digit.toUpperCase()));
@@ -75,17 +78,6 @@ type AdminLotEditModalProps = {
 let regionsCache: Region[] | null = null;
 let regionsPromise: Promise<Region[]> | null = null;
 
-const FOCUSABLE_SELECTORS = [
-  "button",
-  "[href]",
-  "input",
-  "select",
-  "textarea",
-  "[tabindex]:not([tabindex='-1'])",
-]
-  .map((selector) => `${selector}:not([disabled])`)
-  .join(",");
-
 export default function AdminLotEditModal({
   open,
   lot,
@@ -93,8 +85,6 @@ export default function AdminLotEditModal({
   onSubmit,
   submitting = false,
 }: AdminLotEditModalProps) {
-  const dialogRef = useRef<HTMLDivElement | null>(null);
-  const overlayRef = useRef<HTMLDivElement | null>(null);
   const [regions, setRegions] = useState<Region[]>(regionsCache ?? []);
   const [regionsError, setRegionsError] = useState<string | null>(null);
   const [regionsLoading, setRegionsLoading] = useState(false);
@@ -106,6 +96,7 @@ export default function AdminLotEditModal({
     formState: { errors, isSubmitting },
     reset,
     setError,
+    watch,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: lot
@@ -186,58 +177,6 @@ export default function AdminLotEditModal({
     };
   }, [open]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-
-      if (event.key === "Tab") {
-        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS);
-        if (!focusable || focusable.length === 0) {
-          return;
-        }
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (event.shiftKey) {
-          if (document.activeElement === first) {
-            event.preventDefault();
-            last.focus();
-          }
-        } else if (document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS);
-    focusable?.[0]?.focus();
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, onClose]);
-
-  const handleOverlayMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === overlayRef.current) {
-      onClose();
-    }
-  };
-
   const onFormSubmit = handleSubmit(async (values) => {
     if (!lot) {
       return;
@@ -271,147 +210,209 @@ export default function AdminLotEditModal({
 
   const isBusy = submitting || isSubmitting;
   const effectiveRegions = useMemo(
-    () => regions.map((region) => ({ value: region.id, label: `${region.regionCode} — ${region.regionName}` })),
+    () =>
+      regions.map((region) => ({
+        value: region.id,
+        label: `${format2(region.regionCode)} — ${region.regionName}`,
+      })),
     [regions],
   );
 
-  if (!open || !lot) {
+  const firstLetterValue = watch("firstLetter");
+  const secondLetterValue = watch("secondLetter");
+  const thirdLetterValue = watch("thirdLetter");
+  const firstDigitValue = watch("firstDigit");
+  const secondDigitValue = watch("secondDigit");
+  const thirdDigitValue = watch("thirdDigit");
+  const regionFieldValue = watch("regionId");
+  const commentValue = watch("comment");
+
+  const previewPlate = useMemo<PlateData>(() => {
+    const fallbackPlate: PlateData = {
+      price: lot?.originalPrice ?? 0,
+      comment: lot?.comment ?? "",
+      firstLetter: lot?.firstLetter ?? "",
+      secondLetter: lot?.secondLetter ?? "",
+      thirdLetter: lot?.thirdLetter ?? "",
+      firstDigit: lot?.firstDigit ?? "",
+      secondDigit: lot?.secondDigit ?? "",
+      thirdDigit: lot?.thirdDigit ?? "",
+      regionId: lot?.regionCode ?? "",
+    };
+
+    if (!lot) {
+      return fallbackPlate;
+    }
+
+    const ensureString = (value: unknown, fallback: string) =>
+      typeof value === "string" && value.trim() ? value.trim().toUpperCase() : fallback;
+    const ensureDigit = (value: unknown, fallback: string) =>
+      typeof value === "string" && value.trim() ? value.trim() : fallback;
+
+    const regionPreview = (() => {
+      if (typeof regionFieldValue === "number" && Number.isFinite(regionFieldValue)) {
+        return String(regionFieldValue);
+      }
+      if (typeof regionFieldValue === "string" && regionFieldValue.trim()) {
+        return regionFieldValue.trim();
+      }
+      return lot.regionCode ?? "";
+    })();
+
+    return {
+      price: lot.originalPrice ?? 0,
+      comment: typeof commentValue === "string" ? commentValue : lot.comment ?? "",
+      firstLetter: ensureString(firstLetterValue, lot.firstLetter ?? ""),
+      secondLetter: ensureString(secondLetterValue, lot.secondLetter ?? ""),
+      thirdLetter: ensureString(thirdLetterValue, lot.thirdLetter ?? ""),
+      firstDigit: ensureDigit(firstDigitValue, lot.firstDigit ?? ""),
+      secondDigit: ensureDigit(secondDigitValue, lot.secondDigit ?? ""),
+      thirdDigit: ensureDigit(thirdDigitValue, lot.thirdDigit ?? ""),
+      regionId: regionPreview,
+    } satisfies PlateData;
+  }, [commentValue, firstDigitValue, firstLetterValue, lot, regionFieldValue, secondDigitValue, secondLetterValue, thirdDigitValue, thirdLetterValue]);
+
+  if (!lot) {
     return null;
   }
 
-  return createPortal(
-    <div
-      ref={overlayRef}
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 px-4"
-      role="presentation"
-      onMouseDown={handleOverlayMouseDown}
-    >
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="admin-lot-edit-title"
-        className="w-full max-w-2xl rounded-2xl bg-neutral-900 text-white shadow-2xl"
-      >
-        <div className="border-b border-white/10 px-6 py-4">
-          <h2 id="admin-lot-edit-title" className="text-xl font-semibold">
-            Редактирование лота {lot.fullCarNumber}
-          </h2>
-          <p className="mt-1 text-sm text-neutral-300">Измените данные и сохраните изменения.</p>
-        </div>
+  return (
+    <Modal open={open} onClose={onClose}>
+      <div className="relative max-h-[90vh] overflow-hidden rounded-[32px] bg-white text-black shadow-2xl">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/5 text-black transition hover:bg-black/10"
+          aria-label="Закрыть окно редактирования"
+        >
+          <FiX className="h-5 w-5" />
+        </button>
 
-        <form onSubmit={onFormSubmit} className="flex flex-col gap-6 px-6 py-6">
-          {formError ? (
-            <div className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {formError}
+        <div className="max-h-[90vh] overflow-y-auto px-6 pb-8 pt-10 sm:px-10 sm:pb-10 sm:pt-12">
+          <div className="mx-auto w-full max-w-[720px] space-y-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-actay-wide uppercase md:text-3xl">Редактирование лота</h2>
+              <p className="mt-2 text-sm text-black/70 md:text-base">Обновите данные номера и сохраните изменения.</p>
+              <p className="mt-1 text-xs uppercase tracking-wide text-black/40">{lot.fullCarNumber}</p>
             </div>
-          ) : null}
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Первая буква" error={errors.firstLetter?.message}>
-              <input
-                {...register("firstLetter")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg uppercase tracking-wide focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-            <Field label="Вторая буква" error={errors.secondLetter?.message}>
-              <input
-                {...register("secondLetter")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg uppercase tracking-wide focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-            <Field label="Третья буква" error={errors.thirdLetter?.message}>
-              <input
-                {...register("thirdLetter")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg uppercase tracking-wide focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-            <Field label="Первая цифра" error={errors.firstDigit?.message}>
-              <input
-                {...register("firstDigit")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-            <Field label="Вторая цифра" error={errors.secondDigit?.message}>
-              <input
-                {...register("secondDigit")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-            <Field label="Третья цифра" error={errors.thirdDigit?.message}>
-              <input
-                {...register("thirdDigit")}
-                maxLength={1}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-center text-lg focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-          </div>
+            <div className="flex justify-center">
+              <PlateStaticSm data={previewPlate} responsive showCaption={false} className="w-full max-w-[220px]" />
+            </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Регион" error={errors.regionId?.message}>
-              <select
-                {...register("regionId", { valueAsNumber: true })}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-              >
-                <option value="">Выберите регион</option>
-                {effectiveRegions.map((region) => (
-                  <option key={region.value} value={region.value}>
-                    {region.label}
-                  </option>
-                ))}
-              </select>
-              {regionsLoading ? (
-                <p className="mt-2 text-xs text-neutral-400">Загрузка регионов...</p>
+            <form className="space-y-6" onSubmit={onFormSubmit}>
+              {formError ? (
+                <div className="rounded-2xl border border-[#EB5757]/40 bg-[#EB5757]/10 px-4 py-3 text-sm text-[#EB5757]">
+                  {formError}
+                </div>
               ) : null}
-              {regionsError ? (
-                <p className="mt-2 text-xs text-red-400">{regionsError}</p>
-              ) : null}
-            </Field>
-            <Field label="Наценка" error={errors.markupPrice?.message}>
-              <input
-                type="number"
-                step="100"
-                min={0}
-                {...register("markupPrice", { valueAsNumber: true })}
-                className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-              />
-            </Field>
-          </div>
 
-          <Field label="Комментарий" error={errors.comment?.message}>
-            <textarea
-              {...register("comment")}
-              rows={3}
-              className="w-full rounded-lg border border-white/10 bg-neutral-800 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-              placeholder="Комментарий для покупателя"
-            />
-          </Field>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label="Первая буква" error={errors.firstLetter?.message}>
+                  <input
+                    {...register("firstLetter")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+                <Field label="Вторая буква" error={errors.secondLetter?.message}>
+                  <input
+                    {...register("secondLetter")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+                <Field label="Третья буква" error={errors.thirdLetter?.message}>
+                  <input
+                    {...register("thirdLetter")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+                <Field label="Первая цифра" error={errors.firstDigit?.message}>
+                  <input
+                    {...register("firstDigit")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+                <Field label="Вторая цифра" error={errors.secondDigit?.message}>
+                  <input
+                    {...register("secondDigit")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+                <Field label="Третья цифра" error={errors.thirdDigit?.message}>
+                  <input
+                    {...register("thirdDigit")}
+                    maxLength={1}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-center text-lg focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+              </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full rounded-lg border border-white/10 bg-neutral-800 px-4 py-2 text-sm font-medium transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:w-auto"
-            >
-              Отмена
-            </button>
-            <button
-              type="submit"
-              disabled={isBusy || regionsLoading}
-              className="w-full rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/60 sm:w-auto"
-            >
-              {isBusy ? "Сохранение..." : "Сохранить"}
-            </button>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Регион" error={errors.regionId?.message}>
+                  <select
+                    {...register("regionId", { valueAsNumber: true })}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  >
+                    <option value="">Выберите регион</option>
+                    {effectiveRegions.map((region) => (
+                      <option key={region.value} value={region.value}>
+                        {region.label}
+                      </option>
+                    ))}
+                  </select>
+                  {regionsLoading ? (
+                    <p className="mt-2 text-xs text-black/50">Загрузка регионов...</p>
+                  ) : null}
+                  {regionsError ? (
+                    <p className="mt-2 text-xs text-[#EB5757]">{regionsError}</p>
+                  ) : null}
+                </Field>
+                <Field label="Наценка" error={errors.markupPrice?.message}>
+                  <input
+                    type="number"
+                    step="100"
+                    min={0}
+                    {...register("markupPrice", { valueAsNumber: true })}
+                    className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  />
+                </Field>
+              </div>
+
+              <Field label="Комментарий" error={errors.comment?.message}>
+                <textarea
+                  {...register("comment")}
+                  rows={4}
+                  className="w-full rounded-xl border border-black/10 bg-[#f5f6f8] px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E63FF]"
+                  placeholder="Комментарий для покупателя"
+                />
+              </Field>
+
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full rounded-full border border-black/10 px-6 py-3 text-sm font-medium text-black transition hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-[#1E63FF]/40 sm:w-auto"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="submit"
+                  disabled={isBusy || regionsLoading}
+                  className="w-full rounded-full bg-[#1E63FF] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#1557E0] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                >
+                  {isBusy ? "Сохранение..." : "Сохранить"}
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
-    </div>,
-    document.body,
+    </Modal>
   );
 }
 
@@ -423,10 +424,10 @@ type FieldProps = {
 
 function Field({ label, error, children }: FieldProps) {
   return (
-    <label className="flex flex-col gap-1 text-sm">
-      <span className="font-medium text-neutral-100">{label}</span>
+    <label className="flex flex-col gap-2 text-sm text-black">
+      <span className="font-semibold text-black/70">{label}</span>
       {children}
-      {error ? <span className="text-xs text-red-400">{error}</span> : null}
+      {error ? <span className="text-xs text-[#EB5757]">{error}</span> : null}
     </label>
   );
 }

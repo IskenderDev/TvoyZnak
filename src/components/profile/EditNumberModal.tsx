@@ -35,10 +35,13 @@ const toPlateValue = (lot: NumberItem | null): PlateSelectValue => {
     plate.thirdLetter || "*",
   ].join("");
 
+  const numericRegionId =
+    typeof plate.regionId === "number" && Number.isFinite(plate.regionId) ? plate.regionId : null;
+
   return {
     text,
     regionCode: region || "",
-    regionId: plate.regionId ?? null,
+    regionId: numericRegionId,
   };
 };
 

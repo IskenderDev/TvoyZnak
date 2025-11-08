@@ -33,13 +33,14 @@ export default function HeaderNav({
   const containerBase =
     orientation === "horizontal"
       ? "flex items-center gap-7 xl:gap-9"
-      : "flex flex-col gap-4";
+      : "flex flex-col gap-3";
 
   const linkBase =
-    "transition-colors duration-200 font-medium text-white hover:text-[#85B6FF]";
+    "rounded-xl px-3 py-2 font-medium text-slate-300 transition-colors duration-200 hover:text-white";
+  const linkActive = "bg-white/10 text-white shadow";
 
   const horizontalText = "text-[15px]";
-  const verticalText = "text-base";
+  const verticalText = "text-base w-full text-left";
 
   return (
     <nav className={`${containerBase} ${className}`.trim()}>
@@ -53,7 +54,7 @@ export default function HeaderNav({
             [
               linkBase,
               orientation === "horizontal" ? horizontalText : verticalText,
-              isActive ? "text-[#85B6FF]" : null,
+              isActive ? linkActive : "",
             ]
               .filter(Boolean)
               .join(" ")
