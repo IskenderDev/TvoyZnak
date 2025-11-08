@@ -1,0 +1,15 @@
+services:
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      # прокинь нужные env (Vite видит только переменные с префиксом VITE_)
+      - HOST=0.0.0.0
+      - PORT=5173
+      - VITE_API_BASE_URL=http://localhost:8081
