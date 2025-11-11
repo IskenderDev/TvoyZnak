@@ -15,7 +15,7 @@ export default function HomePage({ hideSeo = false }: HomePageProps = {}) {
       {hideSeo ? null : (
         <Seo title="Знак отличия" description="Главная страница каркаса SPA" />
       )}
-      <div>
+      <div>asdas
         <HeroSection />
         <NumbersMarketSection />
         <ProjectsSection />
