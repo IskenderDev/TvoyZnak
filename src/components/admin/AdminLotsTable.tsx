@@ -3,7 +3,7 @@ import { FiCheck, FiEdit2, FiLoader, FiTrash2 } from "react-icons/fi";
 import { LuChevronDown } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
 
-import type { AdminLot } from "@/api/adminLots";
+import type { AdminLot } from "@/shared/api/adminLots";
 import type { AdminLotSortKey, SortDirection } from "@/hooks/useAdminLots";
 import Button from "@/shared/ui/Button";
 import IconButton from "@/shared/ui/IconButton";

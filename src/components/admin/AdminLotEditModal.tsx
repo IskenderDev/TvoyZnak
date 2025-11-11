@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type { AdminLot, UpdateAdminLotPayload } from "@/api/adminLots";
+import type { AdminLot, UpdateAdminLotPayload } from "@/shared/api/adminLots";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
 import { DIGITS, LETTERS } from "@/shared/components/plate/constants";
 

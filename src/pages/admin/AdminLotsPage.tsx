@@ -4,7 +4,7 @@ import { FiRefreshCw, FiSearch } from "react-icons/fi";
 import AdminLotsTable from "@/components/admin/AdminLotsTable";
 import EditNumberModal, { type EditNumberModalSubmitPayload } from "@/components/profile/EditNumberModal";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
-import type { AdminLot } from "@/api/adminLots";
+import type { AdminLot } from "@/shared/api/adminLots";
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/ui/Button";
 import Input from "@/shared/ui/Input";

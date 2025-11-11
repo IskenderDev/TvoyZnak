@@ -8,7 +8,7 @@ import {
   deleteLot as apiDeleteLot,
   type AdminLot,
   type UpdateAdminLotPayload,
-} from "@/api/adminLots";
+} from "@/shared/api/adminLots";
 
 export type AdminLotStatusFilter = "all" | "confirmed" | "pending";
 export type AdminLotSortKey = "createdDate" | "originalPrice" | "markupPrice";

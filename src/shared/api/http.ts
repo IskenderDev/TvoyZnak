@@ -12,7 +12,7 @@ const baseURL = (() => {
     return candidate;
   }
 
-  return "http://localhost:8081/";
+  return "https://sell-license.onrender.com/";
 })();
 
 const http = axios.create({

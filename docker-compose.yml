@@ -1,11 +1,15 @@
+version: "3.9"
+
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        VITE_API_BASE_URL: "http://localhost:8081"
-    image: my-vite-web:latest
+    image: my-vite-app:prod
+    container_name: my-vite-web
     ports:
-      - "5173:80"  # снаружи 5173 -> внутри nginx:80
+      - "8080:80"    
+    environment:
+      API_BASE_URL: "https://api.mydomain.com"   
+      APP_ENV: "production"
     restart: unless-stopped
