@@ -16,11 +16,20 @@ export default function NewsCard({ news }: Props) {
       <div className="p-5 flex flex-col justify-between min-h-[200px]">
         <div>
           {formattedDate && (
-            <p className="text-neutral-400 text-sm flex items-center gap-2">{formattedDate}</p>
+            <p className="text-neutral-400 text-sm flex items-center gap-2">
+              <time dateTime={news.publishedAt!}>{formattedDate}</time>
+            </p>
           )}
-          <h3 className="text-white font-road font-bold mt-2 leading-snug uppercase">{news.title}</h3>
-          {news.excerpt && <p className="text-neutral-400 text-sm mt-3 line-clamp-3">{news.excerpt}</p>}
+
+          <h3 className="text-white font-road font-bold mt-2 leading-snug uppercase">
+            {news.title}
+          </h3>
+
+          {news.excerpt && (
+            <p className="text-neutral-400 text-sm mt-3 line-clamp-3">{news.excerpt}</p>
+          )}
         </div>
+
         <Link
           to={`/news/${news.id}`}
           className="block mt-5 text-center text-white bg-[#0177FF] hover:bg-[#046FFF] rounded-xl py-2 font-road font-medium"

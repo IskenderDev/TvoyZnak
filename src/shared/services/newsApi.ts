@@ -26,11 +26,10 @@ export interface NewsApi {
   delete(id: string): Promise<void>;
 }
 
-type PostDto = z.infer<typeof postSchema>;
-
 const postSchema = z
   .object({
     id: z.union([z.string(), z.number()]),
+    // названия, тексты
     title: z.string().optional(),
     name: z.string().optional(),
     slug: z.string().optional(),
@@ -42,69 +41,69 @@ const postSchema = z
     content: z.string().optional(),
     body: z.string().optional(),
     text: z.string().optional(),
+    // изображения
     cover: z.string().optional(),
     coverUrl: z.string().optional(),
     imageUrl: z.string().optional(),
     thumbnailUrl: z.string().optional(),
     mainImageUrl: z.string().optional(),
+    // даты (оба варианта полей)
     publishedAt: z.string().optional(),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
+    createdDate: z.string().optional(),
+    updatedDate: z.string().optional(),
+    // статус
     status: z.string().optional(),
   })
   .passthrough();
 
+type PostDto = z.infer<typeof postSchema>;
 const listResponseSchema = z.array(postSchema);
 
-const FALLBACK_COVER = "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80";
-
-const toNewsItem = (dto: PostDto): NewsItem => {
-  const title = pickString([dto.title, dto.name, dto.description, dto.text, "Новость"]);
-  const excerpt = pickString([dto.excerpt, dto.previewText, dto.shortDescription, dto.description, dto.text]);
-  const content = pickString([dto.content, dto.body, dto.text, excerpt]);
-  const cover = normalizeCover(
-    pickString([dto.cover, dto.coverUrl, dto.imageUrl, dto.thumbnailUrl, dto.mainImageUrl]),
-  ) || FALLBACK_COVER;
-  const rawDate = pickString([dto.publishedAt, dto.createdAt, dto.updatedAt]);
-
-  return {
-    id: String(dto.id),
-    slug: normalizeSlug(pickString([dto.slug, dto.code]) || title),
-    title,
-    cover,
-    excerpt,
-    content,
-    status: pickString([dto.status]) || "published",
-    publishedAt: normalizeDate(rawDate),
-  };
-};
+const FALLBACK_COVER =
+  "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80";
 
 const pickString = (values: Array<unknown | undefined>): string => {
   for (const value of values) {
-    if (typeof value === "string" && value.trim()) {
-      return value.trim();
-    }
+    if (typeof value === "string" && value.trim()) return value.trim();
   }
   return "";
 };
 
 const normalizeSlug = (value: string): string => {
   if (!value) return "post";
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9\p{sc=Cyrl}]+/gu, "-")
-    .replace(/^-+|-+$/g, "")
-    .replace(/-{2,}/g, "-")
-    .slice(0, 80) || "post";
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9\p{sc=Cyrl}]+/gu, "-")
+      .replace(/^-+|-+$/g, "")
+      .replace(/-{2,}/g, "-")
+      .slice(0, 80) || "post"
+  );
 };
 
 const normalizeDate = (value: string): string | undefined => {
   if (!value) return undefined;
-  const date = new Date(value);
+
+  let v = value.trim();
+
+  // поддержка формата "YYYY-MM-DD HH:mm:ss(.SSS)"
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(v)) {
+    v = v.replace(" ", "T");
+  }
+
+  // если нет таймзоны и это ISO без 'Z' — добавим 'Z'
+  const hasTZ = /[zZ]|[+\-]\d{2}:?\d{2}$/.test(v);
+  if (!hasTZ) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) v += "T00:00:00Z";
+    else if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(v)) v += "Z";
+  }
+
+  const date = new Date(v);
   if (Number.isNaN(+date)) return undefined;
   return date.toISOString();
 };
-
 
 const normalizeCover = (value: string): string => {
   const cover = value?.trim();
@@ -118,7 +117,6 @@ const normalizeCover = (value: string): string => {
     if (cover.startsWith("/")) {
       return new URL(cover, API_BASE_URL).toString();
     }
-
     const url = new URL("/api/files", API_BASE_URL);
     url.searchParams.set("path", cover);
     return url.toString();
@@ -128,6 +126,36 @@ const normalizeCover = (value: string): string => {
   }
 };
 
+const toNewsItem = (dto: PostDto): NewsItem => {
+  const title = pickString([dto.title, dto.name, dto.description, dto.text, "Новость"]);
+  const excerpt = pickString([dto.excerpt, dto.previewText, dto.shortDescription, dto.description, dto.text]);
+  const content = pickString([dto.content, dto.body, dto.text, excerpt]);
+
+  const cover =
+    normalizeCover(
+      pickString([dto.cover, dto.coverUrl, dto.imageUrl, dto.thumbnailUrl, dto.mainImageUrl]),
+    ) || FALLBACK_COVER;
+
+  // дата публикации: publishedAt → createdAt/createdDate → updatedAt/updatedDate
+  const rawDate = pickString([
+    dto.publishedAt,
+    dto.createdAt,
+    (dto as any).createdDate,
+    dto.updatedAt,
+    (dto as any).updatedDate,
+  ]);
+
+  return {
+    id: String(dto.id),
+    slug: normalizeSlug(pickString([dto.slug, dto.code]) || title),
+    title,
+    cover,
+    excerpt,
+    content,
+    status: pickString([dto.status]) || "published",
+    publishedAt: normalizeDate(rawDate),
+  };
+};
 
 const request = async <T>(fn: () => Promise<{ data: unknown }>, map: (payload: unknown) => T): Promise<T> => {
   const response = await fn();

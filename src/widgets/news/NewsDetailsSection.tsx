@@ -1,54 +1,72 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Seo from "@/shared/components/Seo";
-import NewsCard from "@/shared/components/NewsCard";
-import { newsApi } from "@/shared/services/newsApi";
-import type { NewsItem } from "@/entities/news/types";
+import { useEffect, useMemo, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import Seo from "@/shared/components/Seo"
+import NewsCard from "@/shared/components/NewsCard"
+import { newsApi } from "@/shared/services/newsApi"
+import type { NewsItem } from "@/entities/news/types"
 
-const PER_PAGE = 6;
+const PER_PAGE = 6
 
 export default function NewsDetailsSection() {
-  const { id } = useParams<{ id: string }>();
-  const [item, setItem] = useState<NewsItem | null>(null);
-  const [related, setRelated] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { id } = useParams<{ id: string }>()
+  const [item, setItem] = useState<NewsItem | null>(null)
+  const [related, setRelated] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!id) return;
-    let mounted = true;
-    setLoading(true);
-    setError(null);
+    if (!id) return
+    let mounted = true
+    setLoading(true)
+    setError(null)
 
     Promise.all([newsApi.get(id), newsApi.list({})])
       .then(([current, list]) => {
-        if (!mounted) return;
-        setItem(current);
-        const filtered = list.filter((news) => news.id !== current.id).slice(0, PER_PAGE);
-        setRelated(filtered);
+        if (!mounted) return
+        setItem(current)
+        const filtered = list
+          .filter((news) => news.id !== current.id)
+          .slice(0, PER_PAGE)
+        setRelated(filtered)
       })
       .catch((err) => {
-        if (!mounted) return;
-        const message = err?.response?.data?.message || err?.message || "Не удалось загрузить новость";
-        setError(message);
+        if (!mounted) return
+        const message =
+          err?.response?.data?.message ||
+          err?.message ||
+          "Не удалось загрузить новость"
+        setError(message)
       })
       .finally(() => {
-        if (mounted) setLoading(false);
-      });
+        if (mounted) setLoading(false)
+      })
 
     return () => {
-      mounted = false;
-    };
-  }, [id]);
+      mounted = false
+    }
+  }, [id])
 
-  const publishedDate = useMemo(() => (item?.publishedAt ? formatDate(item.publishedAt) : ""), [item]);
+  const meta = useMemo(() => {
+    if (!item) return { date: "", views: 0, dateTime: "" }
+    const rawDate =
+      (item as any).publishedAt ||
+      (item as any).createdDate ||
+      (item as any).updatedDate ||
+      ""
+    return {
+      date: rawDate ? formatDateShort(rawDate) : "",
+      dateTime: rawDate || "",
+      views: (item as any)?.views ?? 0,
+    }
+  }, [item])
+
 
   if (loading) {
     return (
       <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
-        <p className="text-neutral-300">Загрузка...</p>
+        <p className="text-neutral-300">Загрузка…</p>
       </section>
-    );
+    )
   }
 
   if (error) {
@@ -56,7 +74,7 @@ export default function NewsDetailsSection() {
       <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
         <p className="text-[#EB5757]">{error}</p>
       </section>
-    );
+    )
   }
 
   if (!item) {
@@ -64,49 +82,103 @@ export default function NewsDetailsSection() {
       <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Новость не найдена</p>
       </section>
-    );
+    )
   }
 
   return (
     <>
-      <Seo title={`${item.title} — Знак отличия`} description={item.excerpt || item.content?.slice(0, 180)} />
-      <Link to="/news" className="text-[#0177FF] hover:underline mx-6">
-        ← Все новости
-      </Link>
-      <article className="bg-[#0B0B0C] text-white min-h-screen py-8 font-actay">
-        <div className="mx-auto px-6 max-w-6xl flex flex-col lg:flex-row gap-10">
-          {item.cover && (
-            <img src={item.cover} alt={item.title} className="w-full lg:w-1/2 rounded-2xl object-cover" loading="lazy" />
-          )}
+      <Seo
+        title={`${item.title} — Знак отличия`}
+        description={item.excerpt || item.content?.slice(0, 180)}
+      />
 
-          <div className="flex-1">
-            {publishedDate && <p className="text-neutral-400 text-sm mb-2 flex items-center gap-2">{publishedDate}</p>}
-            <h1 className="text-3xl md:text-4xl font-road font-bold mb-4 uppercase leading-snug">{item.title}</h1>
-            {item.excerpt && <p className="text-neutral-300 leading-relaxed mb-6 font-road">{item.excerpt}</p>}
-            {item.content && (
-              <div className="text-neutral-300 whitespace-pre-line leading-relaxed font-road">{item.content}</div>
-            )}
-          </div>
+      <section className="bg-[#0B0B0C] text-white min-h-screen">
+        <div className="mx-auto max-w-9xl px-4 md:px-6 py-6">
+          <Link
+            to="/news"
+            className="inline-flex items-center gap-2 text-[#0177FF] hover:underline mb-6"
+          >
+            <span className="-mt-[1px]">←</span> Все новости
+          </Link>
+
+          <article className=" overflow-hidden">
+            <div className="flex flex-col lg:flex-row gap-0">
+              {item.cover ? (
+                <div className="lg:w-[46%] relative">
+                  <img
+                    src={item.cover}
+                    alt={item.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover aspect-[16/9] lg:aspect-auto lg:h-[420px]"
+                  />
+                </div>
+              ) : null}
+
+              <div className="flex-1 p-6 md:p-8">
+                {meta.date && (
+                  <time dateTime={meta.dateTime} className="inline-block text-lg text-neutral-400 mb-4">
+                    {meta.date}
+                  </time>
+                )}
+
+                <h1 className="uppercase font-extrabold tracking-wide leading-tight font-actay-wide text-white text-[26px] md:text-[34px] mb-4">
+                  {item.title}
+                </h1>
+
+                {item.excerpt && (
+                  <p className="font-actay mb-6 text-[15px] md:text-2xl">
+                    {item.excerpt}
+                  </p>
+                )}
+              </div>
+            </div>
+          </article>
+
+          {related.length > 0 && (
+            <>
+              <h2 className="font-actay-wide text-[28px] md:text-[34px] font-extrabold mt-12 md:mt-16 mb-6">
+                Другие новости
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {related.map((news) => (
+                  <NewsCard key={news.id} news={news} />
+                ))}
+              </div>
+            </>
+          )}
         </div>
-            <h1 className="text-4xl font-extrabold my-12 mx-10 font-actay-wide">Другие новости</h1>
-        {related.length > 0 && (
-          <div className="m-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {related.map((news) => (
-              <NewsCard key={news.id} news={news} />
-            ))}
-          </div>
-        )}
-      </article>
+      </section>
     </>
-  );
+  )
 }
 
-const formatDate = (value: string): string => {
-  const date = new Date(value);
-  if (Number.isNaN(+date)) return "";
-  return date.toLocaleDateString("ru-RU", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-};
+
+const formatDateShort = (value: string): string => {
+  const d = new Date(value)
+  if (Number.isNaN(+d)) return ""
+  const dd = String(d.getDate()).padStart(2, "0")
+  const mm = String(d.getMonth() + 1).padStart(2, "0")
+  const yyyy = d.getFullYear()
+  return `${dd}.${mm}.${yyyy}`
+}
+
+const formatViews = (v: number) => {
+  if (v >= 1000000) return `${(v / 1_000_000).toFixed(1)}M`
+  if (v >= 1000) return `${(v / 1000).toFixed(1)}k`
+  return String(v)
+}
+
+function EyeIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <path
+        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="3.25" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  )
+}
