@@ -46,19 +46,8 @@ export default function ProjectsSection({ items }: Props) {
 							{featured.description}
 						</p>
 
-						<dl className="mt-6 space-y-2 text-xs md:text-sm text-neutral-400 tracking-wide uppercase">
-							<div className="flex gap-2">
-								<dt className="opacity-70">Category:</dt>
-								<dd>{featured.category}</dd>
-							</div>
-							<div className="flex gap-2">
-								<dt className="opacity-70">Date:</dt>
-								<dd>{featured.date}</dd>
-							</div>
-							<div className="flex gap-2">
-								<dt className="opacity-70">Tags:</dt>
-								<dd>{featured.tags.join(", ")}</dd>
-							</div>
+						<dl className="mt-6 space-y-2 text-sm md:text-lg text-white font-extrabold font-actay tracking-wide uppercase">
+							ХОТИТЕ ТАКОЙ ЖЕ? — ПОДБЕРЕМ!
 						</dl>
 
 						<div className="absolute bottom-0 left-0 right-0 flex justify-between">
