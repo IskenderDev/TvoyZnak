@@ -2,8 +2,10 @@ node_modules
 dist
 .git
 .gitignore
-Dockerfile*
-docker-compose*.yml
-.idea
-.vscode
+Dockerfile
+docker-compose.yml
 *.log
+.vscode
+.idea
+.env.local
+.env.development

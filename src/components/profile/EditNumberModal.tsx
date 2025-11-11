@@ -10,7 +10,7 @@ import {
 } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
-import type { AdminLot } from "@/api/adminLots";
+import type { AdminLot } from "@/shared/api/adminLots";
 
 const INPUT_BASE =
   "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border";
