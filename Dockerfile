@@ -27,9 +27,8 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 
+# Права на каталоги — оставим, но USER не меняем (мастер запустится от root и дропнет воркеров до 'web')
 RUN chown -R web:web /usr/share/nginx/html /var/cache/nginx /var/run/nginx
-
-USER web
 
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1/health || exit 1

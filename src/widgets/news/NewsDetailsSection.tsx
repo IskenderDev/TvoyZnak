@@ -162,23 +162,3 @@ const formatDateShort = (value: string): string => {
   return `${dd}.${mm}.${yyyy}`
 }
 
-const formatViews = (v: number) => {
-  if (v >= 1000000) return `${(v / 1_000_000).toFixed(1)}M`
-  if (v >= 1000) return `${(v / 1000).toFixed(1)}k`
-  return String(v)
-}
-
-function EyeIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="12" cy="12" r="3.25" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  )
-}
