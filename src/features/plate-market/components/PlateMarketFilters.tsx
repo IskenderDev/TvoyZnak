@@ -36,7 +36,7 @@ export const PlateMarketFilters = ({
           onChange={onRegionChange}
           placeholder="Регионы"
           options={regionOptions}
-          className="min-w-[150px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
+          className="w-[240px] md:w-[380px] text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
         />
         <UiSelect
           name="category"
@@ -44,7 +44,7 @@ export const PlateMarketFilters = ({
           onChange={onCategoryChange}
           placeholder="Категория"
           options={categoryOptions}
-          className="min-w-[200px] text-sm md:text-2xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm"
+          className="w-[200px] md:w-[290px] text-center text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
         />
       </div>
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
+import { regionsApi, type Region } from "@/shared/services/regionsApi";
 import type { PlateMarketFiltersState, SortDir } from "./types";
 import { filterPlates } from "../lib/filterPlates";
 import type { NumberItem } from "@/entities/number/types";
@@ -27,8 +28,10 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
   const [filters, setFilters] = useState<PlateMarketFiltersState>(() => createInitialState());
   const [limit, setLimit] = useState(initialLimit);
   const [items, setItems] = useState<NumberItem[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [regionsError, setRegionsError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -49,6 +52,46 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     void load();
   }, [load]);
 
+  useEffect(() => {
+    let active = true;
+
+    const loadRegions = async () => {
+      try {
+        const data = await regionsApi.list();
+        if (active) {
+          setRegions(data);
+        }
+      } catch (err: unknown) {
+        if (active) {
+          const message = extractErrorMessage(err, "Не удалось загрузить регионы");
+          setRegionsError(message);
+        }
+      }
+    };
+
+    void loadRegions();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (regionsError) {
+      setError((prev) => prev ?? regionsError);
+    }
+  }, [regionsError]);
+
+  const regionLabels = useMemo(() => {
+    const labels = new Map<string, string>();
+    regions.forEach((region) => {
+      if (region.regionCode) {
+        labels.set(region.regionCode, region.regionName || region.regionCode);
+      }
+    });
+    return labels;
+  }, [regions]);
+
   const regionOptions = useMemo(() => {
     const base = new Set<string>();
     items.forEach((item) => {
@@ -62,10 +105,13 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     return [
       { label: "Все регионы", value: "" },
       ...Array.from(base)
-        .sort((a, b) => a.localeCompare(b, "ru"))
-        .map((value) => ({ label: value, value })),
+        .map((value) => ({
+          value,
+          label: regionLabels.get(value) ?? value,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label, "ru")),
     ];
-  }, [items]);
+  }, [items, regionLabels]);
 
   const categoryOptions = useMemo(() => {
     const base = new Set<string>();
