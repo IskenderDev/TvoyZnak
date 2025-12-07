@@ -1,52 +1,119 @@
 @import "tailwindcss";
 @reference "tailwindcss";
 
+
 @font-face {
   font-family: "Actay";
-  src: url("/fonts/Actay-Regular.otf") format("opentype");
+  src:
+    local("Actay Regular"),
+    url("/fonts/Actay-Regular.otf") format("opentype");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Actay Wide";
-  src: url("/fonts/ActayWide-Bold.otf") format("opentype");
+  src:
+    local("Actay Wide Bold"),
+    url("/fonts/ActayWide-Bold.otf") format("opentype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Actay Druk Wide Cyr";
-  src: url("/fonts/ActayDrukWideCyr.woff2") format("woff2");
+  src:
+    local("Actay Druk Wide Cyr"),
+    url("/fonts/ActayDrukWideCyr.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "RoadNumbers2";
-  src: url("/fonts/roadnumbers.otf") format("opentype");
+  src:
+    local("RoadNumbers2"),
+    url("/fonts/AutoNumber_Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
+
+
+
+@theme {
+  --font-actay:
+    "Actay",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    "Noto Sans",
+    "Liberation Sans",
+    sans-serif;
+
+  --font-actay-wide:
+    "Actay Wide",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    "Noto Sans",
+    "Liberation Sans",
+    sans-serif;
+
+  --font-actay-druk:
+    "Actay Druk Wide Cyr",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    "Noto Sans",
+    "Liberation Sans",
+    sans-serif;
+
+  --font-road:
+    "RoadNumbers2",
+    var(--font-sans);
+
+  --font-monroad: "Monroad";
+
+  --font-sans: var(--font-monroad);
+}
+
+
+@utility font-actay {
+  font-family: var(--font-actay);
+}
+
+@utility font-actay-wide {
+  font-family: var(--font-actay-wide);
+}
+
+@utility font-actay-druk {
+  font-family: var(--font-actay-druk);
+}
+
 @utility font-road {
   font-family: var(--font-road);
 }
-@theme {
-  --font-actay:
-    "Actay", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial,
-    "Noto Sans", "Liberation Sans", sans-serif;
-  --font-actay-wide:
-    "Actay Wide", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial,
-    "Noto Sans", "Liberation Sans", sans-serif;
-  --font-actay-druk:
-    "Actay Druk Wide Cyr", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Arial, "Noto Sans", "Liberation Sans", sans-serif;
-  --font-road: "RoadNumbers2", var(--font-sans);
-  --font-sans: var(--font-actay);
+
+@utility font-monroad {
+  font-family: var(--font-monroad);
 }
+
+
 
 html {
   color-scheme: dark;
 }
+
 html.dark {
   color-scheme: dark;
 }
@@ -55,5 +122,27 @@ body {
   @apply bg-[#0b0b0c] antialiased font-actay overflow-x-hidden;
 }
 
-.no-scrollbar::-webkit-scrollbar { width: 0; height: 0; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button {
+  outline: none;
+  border: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; 
+}

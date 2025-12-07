@@ -141,7 +141,7 @@ export default function PlateStaticSm({
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb, }}
               >
                 <span
-                  className="font-extrabold font-actay-druk"
+                  className="font-extrabold font-monroad"
                   style={{ fontSize: rusFont, lineHeight: 1 }}
                 >
                   RUS
