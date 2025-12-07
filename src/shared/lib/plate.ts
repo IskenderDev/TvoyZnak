@@ -1,11 +1,12 @@
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
 import { formatPrice } from "./format";
+import { normalizePlateLetter } from "./plateLetters";
 
 const sanitizeLetter = (value?: string): string => {
   if (typeof value !== "string") return "";
   const trimmed = value.trim();
   if (!trimmed || trimmed === "*") return "";
-  return trimmed.slice(0, 1).toUpperCase();
+  return normalizePlateLetter(trimmed);
 };
 
 const sanitizeDigit = (value?: string): string => {

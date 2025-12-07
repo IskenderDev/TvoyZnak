@@ -3,41 +3,95 @@
 
 
 @font-face {
-  font-family: "Actay";
+  font-family: "Rubik";
   src:
-    local("Actay Regular"),
-    url("/fonts/Actay-Regular.otf") format("opentype");
+    url("/fonts/Rubik/Rubik-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Actay Wide";
+  font-family: "Rubik";
   src:
-    local("Actay Wide Bold"),
-    url("/fonts/ActayWide-Bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Actay Druk Wide Cyr";
-  src:
-    local("Actay Druk Wide Cyr"),
-    url("/fonts/ActayDrukWideCyr.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "RoadNumbers2";
-  src:
-    local("RoadNumbers2"),
-    url("/fonts/AutoNumber_Regular.ttf") format("truetype");
+    url("/fonts/Rubik/Rubik-Italic.ttf") format("truetype");
   font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src:
+    url("/fonts/Rubik/Rubik-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlateCyrillic";
+  src:
+    url("/fonts/PlateCyrillic.woff2") format("woff2"),
+    url("/fonts/PlateCyrillic.ttf") format("truetype"),
+    url("/fonts/PlateCyrillic.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlateRUS";
+  src:
+    url("/fonts/PlateRUS.woff2") format("woff2"),
+    url("/fonts/PlateRUS.ttf") format("truetype"),
+    url("/fonts/PlateRUS.otf") format("opentype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -45,8 +99,8 @@
 
 
 @theme {
-  --font-actay:
-    "Actay",
+  --font-sans:
+    "Rubik",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -56,35 +110,12 @@
     "Liberation Sans",
     sans-serif;
 
-  --font-actay-wide:
-    "Actay Wide",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Arial,
-    "Noto Sans",
-    "Liberation Sans",
-    sans-serif;
+  --font-actay: var(--font-sans);
+  --font-actay-wide: var(--font-sans);
+  --font-actay-druk: var(--font-sans);
 
-  --font-actay-druk:
-    "Actay Druk Wide Cyr",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Arial,
-    "Noto Sans",
-    "Liberation Sans",
-    sans-serif;
-
-  --font-road:
-    "RoadNumbers2",
-    var(--font-sans);
-
-  --font-monroad: "Monroad";
-
-  --font-sans: var(--font-monroad);
+  --font-plate: "PlateCyrillic", var(--font-sans);
+  --font-plate-rus: "PlateRUS", var(--font-sans);
 }
 
 
@@ -100,12 +131,12 @@
   font-family: var(--font-actay-druk);
 }
 
-@utility font-road {
-  font-family: var(--font-road);
+@utility font-plate {
+  font-family: var(--font-plate);
 }
 
-@utility font-monroad {
-  font-family: var(--font-monroad);
+@utility font-plate-rus {
+  font-family: var(--font-plate-rus);
 }
 
 
@@ -119,7 +150,7 @@ html.dark {
 }
 
 body {
-  @apply bg-[#0b0b0c] antialiased font-actay overflow-x-hidden;
+  @apply bg-[#0b0b0c] antialiased font-sans overflow-x-hidden;
 }
 
 
