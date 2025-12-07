@@ -74,7 +74,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
       tabIndex={0}
       onClick={handleOpenDetails}
       onKeyDown={handleKeyDown}
-      className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center font-actay transition hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
+      className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
       style={style}
       aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
     >
@@ -86,11 +86,11 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         <PlateStaticSm data={data} responsive showCaption={true} className="mx-auto max-w-[210px]" />
       </div>
 
-      <div className="tabular-nums text-sm md:text-lg font-actay">
-        <span className="font-medium font-actay-druk">{priceLabel}</span>
+      <div className="tabular-nums text-sm md:text-lg">
+        <span className="font-medium">{priceLabel}</span>
       </div>
 
-      <div className="text-sm font-actay md:text-lg">{row.seller}</div>
+      <div className="text-sm md:text-lg">{row.seller}</div>
 
       <div className="justify-self-end">
         <button

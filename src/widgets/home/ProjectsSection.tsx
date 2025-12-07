@@ -21,7 +21,7 @@ export default function ProjectsSection({ items }: Props) {
 	return (
 		<section className=" text-white py-14 md:py-18">
 			<div className="max-w-[1200px] mx-auto px-6 md:px-10">
-				<h2 className="text-center font-bold uppercase text-2xl md:text-4xl tracking-wide font-actay-wide">
+                             <h2 className="text-center font-bold uppercase text-2xl md:text-4xl tracking-wide">
 					НАШИ ГОТОВЫЕ РАБОТЫ
 				</h2>
 
@@ -38,15 +38,15 @@ export default function ProjectsSection({ items }: Props) {
 					</div>
 
 					<div className="relative pb-16">
-						<h3 className="uppercase font-bold text-xl md:text-2xl tracking-wide font-actay-wide">
+                                             <h3 className="uppercase font-bold text-xl md:text-2xl tracking-wide">
 							{featured.title}
 						</h3>
 
-						<p className="text-neutral-300 mt-4 leading-relaxed font-actay">
+                                             <p className="text-neutral-300 mt-4 leading-relaxed">
 							{featured.description}
 						</p>
 
-						<dl className="mt-6 space-y-2 text-sm md:text-lg text-white font-extrabold font-actay tracking-wide uppercase">
+                                             <dl className="mt-6 space-y-2 text-sm md:text-lg text-white font-extrabold tracking-wide uppercase">
 							ХОТИТЕ ТАКОЙ ЖЕ? — ПОДБЕРЕМ!
 						</dl>
 

@@ -78,7 +78,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
   return (
     <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
       <div className="mx-auto w-full px-4 sm:px-6">
-        <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">{pageTitle}</h1>
+        <h1 className="mb-6 text-3xl uppercase md:text-4xl">{pageTitle}</h1>
 
         <div className="grid gap-6">
           <article className="rounded-2xl bg-white px-6 py-6 text-black shadow-sm sm:px-8 sm:py-8">
@@ -87,7 +87,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                 {eyebrow ? (
                   <p className="text-xs uppercase tracking-[0.3em] text-black/50">{eyebrow}</p>
                 ) : null}
-                <h2 className="mt-2 text-3xl font-actay-wide uppercase text-black md:text-4xl">{title}</h2>
+                <h2 className="mt-2 text-3xl uppercase text-black md:text-4xl">{title}</h2>
                 {description ? (
                   <p className="mt-3 max-w-2xl text-sm text-black/70 md:text-base">{description}</p>
                 ) : null}
@@ -110,7 +110,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
           <article className="overflow-hidden rounded-2xl bg-white text-black shadow-sm">
             <div className="flex flex-col gap-4 border-b border-black/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <h2 className="text-2xl font-actay-wide uppercase text-black md:text-3xl">{lotsTitle}</h2>
+                <h2 className="text-2xl uppercase text-black md:text-3xl">{lotsTitle}</h2>
                 {lotsSubtitle ? <p className="mt-1 text-sm text-black/70 md:text-base">{lotsSubtitle}</p> : null}
               </div>
               {headerActions ? <div className="flex flex-wrap items-center gap-3">{headerActions}</div> : null}
@@ -128,7 +128,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
             {items.length ? (
               <div className="mt-6">
                 <div className="hidden border-y border-black/10 md:block">
-                  <div className="grid items-center gap-4 px-6 py-3 text-center font-actay-druk text-lg font-bold [grid-template-columns:var(--cols)]" style={DESKTOP_COLS_STYLE}>
+                  <div className="grid items-center gap-4 px-6 py-3 text-center text-lg font-bold [grid-template-columns:var(--cols)]" style={DESKTOP_COLS_STYLE}>
                     <span>Дата</span>
                     <span>Номер</span>
                     <span>Цена</span>
@@ -140,14 +140,14 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                     {items.map((item) => (
                       <li
                         key={item.id}
-                        className="grid items-center gap-4 px-6 py-4 text-center font-actay text-sm md:text-base [grid-template-columns:var(--cols)]"
+                        className="grid items-center gap-4 px-6 py-4 text-center text-sm md:text-base [grid-template-columns:var(--cols)]"
                         style={DESKTOP_COLS_STYLE}
                       >
                         <span className="tabular-nums text-black/80">{item.dateLabel}</span>
                         <div className="flex items-center justify-center">
                           <PlateStaticSm data={item.plate} responsive showCaption={true} className="mx-auto max-w-[210px]" />
                         </div>
-                        <span className="font-actay-druk text-base font-medium text-black">{item.priceLabel}</span>
+                        <span className="text-base font-medium text-black">{item.priceLabel}</span>
                         <span className="text-black/80">{item.sellerLabel}</span>
                         <div className="justify-self-end">
                           <div className="flex items-center justify-end gap-2">
@@ -192,7 +192,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                       <dl className="mt-4 grid gap-2 text-sm">
                         <div className="flex items-center justify-between">
                           <dt className="text-black/60">Цена</dt>
-                          <dd className="font-actay-druk text-base font-medium text-black">{item.priceLabel}</dd>
+                          <dd className="text-base font-medium text-black">{item.priceLabel}</dd>
                         </div>
                         <div className="flex items-center justify-between">
                           <dt className="text-black/60">Продавец</dt>

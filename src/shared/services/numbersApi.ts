@@ -1,6 +1,7 @@
 import http from "@/shared/api/http";
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
 import { formatRegionCode } from "@/shared/lib/plate";
+import { normalizePlateLetter } from "@/shared/lib/plateLetters";
 
 export interface NumbersListParams {
   page?: number;
@@ -381,10 +382,8 @@ const pickString = (values: unknown[]): string => {
 };
 
 const ensureLetter = (value: string): string => {
-  if (value) {
-    return value.slice(0, 1).toUpperCase();
-  }
-  return "*";
+  const normalized = normalizePlateLetter(value);
+  return normalized || "*";
 };
 
 const ensureDigit = (value: string): string => {
@@ -401,8 +400,13 @@ const extractLetters = (value?: string): [string, string, string] => {
     return ["", "", ""];
   }
 
-  const normalized = value.replace(/[^A-Za-zА-Яа-я]/g, "").toUpperCase();
-  return [normalized[0] || "", normalized[1] || "", normalized[2] || ""];
+  const normalized = value.replace(/[^A-Za-zА-Яа-яЁё]/gu, "");
+  const mapped = normalized
+    .split("")
+    .map((char) => normalizePlateLetter(char))
+    .filter(Boolean);
+
+  return [mapped[0] || "", mapped[1] || "", mapped[2] || ""];
 };
 
 const extractDigits = (value?: string): [string, string, string] => {

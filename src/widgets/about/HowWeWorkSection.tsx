@@ -31,13 +31,13 @@ export default function HowWeWorkSection() {
   ] as const;
 
   const numberBaseClass =
-    "relative w-[60px] md:w-[90px] pr-2 md:pr-3 text-right text-6xl md:text-9xl font-extrabold leading-none text-white/95 select-none font-actay-druk";
+    "relative w-[60px] md:w-[90px] pr-2 md:pr-3 text-right text-6xl md:text-9xl font-extrabold leading-none text-white/95 select-none";
 
   return (
     <section className="relative text-white py-12 md:py-16" aria-label="Как мы работаем">
       <div className="max-w-[1100px] mx-auto px-6 md:px-10">
         <header className="text-center">
-          <h2 className="text-2xl md:text-4xl font-extrabold tracking-wide font-actay-wide">
+          <h2 className="text-2xl md:text-4xl font-extrabold tracking-wide">
             КАК МЫ РАБОТАЕМ
           </h2>
           <p className="text-[#A7C6FF] text-sm md:text-base mt-1">Просто, быстро и безопасно.</p>

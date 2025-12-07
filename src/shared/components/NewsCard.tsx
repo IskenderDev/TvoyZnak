@@ -21,7 +21,7 @@ export default function NewsCard({ news }: Props) {
             </p>
           )}
 
-          <h3 className="text-white font-road font-bold mt-2 leading-snug uppercase">
+          <h3 className="text-white font-sans font-bold mt-2 leading-snug uppercase">
             {news.title}
           </h3>
 
@@ -32,7 +32,7 @@ export default function NewsCard({ news }: Props) {
 
         <Link
           to={`/news/${news.id}`}
-          className="block mt-5 text-center text-white bg-[#0177FF] hover:bg-[#046FFF] rounded-xl py-2 font-road font-medium"
+          className="block mt-5 text-center text-white bg-[#0177FF] hover:bg-[#046FFF] rounded-xl py-2 font-sans font-medium"
         >
           Читать больше
         </Link>

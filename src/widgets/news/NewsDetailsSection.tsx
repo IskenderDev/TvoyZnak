@@ -121,12 +121,12 @@ export default function NewsDetailsSection() {
                   </time>
                 )}
 
-                <h1 className="uppercase font-extrabold tracking-wide leading-tight font-actay-wide text-white text-[26px] md:text-[34px] mb-4">
+                <h1 className="uppercase font-extrabold tracking-wide leading-tight text-white text-[26px] md:text-[34px] mb-4">
                   {item.title}
                 </h1>
 
                 {item.excerpt && (
-                  <p className="font-actay mb-6 text-[15px] md:text-2xl">
+                  <p className="mb-6 text-[15px] md:text-2xl">
                     {item.excerpt}
                   </p>
                 )}
@@ -136,7 +136,7 @@ export default function NewsDetailsSection() {
 
           {related.length > 0 && (
             <>
-              <h2 className="font-actay-wide text-[28px] md:text-[34px] font-extrabold mt-12 md:mt-16 mb-6">
+              <h2 className="text-[28px] md:text-[34px] font-extrabold mt-12 md:mt-16 mb-6">
                 Другие новости
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
