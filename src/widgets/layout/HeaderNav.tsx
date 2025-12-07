@@ -36,9 +36,9 @@ export default function HeaderNav({
       : "flex flex-col gap-4";
 
   const linkBase =
-    "relative flex items-center transition-colors duration-200 font-medium text-white hover:text-[#85B6FF]";
+    "relative flex items-center transition-colors duration-200 font-[400] text-white hover:text-[#85B6FF]";
 
-  const horizontalText = "text-[15px] justify-center";
+  const horizontalText = "text-[17px] justify-center";
   const verticalText = "w-full justify-start pl-4 text-base py-1.5";
   const activeClass =
     orientation === "horizontal"

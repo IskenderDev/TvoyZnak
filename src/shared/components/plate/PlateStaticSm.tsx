@@ -62,12 +62,12 @@ export default function PlateStaticSm({
   const leftWidth = "72%";
   const rightWidth = "28%";
 
-  const mainFontNumbers = 48 * k;
-  const mainFont = 38 * k;
+  const mainFontNumbers = 45 * k;
+  const mainFont = 35 * k;
   const mainPx = 10 * k;
   const mainPb = 12 * k;
-  const mainGap = 8 * k;
-  const digitGap = 2 * k;
+  const mainGap = 1 * k;
+  const digitGap = 0 * k;
 
   const regionFont = 30 * k;
   const rusFont = 11 * k;
@@ -156,14 +156,6 @@ export default function PlateStaticSm({
             </div>
           </div>
 
-          {showCaption && (
-            <div
-              className="w-full text-white text-center uppercase italic font-extrabold"
-              style={{ fontSize: captionFs }}
-            >
-              ЗНАК ОТЛИЧИЯ
-            </div>
-          )}
         </div>
       </div>
     </figure>

@@ -69,7 +69,7 @@ export default function PlateStaticLg({
   const radius = Math.max(6, 14 * k);
   const outerPadY = 6 * k;
 
-  const mainFont = 180 * k;
+  const mainFont = 80 * k;
   const mainFontLetter = 140 * k;
   const mainGap = 20 * k;
   const mainPx = 32 * k;
@@ -165,14 +165,7 @@ export default function PlateStaticLg({
             </div>
           </div>
 
-          {showCaption && (
-            <div
-              className="w-full text-white text-center uppercase italic font-extrabold"
-              style={{ fontSize: captionFs, marginTop: captionMt }}
-            >
-              ЗНАК ОТЛИЧИЯ
-            </div>
-          )}
+        
         </div>
       </div>
     </figure>

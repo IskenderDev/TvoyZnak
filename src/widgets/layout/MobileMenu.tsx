@@ -193,7 +193,7 @@ export default function MobileMenu({
               onSellClick();
               onClose();
             }}
-            className="w-full rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-4 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            className="w-full rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-4 py-3 text-sm font-[400] text-white transition hover:opacity-90"
           >
             Продать номер
           </Button>
