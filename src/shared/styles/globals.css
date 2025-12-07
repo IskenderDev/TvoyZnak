@@ -1,11 +1,9 @@
 @import "tailwindcss";
 @reference "tailwindcss";
 
-
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-Light.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -13,8 +11,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-LightItalic.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-LightItalic.ttf") format("truetype");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -22,8 +19,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-Regular.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -31,8 +27,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-Italic.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -40,8 +35,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-Medium.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -49,8 +43,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-MediumItalic.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-MediumItalic.ttf") format("truetype");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -58,8 +51,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-Bold.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -67,8 +59,7 @@
 
 @font-face {
   font-family: "Rubik";
-  src:
-    url("/fonts/Rubik/Rubik-BoldItalic.ttf") format("truetype");
+  src: url("/fonts/Rubik/Rubik-BoldItalic.ttf") format("truetype");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -96,24 +87,14 @@
   font-display: swap;
 }
 
-
-
 @theme {
   --font-sans:
-    "Rubik",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Arial,
-    "Noto Sans",
-    "Liberation Sans",
-    sans-serif;
+    "Rubik", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
 
   --font-plate: "PlateCyrillic", var(--font-sans);
   --font-plate-rus: "PlateRUS", var(--font-sans);
 }
-
 
 @utility font-plate {
   font-family: var(--font-plate);
@@ -122,8 +103,6 @@
 @utility font-plate-rus {
   font-family: var(--font-plate-rus);
 }
-
-
 
 html {
   color-scheme: dark;
@@ -136,7 +115,9 @@ html.dark {
 body {
   @apply bg-[#0b0b0c] antialiased font-sans overflow-x-hidden;
 }
-
+a {
+  cursor: pointer;
+}
 
 input:focus {
   outline: none !important;
@@ -146,12 +127,14 @@ input:focus {
 button {
   outline: none;
   border: none;
+  cursor: pointer;
 }
 
 button::-moz-focus-inner {
   border: 0;
-}
 
+  cursor: pointer;
+}
 
 .no-scrollbar::-webkit-scrollbar {
   width: 0;
@@ -159,5 +142,5 @@ button::-moz-focus-inner {
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }

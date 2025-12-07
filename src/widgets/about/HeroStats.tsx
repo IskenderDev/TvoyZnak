@@ -16,7 +16,7 @@ export default function HeroStats({
 		>
 			<div className="max-w-screen mx-auto px-6 md:px-10 pt-14 md:pt-18 pb-14 md:pb-28">
 				<header className="text-center">
-                                     <h2 className="text-3xl md:text-5xl font-extrabold uppercase tracking-wide leading-tight">
+					<h2 className="text-3xl md:text-5xl font-extrabold uppercase tracking-wide leading-tight">
 						КРАСИВЫЕ <span className="text-[#0177FF]">НОМЕРА</span>, БЕЗОПАСНЫЕ
 						<br className="hidden md:block" />
 						<span className="block md:inline"> СДЕЛКИ, ВАШ СТАТУС НА ДОРОГЕ</span>
@@ -41,7 +41,7 @@ export default function HeroStats({
 									aria-hidden
 									className="absolute top-4 right-4 opacity-90 w-6 h-6 md:w-8 md:h-8"
 								/>
-                                                             <h3 className="text-4xl md:text-6xl font-extrabold">
+								<h3 className="text-4xl md:text-6xl font-extrabold">
 									500+
 								</h3>
 								<p className="mt-4 text-neutral-100 text-sm md:text-base">
@@ -51,16 +51,16 @@ export default function HeroStats({
 							</article>
 
 							<article className="rounded-[18px] p-6 md:p-8 bg-[#F6F7F9] text-black ">
-                                                             <h3 className="text-3xl md:text-5xl font-extrabold text-[#1A1A1A]">
+								<h3 className="text-3xl md:text-5xl font-extrabold text-[#1A1A1A]">
 									Более 200
 								</h3>
 								<p className="mt-4 text-neutral-600 text-sm md:text-base">
-									Более 2000 уникальных комбинаций в каталоге на любой вкус.
+									Более 200 уникальных комбинаций в каталоге на любой вкус.
 								</p>
 							</article>
 
 							<article className="rounded-[18px] p-6 md:p-8 bg-[#F6F7F9] text-black ">
-                                                             <h3 className="text-3xl md:text-5xl font-extrabold text-[#1A1A1A]">
+								<h3 className="text-3xl md:text-5xl font-extrabold text-[#1A1A1A]">
 									1 день
 								</h3>
 								<p className="mt-4 text-neutral-600 text-sm md:text-base">

@@ -16,11 +16,8 @@ export default function ServicesSection() {
             type="button"
             aria-label="Оценка вашего номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-lg md:text-xl leading-snug font-medium bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200
-                       hover:brightness-95 hover:-translate-y-[1px]
-                       focus:outline-none focus:ring-2 focus:ring-white/50
-                       shadow-[0_8px_24px_rgba(1,119,255,0.25)]"
+                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
+                       rounded-2xl px-6 transition-all duration-200"
           >
             Оценка вашего номера
           </button>
@@ -29,11 +26,8 @@ export default function ServicesSection() {
             type="button"
             aria-label="Быстрый выкуп номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-lg md:text-xl leading-snug font-medium bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200
-                       hover:brightness-95 hover:-translate-y-[1px]
-                       focus:outline-none focus:ring-2 focus:ring-white/50
-                       shadow-[0_8px_24px_rgba(1,119,255,0.25)]"
+                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
+                       rounded-2xl px-6 transition-all duration-200"
           >
             Быстрый выкуп номера
           </button>
@@ -42,11 +36,8 @@ export default function ServicesSection() {
             type="button"
             aria-label="Продажа номеров «Знак Отличия»"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-lg md:text-xl leading-snug font-medium bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200
-                       hover:brightness-95 hover:-translate-y-[1px]
-                       focus:outline-none focus:ring-2 focus:ring-white/50
-                       shadow-[0_8px_24px_rgba(1,119,255,0.25)]"
+                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
+                       rounded-2xl px-6 transition-all duration-200"
           >
             Продажа номеров «Знак Отличия»
           </button>
@@ -55,11 +46,8 @@ export default function ServicesSection() {
             type="button"
             aria-label="Поиск номера под ваш запрос"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-lg md:text-xl leading-snug font-medium bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200
-                       hover:brightness-95 hover:-translate-y-[1px]
-                       focus:outline-none focus:ring-2 focus:ring-white/50
-                       shadow-[0_8px_24px_rgba(1,119,255,0.25)]"
+                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
+                       rounded-2xl px-6 transition-all duration-200"
           >
             Поиск номера под ваш запрос
           </button>

@@ -50,7 +50,7 @@ export default function Footer() {
                 <FaTelegramPlane />
               </a>
               <a
-                href="#" 
+                href="#"
                 className="hover:text-[#85B6FF] transition-colors"
                 aria-label="WhatsApp"
               >
@@ -64,21 +64,69 @@ export default function Footer() {
             <div>
               <h4 className="text-[18px] font-medium mb-3">Основные</h4>
               <ul className="flex flex-col gap-2">
-                <li><NavLink to={paths.home} className={linkClass}>Главная</NavLink></li>
-                <li><NavLink to="/about" className={linkClass}>О компании</NavLink></li>
-                <li><NavLink to="/numbers" className={linkClass}>Номера</NavLink></li>
-                <li><NavLink to="/blog" className={linkClass}>Блог</NavLink></li>
-                <li><NavLink to="/contacts" className={linkClass}>Контакты</NavLink></li>
+                <li>
+                  <NavLink to={paths.home} className={linkClass}>
+                    Главная
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about" className={linkClass}>
+                    О компании
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/numbers" className={linkClass}>
+                    Номера
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/news" className={linkClass}>
+                    Блог
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/contacts" className={linkClass}>
+                    Контакты
+                  </NavLink>
+                </li>
               </ul>
             </div>
 
             <div>
               <h4 className="text-[18px] font-medium mb-3">Услуги</h4>
               <ul className="flex flex-col gap-2">
-                <li><NavLink to="/service/evaluation" className={linkClass}>Оценка вашего номера</NavLink></li>
-                <li><NavLink to="/service/buyout" className={linkClass}>Быстрый выкуп номера</NavLink></li>
-                <li><NavLink to="/service/sale" className={linkClass}>Продажа номеров «Знак Отличия»</NavLink></li>
-                <li><NavLink to="/service/search" className={linkClass}>Поиск номера под ваш запрос</NavLink></li>
+                <li>
+                  <NavLink
+                    to="/services#evaluation"
+                    className={linkClass}
+                  >
+                    Оценка вашего номера
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/services#buyout"
+                    className={linkClass}
+                  >
+                    Быстрый выкуп номера
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/services#sale"
+                    className={linkClass}
+                  >
+                    Продажа номеров из наличия
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/services#search"
+                    className={linkClass}
+                  >
+                    Поиск номера под ваш запрос
+                  </NavLink>
+                </li>
               </ul>
             </div>
           </div>

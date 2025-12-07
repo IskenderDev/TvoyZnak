@@ -166,9 +166,6 @@ export default function PlateSelectForm({
 
   const regionGap = isXs ? 10 : 4 * k;
 
-  const captionFs = isXs ? 0 : Math.max(10, 24 * k);
-  const captionMt = isXs ? 0 : Math.max(4, 8 * k);
-
   const containerStyle: React.CSSProperties =
     responsive && !isXs ? { width: "100%", maxWidth: `${preset.w}px` } : { width: `${preset.w}px` };
 
@@ -475,7 +472,7 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 90 : Math.max(110 * k, 130 * 1.35)}
+                slotW={isXs ? 70 : Math.max(110 * k, 130 * 1.35)}
                 slotH={isXs ? 22 : regionFont * 1.05}
                 color={glyphColor(regionDisplayValue)}
                 centerText

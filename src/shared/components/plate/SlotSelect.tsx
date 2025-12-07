@@ -374,9 +374,8 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const highlightLength = searchable ? filter.length : 0
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
 
-  const listContainerClasses = searchable
-    ? "grid grid-rows-3 grid-flow-col auto-cols-max gap-2 p-3"
-    : "grid grid-rows-3 grid-flow-col auto-cols-max gap-2 p-3"
+  // 3 элемента в ряд, скролл вниз
+  const listContainerClasses = "grid grid-cols-3 gap-2 p-3 justify-items-center"
 
   const renderOption = (
     option: SlotSelectOption,
@@ -402,11 +401,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300"
           } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
           style={{
-            minHeight: searchable ? 44 : 44,
-            minWidth: searchable ? 44 : 44,
-            padding: searchable ? "10px" : "10px",
+            minHeight: 44,
+            minWidth: 44,
+            padding: "10px",
             lineHeight: 1,
-            fontSize: searchable ? undefined : Math.max(14),
+            fontSize: Math.max(14),
           }}
         >
           {shouldHighlight && highlightPart ? (
@@ -437,8 +436,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((prev) => !prev)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-plate ${disabled ? "cursor-not-allowed opacity-60" : ""
-          }`}
+        className={`w-full h-full grid ${
+          centerText ? "place-items-center" : "place-items-end"
+        } select-none transition-colors duration-150 font-plate ${
+          disabled ? "cursor-not-allowed opacity-60" : ""
+        }`}
         style={{
           lineHeight: 0.9,
           fontWeight: 700,
@@ -452,14 +454,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       {open && (
         <div
-          className={`absolute z-50 left-1/2 -mt-[10%] -translate-x-1/2 transition-all duration-150 ${appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
-            }`}
+          className={`absolute z-50 left-1/2 -mt-[10%] -translate-x-1/2 transition-all duration-150 ${
+            appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
+          }`}
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
             className="rounded-xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate border border-neutral-100"
             style={{
-              width: Math.max(56, slotW + 8),
+              width: Math.max(56, slotW + 140),
               maxHeight: dropdownMaxHeight,
               overflow: "hidden",
             }}
@@ -489,7 +492,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               className="outline-none"
             >
               <ul
-                className={`overflow-auto no-scrollbar ${listContainerClasses}`}
+                className={`${listContainerClasses} overflow-y-auto overflow-x-hidden no-scrollbar`}
                 style={{ maxHeight: dropdownMaxHeight, minHeight: searchable ? undefined : 160 }}
               >
                 {filteredOptions.length === 0 ? (
@@ -518,7 +521,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                         ? option.label.slice(highlightIndex + highlightLength)
                         : ""
 
-                    return renderOption(option, index, highlighted, selected, before, highlightPart, after)
+                    return renderOption(
+                      option,
+                      index,
+                      highlighted,
+                      selected,
+                      before,
+                      highlightPart,
+                      after,
+                    )
                   })
                 )}
               </ul>
@@ -531,3 +542,4 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 })
 
 export default SlotSelect
+   

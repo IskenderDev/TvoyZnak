@@ -4,7 +4,7 @@ import type { FaqItem } from "./faqs";
 import { FaSquareMinus, FaSquarePlus } from "react-icons/fa6";
 import { LuInfo } from "react-icons/lu";
 
-const DEFAULT_OPEN_INDEX = 1;
+const DEFAULT_OPEN_INDEX = null;
 
 function FaqRow({
   item,
@@ -70,7 +70,7 @@ export default function FaqSection({
   defaultOpenIndex = DEFAULT_OPEN_INDEX,
 }: {
   items?: FaqItem[];
-  defaultOpenIndex?: number;
+  defaultOpenIndex?: number | null;
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
 
