@@ -16,12 +16,10 @@ function FaqRow({
   onToggle: () => void;
 }) {
   return (
-    <div
-      className="rounded-xl border border-neutral-700 bg-[#1A1A1A] shadow-[0_0_0_1px_#2a2a2a] px-4 sm:px-6 py-4 sm:py-5"
-    >
-      <div className="flex items-start gap-3 sm:gap-4">
-        <div className="relative mt-1 grid place-items-center w-6 h-6 rounded-full bg-white text-xs shrink-0">
-          <LuInfo className='text-[#0177FF] h-4 w-4' />
+    <div className="rounded-xl border border-neutral-700 bg-[#1A1A1A] shadow-[0_0_0_1px_#2a2a2a] px-4 sm:px-6 py-4 sm:py-5">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="relative grid place-items-center w-6 h-6 rounded-full bg-white text-xs shrink-0">
+          <LuInfo className="text-[#0177FF] h-4 w-4" />
         </div>
 
         <div className="flex-1">

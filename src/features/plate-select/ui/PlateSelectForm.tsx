@@ -68,12 +68,17 @@ const setCharAt = (text: string, index: number, nextChar: string) => {
   return chars.join("");
 };
 
-const LETTER_OPTIONS = PLATE_LETTERS.map((char) => ({
-  value: char,
-  label: char,
-  keywords: letterKeywords(char),
-}));
-const DIGIT_OPTIONS = DIGITS.filter((char) => char !== "*");
+const ANY_OPTION = { value: "*", label: "*", keywords: ["*", "любой", "очистить"] } as const;
+
+const LETTER_OPTIONS = [
+  ANY_OPTION,
+  ...PLATE_LETTERS.map((char) => ({
+    value: char,
+    label: char,
+    keywords: letterKeywords(char),
+  })),
+];
+const DIGIT_OPTIONS = [...DIGITS];
 
 const LETTERS_HINT = PLATE_LETTERS.join(", ");
 const DIGITS_HINT = DIGIT_OPTIONS.join(", ");
@@ -222,13 +227,16 @@ export default function PlateSelectForm({
 
   const regionOptions = React.useMemo(
     () =>
-      regions.map((region) => ({
-        value: region.regionCode,
-        label: region.regionCode,
-        keywords: region.regionName
-          ? [region.regionCode, region.regionName]
-          : [region.regionCode],
-      })),
+      [
+        ANY_OPTION,
+        ...regions.map((region) => ({
+          value: region.regionCode,
+          label: region.regionCode,
+          keywords: region.regionName
+            ? [region.regionCode, region.regionName]
+            : [region.regionCode],
+        })),
+      ],
     [regions],
   );
 
