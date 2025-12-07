@@ -374,6 +374,55 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const highlightLength = searchable ? filter.length : 0
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
 
+  const listContainerClasses = searchable
+    ? "grid grid-rows-3 grid-flow-col auto-cols-max gap-2 p-3"
+    : "grid grid-rows-3 grid-flow-col auto-cols-max gap-2 p-3"
+
+  const renderOption = (
+    option: SlotSelectOption,
+    index: number,
+    highlighted: boolean,
+    selected: boolean,
+    before: string,
+    highlightPart: string,
+    after: string,
+  ) => {
+    return (
+      <li key={`${option.value}-${option.label}`} className="w-full">
+        <button
+          id={`${listboxId}-opt-${index}`}
+          role="option"
+          aria-selected={selected}
+          type="button"
+          onMouseEnter={() => setActiveIndex(index)}
+          onClick={() => selectOption(option)}
+          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-bold ${
+            selected
+              ? "bg-[#0177FF] text-white border-[#0177FF] shadow-[0_6px_18px_rgba(1,119,255,0.35)]"
+              : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300"
+          } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
+          style={{
+            minHeight: searchable ? 44 : 44,
+            minWidth: searchable ? 44 : 44,
+            padding: searchable ? "10px" : "10px",
+            lineHeight: 1,
+            fontSize: searchable ? undefined : Math.max(14),
+          }}
+        >
+          {shouldHighlight && highlightPart ? (
+            <span>
+              {before}
+              <span className="text-[#0019FF]">{highlightPart}</span>
+              {after}
+            </span>
+          ) : (
+            option.label
+          )}
+        </button>
+      </li>
+    )
+  }
+
   return (
     <div className="relative" style={{ width: slotW, height: slotH }}>
       <button
@@ -408,15 +457,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
-          className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate"
+            className="rounded-xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate border border-neutral-100"
             style={{
-              width: Math.max(40, slotW),
+              width: Math.max(56, slotW + 8),
               maxHeight: dropdownMaxHeight,
-              overflow: "hidden", 
+              overflow: "hidden",
             }}
           >
             {searchable && (
-              <div className="p-2 border-b border-white/20">
+              <div className="p-2 border-b border-neutral-200">
                 <input
                   ref={searchRef}
                   type="text"
@@ -424,7 +473,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                   onChange={onSearchChange}
                   onKeyDown={onSearchKeyDown}
                   placeholder={searchPlaceholder}
-                  className="w-full rounded-md bg-white/20 px-3 py-2 text-sm font-semibold text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#33D9FF]"
+                  className="w-full rounded-md bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-800 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#0177FF]"
                 />
               </div>
             )}
@@ -440,12 +489,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               className="outline-none"
             >
               <ul
-                className={`overflow-y-auto no-scrollbar ${searchable ? "" : "flex flex-col items-center"
-                  }`}
-                style={{ maxHeight: dropdownMaxHeight }}
+                className={`overflow-auto no-scrollbar ${listContainerClasses}`}
+                style={{ maxHeight: dropdownMaxHeight, minHeight: searchable ? undefined : 160 }}
               >
                 {filteredOptions.length === 0 ? (
-                  <li className="px-4 py-3 text-center text-white/80 text-sm">
+                  <li className="px-4 py-3 text-center text-neutral-500 text-sm">
                     {normalizedOptions.length === 0 ? "Нет доступных значений" : "Ничего не найдено"}
                   </li>
                 ) : (
@@ -470,39 +518,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                         ? option.label.slice(highlightIndex + highlightLength)
                         : ""
 
-                    return (
-                      <li key={`${option.value}-${option.label}`} className="w-full">
-                        <button
-                          id={`${listboxId}-opt-${index}`}
-                          role="option"
-                          aria-selected={selected}
-                          type="button"
-                          onMouseEnter={() => setActiveIndex(index)}
-                          onClick={() => selectOption(option)}
-                          className={`${searchable
-                              ? "w-full px-4 py-3 text-left text-white font-semibold"
-                              : "w-full grid place-items-center text-white font-bold"
-                            } transition-colors duration-150 ${highlighted ? "bg-[#0177FF]" : ""
-                            } ${selected ? "bg-white/20" : ""}`}
-                          style={{
-                            paddingTop: searchable ? undefined : 12,
-                            paddingBottom: searchable ? undefined : 12,
-                            lineHeight: searchable ? undefined : 1,
-                            fontSize: searchable ? undefined : Math.max(14),
-                          }}
-                        >
-                          {highlightIndex >= 0 ? (
-                            <span>
-                              {before}
-                              <span className="text-[#33D9FF]">{highlightPart}</span>
-                              {after}
-                            </span>
-                          ) : (
-                            option.label
-                          )}
-                        </button>
-                      </li>
-                    )
+                    return renderOption(option, index, highlighted, selected, before, highlightPart, after)
                   })
                 )}
               </ul>

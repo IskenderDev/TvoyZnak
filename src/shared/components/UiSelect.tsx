@@ -117,8 +117,13 @@ export default function UiSelect<T extends string>({
               >
                 <span
                   className={[
-                    "inline-flex items-center px-2 py-1 rounded-full",
-                    selected || active ? "ring-2 ring-white/60" : "",
+                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10 min-w-[160px]",
+                    "transition-colors duration-150",
+                    selected
+                      ? "bg-white text-[#0177FF] border-white"
+                      : active
+                        ? "bg-white/10 text-white border-white/40"
+                        : "text-white",
                   ].join(" ")}
                 >
                   {opt.label}
