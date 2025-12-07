@@ -28,7 +28,7 @@ export const PlateMarketTable = ({
   return (
     <div className={`overflow-hidden rounded-2xl bg-white text-black ${className}`}>
       <div
-        className="font-actay-druk font-bold grid items-center gap-4 border-b border-black/10 px-6 py-3 text-lg [grid-template-columns:var(--cols)] text-center"
+        className="grid items-center gap-4 border-b border-black/10 px-6 py-3 text-lg font-bold [grid-template-columns:var(--cols)] text-center"
         style={style}
       >
         <span>Дата</span>

@@ -11,7 +11,7 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
   const handleNext = () => onPageChange((p) => Math.min(totalPages, p + 1));
 
   return (
-    <div className="flex justify-center items-center gap-2 font-road">
+    <div className="flex justify-center items-center gap-2 font-sans">
       <button
         onClick={handlePrev}
         className="px-3 py-2 text-2xl text-white/60 hover:text-white"

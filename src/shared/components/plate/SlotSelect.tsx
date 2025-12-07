@@ -58,6 +58,15 @@ const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelect
 const isPrintableKey = (event: React.KeyboardEvent) =>
   event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey
 
+const matchesOption = (opt: SlotSelectOption, target: string) => {
+  const normalized = target.toUpperCase()
+  return (
+    opt.value.toUpperCase() === normalized ||
+    opt.label.toUpperCase() === normalized ||
+    opt.keywords?.some((keyword) => keyword.toUpperCase() === normalized)
+  )
+}
+
 const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelect(
   {
     ariaLabel,
@@ -195,10 +204,14 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       const buffer = typeBufferRef.current
       const bufferLower = buffer.toLowerCase()
 
-      const exactMatch = normalizedOptions.find(
-        (opt) =>
-          opt.value.toLowerCase() === bufferLower || opt.label.toLowerCase() === bufferLower,
-      )
+      const exactMatch = normalizedOptions.find((opt) => {
+        const optionKeywords = opt.keywords?.map((keyword) => keyword.toLowerCase()) ?? []
+        return (
+          opt.value.toLowerCase() === bufferLower ||
+          opt.label.toLowerCase() === bufferLower ||
+          optionKeywords.includes(bufferLower)
+        )
+      })
       if (exactMatch) {
         selectOption(exactMatch)
         return
@@ -227,9 +240,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         applyTypeahead(char)
         return
       }
-      const directMatch = normalizedOptions.find(
-        (opt) => opt.value.toUpperCase() === char || opt.label.toUpperCase() === char,
-      )
+      const directMatch = normalizedOptions.find((opt) => matchesOption(opt, char))
       if (directMatch) {
         selectOption(directMatch)
       } else {
@@ -377,7 +388,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((prev) => !prev)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 ${disabled ? "cursor-not-allowed opacity-60" : ""
+        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-plate ${disabled ? "cursor-not-allowed opacity-60" : ""
           }`}
         style={{
           lineHeight: 0.9,
@@ -392,12 +403,12 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       {open && (
         <div
-          className={`absolute font-actay z-50 left-1/2 -mt-[10%] -translate-x-1/2 transition-all duration-150 ${appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
+          className={`absolute z-50 left-1/2 -mt-[10%] -translate-x-1/2 transition-all duration-150 ${appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
             }`}
           style={{ top: `calc(100% + 4px)` }}
         >
           <div
-            className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col"
+          className="rounded-xl bg-[#0019FF] shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate"
             style={{
               width: Math.max(40, slotW),
               maxHeight: dropdownMaxHeight,

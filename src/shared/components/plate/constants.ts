@@ -1,16 +1,7 @@
+import { PLATE_LETTERS } from "@/shared/lib/plateLetters"
+
 export const LETTERS = [
-  "A",
-  "B",
-  "E",
-  "K",
-  "M",
-  "H",
-  "O",
-  "P",
-  "C",
-  "T",
-  "У",
-  "Х",
+  ...PLATE_LETTERS,
   "*",
 ] as const;
 

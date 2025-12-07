@@ -36,7 +36,7 @@ export default function Header() {
   const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="mb-12 bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-actay font-light text-xl">
+    <header className="mb-12 bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-light text-xl">
       <Container>
         <div className="flex items-center justify-between gap-4 p-5 md:p-10">
           <Link to={paths.home} className="shrink-0">

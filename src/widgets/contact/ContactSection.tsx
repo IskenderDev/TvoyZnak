@@ -5,7 +5,7 @@ export default function ContactSection() {
   return (
     <section className="text-white py-10 sm:py-14">
       <div className="max-w-[1100px] mx-auto px-5 sm:px-6">
-        <h2 className="text-center font-actay-wide font-extrabold uppercase leading-tight text-[22px] sm:text-[28px]">
+        <h2 className="text-center font-extrabold uppercase leading-tight text-[22px] sm:text-[28px]">
           <span className="text-[#0177FF]">СВЯЖИТЕСЬ С НАМИ</span> УДОБНЫМ СПОСОБОМ — МЫ
           <br /> ЦЕНИМ ВАШЕ ВРЕМЯ И ГОТОВЫ К ДИАЛОГУ
         </h2>

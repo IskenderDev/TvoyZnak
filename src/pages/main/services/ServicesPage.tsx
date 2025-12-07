@@ -74,7 +74,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 sm:py-20 md:px-8 lg:py-24">
-            <h1 className="mt-5 text-center font-actay-wide text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
+            <h1 className="mt-5 text-center text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
               ВСЕ УСЛУГИ С <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
               <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
             </h1>
@@ -100,7 +100,7 @@ export default function ServicesPage() {
                   <div
                     className="rounded-2xl bg-[#0177FF] p-5 text-white shadow-[_24px_24px_rgb(44,44,44)]"
                   >
-                    <div className="items-start justify-between font-actay-druk ">
+                    <div className="items-start justify-between">
                       <div className="text-2xl text-left md:text-3xl  font-bold tracking-[0.2em]">УСЛУГА</div>
                       <div className=" text-right text-5xl font-extrabold leading-none tracking-[0.2em]">{service.number}</div>
                     </div>
@@ -108,8 +108,8 @@ export default function ServicesPage() {
                   </div>
                 </div>
 
-                <div className='font-actay text-white/95'>
-                  <h3 className="font-actay-wide text-2xl md:text-3xl font-extrabold uppercase">{service.title}</h3>
+                <div className='text-white/95'>
+                  <h3 className="text-2xl md:text-3xl font-extrabold uppercase">{service.title}</h3>
                   <p className="mt-2 text-[16px] md:text-2xl leading-relaxed  ">{service.description}</p>
                   <p className="mt-4 text-[16px] md:text-2xl ">{service.subtitle}</p>
                   <div className="mt-3 flex flex-wrap gap-3">

@@ -120,9 +120,9 @@ export default function ProfilePage() {
         <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
         <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
           <div className="mx-auto w-full px-4 sm:px-6">
-            <h1 className="mb-6 text-3xl font-actay-wide uppercase md:text-4xl">Профиль</h1>
+            <h1 className="mb-6 text-3xl uppercase md:text-4xl">Профиль</h1>
             <div className="mx-auto max-w-xl rounded-2xl bg-white px-10 py-12 text-center text-black shadow-sm">
-              <h2 className="text-2xl font-actay-wide uppercase md:text-3xl">Требуется авторизация</h2>
+              <h2 className="text-2xl uppercase md:text-3xl">Требуется авторизация</h2>
               <p className="mt-3 text-sm text-black/70 md:text-base">
                 Авторизуйтесь, чтобы увидеть свои данные и управлять объявлениями.
               </p>

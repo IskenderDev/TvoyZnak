@@ -114,7 +114,7 @@ export default function AdminLotsPage() {
       <Seo title="Админка — Лоты" description="Управление лотами номеров" />
 
       <header className="space-y-2">
-        <h1 className="text-3xl font-extrabold font-actay-wide text-white ">Лоты номеров</h1>
+        <h1 className="text-3xl font-extrabold text-white ">Лоты номеров</h1>
         <p className="text-lg text-white/90">
           Управляйте поступающими заявками: подтверждайте, редактируйте и удаляйте лоты номеров.
         </p>

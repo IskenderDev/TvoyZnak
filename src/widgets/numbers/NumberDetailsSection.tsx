@@ -116,7 +116,7 @@ export default function NumberDetailsSection() {
               </button></Link>
 
             <h1 className="text-[30px] leading-tight sm:text-[36px] md:text-[42px] font-semibold">
-              Продам номер <span className="font-road uppercase tracking-wide">{numberLabel || item.series}</span>
+              Продам номер <span className="font-plate uppercase tracking-wide">{numberLabel || item.series}</span>
             </h1>
           </div>
 

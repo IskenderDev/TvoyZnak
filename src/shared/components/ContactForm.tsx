@@ -91,7 +91,7 @@ export default function ContactForm() {
       {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-3xl md:text-4xl font-bold uppercase font-actay-wide">Оставьте заявку!</h2>
+        <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">Оставьте заявку!</h2>
         <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
           Все сделки сопровождаются юридической поддержкой, а номера подбираются только из проверенных источников.
         </p>

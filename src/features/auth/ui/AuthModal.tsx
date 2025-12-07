@@ -182,7 +182,7 @@ export default function AuthModal() {
           <div className="flex flex-col gap-3">
             <h2
               id="auth-modal-title"
-              className="text-[36px] font-extrabold font-actay-wide uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
+              className="text-[36px] font-extrabold uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
             >
               {showAuthenticatedMessage ? "ВЫ УЖЕ В СИСТЕМЕ" : VIEW_TITLE[view]}
             </h2>

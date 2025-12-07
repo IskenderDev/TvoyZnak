@@ -1,9 +1,10 @@
 import React from "react";
-import { PRESETS, LETTERS, DIGITS, type PlateSize } from "../../../shared/components/plate/constants";
+import { PRESETS, DIGITS, type PlateSize } from "../../../shared/components/plate/constants";
 import { useScale } from "../../../shared/components/plate/useScale";
 import SlotSelect from "../../../shared/components/plate/SlotSelect";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "../model/types";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
+import { letterKeywords, normalizePlateLetter, PLATE_LETTERS } from "@/shared/lib/plateLetters";
 
 type Props = {
   size?: PlateSize;
@@ -18,21 +19,26 @@ type Props = {
 
 type NormalizedPlateSelectValue = PlateSelectValue;
 
-const ensureChar = (char: string | undefined, allowed: readonly string[]) => {
+const ensureDigit = (char: string | undefined, allowed: readonly string[]) => {
   if (char && allowed.includes(char)) return char;
   return "*";
+};
+
+const ensureLetter = (char: string | undefined) => {
+  const normalized = normalizePlateLetter(char ?? "");
+  return normalized || "*";
 };
 
 const normalizeValue = (value?: PlateSelectValue): NormalizedPlateSelectValue => {
   const base = value ?? DEFAULT_PLATE_VALUE;
   const rawText = ((base.text ?? DEFAULT_PLATE_VALUE.text).toUpperCase() + "******").slice(0, 6);
   const normalizedChars: [string, string, string, string, string, string] = [
-    ensureChar(rawText[0], LETTERS),
-    ensureChar(rawText[1], DIGITS),
-    ensureChar(rawText[2], DIGITS),
-    ensureChar(rawText[3], DIGITS),
-    ensureChar(rawText[4], LETTERS),
-    ensureChar(rawText[5], LETTERS),
+    ensureLetter(rawText[0]),
+    ensureDigit(rawText[1], DIGITS),
+    ensureDigit(rawText[2], DIGITS),
+    ensureDigit(rawText[3], DIGITS),
+    ensureLetter(rawText[4]),
+    ensureLetter(rawText[5]),
   ];
 
   const rawRegionCode = typeof base.regionCode === "string" ? base.regionCode : "";
@@ -62,10 +68,14 @@ const setCharAt = (text: string, index: number, nextChar: string) => {
   return chars.join("");
 };
 
-const LETTER_OPTIONS = LETTERS.filter((char) => char !== "*");
+const LETTER_OPTIONS = PLATE_LETTERS.map((char) => ({
+  value: char,
+  label: char,
+  keywords: letterKeywords(char),
+}));
 const DIGIT_OPTIONS = DIGITS.filter((char) => char !== "*");
 
-const LETTERS_HINT = LETTER_OPTIONS.join(", ");
+const LETTERS_HINT = PLATE_LETTERS.join(", ");
 const DIGITS_HINT = DIGIT_OPTIONS.join(", ");
 
 const sortRegions = (a: Region, b: Region) => {
@@ -323,7 +333,7 @@ export default function PlateSelectForm({
           className="flex flex-col rounded-xl bg-black box-border"
           style={{ border: `${borderW}px solid #000`, borderRadius: radius, height: `${preset.h}px` }}
         >
-          <div className="flex w-full bg-black rounded-xl font-road" style={{ height: "100%" }}>
+          <div className="flex w-full bg-black rounded-xl font-plate" style={{ height: "100%" }}>
             <div
               className="flex items-end justify-center bg-white font-bold"
               style={{
@@ -472,7 +482,7 @@ export default function PlateSelectForm({
                 className="flex items-center justify-center m-0"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb }}
               >
-                <span className="font-extrabold font-monroad" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className="font-extrabold font-plate-rus" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img
@@ -486,7 +496,7 @@ export default function PlateSelectForm({
 
           {showCaption && !isXs && (
             <div
-              className="w-full text-white text-center uppercase font-actay-druk italic font-extrabold"
+              className="w-full text-white text-center uppercase italic font-extrabold"
               style={{ fontSize: captionFs, marginTop: captionMt }}
             >
               ЗНАК ОТЛИЧИЯ
