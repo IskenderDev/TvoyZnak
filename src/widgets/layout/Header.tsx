@@ -62,7 +62,7 @@ export default function Header() {
             <div className="hidden items-center gap-3 md:flex md:gap-5">
               <Button
                 onClick={handleSellClick}
-                className="rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-3 py-2 text-sm font-medium text-white transition hover:opacity-90 md:px-4 md:text-[15px]"
+                className="rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-3 py-2 text-[17px] font-[400] text-white transition hover:opacity-90 md:px-4 md:text-[16px]"
               >
                 Продать номер
               </Button>
@@ -73,7 +73,7 @@ export default function Header() {
                   aria-label={isAdmin ? "Открыть админку" : "Открыть профиль"}
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
-                  <span className="hidden text-sm font-medium md:block">{user.fullName}</span>
+                  <span className="hidden text-md font-[400] md:block">{user.fullName}</span>
                 </Link>
               ) : (
                 <button

@@ -141,15 +141,15 @@ export default function PlateSelectForm({
   const radius = isXs ? 10 : Math.max(6, 14 * k);
   const outerPadY = isXs ? 4 : 6 * k;
 
-  const mainFontLetter = isXs ? 40 : 140 * k;
-  const mainFontNumber = isXs ? 55 : 180 * k;
-  const mainGap = isXs ? 15 : 20 * k;
+  const mainFontLetter = isXs ? 35 : 120 * k;
+  const mainFontNumber = isXs ? 50 : 150 * k;
+  const mainGap = isXs ? 15 : 10 * k;
   const mainPx = isXs ? 6 : 32 * k;
   const mainPb = isXs ? 5 : 1;
   const slotW = isXs ? 22 : 90 * k;
   const slotH = isXs ? 68 : mainFontNumber;
   const digitGap = isXs ? 10 : 4 * k;
-  const digitGapLetter = isXs ? 4 : 4 * k;
+  const digitGapLetter = isXs ? 10 : 4 * k;
 
   const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -494,14 +494,7 @@ export default function PlateSelectForm({
             </div>
           </div>
 
-          {showCaption && !isXs && (
-            <div
-              className="w-full text-white text-center uppercase italic font-extrabold"
-              style={{ fontSize: captionFs, marginTop: captionMt }}
-            >
-              ЗНАК ОТЛИЧИЯ
-            </div>
-          )}
+  
         </div>
       </div>
 
