@@ -263,6 +263,9 @@ export default function PlateSelectForm({
   const glyphColor = (v: string) =>
     v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6";
 
+  const formattedPlate = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
+  const captionText = `${formattedPlate} ${resolvedRegionCode || "*"}`.trim();
+
   const createCommitHandler = React.useCallback(
     (index: number) => () => {
       clearError();
@@ -521,6 +524,12 @@ export default function PlateSelectForm({
             Повторить загрузку
           </button>
         </div>
+      )}
+
+      {showCaption && (
+        <figcaption className="mt-3 text-center text-sm text-black/70" aria-live="polite">
+          Текущий номер: {captionText}
+        </figcaption>
       )}
     </figure>
   );

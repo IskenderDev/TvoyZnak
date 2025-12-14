@@ -33,6 +33,11 @@ export default function PlateStaticSm({
   const ref = useRef<HTMLDivElement | null>(null);
   const [k, setK] = useState(1);
   const regionLabel = formatRegionCode(data.regionId) || "*";
+  const captionComment = data.comment?.trim();
+  const formattedPrice = Number.isFinite(data.price)
+    ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
+    : "";
+  const captionText = captionComment || formattedPrice;
 
   useEffect(() => {
     const el = ref.current;
@@ -76,8 +81,6 @@ export default function PlateStaticSm({
   const rusPb = 1;
   const flagH = 14 * k;
   const flagBorder = 0.1;
-
-  const captionFs = 13 * k;
 
   const containerStyle: React.CSSProperties = responsive
     ? { width: "100%", maxWidth: `${W}px` }
@@ -158,6 +161,10 @@ export default function PlateStaticSm({
 
         </div>
       </div>
+
+      {showCaption && captionText && (
+        <figcaption className="mt-2 text-center text-xs text-black/70">{captionText}</figcaption>
+      )}
     </figure>
   );
 }

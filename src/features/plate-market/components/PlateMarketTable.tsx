@@ -26,6 +26,8 @@ export const PlateMarketTable = ({
   gridCols = DEFAULT_COLS,
 }: PlateMarketTableProps) => {
   const style = { "--cols": gridCols } as CSSProperties
+  const isDateSorted = sortField === "date"
+  const isPriceSorted = sortField === "price"
 
   return (
     <div className={`overflow-hidden rounded-2xl bg-white text-black ${className}`}>
@@ -40,9 +42,11 @@ export const PlateMarketTable = ({
           title="Сортировать по дате"
         >
           Дата
-  
-            <LuChevronDown className={`h-4 w-4 transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
-
+          <LuChevronDown
+            className={`h-4 w-4 transition ${
+              sortDir === "desc" && isDateSorted ? "rotate-180" : ""
+            } ${isDateSorted ? "opacity-100" : "opacity-30"}`}
+          />
         </button>
         <span>Номер</span>
 
@@ -53,8 +57,11 @@ export const PlateMarketTable = ({
           title="Сортировать по цене"
         >
           Цена
-            <LuChevronDown className={`h-4 w-4 transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
-
+          <LuChevronDown
+            className={`h-4 w-4 transition ${
+              sortDir === "desc" && isPriceSorted ? "rotate-180" : ""
+            } ${isPriceSorted ? "opacity-100" : "opacity-30"}`}
+          />
         </button>
 
         <span>Продавец</span>
