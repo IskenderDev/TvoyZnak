@@ -2,9 +2,9 @@ import ContactForm from '@/shared/components/ContactForm'
 import Seo from "@/shared/components/Seo";
 import HeroStats from '@/widgets/about/HeroStats'
 import HowWeWorkSection from '@/widgets/about/HowWeWorkSection'
-import MissionGallerySection from '@/widgets/about/MissionGallerySection'
 import ServicesSection from '@/widgets/about/ServicesSection'
 import WhyChooseUs from '@/widgets/about/WhyChooseUs'
+import ProjectsSection from '@/widgets/home/ProjectsSection'
 
 export default function AboutPage() {
   return (
@@ -15,7 +15,7 @@ export default function AboutPage() {
         <WhyChooseUs/>
         <HowWeWorkSection/>
         <ServicesSection/>
-        <MissionGallerySection/>
+        <ProjectsSection/>
         <ContactForm/>
       </div>
     </>
