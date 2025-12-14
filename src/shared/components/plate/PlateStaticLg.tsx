@@ -41,6 +41,11 @@ export default function PlateStaticLg({
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [k, setK] = useState(1);
   const regionLabel = formatRegionCode(data.regionId) || "";
+  const captionComment = data.comment?.trim();
+  const formattedPrice = Number.isFinite(data.price)
+    ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
+    : "";
+  const captionText = captionComment || formattedPrice;
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -165,6 +170,10 @@ export default function PlateStaticLg({
         
         </div>
       </div>
+
+      {showCaption && captionText && (
+        <figcaption className="mt-3 text-center text-sm text-black/70">{captionText}</figcaption>
+      )}
     </figure>
   );
 }
