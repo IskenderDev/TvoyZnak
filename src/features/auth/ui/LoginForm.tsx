@@ -4,6 +4,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import Button from "@/shared/components/Button"
+import ConsentNotice from "@/shared/components/ConsentNotice"
 import { useAuth } from "@/shared/lib/hooks/useAuth"
 import type { AuthSession } from "@/entities/session/model/auth"
 import { useNavigate } from "react-router-dom"
@@ -19,10 +20,6 @@ const loginSchema = z.object({
     .string({ required_error: "Введите пароль" })
     .min(3, "Минимум 6 символов"),
   remember: z.boolean().default(false),
-  consent: z
-    .boolean()
-    .default(false)
-    .refine((value) => value, "Необходимо согласие"),
 })
 
 export type LoginFormValues = z.infer<typeof loginSchema>
@@ -47,7 +44,6 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
       email: "",
       password: "",
       remember: false,
-      consent: false,
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -120,24 +116,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
       </div>
 
       <div className="flex flex-col gap-3 text-[13px] text-slate-300">
-        <div>
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              {...register("consent")}
-              className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200 "
-            />
-            <span className="leading-snug">
-              Я согласен на обработку персональных данных{" "}
-              <span className="text-red-700">*</span>
-            </span>
-          </label>
-          {errors.consent ? (
-            <p className="mt-1 text-xs text-[#EF4444]" role="alert">
-              {errors.consent.message}
-            </p>
-          ) : null}
-        </div>
+        <ConsentNotice />
 
         <label className="flex items-start gap-3 cursor-pointer">
           <input
