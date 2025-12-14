@@ -14,7 +14,7 @@ export default function ConsentNotice({ className }: ConsentNoticeProps) {
         href="/personal-data-policy.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#0177FF] underline-offset-4 transition hover:underline"
+        className="text-white font-semibold underline-offset-4 transition hover:underline"
       >
         персональных данных
       </a>
@@ -25,7 +25,7 @@ export default function ConsentNotice({ className }: ConsentNoticeProps) {
         href="/privacy-policy.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#0177FF] underline-offset-4 transition hover:underline"
+        className="text-white font-semibold underline-offset-4 transition hover:underline"
       >
         политикой конфиденциальности
       </a>
