@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
+import ConsentNotice from "@/shared/components/ConsentNotice";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
@@ -20,7 +21,6 @@ type FormState = {
   price: string;
   type: string;
   comment: string;
-  consent: boolean;
 };
 
 type ToastState = { type: "success" | "error"; msg: string } | null;
@@ -33,7 +33,6 @@ const INITIAL_FORM: FormState = {
   price: "",
   type: TYPE_OPTIONS[1]?.value ?? "sell",
   comment: "",
-  consent: false,
 };
 
 const INITIAL_PLATE: PlateSelectValue = { ...DEFAULT_PLATE_VALUE };
@@ -70,7 +69,6 @@ export default function PlaceAdForm() {
 
   const isSubmitDisabled =
     loading ||
-    !form.consent ||
     !form.price.trim() ||
     plate.text.includes("*") ||
     !plate.regionCode.trim() ||
@@ -290,21 +288,7 @@ export default function PlaceAdForm() {
 
           {error && <p className="text-sm text-[#EB5757]">{error}</p>}
 
-          <div className="flex items-start gap-2">
-            <input
-              id="consent"
-              type="checkbox"
-              className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
-              checked={form.consent}
-              onChange={handleInputChange}
-              name="consent"
-              required
-            />
-            <label htmlFor="consent" className="text-[13px] text-[#1E66FF]">
-               Я согласен на обработку персональных данных{" "}
-              <span className="text-red-700">*</span>
-            </label>
-          </div>
+          <ConsentNotice className="text-[#94A3B8]" />
 
           <div className="flex justify-center">
             <button

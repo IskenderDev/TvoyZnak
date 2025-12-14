@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react"
 import { useLocation } from "react-router-dom"
 import Toast from "@/shared/components/Toast"
+import ConsentNotice from "@/shared/components/ConsentNotice"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
 import UiSelect from "@/shared/components/UiSelect"
 
@@ -13,7 +14,6 @@ export default function ContactForm() {
     phoneNumber: "",
     feedbackType: "buy",
     carNumber: "",
-    consent: false,
   })
 
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null)
@@ -84,21 +84,15 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!formData.consent) {
-      setToast({ type: "error", msg: "Пожалуйста, согласитесь на обработку персональных данных." })
-      return
-    }
     const ok = await submit(formData)
-    if (ok)
-      setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "", consent: false })
+    if (ok) setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "" })
   }
 
   const isSubmitDisabled =
     loading ||
     !formData.fullName.trim() ||
     !formData.phoneNumber.trim() ||
-    !formData.feedbackType ||
-    !formData.consent
+    !formData.feedbackType
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
@@ -144,19 +138,7 @@ export default function ContactForm() {
         placeholderClassName="text-[#7A7A7A]"
       />
 
-      <label className="flex items-center gap-2 text-xs text-[#6AA3FF] select-none">
-        <input
-          type="checkbox"
-          name="consent"
-          checked={formData.consent}
-          onChange={handleChange}
-          className="accent-[#0177FF] w-4 h-4 "
-        />
-        <p>
-          Я согласен на обработку персональных данных
-          <span className="text-[#EB5757] m-2">*</span>
-        </p>
-      </label>
+      <ConsentNotice className="text-[#94A3B8]" />
 
       <button
         type="submit"

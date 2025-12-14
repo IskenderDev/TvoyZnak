@@ -6,7 +6,6 @@ export type LeadFormPayload = {
   phoneNumber: string;
   feedbackType: string;
   carNumber: string;
-  consent: boolean;
 };
 
 export function useLeadSubmit() {

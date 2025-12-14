@@ -111,5 +111,5 @@ function fmtDate(v?: string) {
 
 function fmtPrice(n?: number) {
   if (typeof n !== "number") return "";
-  return new Intl.NumberFormat("ru-RU").format(n) + " рублей";
+  return `${new Intl.NumberFormat("ru-RU").format(n)} ₽`;
 }

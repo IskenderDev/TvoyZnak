@@ -1,5 +1,6 @@
 import UiSelect from "@/shared/components/UiSelect"
 import Toast from "@/shared/components/Toast"
+import ConsentNotice from "@/shared/components/ConsentNotice"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
 import { useFeedbackTypes } from "@/shared/hooks/useFeedbackTypes"
 import { useEffect, useMemo, useState } from "react"
@@ -18,7 +19,6 @@ export default function ContactForm() {
     phoneNumber: "",
     feedbackType: "",
     carNumber: "",
-    consent: false,
   })
 
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null)
@@ -63,19 +63,13 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!formData.consent) {
-      setToast({ type: "error", msg: "Пожалуйста, согласитесь на обработку персональных данных." })
-      return
-    }
     const ok = await submit({
       fullName: formData.fullName,
       phoneNumber: formData.phoneNumber,
       feedbackType: formData.feedbackType,
       carNumber: formData.carNumber,
-      consent: formData.consent,
     })
-    if (ok)
-      setFormData({ fullName: "", phoneNumber: "", feedbackType: "", carNumber: "", consent: false })
+    if (ok) setFormData({ fullName: "", phoneNumber: "", feedbackType: "", carNumber: "" })
   }
 
   const isSubmitDisabled =
@@ -83,7 +77,6 @@ export default function ContactForm() {
     !formData.fullName.trim() ||
     !formData.phoneNumber.trim() ||
     !formData.feedbackType ||
-    !formData.consent ||
     typesLoading
 
   return (
@@ -142,16 +135,7 @@ export default function ContactForm() {
             />
           </div>
 
-          <label className="flex items-center gap-2 text-xs text-[#6AA3FF] select-none">
-            <input
-              type="checkbox"
-              name="consent"
-              checked={formData.consent}
-              onChange={handleChange}
-              className="accent-[#0177FF] w-4 h-4 "
-            />
-            Я согласен на обработку персональных данных<span className="text-[#EB5757]">*</span>
-          </label>
+          <ConsentNotice className="text-[#94A3B8]" />
 
           <div className="flex justify-center">
             <button
