@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import type { MouseEvent } from "react";
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
 import { formatRegionCode } from "@/shared/lib/plate";
 import type { NumberItem } from "@/entities/number/types";
@@ -32,44 +33,59 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
   const price = fmtPrice(row.price);
   const seller = row.seller || row.owner || row.ownerName || row.user || "Продавец";
 
+  const handleBuy = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onBuy?.(row);
+  };
+
   return (
-    <li className={`rounded-2xl bg-white p-3 text-black shadow-sm ${className}`}>
-      <div className="flex items-start justify-between gap-3">
-        {detailsHref ? (
-          <Link
-            to={detailsHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-[160px] shrink-0 transition hover:opacity-90"
-          >
-            <PlateStaticSm data={plate} responsive className="w-full" />
-          </Link>
-        ) : (
-          <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
-        )}
-        {date && <span className="text-xs text-black/50">{date}</span>}
-      </div>
-
-      <div className="mt-3 flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-sm font-semibold tabular-nums leading-tight">{price}</div>
-          <div className="text-xs text-black/70 truncate">{seller}</div>
-        </div>
-
-        <button className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white" onClick={() => onBuy?.(row)}>
-          {ctaText}
-        </button>
-      </div>
-
-      {detailsHref && (
+    <li>
+      {detailsHref ? (
         <Link
           to={detailsHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[#0177FF] hover:underline"
+          className={`block rounded-2xl bg-white p-3 text-black shadow-sm transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] ${className}`}
         >
-          Подробнее
+          <div className="flex items-start justify-between gap-3">
+            <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
+            {date && <span className="text-xs text-black/50">{date}</span>}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-sm font-semibold tabular-nums leading-tight">{price}</div>
+              <div className="text-xs text-black/70 truncate">{seller}</div>
+            </div>
+
+            <button className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white" onClick={handleBuy}>
+              {ctaText}
+            </button>
+          </div>
+
+          <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-[#0177FF]">
+            Подробнее
+          </span>
         </Link>
+      ) : (
+        <div
+          className={`rounded-2xl bg-white p-3 text-black shadow-sm ${className}`}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <PlateStaticSm data={plate} responsive className="w-[160px] shrink-0" />
+            {date && <span className="text-xs text-black/50">{date}</span>}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-sm font-semibold tabular-nums leading-tight">{price}</div>
+              <div className="text-xs text-black/70 truncate">{seller}</div>
+            </div>
+
+            <button className="shrink-0 rounded-full bg-[#0177FF] px-4 py-2 text-white" onClick={handleBuy}>
+              {ctaText}
+            </button>
+          </div>
+        </div>
       )}
     </li>
   );

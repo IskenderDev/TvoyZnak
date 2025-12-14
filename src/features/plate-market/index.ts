@@ -1,5 +1,5 @@
 export { usePlateMarket } from "./model/usePlateMarket"
-export type { SortDir, PlateMarketFiltersState } from "./model/types"
+export type { SortDir, SortField, PlateMarketFiltersState } from "./model/types"
 
 export { PlateMarketFilters } from "./components/PlateMarketFilters"
 export { PlateMarketTable } from "./components/PlateMarketTable"

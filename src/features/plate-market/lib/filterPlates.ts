@@ -44,10 +44,22 @@ const applyFilters = (row: NumberItem, filters: PlateMarketFiltersState) => {
   return true
 }
 
-const applySorting = (a: NumberItem, b: NumberItem, sortDir: PlateMarketFiltersState["sortDir"]) =>
-  sortDir === "asc" ? a.price - b.price : b.price - a.price
+const getDateValue = (value: string) => {
+  const timestamp = new Date(value).getTime()
+  return Number.isFinite(timestamp) ? timestamp : 0
+}
+
+const applySorting = (a: NumberItem, b: NumberItem, filters: PlateMarketFiltersState) => {
+  if (filters.sortField === "price") {
+    return filters.sortDir === "asc" ? a.price - b.price : b.price - a.price
+  }
+
+  const aDate = getDateValue(a.date)
+  const bDate = getDateValue(b.date)
+  return filters.sortDir === "asc" ? aDate - bDate : bDate - aDate
+}
 
 export const filterPlates = (plates: NumberItem[], filters: PlateMarketFiltersState) => {
   const filtered = plates.filter((row) => applyFilters(row, filters))
-  return filtered.sort((a, b) => applySorting(a, b, filters.sortDir))
+  return filtered.sort((a, b) => applySorting(a, b, filters))
 }

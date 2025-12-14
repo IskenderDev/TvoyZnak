@@ -1,5 +1,5 @@
-import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import type { CSSProperties, MouseEvent } from "react";
+import { Link, createSearchParams, useNavigate } from "react-router-dom";
 import PlateStaticSm from "@/shared/components/plate/PlateStaticSm";
 import type { PlateData } from "@/shared/components/plate/PlateStaticSm";
 import { formatPrice } from "@/shared/lib/format";
@@ -41,23 +41,8 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
     feedbackType: contactPrefill.feedbackType,
   }).toString();
 
-  const handleOpenDetails = () => {
-    if (typeof window !== "undefined") {
-      window.open(detailsPath, "_blank", "noopener,noreferrer");
-      return;
-    }
-
-    navigate(detailsPath);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLLIElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleOpenDetails();
-    }
-  };
-
   const handleBuyClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     event.stopPropagation();
     navigate(
       {
@@ -69,37 +54,36 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   };
 
   return (
-    <li
-      role="link"
-      tabIndex={0}
-      onClick={handleOpenDetails}
-      onKeyDown={handleKeyDown}
-      className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
-      style={style}
-      aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
-    >
-      <time className="tabular-nums text-sm text-black md:text-lg">
-        {row.date ? formatDate(row.date) : "—"}
-      </time>
+    <li>
+      <Link
+        to={detailsPath}
+        className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
+        style={style}
+        aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
+      >
+        <time className="tabular-nums text-sm text-black md:text-lg">
+          {row.date ? formatDate(row.date) : "—"}
+        </time>
 
-      <div className="flex items-center">
-        <PlateStaticSm data={data} responsive showCaption={true} className="mx-auto max-w-[210px]" />
-      </div>
+        <div className="flex items-center">
+          <PlateStaticSm data={data} responsive showCaption={true} className="mx-auto max-w-[210px]" />
+        </div>
 
-      <div className="tabular-nums text-sm md:text-lg">
-        <span className="font-medium">{priceLabel}</span>
-      </div>
+        <div className="tabular-nums text-sm md:text-lg">
+          <span className="font-medium">{priceLabel}</span>
+        </div>
 
-      <div className="text-sm md:text-lg">{row.seller}</div>
+        <div className="text-sm md:text-lg">{row.seller}</div>
 
-      <div className="justify-self-end">
-        <button
-          onClick={handleBuyClick}
-          className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white transition hover:brightness-95 md:text-lg"
-        >
-          Купить
-        </button>
-      </div>
+        <div className="justify-self-end">
+          <button
+            onClick={handleBuyClick}
+            className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white transition hover:brightness-95 md:text-lg"
+          >
+            Купить
+          </button>
+        </div>
+      </Link>
     </li>
   );
 };
