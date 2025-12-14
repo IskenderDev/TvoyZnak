@@ -40,7 +40,7 @@ export default function Header() {
       <Container>
         <div className="flex items-center justify-between gap-4 p-5 md:p-10">
           <Link to={paths.home} className="shrink-0">
-            <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto md:h-9" />
+            <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto md:h-9 text-white" />
           </Link>
 
           <div className="hidden md:block">

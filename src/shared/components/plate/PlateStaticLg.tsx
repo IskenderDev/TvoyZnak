@@ -65,12 +65,12 @@ export default function PlateStaticLg({
     ro.observe(el);
     return () => ro.disconnect();
   }, [preset.w]);
-  const borderW = Math.max(1, 8 * k);            
+  const borderW = Math.max(1, 5 * k);            
   const radius = Math.max(6, 14 * k);
   const outerPadY = 6 * k;
 
-  const mainFont = 80 * k;
-  const mainFontLetter = 140 * k;
+  const mainFont = 150 * k;
+  const mainFontLetter = 110 * k;
   const mainGap = 20 * k;
   const mainPx = 32 * k;
   const mainPb = 12 * k;
@@ -83,9 +83,6 @@ export default function PlateStaticLg({
   const rusPb = 4 * k;
   const flagH = rusRowH * 0.9;
   const flagBorder = Math.max(1, 2 * k);
-
-  const captionFs = Math.max(10, 24 * k);         
-  const captionMt = Math.max(4, 8 * k);
 
   const containerStyle: React.CSSProperties = responsive
     ? { width: "100%", maxWidth: `${preset.w}px` }
