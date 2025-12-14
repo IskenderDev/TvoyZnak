@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
-import type { PlateMarketFiltersState, SortDir } from "./types";
+import type { PlateMarketFiltersState, SortField } from "./types";
 import { filterPlates } from "../lib/filterPlates";
 import type { NumberItem } from "@/entities/number/types";
 
@@ -11,7 +11,8 @@ const DEFAULT_LIMIT = 8;
 const createInitialState = (): PlateMarketFiltersState => ({
   region: "",
   category: "",
-  sortDir: "asc",
+  sortField: "date",
+  sortDir: "desc",
   plateQuery: { ...DEFAULT_PLATE_VALUE },
 });
 
@@ -158,12 +159,14 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     [initialLimit],
   );
 
-  const toggleSortDir = useCallback(() => {
-    setFilters((prev) => ({ ...prev, sortDir: prev.sortDir === "asc" ? "desc" : "asc" }));
-  }, []);
+  const onSort = useCallback((field: SortField) => {
+    setFilters((prev) => {
+      if (prev.sortField !== field) {
+        return { ...prev, sortField: field, sortDir: "desc" };
+      }
 
-  const setSortDir = useCallback((sortDir: SortDir) => {
-    setFilters((prev) => ({ ...prev, sortDir }));
+      return { ...prev, sortDir: prev.sortDir === "asc" ? "desc" : "asc" };
+    });
   }, []);
 
   const resetFilters = useCallback(() => {
@@ -183,6 +186,7 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     region: filters.region,
     category: filters.category,
     sortDir: filters.sortDir,
+    sortField: filters.sortField,
     plateQuery: filters.plateQuery,
     limit,
     regionOptions,
@@ -193,8 +197,7 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     setRegion,
     setCategory,
     setPlateQuery,
-    setSortDir,
-    toggleSortDir,
+    onSort,
     resetFilters,
     showMore,
     reload: load,

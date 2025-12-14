@@ -15,6 +15,7 @@ export default function NumbersCatalogSection() {
     region,
     category,
     plateQuery,
+    sortField,
     sortDir,
     regionOptions,
     categoryOptions,
@@ -23,7 +24,7 @@ export default function NumbersCatalogSection() {
     setRegion,
     setCategory,
     setPlateQuery,
-    toggleSortDir,
+    onSort,
     resetFilters,
     showMore,
   } = usePlateMarket(12);
@@ -53,9 +54,10 @@ export default function NumbersCatalogSection() {
           <PlateMarketTable
             className="hidden md:block"
             rows={visibleRows}
+            sortField={sortField}
             sortDir={sortDir}
             gridCols={GRID_COLS}
-            onToggleSort={toggleSortDir}
+            onSort={onSort}
             onReset={resetFilters}
           />
           {!loading && !visibleRows.length && !error ? (
