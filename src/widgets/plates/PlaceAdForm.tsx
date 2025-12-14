@@ -265,7 +265,7 @@ export default function PlaceAdForm() {
             />
           </div>
 
-          <p className="text-[12px] text-[#0177FF]">
+          <p className="text-[12px] text-[#d4d4d4]">
             <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
