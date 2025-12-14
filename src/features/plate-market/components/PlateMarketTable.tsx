@@ -40,9 +40,9 @@ export const PlateMarketTable = ({
           title="Сортировать по дате"
         >
           Дата
-          {sortField === "date" && (
+  
             <LuChevronDown className={`h-4 w-4 transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
-          )}
+
         </button>
         <span>Номер</span>
 
@@ -53,9 +53,8 @@ export const PlateMarketTable = ({
           title="Сортировать по цене"
         >
           Цена
-          {sortField === "price" && (
             <LuChevronDown className={`h-4 w-4 transition ${sortDir === "desc" ? "rotate-180" : ""}`} />
-          )}
+
         </button>
 
         <span>Продавец</span>
