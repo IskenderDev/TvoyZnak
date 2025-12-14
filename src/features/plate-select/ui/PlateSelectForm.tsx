@@ -142,7 +142,7 @@ export default function PlateSelectForm({
 
   const isXs = size === "xs";
 
-  const borderW = isXs ? 2 : Math.max(1, 8 * k);
+  const borderW = isXs ? 2 : Math.max(1, 10 * k);
   const radius = isXs ? 10 : Math.max(6, 14 * k);
   const outerPadY = isXs ? 4 : 6 * k;
 
@@ -472,8 +472,9 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 70 : Math.max(110 * k, 130 * 1.35)}
+                slotW={isXs ? 40 : Math.max(110 * k, 130 * 1.35)}
                 slotH={isXs ? 22 : regionFont * 1.05}
+                dropdownOffsetX={-30}
                 color={glyphColor(regionDisplayValue)}
                 centerText
                 dropdownMaxHeight={240}

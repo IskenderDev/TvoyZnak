@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useId,
-} from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState, useId } from "react"
 
 type SlotSelectOption = {
   value: string
@@ -17,10 +10,12 @@ type Props = {
   ariaLabel: string
   value: string
   onChange: (v: string) => void
-  options: Array<string | SlotSelectOption>
+  options: any[] | SlotSelectOption[]
+
   fontSize: number
   slotW: number
   slotH: number
+
   color?: string
   centerText?: boolean
   dropdownMaxHeight?: number
@@ -30,21 +25,18 @@ type Props = {
   disabled?: boolean
   searchPlaceholder?: string
   searchable?: boolean
+
+  dropdownWidth?: number
+  dropdownOffsetX?: number
 }
 
 const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelectOption[] =>
   options.map((opt) => {
-    if (typeof opt === "string") {
-      return {
-        value: opt,
-        label: opt,
-        keywords: [opt],
-      } satisfies SlotSelectOption
-    }
+    if (typeof opt === "string") return { value: opt, label: opt, keywords: [opt] }
 
     const baseKeywords = [opt.value, opt.label, ...(opt.keywords ?? [])]
-      .map((keyword) => keyword?.toString().trim())
-      .filter((keyword): keyword is string => Boolean(keyword))
+      .map((k) => k?.toString().trim())
+      .filter((k): k is string => Boolean(k))
 
     const uniqueKeywords = Array.from(new Set(baseKeywords))
 
@@ -52,7 +44,7 @@ const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelect
       value: opt.value,
       label: opt.label,
       keywords: uniqueKeywords.length ? uniqueKeywords : [opt.value, opt.label],
-    } satisfies SlotSelectOption
+    }
   })
 
 const isPrintableKey = (event: React.KeyboardEvent) =>
@@ -63,7 +55,7 @@ const matchesOption = (opt: SlotSelectOption, target: string) => {
   return (
     opt.value.toUpperCase() === normalized ||
     opt.label.toUpperCase() === normalized ||
-    opt.keywords?.some((keyword) => keyword.toUpperCase() === normalized)
+    opt.keywords?.some((k) => k.toUpperCase() === normalized)
   )
 }
 
@@ -85,6 +77,8 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     disabled = false,
     searchPlaceholder = "Поиск",
     searchable = true,
+    dropdownWidth,
+    dropdownOffsetX = 0,
   },
   forwardedRef,
 ) {
@@ -107,25 +101,19 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const normalizedFilter = searchable ? filter.trim().toLowerCase() : ""
 
   const filteredOptions = useMemo(() => {
-    if (!searchable || !normalizedFilter) {
-      return normalizedOptions
-    }
+    if (!searchable || !normalizedFilter) return normalizedOptions
     return normalizedOptions.filter((opt) => {
-      if (!opt.keywords?.length) {
-        return opt.value.toLowerCase().includes(normalizedFilter)
-      }
-      return opt.keywords.some((keyword) => keyword.toLowerCase().includes(normalizedFilter))
+      if (!opt.keywords?.length) return opt.value.toLowerCase().includes(normalizedFilter)
+      return opt.keywords.some((k) => k.toLowerCase().includes(normalizedFilter))
     })
   }, [normalizedFilter, normalizedOptions, searchable])
 
   const assignTriggerRef = useCallback(
     (node: HTMLButtonElement | null) => {
       triggerRef.current = node
-      if (typeof forwardedRef === "function") {
-        forwardedRef(node)
-      } else if (forwardedRef) {
+      if (typeof forwardedRef === "function") forwardedRef(node)
+      else if (forwardedRef)
         (forwardedRef as React.MutableRefObject<HTMLButtonElement | null>).current = node
-      }
     },
     [forwardedRef],
   )
@@ -135,9 +123,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (!event.target) return
       const wrapper = triggerRef.current?.parentElement
       if (!wrapper) return
-      if (!wrapper.contains(event.target as Node)) {
-        setOpen(false)
-      }
+      if (!wrapper.contains(event.target as Node)) setOpen(false)
     }
     document.addEventListener("mousedown", onDoc)
     return () => document.removeEventListener("mousedown", onDoc)
@@ -148,21 +134,16 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       setAppear(false)
       const frame = requestAnimationFrame(() => setAppear(true))
       const selectedIndex = filteredOptions.findIndex((opt) => opt.value === value)
-      const nextIndex = selectedIndex >= 0 ? selectedIndex : filteredOptions.length ? 0 : -1
-      setActiveIndex(nextIndex)
+      setActiveIndex(selectedIndex >= 0 ? selectedIndex : filteredOptions.length ? 0 : -1)
 
-      const focusActiveControl = () => {
+      window.setTimeout(() => {
         if (searchable) {
           searchRef.current?.focus()
-          if (filter) {
-            searchRef.current?.setSelectionRange(filter.length, filter.length)
-          }
+          if (filter) searchRef.current?.setSelectionRange(filter.length, filter.length)
         } else {
           listboxRef.current?.focus()
         }
-      }
-
-      window.setTimeout(focusActiveControl, 0)
+      }, 0)
 
       return () => cancelAnimationFrame(frame)
     }
@@ -171,7 +152,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     setFilter("")
     setActiveIndex(0)
     typeBufferRef.current = ""
-    if (triggerRef.current) triggerRef.current.focus({ preventScroll: true })
+    triggerRef.current?.focus({ preventScroll: true })
   }, [open, filteredOptions, searchable, value, filter])
 
   const resetTypeTimer = useCallback(() => {
@@ -205,11 +186,11 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       const bufferLower = buffer.toLowerCase()
 
       const exactMatch = normalizedOptions.find((opt) => {
-        const optionKeywords = opt.keywords?.map((keyword) => keyword.toLowerCase()) ?? []
+        const kws = opt.keywords?.map((k) => k.toLowerCase()) ?? []
         return (
           opt.value.toLowerCase() === bufferLower ||
           opt.label.toLowerCase() === bufferLower ||
-          optionKeywords.includes(bufferLower)
+          kws.includes(bufferLower)
         )
       })
       if (exactMatch) {
@@ -241,11 +222,8 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         return
       }
       const directMatch = normalizedOptions.find((opt) => matchesOption(opt, char))
-      if (directMatch) {
-        selectOption(directMatch)
-      } else {
-        onInvalidKey?.(char)
-      }
+      if (directMatch) selectOption(directMatch)
+      else onInvalidKey?.(char)
     },
     [applyTypeahead, normalizedOptions, onInvalidKey, searchable, selectOption],
   )
@@ -264,9 +242,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
         setActiveIndex((index) => {
           if (index < 0) return 0
-          if (event.key === "ArrowDown") {
-            return (index + 1) % filteredOptions.length
-          }
+          if (event.key === "ArrowDown") return (index + 1) % filteredOptions.length
           return (index - 1 + filteredOptions.length) % filteredOptions.length
         })
         return
@@ -291,20 +267,14 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       if (event.key === "ArrowDown") {
         event.preventDefault()
         if (!filteredOptions.length) return
-        setActiveIndex((index) => {
-          const next = index + 1
-          return next >= filteredOptions.length ? 0 : next
-        })
+        setActiveIndex((i) => (i + 1 >= filteredOptions.length ? 0 : i + 1))
         return
       }
 
       if (event.key === "ArrowUp") {
         event.preventDefault()
         if (!filteredOptions.length) return
-        setActiveIndex((index) => {
-          const next = index - 1
-          return next < 0 ? filteredOptions.length - 1 : next
-        })
+        setActiveIndex((i) => (i - 1 < 0 ? filteredOptions.length - 1 : i - 1))
         return
       }
 
@@ -333,16 +303,13 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         return
       }
 
-      if (isPrintableKey(event)) {
-        handlePrintableKey(event.key)
-      }
+      if (isPrintableKey(event)) handlePrintableKey(event.key)
     },
     [activeIndex, filteredOptions, handlePrintableKey, selectOption],
   )
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    const next = event.target.value.toUpperCase()
-    setFilter(next)
+    setFilter(event.target.value.toUpperCase())
     setActiveIndex(0)
   }
 
@@ -369,58 +336,13 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
   const displayText = displayValue ?? value ?? ""
   const hasValue = Boolean(displayText)
-  const placeholderChar = "*"
-  const shownText = displayText || placeholderChar
+  const shownText = displayText || "*"
+
   const highlightLength = searchable ? filter.length : 0
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
-
-  // 3 элемента в ряд, скролл вниз
   const listContainerClasses = "grid grid-cols-3 gap-2 p-3 justify-items-center"
 
-  const renderOption = (
-    option: SlotSelectOption,
-    index: number,
-    highlighted: boolean,
-    selected: boolean,
-    before: string,
-    highlightPart: string,
-    after: string,
-  ) => {
-    return (
-      <li key={`${option.value}-${option.label}`} className="w-full">
-        <button
-          id={`${listboxId}-opt-${index}`}
-          role="option"
-          aria-selected={selected}
-          type="button"
-          onMouseEnter={() => setActiveIndex(index)}
-          onClick={() => selectOption(option)}
-          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-bold ${
-            selected
-              ? "bg-[#0177FF] text-white border-[#0177FF] shadow-[0_6px_18px_rgba(1,119,255,0.35)]"
-              : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300"
-          } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
-          style={{
-            minHeight: 44,
-            minWidth: 44,
-            padding: "10px",
-            lineHeight: 1,
-            fontSize: Math.max(14),
-          }}
-        >
-          {shouldHighlight && highlightPart ? (
-            <span>
-              {before}
-              <span className="text-[#0019FF]">{highlightPart}</span>
-              {after}
-            </span>
-          ) : (
-            option.label
-          )}
-        </button>
-      </li>
-    )
-  }
+  const menuW = dropdownWidth ?? Math.max(56, slotW + 140)
 
   return (
     <div className="relative" style={{ width: slotW, height: slotH }}>
@@ -433,20 +355,13 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         aria-controls={listboxId}
         onClick={() => {
           if (disabled) return
-          setOpen((prev) => !prev)
+          setOpen((p) => !p)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${
-          centerText ? "place-items-center" : "place-items-end"
-        } select-none transition-colors duration-150 font-plate ${
+        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-plate ${
           disabled ? "cursor-not-allowed opacity-60" : ""
         }`}
-        style={{
-          lineHeight: 0.9,
-          fontWeight: 700,
-          fontSize,
-          color: hasValue ? color : "#9AA0A6",
-        }}
+        style={{ lineHeight: 0.9, fontWeight: 700, fontSize, color: hasValue ? color : "#9AA0A6" }}
         disabled={disabled}
       >
         {shownText}
@@ -454,18 +369,18 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 
       {open && (
         <div
-          className={`absolute z-50 left-1/2 -mt-[10%] -translate-x-1/2 transition-all duration-150 ${
+          className={`absolute z-50 -mt-[10%] transition-all duration-150 ${
             appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
           }`}
-          style={{ top: `calc(100% + 4px)` }}
+          style={{
+            top: `calc(100% + 4px)`,
+            left: "50%",
+            transform: `translateX(calc(-50% + ${dropdownOffsetX}px))`,
+          }}
         >
           <div
             className="rounded-xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate border border-neutral-100"
-            style={{
-              width: Math.max(56, slotW + 140),
-              maxHeight: dropdownMaxHeight,
-              overflow: "hidden",
-            }}
+            style={{ width: menuW, maxHeight: dropdownMaxHeight, overflow: "hidden" }}
           >
             {searchable && (
               <div className="p-2 border-b border-neutral-200">
@@ -503,32 +418,42 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                   filteredOptions.map((option, index) => {
                     const selected = option.value === value
                     const highlighted = index === activeIndex
+
                     const lowerLabel = option.label.toLowerCase()
-                    const highlightIndex = shouldHighlight
-                      ? lowerLabel.indexOf(normalizedFilter)
-                      : -1
+                    const highlightIndex = shouldHighlight ? lowerLabel.indexOf(normalizedFilter) : -1
 
-                    const before =
-                      highlightIndex >= 0
-                        ? option.label.slice(0, highlightIndex)
-                        : option.label
+                    const before = highlightIndex >= 0 ? option.label.slice(0, highlightIndex) : option.label
                     const highlightPart =
-                      highlightIndex >= 0
-                        ? option.label.slice(highlightIndex, highlightIndex + highlightLength)
-                        : ""
-                    const after =
-                      highlightIndex >= 0
-                        ? option.label.slice(highlightIndex + highlightLength)
-                        : ""
+                      highlightIndex >= 0 ? option.label.slice(highlightIndex, highlightIndex + highlightLength) : ""
+                    const after = highlightIndex >= 0 ? option.label.slice(highlightIndex + highlightLength) : ""
 
-                    return renderOption(
-                      option,
-                      index,
-                      highlighted,
-                      selected,
-                      before,
-                      highlightPart,
-                      after,
+                    return (
+                      <li key={`${option.value}-${option.label}`} className="w-full">
+                        <button
+                          id={`${listboxId}-opt-${index}`}
+                          role="option"
+                          aria-selected={selected}
+                          type="button"
+                          onMouseEnter={() => setActiveIndex(index)}
+                          onClick={() => selectOption(option)}
+                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-bold ${
+                            selected
+                              ? "bg-[#0177FF] text-white border-[#0177FF] shadow-[0_6px_18px_rgba(1,119,255,0.35)]"
+                              : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[10px]"
+                          } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
+                          style={{ minHeight: 44, minWidth: 44, padding: "10px", lineHeight: 1 }}
+                        >
+                          {shouldHighlight && highlightPart ? (
+                            <span>
+                              {before}
+                              <span className="text-[#0019FF]">{highlightPart}</span>
+                              {after}
+                            </span>
+                          ) : (
+                            option.label
+                          )}
+                        </button>
+                      </li>
                     )
                   })
                 )}
@@ -542,4 +467,3 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
 })
 
 export default SlotSelect
-   

@@ -102,7 +102,7 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${item.seller}. Стоимость ${price}.`}
       />
 
-      <section className=" px-4 sm:px-6 lg:px-8  bg-[#0B0B0C] py-6 text-white">
+      <section className=" -px-4 sm:px-6 lg:scroll-px-8  bg-[#0B0B0C] py-6 text-white">
         <div className="mx-auto w-full ">
           <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
             <Link to={paths.home} > 
@@ -120,7 +120,7 @@ export default function NumberDetailsSection() {
             </h1>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 mx-auto text-center">
             <div className="flex items-center">
               <PlateStaticLg
                 data={{
@@ -136,27 +136,27 @@ export default function NumberDetailsSection() {
                 }}
                 responsive
                 showCaption={true}
-                className="w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
+                className="w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px] mx-auto"
               />
             </div>
 
             <button
               onClick={handleBuyClick}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-25 md:px-50 py-3 text-base font-medium text-white transition hover:bg-[#0C8BFF]focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white mx-4 sm:mx-6 lg:mx-8"
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-25 md:px-50 py-3 text-base font-medium text-white transition hover:bg-[#0C8BFF]focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white mx-auto sm:mx-auto lg:mx-auto"
             >
               Купить
             </button>
           </div>
 
-          <div className="mt-8 w-screen -ml-8 -mb-6">
+          <div className="mt-8 w-screen -ml-12   -mb-6">
             {detailsRows.map((row, index) => {
               const bg = index % 2 === 0 ? "bg-[#2C2C2C] " : "bg-transparent"
               return (
                 <div
                   key={row.label}
-                  className={`grid grid-cols-2 gap-5 items-center ${bg} px-10 py-4 sm:px-10 sm:py-5`}
+                  className={`grid grid-cols-2 gap-5 items-center ${bg} px-10 py-1 sm:px-10 sm:py-2`}
                 >
-                  <div className="text-[18px] sm:text-[22px] md:text-[24px] font-semibold">{row.label}</div>
+                  <div className="text-[18px] sm:text-[22px] md:text-[32px] font-semibold">{row.label}</div>
                   <div className="text-[18px] sm:text-[22px] md:text-[24px] text-white">
                     {row.isPhone ? (
                       <a href={`tel:${item.phone}`} className="hover:opacity-90">
