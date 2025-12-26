@@ -1,37 +1,37 @@
-import React from "react";
-import { PRESETS, DIGITS, type PlateSize } from "../../../shared/components/plate/constants";
-import { useScale } from "../../../shared/components/plate/useScale";
-import SlotSelect from "../../../shared/components/plate/SlotSelect";
-import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "../model/types";
-import { regionsApi, type Region } from "@/shared/services/regionsApi";
-import { letterKeywords, normalizePlateLetter, PLATE_LETTERS } from "@/shared/lib/plateLetters";
+import React from "react"
+import { PRESETS, DIGITS, type PlateSize } from "../../../shared/components/plate/constants"
+import { useScale } from "../../../shared/components/plate/useScale"
+import SlotSelect from "../../../shared/components/plate/SlotSelect"
+import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "../model/types"
+import { regionsApi, type Region } from "@/shared/services/regionsApi"
+import { letterKeywords, normalizePlateLetter, PLATE_LETTERS } from "@/shared/lib/plateLetters"
 
 type Props = {
-  size?: PlateSize;
-  responsive?: boolean;
-  flagSrc?: string;
-  showCaption?: boolean;
-  className?: string;
-  value?: PlateSelectValue;
-  defaultValue?: PlateSelectValue;
-  onChange?: (value: PlateSelectValue) => void;
-};
+  size?: PlateSize
+  responsive?: boolean
+  flagSrc?: string
+  showCaption?: boolean
+  className?: string
+  value?: PlateSelectValue
+  defaultValue?: PlateSelectValue
+  onChange?: (value: PlateSelectValue) => void
+}
 
-type NormalizedPlateSelectValue = PlateSelectValue;
+type NormalizedPlateSelectValue = PlateSelectValue
 
 const ensureDigit = (char: string | undefined, allowed: readonly string[]) => {
-  if (char && allowed.includes(char)) return char;
-  return "*";
-};
+  if (char && allowed.includes(char)) return char
+  return "*"
+}
 
 const ensureLetter = (char: string | undefined) => {
-  const normalized = normalizePlateLetter(char ?? "");
-  return normalized || "*";
-};
+  const normalized = normalizePlateLetter(char ?? "")
+  return normalized || "*"
+}
 
 const normalizeValue = (value?: PlateSelectValue): NormalizedPlateSelectValue => {
-  const base = value ?? DEFAULT_PLATE_VALUE;
-  const rawText = ((base.text ?? DEFAULT_PLATE_VALUE.text).toUpperCase() + "******").slice(0, 6);
+  const base = value ?? DEFAULT_PLATE_VALUE
+  const rawText = ((base.text ?? DEFAULT_PLATE_VALUE.text).toUpperCase() + "******").slice(0, 6)
   const normalizedChars: [string, string, string, string, string, string] = [
     ensureLetter(rawText[0]),
     ensureDigit(rawText[1], DIGITS),
@@ -39,19 +39,19 @@ const normalizeValue = (value?: PlateSelectValue): NormalizedPlateSelectValue =>
     ensureDigit(rawText[3], DIGITS),
     ensureLetter(rawText[4]),
     ensureLetter(rawText[5]),
-  ];
+  ]
 
-  const rawRegionCode = typeof base.regionCode === "string" ? base.regionCode : "";
-  const regionCode = rawRegionCode.trim().toUpperCase().slice(0, 3);
+  const rawRegionCode = typeof base.regionCode === "string" ? base.regionCode : ""
+  const regionCode = rawRegionCode.trim().toUpperCase().slice(0, 3)
 
-  const rawRegionId = (base as { regionId?: unknown }).regionId;
-  let regionId: number | null = null;
+  const rawRegionId = (base as { regionId?: unknown }).regionId
+  let regionId: number | null = null
   if (typeof rawRegionId === "number" && Number.isFinite(rawRegionId) && rawRegionId > 0) {
-    regionId = rawRegionId;
+    regionId = rawRegionId
   } else if (typeof rawRegionId === "string") {
-    const parsed = Number(rawRegionId.trim());
+    const parsed = Number(rawRegionId.trim())
     if (Number.isFinite(parsed) && parsed > 0) {
-      regionId = parsed;
+      regionId = parsed
     }
   }
 
@@ -59,16 +59,16 @@ const normalizeValue = (value?: PlateSelectValue): NormalizedPlateSelectValue =>
     text: normalizedChars.join(""),
     regionCode,
     regionId,
-  };
-};
+  }
+}
 
 const setCharAt = (text: string, index: number, nextChar: string) => {
-  const chars = text.split("");
-  chars[index] = nextChar;
-  return chars.join("");
-};
+  const chars = text.split("")
+  chars[index] = nextChar
+  return chars.join("")
+}
 
-const ANY_OPTION = { value: "*", label: "*", keywords: ["*", "любой", "очистить"] } as const;
+const ANY_OPTION = { value: "*", label: "*", keywords: ["*", "любой", "очистить"] } as const
 
 const LETTER_OPTIONS = [
   ANY_OPTION,
@@ -77,28 +77,28 @@ const LETTER_OPTIONS = [
     label: char,
     keywords: letterKeywords(char),
   })),
-];
-const DIGIT_OPTIONS = [...DIGITS];
+]
+const DIGIT_OPTIONS = [...DIGITS]
 
-const LETTERS_HINT = PLATE_LETTERS.join(", ");
-const DIGITS_HINT = DIGIT_OPTIONS.join(", ");
+const LETTERS_HINT = PLATE_LETTERS.join(", ")
+const DIGITS_HINT = DIGIT_OPTIONS.join(", ")
 
 const sortRegions = (a: Region, b: Region) => {
-  const codeA = Number.parseInt(a.regionCode, 10);
-  const codeB = Number.parseInt(b.regionCode, 10);
+  const codeA = Number.parseInt(a.regionCode, 10)
+  const codeB = Number.parseInt(b.regionCode, 10)
 
-  const hasNumericA = Number.isFinite(codeA);
-  const hasNumericB = Number.isFinite(codeB);
+  const hasNumericA = Number.isFinite(codeA)
+  const hasNumericB = Number.isFinite(codeB)
 
   if (hasNumericA && hasNumericB) {
-    return (codeA as number) - (codeB as number);
+    return (codeA as number) - (codeB as number)
   }
 
-  if (hasNumericA) return -1;
-  if (hasNumericB) return 1;
+  if (hasNumericA) return -1
+  if (hasNumericB) return 1
 
-  return a.regionCode.localeCompare(b.regionCode, "ru");
-};
+  return a.regionCode.localeCompare(b.regionCode, "ru")
+}
 
 export default function PlateSelectForm({
   size = "lg",
@@ -110,117 +110,119 @@ export default function PlateSelectForm({
   defaultValue,
   onChange,
 }: Props) {
-  const isControlled = value != null;
+  const isControlled = value != null
   const controlledValue = React.useMemo(
     () => (value != null ? normalizeValue(value) : null),
     [value],
-  );
+  )
   const [internalValue, setInternalValue] = React.useState<NormalizedPlateSelectValue>(() =>
     normalizeValue(defaultValue),
-  );
-  const currentValue = controlledValue ?? internalValue;
+  )
+  const currentValue = controlledValue ?? internalValue
 
   React.useEffect(() => {
     if (!isControlled && defaultValue) {
-      setInternalValue(normalizeValue(defaultValue));
+      setInternalValue(normalizeValue(defaultValue))
     }
-  }, [defaultValue, isControlled]);
+  }, [defaultValue, isControlled])
 
   const applyChange = React.useCallback(
     (nextRaw: PlateSelectValue) => {
-      const next = normalizeValue(nextRaw);
+      const next = normalizeValue(nextRaw)
       if (!isControlled) {
-        setInternalValue(next);
+        setInternalValue(next)
       }
-      onChange?.(next);
+      onChange?.(next)
     },
     [isControlled, onChange],
-  );
+  )
 
-  const preset = PRESETS[size];
-  const { ref: wrapperRef, k } = useScale(preset.w);
+  const preset = PRESETS[size]
+  const { ref: wrapperRef, k } = useScale(preset.w)
 
-  const isXs = size === "xs";
+  const isXs = size === "xs"
 
-  const borderW = isXs ? 2 : Math.max(1, 10 * k);
-  const radius = isXs ? 10 : Math.max(6, 14 * k);
-  const outerPadY = isXs ? 4 : 6 * k;
+  const borderW = isXs ? 2 : Math.max(1, 10 * k)
+  const radius = isXs ? 10 : Math.max(6, 14 * k)
+  const outerPadY = isXs ? 4 : 6 * k
 
-  const mainFontLetter = isXs ? 65 : 160 * k;
-  const mainFontNumber = isXs ? 65 : 170 * k;
-  const mainGap = isXs ? 20 : 30 * k;
-  const mainPx = isXs ? 6 : 32 * k;
-  const mainPb = isXs ? 1 : 0;
-  const slotW = isXs ? 22 : 80 * k;
-  const slotH = isXs ? 68 : mainFontNumber;
-  const digitGap = isXs ? 5 : 0 * k;
-  const digitGapLetter = isXs ? 8 : 0 * k;
+  const mainFontLetter = isXs ? 65 : 160 * k
+  const mainFontNumber = isXs ? 65 : 170 * k
+  const mainGap = isXs ? 20 : 30 * k
+  const mainPx = isXs ? 6 : 32 * k
+  const mainPb = isXs ? 1 : 0
+  const slotW = isXs ? 22 : 80 * k
+  const slotH = isXs ? 68 : mainFontNumber
+  const digitGap = isXs ? 5 : 0 * k
+  const digitGapLetter = isXs ? 8 : 0 * k
+  const slotDropdownWidth = isXs ? 180 : 180 // одна ширина для букв и цифр
 
-  const regionFont = isXs ? 32 : 110 * k;
-  const rusFont = isXs ? 14 : 42 * k;
-  const rusRowH = isXs ? 16 : 40 * k;
-  const rusGap = isXs ? 6 : 10 * k;
-  const rusPb = isXs ? 2 : 4 * k;
-  const flagH = isXs ? 12 : rusRowH * 0.9;
-  const flagBorder = isXs ? 1 : Math.max(1, 2 * k);
 
-  const regionGap = isXs ? 10 : 4 * k;
+  const regionFont = isXs ? 32 : 110 * k
+  const rusFont = isXs ? 14 : 42 * k
+  const rusRowH = isXs ? 16 : 40 * k
+  const rusGap = isXs ? 6 : 10 * k
+  const rusPb = isXs ? 2 : 4 * k
+  const flagH = isXs ? 12 : rusRowH * 0.9
+  const flagBorder = isXs ? 1 : Math.max(1, 2 * k)
+
+  const regionGap = isXs ? 10 : 4 * k
 
   const containerStyle: React.CSSProperties =
-    responsive && !isXs ? { width: "100%", maxWidth: `${preset.w}px` } : { width: `${preset.w}px` };
+    responsive && !isXs ? { width: "100%", maxWidth: `${preset.w}px` } : { width: `${preset.w}px` }
 
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null)
 
-  const slotRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const slotRefs = React.useRef<Array<HTMLButtonElement | null>>([])
   const registerSlot = React.useCallback(
     (index: number) => (node: HTMLButtonElement | null) => {
-      slotRefs.current[index] = node;
+      slotRefs.current[index] = node
     },
     [],
-  );
+  )
 
   const focusNextSlot = React.useCallback((index: number) => {
-    const next = slotRefs.current[index + 1];
-    if (!next) return;
+    const next = slotRefs.current[index + 1]
+    if (!next) return
     if (typeof window !== "undefined") {
-      window.requestAnimationFrame(() => next.focus());
+      window.requestAnimationFrame(() => next.focus())
     } else {
-      next.focus();
+      next.focus()
     }
-  }, []);
+  }, [])
 
-  const clearError = React.useCallback(() => setError(null), []);
+  const clearError = React.useCallback(() => setError(null), [])
 
   React.useEffect(() => {
-    slotRefs.current[0]?.focus();
-  }, []);
+    slotRefs.current[0]?.focus()
+  }, [])
 
-  const [regions, setRegions] = React.useState<Region[]>([]);
-  const [regionsLoading, setRegionsLoading] = React.useState(false);
-  const [regionsError, setRegionsError] = React.useState<string | null>(null);
+  const [regions, setRegions] = React.useState<Region[]>([])
+  const [regionsLoading, setRegionsLoading] = React.useState(false)
+  const [regionsError, setRegionsError] = React.useState<string | null>(null)
 
   const fetchRegions = React.useCallback(async () => {
-    setRegionsLoading(true);
-    setRegionsError(null);
+    setRegionsLoading(true)
+    setRegionsError(null)
     try {
-      const data = await regionsApi.list();
-      const sorted = [...data].sort(sortRegions);
-      setRegions(sorted);
+      const data = await regionsApi.list()
+      const sorted = [...data].sort(sortRegions)
+      setRegions(sorted)
       setError((prev) =>
         prev && prev.startsWith("Не удалось загрузить регионы") ? null : prev,
-      );
+      )
     } catch {
-      const message = "Не удалось загрузить регионы";
-      setRegionsError(message);
-      setError((prev) => prev ?? `${message}. Повторите попытку.`);
+      const message = "Не удалось загрузить регионы"
+      setRegionsError(message)
+      setError((prev) => prev ?? `${message}. Повторите попытку.`)
     } finally {
-      setRegionsLoading(false);
+      setRegionsLoading(false)
     }
-  }, []);
+  }, [])
 
   React.useEffect(() => {
-    void fetchRegions();
-  }, [fetchRegions]);
+    void fetchRegions()
+  }, [fetchRegions])
 
   const regionOptions = React.useMemo(
     () =>
@@ -235,104 +237,104 @@ export default function PlateSelectForm({
         })),
       ],
     [regions],
-  );
+  )
 
   const activeRegion = React.useMemo(() => {
-    if (!regions.length) return null;
+    if (!regions.length) return null
     if (currentValue.regionId != null) {
-      const byId = regions.find((region) => region.id === currentValue.regionId);
-      if (byId) return byId;
+      const byId = regions.find((region) => region.id === currentValue.regionId)
+      if (byId) return byId
     }
     if (currentValue.regionCode) {
-      return regions.find((region) => region.regionCode === currentValue.regionCode) ?? null;
+      return regions.find((region) => region.regionCode === currentValue.regionCode) ?? null
     }
-    return null;
-  }, [currentValue.regionCode, currentValue.regionId, regions]);
+    return null
+  }, [currentValue.regionCode, currentValue.regionId, regions])
 
-  const resolvedRegionCode = activeRegion?.regionCode ?? currentValue.regionCode ?? "";
-  const resolvedRegionId = activeRegion?.id ?? currentValue.regionId ?? null;
+  const resolvedRegionCode = activeRegion?.regionCode ?? currentValue.regionCode ?? ""
+  const resolvedRegionId = activeRegion?.id ?? currentValue.regionId ?? null
 
-  const text = currentValue.text;
-  const firstLetter = text[0] ?? "*";
-  const firstDigit = text[1] ?? "*";
-  const secondDigit = text[2] ?? "*";
-  const thirdDigit = text[3] ?? "*";
-  const secondLetter = text[4] ?? "*";
-  const thirdLetter = text[5] ?? "*";
+  const text = currentValue.text
+  const firstLetter = text[0] ?? "*"
+  const firstDigit = text[1] ?? "*"
+  const secondDigit = text[2] ?? "*"
+  const thirdDigit = text[3] ?? "*"
+  const secondLetter = text[4] ?? "*"
+  const thirdLetter = text[5] ?? "*"
 
   const glyphColor = (v: string) =>
-    v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6";
+    v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
 
-  const formattedPlate = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
-  const captionText = `${formattedPlate} ${resolvedRegionCode || "*"}`.trim();
+  const formattedPlate = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`
+  const captionText = `${formattedPlate} ${resolvedRegionCode || "*"}`.trim()
 
   const createCommitHandler = React.useCallback(
     (index: number) => () => {
-      clearError();
-      focusNextSlot(index);
+      clearError()
+      focusNextSlot(index)
     },
     [clearError, focusNextSlot],
-  );
+  )
 
   const handleInvalidLetter = React.useCallback(
     (query: string) => {
-      const normalized = query.trim().toUpperCase();
-      if (!normalized) return;
-      setError(`Недопустимый символ "${normalized}". Допустимые буквы: ${LETTERS_HINT}.`);
+      const normalized = query.trim().toUpperCase()
+      if (!normalized) return
+      setError(`Недопустимый символ "${normalized}". Допустимые буквы: ${LETTERS_HINT}.`)
     },
     [],
-  );
+  )
 
   const handleInvalidDigit = React.useCallback(
     (query: string) => {
-      const normalized = query.trim();
-      if (!normalized) return;
-      setError(`Недопустимое значение "${normalized}". Допустимые цифры: ${DIGITS_HINT}.`);
+      const normalized = query.trim()
+      if (!normalized) return
+      setError(`Недопустимое значение "${normalized}". Допустимые цифры: ${DIGITS_HINT}.`)
     },
     [],
-  );
+  )
 
   const handleInvalidRegion = React.useCallback((query: string) => {
-    const normalized = query.trim();
-    if (!normalized) return;
-    setError(`Регион "${normalized}" не найден. Введите код из списка.`);
-  }, []);
+    const normalized = query.trim()
+    if (!normalized) return
+    setError(`Регион "${normalized}" не найден. Введите код из списка.`)
+  }, [])
 
   const handleFirstLetterChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 0, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 0, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleFirstDigitChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 1, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 1, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleSecondDigitChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 2, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 2, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleThirdDigitChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 3, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 3, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleSecondLetterChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 4, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 4, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleThirdLetterChange = (next: string) => {
-    clearError();
-    applyChange({ text: setCharAt(text, 5, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId });
-  };
+    clearError()
+    applyChange({ text: setCharAt(text, 5, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
+  }
   const handleRegionChange = (code: string) => {
-    clearError();
-    const match = regions.find((region) => region.regionCode === code);
+    clearError()
+    const match = regions.find((region) => region.regionCode === code)
     applyChange({
       text,
       regionCode: match?.regionCode ?? code,
       regionId: match?.id ?? null,
-    });
-  };
+    })
+  }
 
-  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : "");
+  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : "")
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -367,6 +369,7 @@ export default function PlateSelectForm({
                 slotH={slotH}
                 color={glyphColor(firstLetter)}
                 dropdownMaxHeight={240}
+                dropdownWidth={slotDropdownWidth}
                 onCommit={createCommitHandler(0)}
                 onInvalidKey={handleInvalidLetter}
                 searchable={false}
@@ -384,6 +387,7 @@ export default function PlateSelectForm({
                   slotH={slotH}
                   color={glyphColor(firstDigit)}
                   dropdownMaxHeight={280}
+                  dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(1)}
                   onInvalidKey={handleInvalidDigit}
                   searchable={false}
@@ -399,6 +403,7 @@ export default function PlateSelectForm({
                   slotH={slotH}
                   color={glyphColor(secondDigit)}
                   dropdownMaxHeight={280}
+                  dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(2)}
                   onInvalidKey={handleInvalidDigit}
                   searchable={false}
@@ -414,6 +419,7 @@ export default function PlateSelectForm({
                   slotH={slotH}
                   color={glyphColor(thirdDigit)}
                   dropdownMaxHeight={280}
+                  dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(3)}
                   onInvalidKey={handleInvalidDigit}
                   searchable={false}
@@ -432,6 +438,7 @@ export default function PlateSelectForm({
                   slotH={slotH}
                   color={glyphColor(secondLetter)}
                   dropdownMaxHeight={240}
+                  dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(4)}
                   onInvalidKey={handleInvalidLetter}
                   searchable={false}
@@ -447,6 +454,7 @@ export default function PlateSelectForm({
                   slotH={slotH}
                   color={glyphColor(thirdLetter)}
                   dropdownMaxHeight={240}
+                  dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(5)}
                   onInvalidKey={handleInvalidLetter}
                   searchable={false}
@@ -481,6 +489,7 @@ export default function PlateSelectForm({
                 color={glyphColor(regionDisplayValue)}
                 centerText
                 dropdownMaxHeight={240}
+                dropdownWidth={slotDropdownWidth}
                 onCommit={createCommitHandler(6)}
                 onInvalidKey={handleInvalidRegion}
                 disabled={regionsLoading}
@@ -503,7 +512,7 @@ export default function PlateSelectForm({
             </div>
           </div>
 
-  
+
         </div>
       </div>
 
@@ -532,5 +541,5 @@ export default function PlateSelectForm({
         </figcaption>
       )}
     </figure>
-  );
+  )
 }

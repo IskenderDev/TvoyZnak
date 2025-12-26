@@ -10,7 +10,7 @@ type Props = {
   ariaLabel: string
   value: string
   onChange: (v: string) => void
-  options: any[] | SlotSelectOption[]
+  options: Array<string | SlotSelectOption>
 
   fontSize: number
   slotW: number
@@ -30,8 +30,14 @@ type Props = {
   dropdownOffsetX?: number
 }
 
-const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelectOption[] =>
-  options.map((opt) => {
+const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelectOption[] => {
+  const hasAny = options.some((opt) => (typeof opt === "string" ? opt === "*" : opt.value === "*"))
+
+  const withAny = hasAny
+    ? options
+    : ([{ value: "*", label: "*", keywords: ["*", "любой", "очистить"] }, ...options] as const)
+
+  return withAny.map((opt) => {
     if (typeof opt === "string") return { value: opt, label: opt, keywords: [opt] }
 
     const baseKeywords = [opt.value, opt.label, ...(opt.keywords ?? [])]
@@ -46,6 +52,7 @@ const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelect
       keywords: uniqueKeywords.length ? uniqueKeywords : [opt.value, opt.label],
     }
   })
+}
 
 const isPrintableKey = (event: React.KeyboardEvent) =>
   event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey
@@ -174,6 +181,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     [onChange, onCommit],
   )
 
+  const resetToAny = useCallback(() => {
+    if (value !== "*") {
+      onChange("*")
+      onCommit?.("*")
+    }
+    typeBufferRef.current = ""
+    setFilter("")
+  }, [onChange, onCommit, value])
+
   const applyTypeahead = useCallback(
     (key: string) => {
       if (!searchable) return
@@ -254,12 +270,18 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         return
       }
 
+      if (event.key === "Backspace") {
+        event.preventDefault()
+        resetToAny()
+        return
+      }
+
       if (isPrintableKey(event)) {
         event.preventDefault()
         handlePrintableKey(event.key)
       }
     },
-    [disabled, filteredOptions.length, handlePrintableKey, open],
+    [disabled, filteredOptions.length, handlePrintableKey, open, resetToAny],
   )
 
   const onListboxKeyDown = useCallback(
@@ -303,9 +325,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         return
       }
 
+      if (event.key === "Backspace") {
+        event.preventDefault()
+        resetToAny()
+        return
+      }
+
       if (isPrintableKey(event)) handlePrintableKey(event.key)
     },
-    [activeIndex, filteredOptions, handlePrintableKey, selectOption],
+    [activeIndex, filteredOptions, handlePrintableKey, resetToAny, selectOption],
   )
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -332,6 +360,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
       event.preventDefault()
       setOpen(false)
     }
+    if (event.key === "Backspace") {
+      resetToAny()
+    }
   }
 
   const displayText = displayValue ?? value ?? ""
@@ -342,7 +373,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
   const listContainerClasses = "grid grid-cols-3 gap-2 p-3 justify-items-center"
 
-  const menuW = dropdownWidth ?? Math.max(56, slotW + 140)
+  const menuW = dropdownWidth 
+  const searchBoxHeight = searchable ? 56 : 0
+  const listMaxHeight = Math.max(dropdownMaxHeight - searchBoxHeight, 160)
+  const optionSize = 48
 
   return (
     <div className="relative" style={{ width: slotW, height: slotH }}>
@@ -408,7 +442,12 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
             >
               <ul
                 className={`${listContainerClasses} overflow-y-auto overflow-x-hidden no-scrollbar`}
-                style={{ maxHeight: dropdownMaxHeight, minHeight: searchable ? undefined : 160 }}
+                style={{
+                  maxHeight: listMaxHeight,
+                  minHeight: searchable ? undefined : 160,
+                  touchAction: "pan-y",
+                  overscrollBehavior: "contain",
+                }}
               >
                 {filteredOptions.length === 0 ? (
                   <li className="px-4 py-3 text-center text-neutral-500 text-sm">
@@ -438,10 +477,19 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           onClick={() => selectOption(option)}
                           className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${
                             selected
-                              ? "bg-[#0177FF] text-white border-[#0177FF]]"
+                              ? "bg-[#0177FF] text-white border-[#0177FF]"
                               : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[18px]"
                           } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
-                          style={{ minHeight: 44, minWidth: 44, padding: "10px", lineHeight: 1 }}
+                          style={{
+                            height: optionSize,
+                            width: optionSize,
+                            minHeight: optionSize,
+                            minWidth: optionSize,
+                            padding: 0,
+                            lineHeight: 1,
+                            aspectRatio: "1 / 1",
+                            flexShrink: 0,
+                          }}
                         >
                           {shouldHighlight && highlightPart ? (
                             <span>
