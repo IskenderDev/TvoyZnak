@@ -358,7 +358,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((p) => !p)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-plate ${
+        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${
           disabled ? "cursor-not-allowed opacity-60" : ""
         }`}
         style={{ lineHeight: 0.9, fontWeight: 700, fontSize, color: hasValue ? color : "#9AA0A6" }}
@@ -379,7 +379,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           }}
         >
           <div
-            className="rounded-xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-plate border border-neutral-100"
+            className="rounded-xl bg-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] flex flex-col font-auto-number border border-neutral-100"
             style={{ width: menuW, maxHeight: dropdownMaxHeight, overflow: "hidden" }}
           >
             {searchable && (

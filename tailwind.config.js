@@ -1,7 +1,7 @@
 const config = {
   theme: {
     fontFamily: {
-      sans: ["Rubik", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+      sans: ["Rubik", "sans-serif"],
     },
     extend: {
       colors: {

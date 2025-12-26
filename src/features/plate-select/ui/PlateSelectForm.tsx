@@ -341,7 +341,7 @@ export default function PlateSelectForm({
           className="flex flex-col rounded-xl bg-black box-border"
           style={{ border: `${borderW}px solid #000`, borderRadius: radius, height: `${preset.h}px` }}
         >
-          <div className="flex w-full bg-black rounded-xl font-plate" style={{ height: "100%" }}>
+          <div className="flex w-full bg-black rounded-xl font-auto-number" style={{ height: "100%" }}>
             <div
               className="flex items-end justify-center bg-white font-bold"
               style={{
@@ -491,7 +491,7 @@ export default function PlateSelectForm({
                 className="flex items-center justify-center m-0"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb }}
               >
-                <span className="font-extrabold font-plate-rus" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className="font-extrabold font-auto-number" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img
