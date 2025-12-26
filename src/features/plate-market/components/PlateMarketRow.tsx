@@ -21,7 +21,7 @@ const formatDate = (value: string) => {
 export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   const data: PlateData = {
     price: row.price,
-    comment: row.plate.comment ?? row.description ?? "",
+    comment: "",
     firstLetter: row.plate.firstLetter,
     secondLetter: row.plate.secondLetter,
     thirdLetter: row.plate.thirdLetter,

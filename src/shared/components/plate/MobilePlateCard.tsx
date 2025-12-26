@@ -96,7 +96,7 @@ function pickPlate(row: PlateRowLike): PlateData {
   const src = (row.plate as PlateLike | undefined) ?? row.data ?? row.plateData ?? {};
   return {
     price: src.price ?? row.price ?? 0,
-    comment: src.comment ?? (typeof row.description === "string" ? row.description : ""),
+    comment: "",
     firstLetter: ensureChar(src.firstLetter ?? row.plate?.firstLetter),
     firstDigit: ensureChar(src.firstDigit ?? row.plate?.firstDigit),
     secondDigit: ensureChar(src.secondDigit ?? row.plate?.secondDigit),
