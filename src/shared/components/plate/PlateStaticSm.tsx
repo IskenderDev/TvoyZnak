@@ -1,27 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
-import { formatRegionCode } from "@/shared/lib/plate";
+import React, { useEffect, useRef, useState } from "react"
+import { formatRegionCode } from "@/shared/lib/plate"
 
 export type PlateData = {
-  price: number;
-  firstLetter: string;
-  secondLetter: string;
-  thirdLetter: string;
-  firstDigit: string;
-  secondDigit: string;
-  thirdDigit: string;
-  comment: string;
-  regionId: string | number;
-};
+  price: number
+  firstLetter: string
+  secondLetter: string
+  thirdLetter: string
+  firstDigit: string
+  secondDigit: string
+  thirdDigit: string
+  comment: string
+  regionId: string | number
+}
 
 type Props = {
-  data: PlateData;
-  responsive?: boolean;
-  flagSrc?: string;
-  showCaption?: boolean;
-  className?: string;
-};
+  data: PlateData
+  responsive?: boolean
+  flagSrc?: string
+  showCaption?: boolean
+  className?: string
+}
 
-const W = 250;
+const W = 250
 
 export default function PlateStaticSm({
   data,
@@ -30,61 +30,61 @@ export default function PlateStaticSm({
   showCaption = true,
   className = "",
 }: Props) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [k, setK] = useState(1);
-  const regionLabel = formatRegionCode(data.regionId) || "*";
-  const captionComment = data.comment?.trim();
+  const ref = useRef<HTMLDivElement | null>(null)
+  const [k, setK] = useState(1)
+  const regionLabel = formatRegionCode(data.regionId) || "*"
+  const captionComment = data.comment?.trim()
   const formattedPrice = Number.isFinite(data.price)
     ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
-    : "";
-  const captionText = captionComment || formattedPrice;
+    : ""
+  const captionText = captionComment || formattedPrice
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const el = ref.current
+    if (!el) return
     const ro = new ResizeObserver(([entry]) => {
-      const boxSize = entry.contentBoxSize;
-      let inlineSize = entry.contentRect.width;
+      const boxSize = entry.contentBoxSize
+      let inlineSize = entry.contentRect.width
 
       if (Array.isArray(boxSize)) {
-        inlineSize = boxSize[0]?.inlineSize ?? inlineSize;
+        inlineSize = boxSize[0]?.inlineSize ?? inlineSize
       } else if (boxSize && typeof boxSize === "object" && "inlineSize" in boxSize) {
-        const size = boxSize as unknown as ResizeObserverSize;
-        inlineSize = size.inlineSize ?? inlineSize;
+        const size = boxSize as unknown as ResizeObserverSize
+        inlineSize = size.inlineSize ?? inlineSize
       }
 
-      const w = inlineSize || el.clientWidth;
-      const scale = (w || el.clientWidth) / W;
-      setK(scale > 0 ? scale : 1);
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+      const w = inlineSize || el.clientWidth
+      const scale = (w || el.clientWidth) / W
+      setK(scale > 0 ? scale : 1)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
-  const borderW = 2;
-  const radius = Math.max(4, 8 * k);
+  const borderW = 2
+  const radius = Math.max(4, 8 * k)
 
-  const leftWidth = "72%";
-  const rightWidth = "28%";
+  const leftWidth = "72%"
+  const rightWidth = "28%"
 
-  const mainFontNumbers = 45 * k;
-  const mainFont = 35 * k;
-  const mainPx = 10 * k;
-  const mainPb = 12 * k;
-  const mainGap = 1 * k;
-  const digitGap = 0 * k;
+  const mainFontNumbers = 45 * k
+  const mainFont = 35 * k
+  const mainPx = 10 * k
+  const mainPb = 12 * k
+  const mainGap = 1 * k
+  const digitGap = 0 * k
 
-  const regionFont = 30 * k;
-  const rusFont = 11 * k;
-  const rusRowH = 16 * k;
-  const rusGap = 4;
-  const rusPb = 1;
-  const flagH = 14 * k;
-  const flagBorder = 0.1;
+  const regionFont = 30 * k
+  const rusFont = 11 * k
+  const rusRowH = 16 * k
+  const rusGap = 4
+  const rusPb = 1
+  const flagH = 14 * k
+  const flagBorder = 0.1
 
   const containerStyle: React.CSSProperties = responsive
     ? { width: "100%", maxWidth: `${W}px` }
-    : { width: `${W}px` };
+    : { width: `${W}px` }
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -162,9 +162,7 @@ export default function PlateStaticSm({
         </div>
       </div>
 
-      {showCaption && captionText && (
-        <figcaption className="mt-2 text-center text-xs text-black/70">{captionText}</figcaption>
-      )}
+
     </figure>
-  );
+  )
 }
