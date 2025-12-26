@@ -373,7 +373,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
   const listContainerClasses = "grid grid-cols-3 gap-2 p-3 justify-items-center"
 
-  const menuW = dropdownWidth ?? Math.max(56, slotW + 140)
+  const menuW = dropdownWidth 
   const searchBoxHeight = searchable ? 56 : 0
   const listMaxHeight = Math.max(dropdownMaxHeight - searchBoxHeight, 160)
   const optionSize = 48
