@@ -71,11 +71,11 @@ export default function PlateStaticSm({
   const mainFont = 35 * k
   const mainPx = 10 * k
   const mainPb = 12 * k
-  const mainGap = 1 * k
-  const digitGap = 0 * k
+  const mainGap = 8 * k
+  const digitGap = 2 * k
 
   const regionFont = 30 * k
-  const rusFont = 11 * k
+  const rusFont = 14  * k
   const rusRowH = 16 * k
   const rusGap = 4
   const rusPb = 1
@@ -129,9 +129,9 @@ export default function PlateStaticSm({
                 width: rightWidth,
                 border: `${borderW}px solid #000`,
                 borderRadius: radius,
-                paddingBottom: 4 * k,
+                paddingBottom: 2 * k,
                 justifyContent: "space-between",
-                gap: 4 * k,
+                gap: 2 * k,
                 boxSizing: "border-box",
               }}
             >
@@ -143,7 +143,7 @@ export default function PlateStaticSm({
                 className="flex items-center justify-center"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb, }}
               >
-                <span className="font-extrabold font-auto-number" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className="font-extrabold" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img

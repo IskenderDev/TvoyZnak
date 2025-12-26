@@ -146,15 +146,15 @@ export default function PlateSelectForm({
   const radius = isXs ? 10 : Math.max(6, 14 * k);
   const outerPadY = isXs ? 4 : 6 * k;
 
-  const mainFontLetter = isXs ? 35 : 120 * k;
-  const mainFontNumber = isXs ? 50 : 150 * k;
-  const mainGap = isXs ? 15 : 10 * k;
+  const mainFontLetter = isXs ? 65 : 160 * k;
+  const mainFontNumber = isXs ? 65 : 170 * k;
+  const mainGap = isXs ? 20 : 30 * k;
   const mainPx = isXs ? 6 : 32 * k;
-  const mainPb = isXs ? 5 : 1;
-  const slotW = isXs ? 22 : 90 * k;
+  const mainPb = isXs ? 1 : 0;
+  const slotW = isXs ? 22 : 80 * k;
   const slotH = isXs ? 68 : mainFontNumber;
-  const digitGap = isXs ? 10 : 4 * k;
-  const digitGapLetter = isXs ? 10 : 4 * k;
+  const digitGap = isXs ? 5 : 0 * k;
+  const digitGapLetter = isXs ? 8 : 0 * k;
 
   const regionFont = isXs ? 32 : 110 * k;
   const rusFont = isXs ? 14 : 42 * k;
@@ -351,7 +351,7 @@ export default function PlateSelectForm({
                 paddingLeft: mainPx,
                 paddingRight: mainPx,
                 paddingBottom: mainPb,
-                paddingTop: isXs ? 2 : undefined,
+                paddingTop: isXs ? 2 : 0,
                 gap: mainGap,
                 boxSizing: "border-box",
               }}

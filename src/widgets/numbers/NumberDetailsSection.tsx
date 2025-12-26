@@ -11,27 +11,36 @@ import type { NumberItem } from "@/entities/number/types"
 
 export default function NumberDetailsSection() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+
   const [item, setItem] = useState<NumberItem | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
+
+  /* ⬆️ ВСЕГДА СКРОЛЛ ВВЕРХ ПРИ СМЕНЕ ID */
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+  }, [id])
 
   useEffect(() => {
     if (!id) return
     let mounted = true
+
     setLoading(true)
     setError(null)
 
     numbersApi
       .get(id)
       .then((data) => {
-        if (!mounted) return
-        setItem(data)
+        if (mounted) setItem(data)
       })
       .catch((err) => {
         if (!mounted) return
-        const message = err?.response?.data?.message || err?.message || "Не удалось загрузить номер"
-        setError(message)
+        setError(
+          err?.response?.data?.message ||
+          err?.message ||
+          "Не удалось загрузить номер"
+        )
       })
       .finally(() => mounted && setLoading(false))
 
@@ -47,15 +56,14 @@ export default function NumberDetailsSection() {
 
   const contactSearch = useMemo(() => {
     const params = createSearchParams({
-      ...(contactPrefill.carNumber ? { carNumber: contactPrefill.carNumber } : {}),
+      ...(contactPrefill.carNumber
+        ? { carNumber: contactPrefill.carNumber }
+        : {}),
       feedbackType: contactPrefill.feedbackType,
     }).toString()
+
     return params ? `?${params}` : ""
   }, [contactPrefill])
-
-  const price = item ? formatPrice(item.price) : ""
-  const publishedDate = item?.date ? new Date(item.date).toLocaleDateString("ru-RU") : ""
-  const numberLabel = item ? formatPlateLabel(item) : ""
 
   if (loading) {
     return (
@@ -64,6 +72,7 @@ export default function NumberDetailsSection() {
       </section>
     )
   }
+
   if (error) {
     return (
       <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
@@ -71,6 +80,7 @@ export default function NumberDetailsSection() {
       </section>
     )
   }
+
   if (!item) {
     return (
       <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
@@ -79,98 +89,126 @@ export default function NumberDetailsSection() {
     )
   }
 
-  const handleBuyClick = () => {
-    navigate({ pathname: paths.contacts, search: contactSearch }, { state: { leadPrefill: contactPrefill } })
-  }
+  const price = formatPrice(item.price)
+  const publishedDate = item.date
+    ? new Date(item.date).toLocaleDateString("ru-RU")
+    : "—"
 
-  const sellerLogin = item.sellerLogin || item.seller || "—"
+  const numberLabel = formatPlateLabel(item)
   const sellerName = item.sellerName || item.seller || "—"
   const phone = item.phone || "—"
 
-  const detailsRows: Array<{ label: string; value: string; isPhone?: boolean }> = [
+  const detailsRows = [
     { label: "Цена", value: price },
-    { label: "Дата размещения", value: publishedDate || "—" },
-    { label: "Логин", value: sellerLogin },
+    { label: "Дата размещения", value: publishedDate },
     { label: "Имя", value: sellerName },
     { label: "Телефон", value: phone, isPhone: !!item.phone },
   ]
+
+  const handleBuyClick = () => {
+    navigate(
+      { pathname: paths.contacts, search: contactSearch },
+      { state: { leadPrefill: contactPrefill } }
+    )
+  }
 
   return (
     <>
       <Seo
         title={`Номер ${numberLabel || item.series} — Знак отличия`}
-        description={`Предложение от ${item.seller}. Стоимость ${price}.`}
+        description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
-      <section className=" -px-4 sm:px-6 lg:scroll-px-8  bg-[#0B0B0C] py-6 text-white">
-        <div className="mx-auto w-full ">
-          <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
-            <Link to={paths.home} > 
+      <section className="bg-[#0B0B0C] py-6 text-white">
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Link to={paths.home}>
               <button
                 type="button"
                 onClick={() => navigate(-1)}
                 aria-label="Назад"
-                className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-[#0177FF] hover:bg-[#0C8BFF]  focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-[#0177FF] hover:bg-[#0C8BFF]"
               >
                 <LuArrowLeft className="h-6 w-6 text-white" />
-              </button></Link>
+              </button>
+            </Link>
 
-            <h1 className="text-[30px] leading-tight sm:text-[36px] md:text-[42px] font-semibold">
-              Продам номер <span className="font-auto-number uppercase tracking-wide">{numberLabel || item.series}</span>
+            <h1 className="text-[28px] sm:text-[34px] md:text-[40px] font-semibold">
+              Продам номер{" "}
+              <span className="font-auto-number uppercase tracking-wide">
+                {numberLabel || item.series}
+              </span>
             </h1>
           </div>
 
-          <div className="mt-6 mx-auto text-center">
-            <div className="flex items-center">
-              <PlateStaticLg
-                data={{
-                  price: item.price,
-                  comment: item.plate.comment ?? item.description ?? "",
-                  firstLetter: item.plate.firstLetter,
-                  secondLetter: item.plate.secondLetter,
-                  thirdLetter: item.plate.thirdLetter,
-                  firstDigit: item.plate.firstDigit,
-                  secondDigit: item.plate.secondDigit,
-                  thirdDigit: item.plate.thirdDigit,
-                  regionId: item.plate.regionId,
-                }}
-                responsive
-                showCaption={true}
-                className="w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px] mx-auto"
-              />
-            </div>
+          <div className="mt-6 text-center">
+            <PlateStaticLg
+              data={{
+                price: item.price,
+                comment: item.plate.comment ?? item.description ?? "",
+                firstLetter: item.plate.firstLetter,
+                secondLetter: item.plate.secondLetter,
+                thirdLetter: item.plate.thirdLetter,
+                firstDigit: item.plate.firstDigit,
+                secondDigit: item.plate.secondDigit,
+                thirdDigit: item.plate.thirdDigit,
+                regionId: item.plate.regionId,
+              }}
+              responsive
+              showCaption
+              className="mx-auto w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
+            />
 
             <button
               onClick={handleBuyClick}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-25 md:px-50 py-3 text-base font-medium text-white transition hover:bg-[#0C8BFF]focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white mx-auto sm:mx-auto lg:mx-auto"
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-12 py-3 text-base font-medium hover:bg-[#0C8BFF]"
             >
               Купить
             </button>
           </div>
+        </div>
+      <div className="mt-10">
+  {detailsRows.map((row, index) => {
+    const bg = index % 2 === 0 ? "bg-[#2C2C2C]" : "bg-transparent"
 
-          <div className="mt-8 w-screen -ml-12   -mb-6">
-            {detailsRows.map((row, index) => {
-              const bg = index % 2 === 0 ? "bg-[#2C2C2C] " : "bg-transparent"
-              return (
-                <div
-                  key={row.label}
-                  className={`grid grid-cols-2 gap-5 items-center ${bg} px-10 py-1 sm:px-10 sm:py-2`}
-                >
-                  <div className="text-[18px] sm:text-[22px] md:text-[32px] font-semibold">{row.label}</div>
-                  <div className="text-[18px] sm:text-[22px] md:text-[24px] text-white">
-                    {row.isPhone ? (
-                      <a href={`tel:${item.phone}`} className="hover:opacity-90">
-                        {row.value}
-                      </a>
-                    ) : (
-                      row.value
-                    )}
-                  </div>
-                </div>
-              )
-            })}
+    return (
+      <div key={row.label} className={`${bg} w-full`}>
+        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[500px]">
+            <div
+              className="
+                grid items-center
+                grid-cols-[clamp(180px,26vw,340px)_1fr]
+                min-h-[56px] sm:min-h-[64px]
+                gap-8 sm:gap-12
+              "
+            >
+              <div className="text-left text-[18px] sm:text-[22px] md:text-[32px] font-semibold">
+                {row.label}
+              </div>
+
+              <div className="text-left text-[18px] sm:text-[22px] md:text-[24px] overflow-x-hidden">
+                {row.isPhone ? (
+                  <a href={`tel:${item.phone}`} className="hover:opacity-90">
+                    {row.value}
+                  </a>
+                ) : (
+                  row.value
+                )}
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    )
+  })}
+</div>
+
+
+
+
+
       </section>
     </>
   )

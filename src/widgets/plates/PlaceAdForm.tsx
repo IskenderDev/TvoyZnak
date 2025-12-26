@@ -182,10 +182,10 @@ export default function PlaceAdForm() {
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
         <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">
-          Оставьте заявку!
+          РАЗМЕСТИТЬ ОБЪЯВЛЕНИЕ
         </h2>
         <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
-          Все сделки сопровождаются юридической поддержкой, а номера подбираются только из проверенных источников.
+          Все сделки сопровождаются юридической поддержкой
         </p>
 
         <div className="mt-6 md:mt-8">

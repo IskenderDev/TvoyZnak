@@ -361,7 +361,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${
           disabled ? "cursor-not-allowed opacity-60" : ""
         }`}
-        style={{ lineHeight: 0.9, fontWeight: 700, fontSize, color: hasValue ? color : "#9AA0A6" }}
+        style={{ lineHeight: 0.9, fontWeight: 590, fontSize, color: hasValue ? color : "#9AA0A6" }}
         disabled={disabled}
       >
         {shownText}
@@ -383,15 +383,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
             style={{ width: menuW, maxHeight: dropdownMaxHeight, overflow: "hidden" }}
           >
             {searchable && (
-              <div className="p-2 border-b border-neutral-200">
+              <div className=" border-b border-neutral-200">
                 <input
                   ref={searchRef}
                   type="text"
                   value={filter}
-                  onChange={onSearchChange}
+                  onChange={onSearchChange} 
                   onKeyDown={onSearchKeyDown}
                   placeholder={searchPlaceholder}
-                  className="w-full rounded-md bg-neutral-100 px-3 py-2 text-sm font-semibold text-neutral-800 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#0177FF]"
+                  className="w-full rounded-md bg-neutral-100 px-3 py-2 text-lg font-semibold text-neutral-800 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#0177FF]"
                 />
               </div>
             )}
@@ -436,10 +436,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           type="button"
                           onMouseEnter={() => setActiveIndex(index)}
                           onClick={() => selectOption(option)}
-                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-bold ${
+                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${
                             selected
-                              ? "bg-[#0177FF] text-white border-[#0177FF] shadow-[0_6px_18px_rgba(1,119,255,0.35)]"
-                              : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[10px]"
+                              ? "bg-[#0177FF] text-white border-[#0177FF]]"
+                              : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[18px]"
                           } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
                           style={{ minHeight: 44, minWidth: 44, padding: "10px", lineHeight: 1 }}
                         >

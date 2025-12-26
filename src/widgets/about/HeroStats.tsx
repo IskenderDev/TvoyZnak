@@ -45,7 +45,7 @@ export default function HeroStats({
 									500+
 								</h3>
 								<p className="mt-4 text-neutral-100 text-sm md:text-base">
-									сделок по оценке, выкупу
+									сделок по выкупу
 									<br className="hidden md:block" /> и продаже номеров.
 								</p>
 							</article>

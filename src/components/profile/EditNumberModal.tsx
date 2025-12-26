@@ -8,6 +8,7 @@ import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-sel
 import { numbersApi } from "@/shared/services/numbersApi"
 import type { NumberItem } from "@/entities/number/types"
 import type { AdminLot } from "@/shared/api/adminLots"
+import { useStableViewportWidth } from '@/shared/lib/hooks/useStableViewport'
 
 const INPUT_BASE =
   "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border"
@@ -145,19 +146,11 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<ToastState>(null)
-  const [plateSize, setPlateSize] = useState<"xs" | "lg">(() => {
-    if (typeof window === "undefined") return "lg"
-    return window.innerWidth < 640 ? "xs" : "lg"
-  })
+
+  const { width: viewportWidth, recalc: recalcViewport } = useStableViewportWidth()
+  const plateSize = useMemo<"xs" | "lg">(() => (viewportWidth < 640 ? "xs" : "lg"), [viewportWidth])
 
   const priceInputRef = useRef<HTMLInputElement | null>(null)
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    const handleResize = () => setPlateSize(window.innerWidth < 640 ? "xs" : "lg")
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
 
   useEffect(() => {
     if (!toast) return
@@ -178,6 +171,8 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     setComment(getInitialComment(lot))
     setError(null)
 
+    requestAnimationFrame(() => recalcViewport())
+
     queueMicrotask(() => {
       priceInputRef.current?.focus()
       priceInputRef.current?.setSelectionRange(
@@ -185,7 +180,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
         priceInputRef.current.value.length,
       )
     })
-  }, [open, lotId])
+  }, [open, lotId, recalcViewport])
 
   const isSubmitDisabled = useMemo(() => {
     if (!open) return true
@@ -287,9 +282,9 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
                 <PlateSelectForm
                   size={plateSize}
                   responsive
+                  className='mx-auto'
                   flagSrc="/flag-russia.svg"
                   showCaption={true}
-                  className="mx-auto"
                   value={plate}
                   onChange={setPlate}
                 />
