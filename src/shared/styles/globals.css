@@ -1,107 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 @import "tailwindcss";
 @reference "tailwindcss";
 
 @font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-LightItalic.ttf") format("truetype");
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-Regular.ttf") format("truetype");
+  font-family: "AutoNumber_Regular";
+  src: url("/fonts/AutoNumber_Regular.ttf") format("truetype");
   font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-MediumItalic.ttf") format("truetype");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rubik";
-  src: url("/fonts/Rubik/Rubik-BoldItalic.ttf") format("truetype");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PlateCyrillic";
-  src:
-    url("/fonts/PlateCyrillic.woff2") format("woff2"),
-    url("/fonts/PlateCyrillic.ttf") format("truetype"),
-    url("/fonts/PlateCyrillic.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PlateRUS";
-  src:
-    url("/fonts/PlateRUS.woff2") format("woff2"),
-    url("/fonts/PlateRUS.ttf") format("truetype"),
-    url("/fonts/PlateRUS.otf") format("opentype");
-  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @theme {
-  --font-sans:
-    "Rubik", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial,
-    "Noto Sans", "Liberation Sans", sans-serif;
-
-  --font-plate: "PlateCyrillic", var(--font-sans);
-  --font-plate-rus: "PlateRUS", var(--font-sans);
+  --font-sans: "Rubik", sans-serif;
+  --font-auto-number: "AutoNumber_Regular", "Rubik", sans-serif;
 }
 
-@utility font-plate {
-  font-family: var(--font-plate);
-}
-
-@utility font-plate-rus {
-  font-family: var(--font-plate-rus);
+@utility font-auto-number {
+  font-family: var(--font-auto-number);
 }
 
 html {

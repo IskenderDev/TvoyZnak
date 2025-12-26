@@ -100,7 +100,7 @@ export default function PlateStaticLg({
           className="flex flex-col rounded-xl bg-black box-border"
           style={{ border: `${borderW}px solid #000`, borderRadius: radius }}
         >
-          <div className="flex w-full bg-black rounded-xl font-plate">
+          <div className="flex w-full bg-black rounded-xl font-auto-number">
             <div
               className="flex items-end justify-center bg-white font-bold lowercase"
               style={{
@@ -151,7 +151,7 @@ export default function PlateStaticLg({
                 className="flex items-center justify-center"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb, margin: 0 }}
               >
-                <span className="font-extrabold font-plate-rus" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className="font-extrabold font-auto-number" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img
