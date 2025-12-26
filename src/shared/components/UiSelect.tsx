@@ -1,16 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { LuChevronDown } from "react-icons/lu";
 
 type Option<T extends string> = { label: string; value: T };
+
 type UiSelectProps<T extends string> = {
   name: string;
   value: T | "";
   onChange: (value: T) => void;
   placeholder?: string;
   options: Option<T>[];
+
   className?: string;
   valueClassName?: string;
   placeholderClassName?: string;
+
+  /**
+   * trigger  -> dropdown как сейчас (w-full под кнопку)
+   * content  -> dropdown и "пилюли" подстраиваются под самый длинный label
+   */
+  dropdownWidth?: "trigger" | "content";
+
+  /**
+   * Если нужно ограничить ширину в режиме content (на всякий случай)
+   */
+  contentMaxWidthPx?: number;
 };
 
 export default function UiSelect<T extends string>({
@@ -22,11 +35,26 @@ export default function UiSelect<T extends string>({
   className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
   valueClassName = "text-black",
   placeholderClassName = "text-[#777]",
+  dropdownWidth = "trigger",
+  contentMaxWidthPx,
 }: UiSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState<number>(-1);
+
   const btnRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+
+  // для измерения "самого длинного текста"
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [contentWidth, setContentWidth] = useState<number | null>(null);
+
+  const current = options.find((o) => o.value === value);
+
+  // берём самый длинный label (по символам) как кандидат для измерения
+  const longestLabel = useMemo(() => {
+    if (!options.length) return "";
+    return options.reduce((max, o) => (o.label.length > max.length ? o.label : max), options[0].label);
+  }, [options]);
 
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
@@ -42,7 +70,26 @@ export default function UiSelect<T extends string>({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  const current = options.find((o) => o.value === value);
+  // измеряем ширину longestLabel в тех же стилях, что у "пилюли"
+  useLayoutEffect(() => {
+    if (dropdownWidth !== "content") {
+      setContentWidth(null);
+      return;
+    }
+
+    const el = measureRef.current;
+    if (!el) return;
+
+    // базовая ширина "пилюли"
+    let w = Math.ceil(el.getBoundingClientRect().width);
+
+    // можно ограничить максимальную ширину (опционально)
+    if (typeof contentMaxWidthPx === "number") {
+      w = Math.min(w, contentMaxWidthPx);
+    }
+
+    setContentWidth(w);
+  }, [dropdownWidth, longestLabel, contentMaxWidthPx]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!open && (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ")) {
@@ -73,16 +120,40 @@ export default function UiSelect<T extends string>({
     }
   };
 
+  // dropdown и пилюли: в режиме content задаём фиксированную ширину = measured
+  const dropdownStyle =
+    dropdownWidth === "content" && contentWidth
+      ? { width: contentWidth + 24 } // + немного под внутренние паддинги ul/li
+      : undefined;
+
+  const pillStyle =
+    dropdownWidth === "content" && contentWidth
+      ? { width: contentWidth }
+      : undefined;
+
   return (
     <div className="relative" onKeyDown={handleKeyDown}>
       <input type="hidden" name={name} value={value} readOnly />
+
+      {/* Скрытый измеритель ширины (только для режима content) */}
+      {dropdownWidth === "content" && (
+        <span
+          ref={measureRef}
+          className={[
+            "pointer-events-none absolute -left-[9999px] -top-[9999px] whitespace-nowrap",
+            "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10",
+          ].join(" ")}
+        >
+          {longestLabel || placeholder}
+        </span>
+      )}
 
       <button
         ref={btnRef}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-left`}
       >
         {current?.label ?? placeholder}
@@ -96,11 +167,16 @@ export default function UiSelect<T extends string>({
         <ul
           ref={listRef}
           role="listbox"
-          className="absolute z-20 mt-2 w-full rounded-2xl bg-[#0177FF] text-white shadow-lg p-3"
+          style={dropdownStyle}
+          className={[
+            "absolute z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3",
+            dropdownWidth === "trigger" ? "w-full left-0" : "left-1/2 -translate-x-1/2",
+          ].join(" ")}
         >
           {options.map((opt, idx) => {
             const selected = value === opt.value;
             const active = idx === activeIdx;
+
             return (
               <li
                 key={opt.value}
@@ -113,12 +189,13 @@ export default function UiSelect<T extends string>({
                   onChange(opt.value);
                   setOpen(false);
                 }}
-                className="px-2 py-2 rounded-lg cursor-pointer"
+                className="px-2 py-2 rounded-lg cursor-pointer flex justify-center"
               >
                 <span
+                  style={pillStyle}
                   className={[
-                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10 min-w-[160px]",
-                    "transition-colors duration-150",
+                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10",
+                    "transition-colors duration-150 whitespace-nowrap",
                     selected
                       ? "bg-white text-[#0177FF] border-white"
                       : active
