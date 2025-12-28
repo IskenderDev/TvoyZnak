@@ -97,34 +97,34 @@ export default function Footer() {
               <ul className="flex flex-col gap-2">
                 <li>
                   <NavLink
-                    to="/services#evaluation"
+                    to="/services#service-eval"
                     className={linkClass}
                   >
-                    Оценка вашего номера
+                    Оценка авто номера
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="/services#buyout"
+                    to="/services#service-buyout"
                     className={linkClass}
                   >
-                    Быстрый выкуп номера
+                    Быстрый выкуп авто номера
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="/services#sale"
+                    to="/services#service-sale"
                     className={linkClass}
                   >
-                    Продажа номеров из наличия
+                    Продажа авто номеров из наличия
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="/services#search"
+                    to="/services#service-search"
                     className={linkClass}
                   >
-                    Поиск номера под ваш запрос
+                    Поиск авто номера под ваш запрос
                   </NavLink>
                 </li>
               </ul>
