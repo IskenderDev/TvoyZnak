@@ -32,7 +32,6 @@ export default function Header() {
     openLogin({ redirectTo: `${location.pathname}${location.search}${location.hash}` || paths.profile });
   }, [location.hash, location.pathname, location.search, openLogin]);
 
-  // Обработчик клика на логотип
   const handleLogoClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname === paths.home) {
       e.preventDefault();
@@ -40,7 +39,6 @@ export default function Header() {
     }
   }, [location.pathname]);
 
-  // Обработчик клика на профиль/админку
   const handleProfileClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname === userDestination) {
       e.preventDefault();
@@ -54,24 +52,24 @@ export default function Header() {
   return (
     <header className="mb-12 bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-light text-xl">
       <Container>
-        <div className="flex items-center justify-between gap-4 p-5 md:p-10">
+        <div className="flex items-center justify-between gap-4 p-5 lg:p-10">
           <Link 
             to={paths.home} 
             className="shrink-0"
             onClick={handleLogoClick}
           >
-            <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto md:h-9 text-white" />
+            <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto lg:h-9 text-white" />
           </Link>
 
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <HeaderNav />
           </div>
 
-          <div className="flex items-center gap-3 md:gap-5">
+          <div className="flex items-center gap-3 lg:gap-5">
             <button
               type="button"
               onClick={openMenu}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 md:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 lg:hidden"
               aria-label="Открыть меню"
               aria-controls={MOBILE_MENU_ID}
               aria-expanded={isMobileMenuOpen}
@@ -79,10 +77,10 @@ export default function Header() {
               <LuMenu className="h-6 w-6" />
             </button>
 
-            <div className="hidden items-center gap-3 md:flex md:gap-5">
+            <div className="hidden items-center gap-3 lg:flex lg:gap-5">
               <Button
                 onClick={handleSellClick}
-                className="rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-3 py-2 text-[17px] font-[400] text-white transition hover:opacity-90 md:px-4 md:text-[16px]"
+                className="rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-3 py-2 text-[17px] font-[400] text-white transition hover:opacity-90 lg:px-4 lg:text-[16px]"
               >
                 Продать номер
               </Button>
@@ -94,7 +92,7 @@ export default function Header() {
                   onClick={handleProfileClick}
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
-                  <span className="hidden text-md font-[400] md:block">{user.fullName}</span>
+                  <span className="hidden text-lg font-[400] lg:block">{user.fullName}</span>
                 </Link>
               ) : (
                 <button
@@ -103,7 +101,7 @@ export default function Header() {
                   className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
-                  <span className="hidden text-sm font-medium md:block">Войти</span>
+                  <span className="hidden text-sm font-medium lg:block">Войти</span>
                 </button>
               )}
             </div>
