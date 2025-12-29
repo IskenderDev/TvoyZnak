@@ -130,7 +130,7 @@ export default function AdminLotsTable({
                         <Table.Cell>{currency.format(lot.originalPrice)}</Table.Cell>
                         <Table.Cell>{currency.format(lot.markupPrice)}</Table.Cell>
                         <Table.Cell>{lot.fullName || lot.author?.fullName || "—"}</Table.Cell>
-                        <Table.Cell>{lot.phoneNumber || lot.author?.phoneNumber || "—"}</Table.Cell>
+                        <Table.Cell>{lot.originalPhoneNumber || lot.author?.phoneNumber || "—"}</Table.Cell>
                         <Table.Cell>{formatDate(lot.createdDate)}</Table.Cell>
                         <Table.Cell>
                           <StatusBadge confirmed={lot.isConfirm} />
@@ -211,7 +211,7 @@ export default function AdminLotsTable({
                     {currency.format(lot.markupPrice)}
                   </Table.CardField>
                   <Table.CardField label="Продавец">{lot.fullName || lot.author?.fullName || "—"}</Table.CardField>
-                  <Table.CardField label="Телефон">{lot.phoneNumber || lot.author?.phoneNumber || "—"}</Table.CardField>
+                  <Table.CardField label="Телефон">{lot.originalPhoneNumber || lot.author?.phoneNumber || "—"}</Table.CardField>
                   <Table.CardField label="Комментарий">
                     {lot.comment?.trim() ? lot.comment : "—"}
                   </Table.CardField>

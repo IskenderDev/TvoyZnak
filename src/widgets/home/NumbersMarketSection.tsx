@@ -62,7 +62,7 @@ export default function NumbersMarketSection() {
         ) : (
           <>
 
-            <PlateMarketMobileList className="mt-6 md:hidden" rows={visibleRows} />
+            <PlateMarketMobileList className="mt-6 md:hidden mx-auto" rows={visibleRows} />
 
             {canShowMore && (
               <div className="mt-6 flex justify-center">

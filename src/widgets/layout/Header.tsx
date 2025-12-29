@@ -32,6 +32,22 @@ export default function Header() {
     openLogin({ redirectTo: `${location.pathname}${location.search}${location.hash}` || paths.profile });
   }, [location.hash, location.pathname, location.search, openLogin]);
 
+  // Обработчик клика на логотип
+  const handleLogoClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === paths.home) {
+      e.preventDefault();
+      window.location.reload();
+    }
+  }, [location.pathname]);
+
+  // Обработчик клика на профиль/админку
+  const handleProfileClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === userDestination) {
+      e.preventDefault();
+      window.location.reload();
+    }
+  }, [location.pathname, userDestination]);
+
   const openMenu = () => setIsMobileMenuOpen(true);
   const closeMenu = () => setIsMobileMenuOpen(false);
 
@@ -39,7 +55,11 @@ export default function Header() {
     <header className="mb-12 bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] font-light text-xl">
       <Container>
         <div className="flex items-center justify-between gap-4 p-5 md:p-10">
-          <Link to={paths.home} className="shrink-0">
+          <Link 
+            to={paths.home} 
+            className="shrink-0"
+            onClick={handleLogoClick}
+          >
             <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto md:h-9 text-white" />
           </Link>
 
@@ -71,6 +91,7 @@ export default function Header() {
                   to={userDestination}
                   className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-left text-white transition hover:bg-white/20"
                   aria-label={isAdmin ? "Открыть админку" : "Открыть профиль"}
+                  onClick={handleProfileClick}
                 >
                   <LuCircleUserRound className="h-6 w-6 text-white" />
                   <span className="hidden text-md font-[400] md:block">{user.fullName}</span>

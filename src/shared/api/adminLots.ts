@@ -21,6 +21,7 @@ export interface AdminLot {
   originalPrice: number;
   markupPrice: number;
   phoneNumber: string;
+  originalPhoneNumber: string;
   fullName: string;
   createdDate: string;
   updatedDate?: string;
@@ -51,6 +52,7 @@ export async function fetchAdminLots(signal?: AbortSignal): Promise<AdminLot[]> 
     markupPrice: parseNumber(lot.markupPrice),
     fullName: lot.fullName?.trim?.() ?? "",
     phoneNumber: lot.phoneNumber?.trim?.() ?? "",
+    originalPhoneNumber: lot.originalPhoneNumber?.trim?.() ?? "",
     regionCode: lot.regionCode?.trim?.() ?? "",
   }));
 }
@@ -79,4 +81,3 @@ export const adminLotsApi = {
   updateLot,
   deleteLot,
 };
-

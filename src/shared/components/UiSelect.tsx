@@ -17,13 +17,24 @@ type UiSelectProps<T extends string> = {
   /**
    * trigger  -> dropdown как сейчас (w-full под кнопку)
    * content  -> dropdown и "пилюли" подстраиваются под самый длинный label
+   * custom   -> используется customDropdownWidth
    */
-  dropdownWidth?: "trigger" | "content";
-
+  dropdownWidth?: "trigger" | "content" | "custom";
+  
   /**
-   * Если нужно ограничить ширину в режиме content (на всякий случай)
+   * Кастомная ширина dropdown в пикселях (работает только с dropdownWidth="custom")
    */
-  contentMaxWidthPx?: number;
+  customDropdownWidth?: number;
+  
+  /**
+   * Минимальная ширина для режима "content" (в пикселях)
+   */
+  minContentWidth?: number;
+  
+  /**
+   * Максимальная ширина для режима "content" (в пикселях)
+   */
+  maxContentWidth?: number;
 };
 
 export default function UiSelect<T extends string>({
@@ -36,7 +47,9 @@ export default function UiSelect<T extends string>({
   valueClassName = "text-black",
   placeholderClassName = "text-[#777]",
   dropdownWidth = "trigger",
-  contentMaxWidthPx,
+  customDropdownWidth,
+  minContentWidth,
+  maxContentWidth,
 }: UiSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState<number>(-1);
@@ -79,12 +92,16 @@ export default function UiSelect<T extends string>({
 
     let w = Math.ceil(el.getBoundingClientRect().width);
 
-    if (typeof contentMaxWidthPx === "number") {
-      w = Math.min(w, contentMaxWidthPx);
+    if (typeof minContentWidth === "number") {
+      w = Math.max(w, minContentWidth);
+    }
+    
+    if (typeof maxContentWidth === "number") {
+      w = Math.min(w, maxContentWidth);
     }
 
     setContentWidth(w);
-  }, [dropdownWidth, longestLabel, contentMaxWidthPx]);
+  }, [dropdownWidth, longestLabel, minContentWidth, maxContentWidth]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!open && (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ")) {
@@ -115,15 +132,32 @@ export default function UiSelect<T extends string>({
     }
   };
 
-  const dropdownStyle =
-    dropdownWidth === "content" && contentWidth
-      ? { width: contentWidth + 24 } 
-      : undefined;
+  const dropdownStyle = useMemo(() => {
+    let baseStyle: React.CSSProperties = {};
+    
+    if (dropdownWidth === "custom" && typeof customDropdownWidth === "number") {
+      baseStyle.width = customDropdownWidth + 24;
+    } else if (dropdownWidth === "content" && contentWidth) {
+      baseStyle.width = contentWidth + 24;
+    }
+    
+    // Высота для 10 элементов ("Все регионы" + 9 регионов)
+    // min-h-10 (40px) + py-2 (16px) = ~56px на элемент
+    // 56px * 10 = 560px + padding = ~584px
+    baseStyle.maxHeight = "584px";
+    
+    return baseStyle;
+  }, [dropdownWidth, customDropdownWidth, contentWidth]);
 
-  const pillStyle =
-    dropdownWidth === "content" && contentWidth
-      ? { width: contentWidth }
-      : undefined;
+  const pillStyle = useMemo(() => {
+    if (dropdownWidth === "custom" && typeof customDropdownWidth === "number") {
+      return { width: customDropdownWidth };
+    }
+    if (dropdownWidth === "content" && contentWidth) {
+      return { width: contentWidth };
+    }
+    return undefined;
+  }, [dropdownWidth, customDropdownWidth, contentWidth]);
 
   return (
     <div className="relative" onKeyDown={handleKeyDown}>
@@ -162,7 +196,11 @@ export default function UiSelect<T extends string>({
           role="listbox"
           style={dropdownStyle}
           className={[
-            "absolute  z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3",
+            "absolute z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3 overflow-y-auto",
+            "scrollbar-none",
+            "[&::-webkit-scrollbar]:hidden",
+            "[-ms-overflow-style:none]",
+            "[scrollbar-width:none]",
             dropdownWidth === "trigger" ? "w-full left-0" : "left-1/2 -translate-x-1/2",
           ].join(" ")}
         >

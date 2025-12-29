@@ -1,13 +1,32 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import { FaVk, FaTelegramPlane, FaWhatsapp } from "react-icons/fa"
+import { useCallback } from "react"
 import Container from "../../shared/components/Container"
 import { paths } from "../../shared/routes/paths"
 
 export default function Footer() {
+  const location = useLocation()
+
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `transition-colors duration-200 font-[400] text-[14px] ${
       isActive ? "text-[#85B6FF]" : "text-white hover:text-[#85B6FF]"
     }`
+
+  // Обработчик для NavLink с обновлением страницы
+  const handleNavClick = useCallback((path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === path) {
+      e.preventDefault()
+      window.location.reload()
+    }
+  }, [location.pathname])
+
+  // Обработчик клика на логотип
+  const handleLogoClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === paths.home) {
+      e.preventDefault()
+      window.location.reload()
+    }
+  }, [location.pathname])
 
   return (
     <footer className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] text-white p-10">
@@ -16,7 +35,11 @@ export default function Footer() {
           {/* ЛОГОТИП */}
           <div className="flex flex-col items-start order-1 md:order-none">
             <div className="my-6 md:my-10">
-              <Link to={paths.home} className="shrink-0">
+              <Link 
+                to={paths.home} 
+                className="shrink-0"
+                onClick={handleLogoClick}
+              >
                 <img
                   src="/logo.svg"
                   alt="Знак отличия"
@@ -65,27 +88,47 @@ export default function Footer() {
               <h4 className="text-[18px] font-medium mb-3">Основные</h4>
               <ul className="flex flex-col gap-2">
                 <li>
-                  <NavLink to={paths.home} className={linkClass}>
+                  <NavLink 
+                    to={paths.home} 
+                    className={linkClass}
+                    onClick={handleNavClick(paths.home)}
+                  >
                     Главная
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/about" className={linkClass}>
+                  <NavLink 
+                    to="/about" 
+                    className={linkClass}
+                    onClick={handleNavClick("/about")}
+                  >
                     О компании
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/numbers" className={linkClass}>
+                  <NavLink 
+                    to="/numbers" 
+                    className={linkClass}
+                    onClick={handleNavClick("/numbers")}
+                  >
                     Номера
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/news" className={linkClass}>
+                  <NavLink 
+                    to="/news" 
+                    className={linkClass}
+                    onClick={handleNavClick("/news")}
+                  >
                     Блог
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/contacts" className={linkClass}>
+                  <NavLink 
+                    to="/contacts" 
+                    className={linkClass}
+                    onClick={handleNavClick("/contacts")}
+                  >
                     Контакты
                   </NavLink>
                 </li>
@@ -99,6 +142,7 @@ export default function Footer() {
                   <NavLink
                     to="/services#service-eval"
                     className={linkClass}
+                    onClick={handleNavClick("/services")}
                   >
                     Оценка авто номера
                   </NavLink>
@@ -107,6 +151,7 @@ export default function Footer() {
                   <NavLink
                     to="/services#service-buyout"
                     className={linkClass}
+                    onClick={handleNavClick("/services")}
                   >
                     Быстрый выкуп авто номера
                   </NavLink>
@@ -115,6 +160,7 @@ export default function Footer() {
                   <NavLink
                     to="/services#service-sale"
                     className={linkClass}
+                    onClick={handleNavClick("/services")}
                   >
                     Продажа авто номеров из наличия
                   </NavLink>
@@ -123,6 +169,7 @@ export default function Footer() {
                   <NavLink
                     to="/services#service-search"
                     className={linkClass}
+                    onClick={handleNavClick("/services")}
                   >
                     Поиск авто номера под ваш запрос
                   </NavLink>
