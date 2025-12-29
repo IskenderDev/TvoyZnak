@@ -373,7 +373,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
   const listContainerClasses = "grid grid-cols-3 gap-2 p-3 justify-items-center"
 
-  const menuW = dropdownWidth 
+  const menuW = dropdownWidth
   const searchBoxHeight = searchable ? 56 : 0
   const listMaxHeight = Math.max(dropdownMaxHeight - searchBoxHeight, 160)
   const optionSize = 48
@@ -392,20 +392,28 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((p) => !p)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${
-          disabled ? "cursor-not-allowed opacity-60" : ""
-        }`}
+        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${disabled ? "cursor-not-allowed opacity-60" : ""
+          }`}
         style={{ lineHeight: 0.9, fontWeight: 590, fontSize, color: hasValue ? color : "#9AA0A6" }}
         disabled={disabled}
       >
-        {shownText}
+        {shownText === "*" ? (
+          <span
+            aria-hidden="true"
+            className='font-sans translate-y-2 lg:translate-y-7'
+          >
+            *
+          </span>
+        ) : (
+          shownText
+        )}
+
       </button>
 
       {open && (
         <div
-          className={`absolute z-50 -mt-[10%] transition-all duration-150 ${
-            appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
-          }`}
+          className={`absolute z-50 -mt-[10%] transition-all duration-150 ${appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
+            }`}
           style={{
             top: `calc(100% + 4px)`,
             left: "50%",
@@ -422,7 +430,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                   ref={searchRef}
                   type="text"
                   value={filter}
-                  onChange={onSearchChange} 
+                  onChange={onSearchChange}
                   onKeyDown={onSearchKeyDown}
                   placeholder={searchPlaceholder}
                   className="w-full rounded-md bg-neutral-100 px-3 py-2 text-lg font-semibold text-neutral-800 placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#0177FF]"
@@ -475,11 +483,10 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           type="button"
                           onMouseEnter={() => setActiveIndex(index)}
                           onClick={() => selectOption(option)}
-                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${
-                            selected
+                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${selected
                               ? "bg-[#0177FF] text-white border-[#0177FF]"
                               : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[18px]"
-                          } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
+                            } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
                           style={{
                             height: optionSize,
                             width: optionSize,
