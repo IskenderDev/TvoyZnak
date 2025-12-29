@@ -33,6 +33,9 @@ export default function PlateStaticSm({
   const ref = useRef<HTMLDivElement | null>(null)
   const [k, setK] = useState(1)
   const regionLabel = formatRegionCode(data.regionId) || "*"
+  const firstLetter = (data.firstLetter || "*").toUpperCase()
+  const secondLetter = (data.secondLetter || "*").toUpperCase()
+  const thirdLetter = (data.thirdLetter || "*").toUpperCase()
   const captionComment = data.comment?.trim()
   const formattedPrice = Number.isFinite(data.price)
     ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
@@ -95,7 +98,7 @@ export default function PlateStaticSm({
         >
           <div className="flex w-full bg-black rounded-xl font-auto-number">
             <div
-              className="flex items-end justify-center bg-white font-bold lowercase"
+              className="flex items-end justify-center bg-white font-bold uppercase"
               style={{
                 width: leftWidth,
                 border: `${borderW}px solid #000`,
@@ -108,7 +111,7 @@ export default function PlateStaticSm({
               }}
             >
               <span style={{ fontSize: mainFont, lineHeight: 0.4 }}>
-                {data.firstLetter ?? "*"}
+                {firstLetter}
               </span>
 
               <div className="flex" style={{ fontSize: mainFontNumbers, lineHeight: 0.5, gap: digitGap }}>
@@ -118,8 +121,8 @@ export default function PlateStaticSm({
               </div>
 
               <div className="flex" style={{ fontSize: mainFont, lineHeight: 0.4, gap: digitGap }}>
-                <span>{data.secondLetter ?? "*"}</span>
-                <span>{data.thirdLetter ?? "*"}</span>
+                <span>{secondLetter}</span>
+                <span>{thirdLetter}</span>
               </div>
             </div>
 
@@ -162,7 +165,9 @@ export default function PlateStaticSm({
         </div>
       </div>
 
-
+      {showCaption && captionText && (
+        <figcaption className="mt-2 text-center text-sm text-black/70">{captionText}</figcaption>
+      )}
     </figure>
   )
 }

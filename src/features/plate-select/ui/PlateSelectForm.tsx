@@ -68,7 +68,7 @@ const setCharAt = (text: string, index: number, nextChar: string) => {
   return chars.join("")
 }
 
-const ANY_OPTION = { value: "*", label: "*", keywords: ["*", "любой", "очистить"] } as const
+const ANY_OPTION = { value: "*", label: "*", keywords: ["*", "любой", "очистить"] }
 
 const LETTER_OPTIONS = [
   ANY_OPTION,
