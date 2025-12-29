@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import type { ProjectItem } from "./projects"
 import { projects } from "./projects"
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6"
@@ -9,6 +9,9 @@ export default function ProjectsSection({ items }: Props) {
   const data = useMemo(() => items ?? projects, [items])
   const [active, setActive] = useState(0)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const listRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+  const scrollSetRef = useRef(false)
 
   const featured = data[active]
   const max = data.length - 1
@@ -20,6 +23,54 @@ export default function ProjectsSection({ items }: Props) {
 
   const goPrev = () => setActiveSafe(Math.max(0, active - 1))
   const goNext = () => setActiveSafe(Math.min(max, active + 1))
+
+  useEffect(() => {
+    const container = listRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const scrollLeft = container.scrollLeft
+      let closestIdx = active
+      let minDelta = Infinity
+
+      itemRefs.current.forEach((el, idx) => {
+        if (!el) return
+        const delta = Math.abs(el.offsetLeft - scrollLeft)
+
+        if (delta < minDelta) {
+          minDelta = delta
+          closestIdx = idx
+        }
+      })
+
+      setActive((prev) => {
+        if (closestIdx !== prev) {
+          scrollSetRef.current = true
+          return closestIdx
+        }
+        return prev
+      })
+    }
+
+    handleScroll()
+    container.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => container.removeEventListener("scroll", handleScroll)
+  }, [active])
+
+  useEffect(() => {
+    if (scrollSetRef.current) {
+      scrollSetRef.current = false
+      return
+    }
+
+    const container = listRef.current
+    const target = itemRefs.current[active]
+
+    if (container && target) {
+      target.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" })
+    }
+  }, [active])
 
   return (
     <section className="text-white py-14 md:py-18">
@@ -34,7 +85,7 @@ export default function ProjectsSection({ items }: Props) {
             onClick={() => setMobileOpen((v) => !v)}
             className="text-left rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.25)] relative"
           >
-            <div className="aspect-[7/6] md:aspect-[7/6] lg:h-[420px]">
+            <div className="aspect-[7/6] md:aspect-[7/6] lg:h-[420px] overflow-hidden">
               <img
                 src={featured.cover}
                 alt={featured.alt ?? featured.title}
@@ -101,19 +152,26 @@ export default function ProjectsSection({ items }: Props) {
           </div>
         </div>
 
-        <div className="mt-10 flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-px-6 [-ms-overflow-style:none] [scrollbar-width:none] hide-scroll">
-          <style>{`.hide-scroll::-webkit-scrollbar{display:none}`}</style>
+        <div className="mt-10 space-y-4">
+          <div
+            ref={listRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-px-6 [-ms-overflow-style:none] [scrollbar-width:none] hide-scroll"
+          >
+            <style>{`.hide-scroll::-webkit-scrollbar{display:none}`}</style>
 
-          {data.slice(1).map((item, i) => {
-            const idx = i + 1
-            return (
+            {data.map((item, idx) => (
               <article
                 key={item.id}
+                ref={(el) => (itemRefs.current[idx] = el)}
                 onClick={() => setActiveSafe(idx)}
                 className="min-w-[78%] sm:min-w-[48%] md:min-w-[38%] lg:min-w-[30%] snap-start cursor-pointer"
               >
-                <div className="rounded-2xl overflow-hidden bg-[#0F0F10] border border-white/5 transition hover:shadow-lg/20 hover:shadow-black relative">
-                  <div className="aspect-[4/3] lg:h-[260px]">
+                <div
+                  className={`rounded-2xl overflow-hidden bg-[#0F0F10] border border-white/5 transition hover:shadow-lg/20 hover:shadow-black relative ${
+                    active === idx ? "ring-2 ring-[#1E63FF]" : ""
+                  }`}
+                >
+                  <div className="aspect-[4/3] lg:h-[260px] overflow-hidden">
                     <img
                       src={item.cover}
                       alt={item.alt ?? item.title}
@@ -130,8 +188,22 @@ export default function ProjectsSection({ items }: Props) {
                   </div>
                 </div>
               </article>
-            )
-          })}
+            ))}
+          </div>
+
+          <div className="flex items-center justify-center gap-3">
+            {data.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Показать проект ${idx + 1}`}
+                onClick={() => setActiveSafe(idx)}
+                className={`h-3 w-3 rounded-full border border-white/20 transition ${
+                  active === idx ? "bg-[#1E63FF] border-[#1E63FF]" : "bg-white/20"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
