@@ -71,7 +71,7 @@ export default function PlateStaticSm({
   const rightWidth = "28%"
 
   const mainFontNumbers = 45 * k
-  const mainFont = 35 * k
+  const mainFont = 45 * k
   const mainPx = 10 * k
   const mainPb = 12 * k
   const mainGap = 8 * k
@@ -98,7 +98,7 @@ export default function PlateStaticSm({
         >
           <div className="flex w-full bg-black rounded-xl font-auto-number">
             <div
-              className="flex items-end justify-center bg-white font-bold uppercase"
+              className="flex items-end justify-center bg-white font-medium uppercase"
               style={{
                 width: leftWidth,
                 border: `${borderW}px solid #000`,
@@ -164,10 +164,6 @@ export default function PlateStaticSm({
 
         </div>
       </div>
-
-      {showCaption && captionText && (
-        <figcaption className="mt-2 text-center text-sm text-black/70">{captionText}</figcaption>
-      )}
     </figure>
   )
 }

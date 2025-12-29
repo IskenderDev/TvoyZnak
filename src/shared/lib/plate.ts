@@ -84,10 +84,10 @@ export const formatPlateLabel = (
   return [series, region].filter(Boolean).join(" ");
 };
 
-export const buildContactPrefill = (item: Pick<NumberItem, "series" | "plate" | "region" | "price" | "seller">) => {
+export const buildContactPrefill = (item: Pick<NumberItem, "series" | "plate" | "region" | "price" >) => {
   const numberLabel = formatPlateLabel(item);
   const priceLabel = typeof item.price === "number" && item.price > 0 ? formatPrice(item.price) : "";
-  const descriptionParts = [numberLabel, priceLabel, item.seller].filter(Boolean);
+  const descriptionParts = [numberLabel, priceLabel].filter(Boolean);
 
   return {
     carNumber: descriptionParts.join(" — "),
