@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-select/model/types";
 import { numbersApi } from "@/shared/services/numbersApi";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
+import { CATEGORY_LABELS, PLATE_CATEGORIES } from "@/shared/lib/categories";
 import type { PlateMarketFiltersState, SortField } from "./types";
 import { filterPlates } from "../lib/filterPlates";
 import type { NumberItem } from "@/entities/number/types";
@@ -15,15 +16,6 @@ const createInitialState = (): PlateMarketFiltersState => ({
   sortDir: "desc",
   plateQuery: { ...DEFAULT_PLATE_VALUE },
 });
-
-const CATEGORY_LABELS: Record<string, string> = {
-  "same-digits": "Одинаковые цифры",
-  "same-letters": "Одинаковые буквы",
-  mirror: "Зеркальные",
-  vip: "VIP",
-  random: "Случайные",
-  hidden: "Прочие",
-};
 
 export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
   const [filters, setFilters] = useState<PlateMarketFiltersState>(() => createInitialState());
@@ -114,22 +106,16 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     ];
   }, [items, regionLabels]);
 
-  const categoryOptions = useMemo(() => {
-    const base = new Set<string>();
-    items.forEach((item) => {
-      if (item.category) {
-        base.add(item.category);
-      }
-    });
-
-    return [
+  const categoryOptions = useMemo(
+    () => [
       { label: "Все категории", value: "" },
-      ...Array.from(base).map((value) => ({
+      ...PLATE_CATEGORIES.map((value) => ({
         value,
-        label: CATEGORY_LABELS[value] ?? capitalize(value),
+        label: CATEGORY_LABELS[value],
       })),
-    ];
-  }, [items]);
+    ],
+    [],
+  );
 
   const filteredPlates = useMemo(() => filterPlates(items, filters), [items, filters]);
   const visibleRows = useMemo(() => filteredPlates.slice(0, limit), [filteredPlates, limit]);
@@ -203,8 +189,6 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     reload: load,
   };
 };
-
-const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
 
 const extractErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === "string" && error.trim()) {
