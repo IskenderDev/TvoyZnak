@@ -44,13 +44,11 @@ export default function UiSelect<T extends string>({
   const btnRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  // для измерения "самого длинного текста"
   const measureRef = useRef<HTMLSpanElement>(null);
   const [contentWidth, setContentWidth] = useState<number | null>(null);
 
   const current = options.find((o) => o.value === value);
 
-  // берём самый длинный label (по символам) как кандидат для измерения
   const longestLabel = useMemo(() => {
     if (!options.length) return "";
     return options.reduce((max, o) => (o.label.length > max.length ? o.label : max), options[0].label);
@@ -70,7 +68,6 @@ export default function UiSelect<T extends string>({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  // измеряем ширину longestLabel в тех же стилях, что у "пилюли"
   useLayoutEffect(() => {
     if (dropdownWidth !== "content") {
       setContentWidth(null);
@@ -80,10 +77,8 @@ export default function UiSelect<T extends string>({
     const el = measureRef.current;
     if (!el) return;
 
-    // базовая ширина "пилюли"
     let w = Math.ceil(el.getBoundingClientRect().width);
 
-    // можно ограничить максимальную ширину (опционально)
     if (typeof contentMaxWidthPx === "number") {
       w = Math.min(w, contentMaxWidthPx);
     }
@@ -120,10 +115,9 @@ export default function UiSelect<T extends string>({
     }
   };
 
-  // dropdown и пилюли: в режиме content задаём фиксированную ширину = measured
   const dropdownStyle =
     dropdownWidth === "content" && contentWidth
-      ? { width: contentWidth + 24 } // + немного под внутренние паддинги ul/li
+      ? { width: contentWidth + 24 } 
       : undefined;
 
   const pillStyle =
@@ -135,13 +129,12 @@ export default function UiSelect<T extends string>({
     <div className="relative" onKeyDown={handleKeyDown}>
       <input type="hidden" name={name} value={value} readOnly />
 
-      {/* Скрытый измеритель ширины (только для режима content) */}
       {dropdownWidth === "content" && (
         <span
           ref={measureRef}
           className={[
             "pointer-events-none absolute -left-[9999px] -top-[9999px] whitespace-nowrap",
-            "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10",
+            "inline-flex items-center text-sm md:text-xl justify-center rounded-full border border-white/30 px-3 py-1.5 font-semibold min-h-10",
           ].join(" ")}
         >
           {longestLabel || placeholder}
@@ -169,7 +162,7 @@ export default function UiSelect<T extends string>({
           role="listbox"
           style={dropdownStyle}
           className={[
-            "absolute z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3",
+            "absolute  z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3",
             dropdownWidth === "trigger" ? "w-full left-0" : "left-1/2 -translate-x-1/2",
           ].join(" ")}
         >
@@ -194,7 +187,7 @@ export default function UiSelect<T extends string>({
                 <span
                   style={pillStyle}
                   className={[
-                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm font-semibold min-h-10",
+                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm md:text-xl font-semibold min-h-10",
                     "transition-colors duration-150 whitespace-nowrap",
                     selected
                       ? "bg-white text-[#0177FF] border-white"

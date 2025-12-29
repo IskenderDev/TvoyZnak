@@ -17,7 +17,6 @@ export default function NumberDetailsSection() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  /* ⬆️ ВСЕГДА СКРОЛЛ ВВЕРХ ПРИ СМЕНЕ ID */
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" })
   }, [id])
@@ -174,21 +173,21 @@ export default function NumberDetailsSection() {
 
     return (
       <div key={row.label} className={`${bg} w-full`}>
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full max-w-[500px]">
+        <div className="mx-auto w-full min-w-[1200px] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full  flex justify-center ">
             <div
               className="
                 grid items-center
                 grid-cols-[clamp(180px,26vw,340px)_1fr]
                 min-h-[56px] sm:min-h-[64px]
-                gap-8 sm:gap-12
+                gap-8 sm:gap-12  min-w-[600px]
               "
             >
               <div className="text-left text-[18px] sm:text-[22px] md:text-[32px] font-semibold">
                 {row.label}
               </div>
 
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[24px] overflow-x-hidden">
+              <div className="text-left text-[18px] sm:text-[22px] md:text-[22px] overflow-x-hidden">
                 {row.isPhone ? (
                   <a href={`tel:${item.phone}`} className="hover:opacity-90">
                     {row.value}

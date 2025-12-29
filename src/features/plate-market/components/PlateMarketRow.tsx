@@ -57,7 +57,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
     <li>
       <Link
         to={detailsPath}
-        className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
+        className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
         style={style}
         aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
       >
@@ -69,7 +69,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
           <PlateStaticSm data={data} responsive showCaption={true} className="mx-auto max-w-[210px]" />
         </div>
 
-        <div className="tabular-nums text-sm md:text-lg">
+        <div className="tabular-nums text-sm md:text-lg w-[200px]">
           <span className="font-medium">{priceLabel}</span>
         </div>
 
