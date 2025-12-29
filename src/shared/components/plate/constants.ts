@@ -6,6 +6,7 @@ export const LETTERS = [
 ] as const;
 
 export const DIGITS = [
+  "*",
   "0",
   "1",
   "2",
@@ -16,7 +17,6 @@ export const DIGITS = [
   "7",
   "8",
   "9",
-  "*",
 ] as const;
 
 export type PlateSize = "lg" | "xs";
