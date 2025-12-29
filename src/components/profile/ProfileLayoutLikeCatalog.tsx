@@ -76,7 +76,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
   const hasFields = Boolean(fields && fields.length);
 
   return (
-    <section className="min-h-screen bg-[#0B0B0C] py-12 text-white">
+    <section className="min-h-screen-safe bg-[#0B0B0C] py-12 text-white">
       <div className="mx-auto w-full px-4 sm:px-6">
         <h1 className="mb-6 text-3xl uppercase md:text-4xl">{pageTitle}</h1>
 

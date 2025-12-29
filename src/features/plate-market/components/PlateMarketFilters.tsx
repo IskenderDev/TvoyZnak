@@ -29,7 +29,7 @@ export const PlateMarketFilters = ({
 }: PlateMarketFiltersProps) => {
   return (
     <div className={`flex flex-wrap items-center justify-between gap-4 ${className}`}>
-      <div className="flex flex-wrap gap-3 ">
+      <div className="flex flex-wrap gap-3">
         <UiSelect
           name="region"
           value={region}
@@ -39,7 +39,7 @@ export const PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw] md:w-[350px] text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
+          className="w-full max-w-[360px] text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
         />
 
         <UiSelect
@@ -51,7 +51,7 @@ export const PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw]  md:w-[350px] text-center text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
+          className="w-full max-w-[360px] text-center text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
         />
 
       </div>
