@@ -12,8 +12,8 @@ export default function ServicesSection() {
         </h2>
 
         <div className="my-10 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-          <a
-            href="#service-eval"
+          <Link
+            to="/services#service-eval"
             aria-label="Оценка авто номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
                        text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
@@ -22,10 +22,10 @@ export default function ServicesSection() {
                        focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
             Оценка авто номера
-          </a>
+          </Link>
 
-          <a
-            href="#service-buyout"
+          <Link
+            to="/services#service-buyout"
             aria-label="Быстрый выкуп авто номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
                        text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
@@ -34,10 +34,10 @@ export default function ServicesSection() {
                        focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
             Быстрый выкуп авто номера
-          </a>
+          </Link>
 
-          <a
-            href="#service-sale"
+          <Link
+            to="/services#service-sale"
             aria-label="Продажа авто номеров «Знак Отличия»"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
                        text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
@@ -46,10 +46,10 @@ export default function ServicesSection() {
                        focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
             Продажа авто номеров «Знак Отличия»
-          </a>
+          </Link>
 
-          <a
-            href="#service-search"
+          <Link
+            to="/services#service-search"
             aria-label="Поиск авто номера под ваш запрос"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
                        text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
@@ -58,7 +58,7 @@ export default function ServicesSection() {
                        focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
             Поиск авто номера под ваш запрос
-          </a>
+          </Link>
         </div>
 
         <div className="mt-5 text-center">
