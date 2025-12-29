@@ -28,7 +28,48 @@ html.dark {
 }
 
 body {
-  @apply bg-[#0b0b0c] antialiased font-sans overflow-x-hidden;
+  @apply bg-[#0b0b0c] antialiased font-sans;
+}
+
+html,
+body {
+  min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+:root {
+  --app-vh: 1svh;
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --app-vh: 1dvh;
+  }
+}
+
+@layer utilities {
+  .min-h-screen-safe {
+    min-height: calc(var(--app-vh) * 100);
+  }
+
+  @media (orientation: landscape) {
+    .min-h-screen-safe {
+      min-height: 100dvh;
+    }
+  }
+}
+
+*,
+*::before,
+*::after {
+  min-width: 0;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 a {
   cursor: pointer;

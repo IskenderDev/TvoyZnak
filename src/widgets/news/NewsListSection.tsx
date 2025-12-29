@@ -53,7 +53,7 @@ export default function NewsListSection() {
   return (
     <>
       <Seo title="Новости — Знак отличия" description="Свежие новости компании и полезные материалы." />
-      <section className="bg-[#0B0B0C] text-white min-h-screen py-16">
+      <section className="bg-[#0B0B0C] text-white min-h-screen-safe py-16">
         <div className="mx-auto px-6 max-w-6xl">
           {loading && <p className="text-center text-neutral-300">Загрузка...</p>}
           {error && <p className="text-center text-[#EB5757] mb-6">{error}</p>}
