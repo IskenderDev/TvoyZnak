@@ -8,63 +8,70 @@ export default function ServicesSection() {
           id="services-title"
           className="text-center text-2xl md:text-3xl font-extrabold tracking-wide text-white uppercase"
         >
-          НАШИ УСЛУГИ
+          НАШИ УСЛУГИ ДЛЯ АВТОНОМЕРОВ
         </h2>
 
         <div className="my-10 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-          <button
-            type="button"
-            aria-label="Оценка вашего номера"
+          <a
+            href="#service-eval"
+            aria-label="Оценка авто номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200"
+                       text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
+                       rounded-2xl px-6 transition-colors duration-200 hover:bg-[#0177FF] hover:text-white
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
+                       focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            Оценка вашего номера
-          </button>
+            Оценка авто номера
+          </a>
 
-          <button
-            type="button"
-            aria-label="Быстрый выкуп номера"
+          <a
+            href="#service-buyout"
+            aria-label="Быстрый выкуп авто номера"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200"
+                       text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
+                       rounded-2xl px-6 transition-colors duration-200 hover:bg-[#0177FF] hover:text-white
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
+                       focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            Быстрый выкуп номера
-          </button>
+            Быстрый выкуп авто номера
+          </a>
 
-          <button
-            type="button"
-            aria-label="Продажа номеров «Знак Отличия»"
+          <a
+            href="#service-sale"
+            aria-label="Продажа авто номеров «Знак Отличия»"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200"
+                       text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
+                       rounded-2xl px-6 transition-colors duration-200 hover:bg-[#0177FF] hover:text-white
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
+                       focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            Продажа номеров «Знак Отличия»
-          </button>
+            Продажа авто номеров «Знак Отличия»
+          </a>
 
-          <button
-            type="button"
-            aria-label="Поиск номера под ваш запрос"
+          <a
+            href="#service-search"
+            aria-label="Поиск авто номера под ваш запрос"
             className="w-full min-h-[160px] inline-flex items-center justify-center text-center
-                       text-2xl md:text-4xl font-extrabold leading-snug  bg-[#0177FF] text-white
-                       rounded-2xl px-6 transition-all duration-200"
+                       text-2xl md:text-4xl font-extrabold leading-snug bg-[#f6f7f9] text-black
+                       rounded-2xl px-6 transition-colors duration-200 hover:bg-[#0177FF] hover:text-white
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
+                       focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           >
-            Поиск номера под ваш запрос
-          </button>
+            Поиск авто номера под ваш запрос
+          </a>
         </div>
 
         <div className="mt-5 text-center">
-          <button
-            type="button"
+          <Link
+            to="/contacts"
             aria-label="Узнать больше"
-            className=" hidden md:inline-flex items-center justify-center rounded-full bg-[#0177FF] text-white
+            className="hidden md:inline-flex items-center justify-center rounded-full bg-[#0177FF] text-white
                        px-6 py-2 md:text-[20px]
                        transition-all duration-200 hover:brightness-95 hover:-translate-y-[1px]
-                       focus:outline-none focus:ring-2 focus:ring-white/50
-"
+                       focus:outline-none focus:ring-2 focus:ring-white/50"
           >
-            <Link to="/contacts">Узнать больше</Link>
-          </button>
+            Узнать больше
+          </Link>
         </div>
       </div>
     </section>
