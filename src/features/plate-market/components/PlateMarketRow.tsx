@@ -66,7 +66,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         </time>
 
         <div className="flex items-center">
-          <PlateStaticSm data={data} responsive showCaption={true} className="mx-auto max-w-[210px]" />
+          <PlateStaticSm data={data} responsive className="mx-auto max-w-[210px]" />
         </div>
 
         <div className="tabular-nums text-sm md:text-lg w-[200px]">

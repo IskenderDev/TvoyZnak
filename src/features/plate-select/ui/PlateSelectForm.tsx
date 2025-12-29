@@ -104,7 +104,6 @@ export default function PlateSelectForm({
   size = "lg",
   responsive = true,
   flagSrc = "/flag-russia.svg",
-  showCaption = true,
   className = "",
   value,
   defaultValue,
@@ -264,9 +263,6 @@ export default function PlateSelectForm({
 
   const glyphColor = (v: string) =>
     v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
-
-  const formattedPlate = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`
-  const captionText = `${formattedPlate} ${resolvedRegionCode || "*"}`.trim()
 
   const createCommitHandler = React.useCallback(
     (index: number) => () => {
@@ -535,11 +531,7 @@ export default function PlateSelectForm({
         </div>
       )}
 
-      {showCaption && (
-        <figcaption className="mt-3 text-center text-sm text-black/70" aria-live="polite">
-          Текущий номер: {captionText}
-        </figcaption>
-      )}
+    
     </figure>
   )
 }

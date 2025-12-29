@@ -34,7 +34,6 @@ export default function PlateStaticLg({
   size = "lg",
   responsive = true,
   flagSrc = "/flag-russia.svg",
-  showCaption = true,
   className = "",
 }: Props) {
   const preset = PRESETS[size];
@@ -44,11 +43,7 @@ export default function PlateStaticLg({
   const firstLetter = (data.firstLetter || "").toUpperCase();
   const secondLetter = (data.secondLetter || "").toUpperCase();
   const thirdLetter = (data.thirdLetter || "").toUpperCase();
-  const captionComment = data.comment?.trim();
-  const formattedPrice = Number.isFinite(data.price)
-    ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
-    : "";
-  const captionText = captionComment || formattedPrice;
+
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -174,9 +169,7 @@ export default function PlateStaticLg({
         </div>
       </div>
 
-      {showCaption && captionText && (
-        <figcaption className="mt-3 text-center text-sm text-black/70">{captionText}</figcaption>
-      )}
+  
     </figure>
   );
 }

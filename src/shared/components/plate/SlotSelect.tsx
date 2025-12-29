@@ -400,7 +400,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         {shownText === "*" ? (
           <span
             aria-hidden="true"
-            className='font-sans translate-y-2 lg:translate-y-7'
+            className='font-sans translate-y-3 '
           >
             *
           </span>

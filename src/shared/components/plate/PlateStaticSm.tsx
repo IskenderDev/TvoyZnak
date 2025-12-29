@@ -17,7 +17,6 @@ type Props = {
   data: PlateData
   responsive?: boolean
   flagSrc?: string
-  showCaption?: boolean
   className?: string
 }
 
@@ -27,7 +26,6 @@ export default function PlateStaticSm({
   data,
   responsive = true,
   flagSrc = "/flag-russia.svg",
-  showCaption = true,
   className = "",
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -36,11 +34,6 @@ export default function PlateStaticSm({
   const firstLetter = (data.firstLetter || "*").toUpperCase()
   const secondLetter = (data.secondLetter || "*").toUpperCase()
   const thirdLetter = (data.thirdLetter || "*").toUpperCase()
-  const captionComment = data.comment?.trim()
-  const formattedPrice = Number.isFinite(data.price)
-    ? `${new Intl.NumberFormat("ru-RU").format(data.price)} ₽`
-    : ""
-  const captionText = captionComment || formattedPrice
 
   useEffect(() => {
     const el = ref.current
