@@ -2,6 +2,7 @@ import http from "@/shared/api/http";
 import type { NumberItem, PlateInfo } from "@/entities/number/types";
 import { formatRegionCode } from "@/shared/lib/plate";
 import { normalizePlateLetter } from "@/shared/lib/plateLetters";
+import { deriveCategories } from "@/shared/lib/categories";
 
 export interface NumbersListParams {
   page?: number;
@@ -354,7 +355,7 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
       pickString([dto.updatedAt, dto.createdAt, dto.createdDate, dto.created, dto.date]),
     ),
     status: pickString([dto.status, dto.state]) || "available",
-    category: resolveCategory(series, digitsString, lettersString),
+    categories: deriveCategories(digitsString, lettersString),
     plate,
   };
 };
@@ -449,36 +450,6 @@ const normalizeDate = (value?: string): string => {
   }
 
   return date.toISOString();
-};
-
-const resolveCategory = (series: string, digits: string, letters: string): string => {
-  const normalizedDigits = digits.replace(/\*/g, "");
-  const normalizedLetters = letters.replace(/\*/g, "");
-
-  if (normalizedDigits.length === 3 && new Set(normalizedDigits).size === 1) {
-    if (["000", "111", "777", "888", "999"].includes(normalizedDigits)) {
-      return "vip";
-    }
-    return "same-digits";
-  }
-
-  if (normalizedLetters.length === 3 && new Set(normalizedLetters).size === 1) {
-    return "same-letters";
-  }
-
-  if (normalizedDigits.length === 3 && normalizedDigits[0] === normalizedDigits[2]) {
-    return "mirror";
-  }
-
-  if (/^(0{2,}|00[1-9]|007|900|911)$/.test(normalizedDigits)) {
-    return "vip";
-  }
-
-  if (/777|555|999|123|321/.test(normalizedDigits)) {
-    return "vip";
-  }
-
-  return series ? "random" : "hidden";
 };
 
 export { numbersApi };

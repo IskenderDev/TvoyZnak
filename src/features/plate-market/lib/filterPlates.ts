@@ -29,7 +29,7 @@ const applyFilters = (row: NumberItem, filters: PlateMarketFiltersState) => {
     return false
   }
 
-  if (filters.category && row.category !== filters.category) {
+  if (filters.category && !row.categories?.includes(filters.category)) {
     return false
   }
 

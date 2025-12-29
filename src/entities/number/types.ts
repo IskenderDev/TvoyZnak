@@ -23,7 +23,7 @@ export interface NumberItem {
   sellerName?: string;
   date: string;
   status: NumberStatus;
-  category: string;
+  categories: string[];
   phone?: string;
   description?: string;
   plate: PlateInfo;
