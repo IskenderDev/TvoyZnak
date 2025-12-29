@@ -145,7 +145,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                       >
                         <span className="tabular-nums text-black/80">{item.dateLabel}</span>
                         <div className="flex items-center justify-center">
-                          <PlateStaticSm data={item.plate} responsive showCaption={true} className="mx-auto max-w-[210px]" />
+                          <PlateStaticSm data={item.plate} responsive  className="mx-auto max-w-[210px]" />
                         </div>
                         <span className="text-base font-medium text-black">{item.priceLabel}</span>
                         <span className="text-black/80">{item.sellerLabel}</span>
@@ -186,7 +186,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                       </div>
 
                       <div className="mt-3 flex justify-center">
-                        <PlateStaticSm data={item.plate} responsive showCaption={true} className="max-w-[210px]" />
+                        <PlateStaticSm data={item.plate} responsive  className="max-w-[210px]" />
                       </div>
 
                       <dl className="mt-4 grid gap-2 text-sm">
