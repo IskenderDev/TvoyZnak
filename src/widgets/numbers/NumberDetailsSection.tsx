@@ -66,7 +66,7 @@ export default function NumberDetailsSection() {
 
   if (loading) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen-safe items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     )
@@ -74,7 +74,7 @@ export default function NumberDetailsSection() {
 
   if (error) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen-safe items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -82,7 +82,7 @@ export default function NumberDetailsSection() {
 
   if (!item) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen-safe items-center justify-center bg-[#0B0B0C] text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
     )
@@ -156,7 +156,7 @@ export default function NumberDetailsSection() {
               }}
               responsive
               showCaption
-              className="mx-auto w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
+              className="mx-auto w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px] max-w-full"
             />
 
             <button
@@ -168,41 +168,39 @@ export default function NumberDetailsSection() {
           </div>
         </div>
       <div className="mt-10">
-  {detailsRows.map((row, index) => {
-    const bg = index % 2 === 0 ? "bg-[#2C2C2C]" : "bg-transparent"
+        {detailsRows.map((row, index) => {
+          const bg = index % 2 === 0 ? "bg-[#2C2C2C]" : "bg-transparent"
 
-    return (
-      <div key={row.label} className={`${bg} w-full`}>
-        <div className="mx-auto w-full min-w-[1200px] px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full  flex justify-center ">
-            <div
-              className="
-                grid items-center
-                grid-cols-[clamp(180px,26vw,340px)_1fr]
-                min-h-[56px] sm:min-h-[64px]
-                gap-8 sm:gap-12  min-w-[600px]
-              "
-            >
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[32px] font-semibold">
-                {row.label}
-              </div>
+          return (
+            <div key={row.label} className={`${bg} w-full`}>
+              <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto w-full flex justify-center">
+                  <div
+                    className="
+                      grid items-start
+                      grid-cols-1 gap-4 py-4 sm:grid-cols-[minmax(160px,240px)_1fr] sm:items-center sm:gap-8
+                    "
+                  >
+                    <div className="text-left text-[18px] sm:text-[22px] md:text-[28px] font-semibold">
+                      {row.label}
+                    </div>
 
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[22px] overflow-x-hidden">
-                {row.isPhone ? (
-                  <a href={`tel:${item.phone}`} className="hover:opacity-90">
-                    {row.value}
-                  </a>
-                ) : (
-                  row.value
-                )}
+                    <div className="text-left text-[18px] sm:text-[22px] md:text-[22px] overflow-x-hidden break-words">
+                      {row.isPhone ? (
+                        <a href={`tel:${item.phone}`} className="hover:opacity-90">
+                          {row.value}
+                        </a>
+                      ) : (
+                        row.value
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          )
+        })}
       </div>
-    )
-  })}
-</div>
 
 
 
