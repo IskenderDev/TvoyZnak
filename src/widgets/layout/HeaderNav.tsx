@@ -36,14 +36,17 @@ export default function HeaderNav({
       : "flex flex-col gap-4";
 
   const linkBase =
-    "relative flex items-center transition-colors duration-200 font-[400] text-white hover:text-[#85B6FF]";
+    "relative flex items-center font-[400] transition-colors duration-200";
 
-  const horizontalText = "text-[17px] justify-center";
-  const verticalText = "w-full justify-start pl-4 text-base py-1.5";
-  const activeClass =
-    orientation === "horizontal"
-      ? "text-[#85B6FF] after:absolute after:-bottom-2 after:left-1/2 after:h-0.5 after:w-8 after:-translate-x-1/2 after:rounded-full after:bg-[#85B6FF]"
-      : "text-[#85B6FF] font-semibold before:absolute before:inset-y-0 before:left-0 before:w-1 before:rounded-full before:bg-[#85B6FF]";
+  const horizontalText =
+    "justify-center text-[15px] text-slate-100 hover:text-white px-1 py-1";
+  const verticalText =
+    "w-full justify-start pl-4 text-base py-1.5 text-slate-100 hover:text-white";
+
+  const activeHorizontal =
+    "text-white after:absolute after:-bottom-[1px] after:left-1/2 after:h-0.5 after:w-8 after:-translate-x-1/2 after:rounded-full after:bg-[#2F8DFF]";
+  const activeVertical =
+    "text-white font-semibold before:absolute before:inset-y-0 before:left-0 before:w-1 before:rounded-full before:bg-[#2F8DFF]";
 
   return (
     <nav className={`${containerBase} ${className}`.trim()}>
@@ -57,7 +60,11 @@ export default function HeaderNav({
             [
               linkBase,
               orientation === "horizontal" ? horizontalText : verticalText,
-              isActive ? activeClass : null,
+              isActive
+                ? orientation === "horizontal"
+                  ? activeHorizontal
+                  : activeVertical
+                : "",
             ]
               .filter(Boolean)
               .join(" ")

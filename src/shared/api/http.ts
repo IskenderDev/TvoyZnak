@@ -12,8 +12,8 @@ const baseURL = (() => {
     return candidate;
   }
 
-  return "https://sell-license.onrender.com/";
-  // return "http://localhost:8081";
+  // return "https://sell-license.onrender.com/";
+  return "http://localhost:8081";
 })();
 
 const http = axios.create({

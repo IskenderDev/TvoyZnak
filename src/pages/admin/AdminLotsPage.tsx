@@ -8,7 +8,7 @@ import type { AdminLot } from "@/shared/api/adminLots";
 import Seo from "@/shared/components/Seo";
 import Button from "@/shared/ui/Button";
 import Input from "@/shared/ui/Input";
-import { useAdminLots, type AdminLotSortKey, type AdminLotStatusFilter } from "@/hooks/useAdminLots";
+import { useAdminLots, type AdminLotSortKey, type AdminLotStatusFilter } from "@/shared/hooks/useAdminLots";
 
 const STATUS_OPTIONS: { value: AdminLotStatusFilter; label: string }[] = [
   { value: "all", label: "Все" },

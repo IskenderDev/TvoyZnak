@@ -4,7 +4,7 @@ import { LuChevronDown } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
 
 import type { AdminLot } from "@/shared/api/adminLots";
-import type { AdminLotSortKey, SortDirection } from "@/hooks/useAdminLots";
+import type { AdminLotSortKey, SortDirection } from "@/shared/hooks/useAdminLots";
 import Button from "@/shared/ui/Button";
 import IconButton from "@/shared/ui/IconButton";
 import Spinner from "@/shared/ui/Spinner";

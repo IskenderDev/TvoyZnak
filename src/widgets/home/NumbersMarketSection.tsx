@@ -29,7 +29,7 @@ export default function NumbersMarketSection() {
   } = usePlateMarket();
 
   return (
-    <section className=" bg-[#0B0B0C] py-10 text-white">
+    <section className="  py-10 text-white">
       <div className="mx-auto px-4 sm:px-6">
         <PlateMarketFilters
           className="mb-6"

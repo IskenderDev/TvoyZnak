@@ -63,7 +63,7 @@ export default function NewsDetailsSection() {
 
   if (loading) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className=" text-white min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Загрузка…</p>
       </section>
     )
@@ -71,7 +71,7 @@ export default function NewsDetailsSection() {
 
   if (error) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className=" text-white min-h-screen flex items-center justify-center">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -79,7 +79,7 @@ export default function NewsDetailsSection() {
 
   if (!item) {
     return (
-      <section className="bg-[#0B0B0C] text-white min-h-screen flex items-center justify-center">
+      <section className=" text-white min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Новость не найдена</p>
       </section>
     )
@@ -92,7 +92,7 @@ export default function NewsDetailsSection() {
         description={item.excerpt || item.content?.slice(0, 180)}
       />
 
-      <section className="bg-[#0B0B0C] text-white min-h-screen">
+      <section className=" text-white min-h-screen">
         <div className="mx-auto max-w-9xl px-4 md:px-6 py-6">
           <Link
             to="/news"

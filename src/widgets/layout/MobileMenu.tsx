@@ -20,13 +20,13 @@ type MobileMenuProps = {
 };
 
 const focusableSelectors = [
-  'a[href]',
-  'button:not([disabled])',
-  'textarea:not([disabled])',
+  "a[href]",
+  "button:not([disabled])",
+  "textarea:not([disabled])",
   'input[type="text"]:not([disabled])',
   'input[type="radio"]:not([disabled])',
   'input[type="checkbox"]:not([disabled])',
-  'select:not([disabled])',
+  "select:not([disabled])",
   '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
@@ -48,16 +48,12 @@ export default function MobileMenu({
   useLockBodyScroll(isOpen);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     previouslyFocusedElement.current = document.activeElement;
 
     const panel = panelRef.current;
-    if (!panel) {
-      return;
-    }
+    if (!panel) return;
 
     const focusable = panel.querySelectorAll<HTMLElement>(focusableSelectors);
     const firstElement = focusable.item(0);
@@ -69,9 +65,7 @@ export default function MobileMenu({
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -82,9 +76,7 @@ export default function MobileMenu({
 
       if (event.key === "Tab") {
         const panel = panelRef.current;
-        if (!panel) {
-          return;
-        }
+        if (!panel) return;
 
         const focusable = panel.querySelectorAll<HTMLElement>(focusableSelectors);
         if (focusable.length === 0) {
@@ -122,12 +114,12 @@ export default function MobileMenu({
 
   const overlay = (
     <div
-      className={`fixed inset-0 z-40 transition duration-200 ${
+      className={`fixed inset-0 z-400 transition duration-200 ${
         isOpen ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >
       <div
-        className={`absolute inset-0 bg-black/50 transition-opacity duration-200 ${
+        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         onClick={onClose}
@@ -140,35 +132,65 @@ export default function MobileMenu({
         aria-label="Мобильное меню"
         tabIndex={-1}
         id={menuId}
-        className={`ml-auto flex h-full w-full max-w-xs flex-col bg-gradient-to-b from-[#001833] via-[#003979] to-[#004899] p-6 shadow-xl transition-transform duration-200 ease-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`
+          ml-auto flex h-full w-full max-w-xs flex-col
+          bg-[radial-gradient(circle_at_top,_#003C8F_0,_#020617_55%,_#000814_100%)]
+          text-white
+          shadow-[0_24px_80px_rgba(15,23,42,0.95)]
+          ring-1 ring-white/10
+          transition-transform duration-200 ease-out
+          ${isOpen ? "translate-x-0" : "translate-x-full"}
+        `}
       >
-        <div className="mb-6 flex items-center justify-between">
-          <Link to={paths.home} onClick={onClose} className="shrink-0">
-            <img src="/logo.svg" alt="Знак отличия" className="h-8 w-auto" />
+        <div className="flex items-center justify-between px-5 pb-3 pt-6">
+          <Link
+            to={paths.home}
+            onClick={onClose}
+            className="inline-flex items-center rounded-full bg-black/40 px-3 py-1.5 ring-1 ring-white/10"
+          >
+            <img src="/logo.svg" alt="Знак отличия" className="h-7 w-auto" />
           </Link>
+
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
+            className="
+              rounded-full bg-white/5 p-2
+              text-white
+              ring-1 ring-white/15
+              backdrop-blur-xl
+              transition
+              hover:bg-white/10 hover:ring-white/30
+            "
             aria-label="Закрыть меню"
           >
-            <LuX className="h-6 w-6" />
+            <LuX className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="flex flex-col gap-6 overflow-y-auto pb-6">
+        <div className="flex flex-1 flex-col gap-5 overflow-y-auto px-5 pb-8 pt-2">
           {user ? (
             <Link
               to={profileDestination}
               onClick={onClose}
-              className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
+              className="
+                flex items-center gap-3
+                rounded-2xl
+                bg-white/5
+                px-4 py-3
+                text-left text-slate-100
+                ring-1 ring-white/10
+                backdrop-blur-xl
+                transition
+                hover:bg-white/10 hover:text-white hover:ring-white/30
+              "
             >
               <LuCircleUserRound className="h-7 w-7" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{user.fullName}</span>
-                <span className="text-xs text-white/70">{isAdmin ? "Перейти в админку" : "Перейти в профиль"}</span>
+                <span className="text-xs text-white/70">
+                  {isAdmin ? "Перейти в админку" : "Перейти в профиль"}
+                </span>
               </div>
             </Link>
           ) : (
@@ -178,7 +200,17 @@ export default function MobileMenu({
                 onLoginClick();
                 onClose();
               }}
-              className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-3 text-left text-white transition hover:bg-white/20"
+              className="
+                flex items-center gap-3
+                rounded-2xl
+                bg-white/5
+                px-4 py-3
+                text-left text-slate-100
+                ring-1 ring-white/10
+                backdrop-blur-xl
+                transition
+                hover:bg-white/10 hover:text-white hover:ring-white/30
+              "
             >
               <LuCircleUserRound className="h-7 w-7" />
               <div className="flex flex-col">
@@ -193,16 +225,36 @@ export default function MobileMenu({
               onSellClick();
               onClose();
             }}
-            className="w-full rounded-full bg-gradient-to-r from-[#0074FF] to-[#005CDB] px-4 py-3 text-sm font-[400] text-white transition hover:opacity-90"
+            className="
+              w-full rounded-full
+              bg-gradient-to-r from-[#1D9BFF] via-[#1A6DFF] to-[#005CDB]
+              px-4 py-3
+              text-sm font-semibold text-white
+              shadow-[0_0_32px_rgba(59,130,246,0.7)]
+              transition
+              hover:shadow-[0_0_42px_rgba(59,130,246,0.95)]
+              hover:brightness-110
+            "
           >
             Продать номер
           </Button>
 
-          <HeaderNav
-            orientation="vertical"
-            onNavigate={onClose}
-            className="gap-5 text-white"
-          />
+          <div
+            className="
+              rounded-2xl
+              bg-black/40
+              px-3 py-3
+              ring-1 ring-white/10
+              backdrop-blur-2xl
+              shadow-[0_18px_45px_rgba(15,23,42,0.8)]
+            "
+          >
+            <HeaderNav
+              orientation="vertical"
+              onNavigate={onClose}
+              className="gap-3 text-white"
+            />
+          </div>
         </div>
       </div>
     </div>

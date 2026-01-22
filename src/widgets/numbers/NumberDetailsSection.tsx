@@ -66,7 +66,7 @@ export default function NumberDetailsSection() {
 
   if (loading) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen items-center justify-center   text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     )
@@ -74,7 +74,7 @@ export default function NumberDetailsSection() {
 
   if (error) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen items-center justify-center   text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -82,7 +82,7 @@ export default function NumberDetailsSection() {
 
   if (!item) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-[#0B0B0C] text-white">
+      <section className="flex min-h-screen items-center justify-center   text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
     )
@@ -118,7 +118,7 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
-      <section className="bg-[#0B0B0C] py-6 text-white">
+      <section className="  py-6 text-white">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
 
           <div className="flex items-center gap-4 sm:gap-6">

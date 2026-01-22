@@ -9,7 +9,7 @@ export default function NewsCard({ news }: Props) {
   const formattedDate = news.publishedAt ? formatDate(news.publishedAt) : "";
 
   return (
-    <div className="bg-[#0B0B0C] border border-[#1E1E1E] hover:border-[#0177FF] rounded-2xl overflow-hidden transition-all">
+    <div className=" border border-[#1E1E1E] hover:border-[#0177FF] rounded-2xl overflow-hidden transition-all">
       {news.cover && (
         <img src={news.cover} alt={news.title} className="w-full h-56 object-cover" loading="lazy" />
       )}
