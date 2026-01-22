@@ -41,6 +41,7 @@ export default function NumbersMarketSection() {
           onRegionChange={setRegion}
           onCategoryChange={setCategory}
           onPlateQueryChange={setPlateQuery}
+          onReset={resetFilters}
         />
 
         {error && <p className="mb-4 rounded-xl bg-white px-4 py-3 text-[#FF6B6B]">{error}</p>}

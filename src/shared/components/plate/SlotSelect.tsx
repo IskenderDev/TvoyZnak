@@ -392,8 +392,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((p) => !p)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${disabled ? "cursor-not-allowed opacity-60" : ""
-          }`}
+        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1E63FF]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5f5f7] ${
+          disabled ? "cursor-not-allowed opacity-60" : ""
+        }`}
         style={{ lineHeight: 0.9, fontWeight: 590, fontSize, color: hasValue ? color : "#9AA0A6" }}
         disabled={disabled}
       >

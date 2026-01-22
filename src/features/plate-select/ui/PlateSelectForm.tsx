@@ -171,6 +171,9 @@ export default function PlateSelectForm({
     responsive && !isXs ? { width: "100%", maxWidth: `${preset.w}px` } : { width: `${preset.w}px` }
 
   const [error, setError] = React.useState<string | null>(null)
+  const hasError = Boolean(error)
+  const innerRadius = Math.max(8, radius - borderW)
+  const plateShadow = "0 18px 40px rgba(2,6,23,0.35), inset 0 1px 0 rgba(255,255,255,0.9)"
 
   const slotRefs = React.useRef<Array<HTMLButtonElement | null>>([])
   const registerSlot = React.useCallback(
@@ -333,19 +336,26 @@ export default function PlateSelectForm({
   const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : "")
 
   return (
-    <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
+    <figure className={`flex flex-col items-center ${className} text-black`} style={containerStyle}>
       <div ref={wrapperRef} className="w-full">
         <div
-          className="flex flex-col rounded-xl bg-black box-border"
-          style={{ border: `${borderW}px solid #000`, borderRadius: radius, height: `${preset.h}px` }}
+          className={`flex flex-col bg-[#f5f5f7]/95 box-border transition duration-200 focus-within:ring-2 ${
+            hasError ? "ring-1 ring-[#EB5757]" : "ring-1 ring-black/10"
+          }`}
+          style={{
+            borderRadius: radius,
+            height: `${preset.h}px`,
+            boxShadow: plateShadow,
+          }}
         >
-          <div className="flex w-full bg-black rounded-xl font-auto-number" style={{ height: "100%" }}>
+          <div
+            className="flex w-full font-auto-number overflow-hidden"
+            style={{ height: "100%", borderRadius: innerRadius }}
+          >
             <div
-              className="flex items-end justify-center bg-white font-bold"
+              className="flex items-end justify-center font-bold bg-transparent"
               style={{
                 width: "70%",
-                border: `${borderW}px solid #000`,
-                borderRadius: radius,
                 paddingLeft: mainPx,
                 paddingRight: mainPx,
                 paddingBottom: mainPb,
@@ -459,11 +469,9 @@ export default function PlateSelectForm({
             </div>
 
             <div
-              className="flex flex-col items-center mx-auto bg-white"
+              className="flex flex-col items-center mx-auto bg-transparent border-l border-black/10"
               style={{
                 width: "30%",
-                border: `${borderW}px solid #000`,
-                borderRadius: radius,
                 paddingTop: outerPadY,
                 paddingBottom: outerPadY,
                 justifyContent: "center",
