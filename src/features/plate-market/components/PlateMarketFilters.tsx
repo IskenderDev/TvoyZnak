@@ -28,8 +28,11 @@ export const PlateMarketFilters = ({
   className = "",
 }: PlateMarketFiltersProps) => {
   return (
-    <div className={`flex flex-wrap items-center justify-between gap-4 ${className}`}>
-      <div className="flex flex-wrap gap-3 ">
+    <div className={`flex flex-col flex-wrap items-center justify-center gap-4 ${className}`}>
+      <div className="mx-auto">
+        <PlateSelectForm320 value={plateQuery} onChange={onPlateQueryChange} />
+      </div>
+      <div className="flex flex-wrap gap-3 bg-white px-20 py-5 rounded-3xl">
         <UiSelect
           name="region"
           value={region}
@@ -39,9 +42,8 @@ export const PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw] md:w-[350px] text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
+          className="w-[90vw] md:w-[350px] text-sm md:text-xl rounded-full bg-[#eeeeee] px-4 py-2 text-black shadow-sm flex justify-center"
         />
-
         <UiSelect
           name="category"
           value={category}
@@ -51,14 +53,12 @@ export const PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw]  md:w-[350px] text-center text-sm md:text-xl rounded-full bg-[#0177FF] px-4 py-2 text-white shadow-sm flex justify-center"
+          className="w-[90vw] md:w-[350px] text-sm md:text-xl rounded-full bg-[#eeeeee] px-4 py-2 text-black shadow-sm flex justify-center"
         />
 
       </div>
 
-      <div className="mx-auto md:ml-auto md:mx-0">
-        <PlateSelectForm320 value={plateQuery} onChange={onPlateQueryChange} />
-      </div>
+
     </div>
   )
 }

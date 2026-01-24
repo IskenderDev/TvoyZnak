@@ -3,6 +3,7 @@ import { faqs } from "./faqs";
 import type { FaqItem } from "./faqs";
 import { FaSquareMinus, FaSquarePlus } from "react-icons/fa6";
 import { LuInfo } from "react-icons/lu";
+import { FaMinus, FaPlus } from 'react-icons/fa'
 
 const DEFAULT_OPEN_INDEX = null;
 
@@ -16,11 +17,9 @@ function FaqRow({
   onToggle: () => void;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-700 bg-[#1A1A1A] shadow-[0_0_0_1px_#2a2a2a] px-4 sm:px-6 py-4 sm:py-5">
+    <div className="rounded-4xl   bg-[#131313]  px-4 sm:px-6 py-4 sm:py-5 hover:bg-[#282828] transition-colors duration-500">
       <div className="flex items-center gap-3 sm:gap-4">
-        <div className="relative grid place-items-center w-6 h-6 rounded-full bg-white text-xs shrink-0">
-          <LuInfo className="text-[#0177FF] h-4 w-4" />
-        </div>
+        
 
         <div className="flex-1">
           <button
@@ -39,9 +38,9 @@ function FaqRow({
               title={open ? "Свернуть" : "Развернуть"}
             >
               {open ? (
-                <FaSquareMinus className="text-white w-5 h-5" />
+                <FaMinus className='w-3 h-3 text-white' />
               ) : (
-                <FaSquarePlus  className="text-[#0177FF] w-5 h-5" />
+                <FaPlus className='w-3 h-3 text-white' />
               )}
             </span>
           </button>

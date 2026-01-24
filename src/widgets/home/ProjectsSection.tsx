@@ -65,7 +65,7 @@ export default function ProjectsSection({ items }: Props) {
                   key={item.id}
                   className="shrink-0 w-[82%] sm:w-[48%] lg:w-[32%]"
                 >
-                  <article className="relative overflow-hidden rounded-2xl bg-[#1E63FF] transition-transform duration-300 ">
+                  <article className="relative overflow-hidden rounded-2xl bg-[#131313] transition-transform duration-300 ">
                     <div className="h-[300px] overflow-hidden">
                       <img
                         src={item.cover}

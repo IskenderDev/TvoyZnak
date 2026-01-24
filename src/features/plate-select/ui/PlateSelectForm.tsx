@@ -141,7 +141,7 @@ export default function PlateSelectForm({
 
   const isXs = size === "xs"
 
-  const borderW = isXs ? 2 : Math.max(1, 10 * k)
+  const borderW = isXs ? 2 : Math.max(1, 5 * k)
   const radius = isXs ? 10 : Math.max(6, 14 * k)
   const outerPadY = isXs ? 4 : 6 * k
 
