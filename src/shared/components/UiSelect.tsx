@@ -9,6 +9,7 @@ type UiSelectProps<T extends string> = {
   onChange: (value: T) => void;
   placeholder?: string;
   options: Option<T>[];
+  leadingIcon?: React.ReactNode;
 
   className?: string;
   valueClassName?: string;
@@ -43,6 +44,7 @@ export default function UiSelect<T extends string>({
   onChange,
   placeholder = "Выберите действие",
   options,
+  leadingIcon,
   className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
   valueClassName = "text-black",
   placeholderClassName = "text-[#777]",
@@ -183,7 +185,14 @@ export default function UiSelect<T extends string>({
         onClick={() => setOpen((o) => !o)}
         className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-left`}
       >
-        {current?.label ?? placeholder}
+        <span className="flex items-center gap-2">
+          {leadingIcon ? (
+            <span className="flex h-4 w-4 items-center justify-center md:h-5 md:w-5">
+              {leadingIcon}
+            </span>
+          ) : null}
+          <span className="truncate">{current?.label ?? placeholder}</span>
+        </span>
         <LuChevronDown
           className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${open ? "rotate-180" : ""}`}
           size={18}
