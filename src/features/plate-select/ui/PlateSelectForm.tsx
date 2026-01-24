@@ -140,32 +140,34 @@ export default function PlateSelectForm({
   const { ref: wrapperRef, k } = useScale(preset.w)
 
   const isXs = size === "xs"
+  const sizeRatio = isXs ? 1 : preset.w / PRESETS.lg.w
+  const scale = isXs ? 1 : k * sizeRatio
 
-  const borderW = isXs ? 2 : Math.max(1, 5 * k)
-  const radius = isXs ? 10 : Math.max(6, 14 * k)
-  const outerPadY = isXs ? 4 : 6 * k
+  const borderW = isXs ? 2 : Math.max(1, 5 * scale)
+  const radius = isXs ? 10 : Math.max(6, 14 * scale)
+  const outerPadY = isXs ? 4 : 6 * scale
 
-  const mainFontLetter = isXs ? 65 : 160 * k
-  const mainFontNumber = isXs ? 65 : 170 * k
-  const mainGap = isXs ? 20 : 30 * k
-  const mainPx = isXs ? 6 : 32 * k
+  const mainFontLetter = isXs ? 65 : 160 * scale
+  const mainFontNumber = isXs ? 65 : 170 * scale
+  const mainGap = isXs ? 20 : 30 * scale
+  const mainPx = isXs ? 6 : 32 * scale
   const mainPb = isXs ? 1 : 0
-  const slotW = isXs ? 22 : 80 * k
+  const slotW = isXs ? 22 : 80 * scale
   const slotH = isXs ? 68 : mainFontNumber
-  const digitGap = isXs ? 5 : 0 * k
-  const digitGapLetter = isXs ? 8 : 0 * k
+  const digitGap = isXs ? 5 : 0 * scale
+  const digitGapLetter = isXs ? 8 : 0 * scale
   const slotDropdownWidth = isXs ? 180 : 180 // одна ширина для букв и цифр
 
 
-  const regionFont = isXs ? 32 : 110 * k
-  const rusFont = isXs ? 14 : 42 * k
-  const rusRowH = isXs ? 16 : 40 * k
-  const rusGap = isXs ? 6 : 10 * k
-  const rusPb = isXs ? 2 : 4 * k
+  const regionFont = isXs ? 32 : 110 * scale
+  const rusFont = isXs ? 14 : 42 * scale
+  const rusRowH = isXs ? 16 : 40 * scale
+  const rusGap = isXs ? 6 : 10 * scale
+  const rusPb = isXs ? 2 : 4 * scale
   const flagH = isXs ? 12 : rusRowH * 0.9
-  const flagBorder = isXs ? 1 : Math.max(1, 2 * k)
+  const flagBorder = isXs ? 1 : Math.max(1, 2 * scale)
 
-  const regionGap = isXs ? 10 : 4 * k
+  const regionGap = isXs ? 10 : 4 * scale
 
   const containerStyle: React.CSSProperties =
     responsive && !isXs ? { width: "100%", maxWidth: `${preset.w}px` } : { width: `${preset.w}px` }
@@ -479,7 +481,7 @@ export default function PlateSelectForm({
                 onChange={handleRegionChange}
                 options={regionOptions}
                 fontSize={regionFont}
-                slotW={isXs ? 40 : Math.max(110 * k, 130 * 1.35)}
+                slotW={isXs ? 40 : Math.max(110 * scale, 130 * 1.35 * scale)}
                 slotH={isXs ? 22 : regionFont * 1.05}
                 dropdownOffsetX={-30}
                 color={glyphColor(regionDisplayValue)}

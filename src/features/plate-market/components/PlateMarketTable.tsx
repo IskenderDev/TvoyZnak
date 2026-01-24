@@ -11,7 +11,6 @@ type PlateMarketTableProps = {
   sortField: SortField
   sortDir: SortDir
   onSort: (field: SortField) => void
-  onReset: () => void
   className?: string
   gridCols?: string
 }
@@ -21,7 +20,6 @@ export const PlateMarketTable = ({
   sortField,
   sortDir,
   onSort,
-  onReset,
   className = "",
   gridCols = DEFAULT_COLS,
 }: PlateMarketTableProps) => {
@@ -66,14 +64,7 @@ export const PlateMarketTable = ({
 
         <span>Продавец</span>
 
-        <div>
-          <button
-            onClick={onReset}
-            className="-mr-4 rounded-full border border-black/20 px-4 py-1.5 text-lg font-medium hover:bg-black/5"
-          >
-            Сбросить фильтры
-          </button>
-        </div>
+        <div />
       </div>
 
       <ul className="divide-y divide-black/10">

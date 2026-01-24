@@ -41,6 +41,7 @@ export default function NumbersMarketSection() {
           onRegionChange={setRegion}
           onCategoryChange={setCategory}
           onPlateQueryChange={setPlateQuery}
+          onReset={resetFilters}
         />
 
         {error && <p className="mb-4 rounded-xl bg-white px-4 py-3 text-[#FF6B6B]">{error}</p>}
@@ -53,7 +54,6 @@ export default function NumbersMarketSection() {
           sortDir={sortDir}
           gridCols={GRID_COLS}
           onSort={onSort}
-          onReset={resetFilters}
         />
         {!loading && !visibleRows.length && !error ? (
           <p className="rounded-xl md:-mt-10 bg-white px-6 py-10 pt-20 text-center text-black">

@@ -6,11 +6,11 @@ type CompactProps = Omit<React.ComponentProps<typeof PlateSelectForm>, "size" | 
 export default function PlateSelectForm320({ className = "", flagSrc = "/flag-russia.svg", ...rest }: CompactProps) {
   return (
     <PlateSelectForm
-      size="lg"
+      size="md"
       responsive={false}
       showCaption={true}
       flagSrc={flagSrc}
-      className={` ${className}`}
+      className={` ${className} `}
       {...rest}
     />
   );

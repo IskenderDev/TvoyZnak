@@ -9,31 +9,21 @@ type UiSelectProps<T extends string> = {
   onChange: (value: T) => void;
   placeholder?: string;
   options: Option<T>[];
+  leadingIcon?: React.ReactNode;
 
   className?: string;
   valueClassName?: string;
   placeholderClassName?: string;
 
-  /**
-   * trigger  -> dropdown как сейчас (w-full под кнопку)
-   * content  -> dropdown и "пилюли" подстраиваются под самый длинный label
-   * custom   -> используется customDropdownWidth
-   */
+
   dropdownWidth?: "trigger" | "content" | "custom";
-  
-  /**
-   * Кастомная ширина dropdown в пикселях (работает только с dropdownWidth="custom")
-   */
+
   customDropdownWidth?: number;
   
-  /**
-   * Минимальная ширина для режима "content" (в пикселях)
-   */
+
   minContentWidth?: number;
   
-  /**
-   * Максимальная ширина для режима "content" (в пикселях)
-   */
+
   maxContentWidth?: number;
 };
 
@@ -43,6 +33,7 @@ export default function UiSelect<T extends string>({
   onChange,
   placeholder = "Выберите действие",
   options,
+  leadingIcon,
   className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
   valueClassName = "text-black",
   placeholderClassName = "text-[#777]",
@@ -181,9 +172,16 @@ export default function UiSelect<T extends string>({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-left`}
+        className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-center`}
       >
-        {current?.label ?? placeholder}
+        <span className="flex items-center justify-center gap-2">
+          {leadingIcon ? (
+            <span className="flex h-4 w-4 items-center  justify-center md:h-5 md:w-5">
+              {leadingIcon}
+            </span>
+          ) : null}
+          <span className="truncate">{current?.label ?? placeholder}</span>
+        </span>
         <LuChevronDown
           className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${open ? "rotate-180" : ""}`}
           size={18}
