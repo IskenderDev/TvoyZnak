@@ -10,7 +10,7 @@ export default function PlateSelectForm320({ className = "", flagSrc = "/flag-ru
       responsive={false}
       showCaption={true}
       flagSrc={flagSrc}
-      className={` ${className}`}
+      className={` ${className} `}
       {...rest}
     />
   );

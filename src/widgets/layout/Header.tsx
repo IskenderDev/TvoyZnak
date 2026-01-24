@@ -132,13 +132,12 @@ export default function Header() {
                 onClick={handleSellClick}
                 className="
                   rounded-full
-                  bg-gradient-to-r from-[#1D9BFF] via-[#1A6DFF] to-[#005CDB]
+                  bg-[#0075ff]
                   px-4 sm:px-5
                   py-2 sm:py-2.5
                   text-xs sm:text-sm font-semibold
-                  shadow-[0_0_24px_rgba(59,130,246,0.7)]
                   transition
-                  hover:shadow-[0_0_36px_rgba(59,130,246,0.95)]
+                  hover:bg-[#0063e6]
                   whitespace-nowrap
                 "
               >
