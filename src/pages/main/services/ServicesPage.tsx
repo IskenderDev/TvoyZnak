@@ -109,7 +109,7 @@ export default function ServicesPage() {
               выкупаем, продаём и подбираем уникальные комбинации, обеспечивая
               прозрачность, безопасность и удобство на каждом этапе.
             </p>
-            <div className="mt-10 mx-auto">
+            <div className="mt-10 -mb-15 mx-auto h-0 md:h-auto">
               <img src="/services/heroServices.png" alt="" />
             </div>
           </div>
@@ -145,19 +145,19 @@ export default function ServicesPage() {
                   <h3 className="text-2xl md:text-3xl font-extrabold uppercase">
                     {service.title}
                   </h3>
-                  <p className="mt-2 text-[16px] md:text-2xl leading-relaxed">
+                  <p className="my-5 text-[16px] md:text-lg leading-relaxed">
                     {service.description}
                   </p>
-                  <p className="mt-4 text-[16px] md:text-2xl">
+                  <p className="mt-4 text-[16px] md:text-lg">
                     {service.subtitle}
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-3">
+                  <div className="mt-3 flex flex-col">
                     {service.chips.map((chip) => (
                       <span
                         key={chip}
-                        className="rounded-xl border border-white/30 px-4 py-2 text-[15px] md:text-lg transition-colors duration-200 hover:bg-white/5 max-w-100"
+                        className="rounded-xl py-2 text-[12px] md:text-[14px] transition-colors duration-200 "
                       >
-                        {chip}
+                        —  {chip}
                       </span>
                     ))}
                   </div>

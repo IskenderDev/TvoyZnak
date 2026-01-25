@@ -16,12 +16,9 @@ export default function HeroStats({
 		>
 			<div className="mx-auto max-w-[1200px] px-6 md:px-10 pt-12 md:pt-16 pb-14 md:pb-24">
 				<header className="text-center">
-					{/* approx font-size: 32/46 */}
 					<h2 className="text-[26px] md:text-[40px] font-extrabold uppercase tracking-[0.02em] leading-[1.15]">
 						КРАСИВЫЕ <span className="text-[#0177FF]">АВТОНОМЕРА</span> — ВАШ СТАТУС НА ДОРОГЕ
 					</h2>
-
-					{/* approx font-size: 14/16 */}
 					<p className="mt-4 md:mt-5 text-[#C8C8C8] text-[14px] md:text-[16px] leading-[1.7] max-w-[880px] mx-auto">
 						Мы оцениваем уникальные комбинации, выкупаем номера по выгодной цене и подбираем
 						идеальный вариант под ваши пожелания. С нами покупка и продажа номеров становится
@@ -29,24 +26,22 @@ export default function HeroStats({
 					</p>
 				</header>
 
-				<div className="relative mt-8 md:mt-10">
-					<div className="h-40 md:h-72" aria-hidden />
+				<div className="relative my-10">
 					<img
 						src={carSrc}
 						alt="Черный автомобиль — визуальный акцент секции"
-						className="absolute left-1/2 -translate-x-1/2 -top-6 md:-top-10 w-auto h-auto md:h-[360px] lg:h-[400px] z-30 drop-shadow-xl"
+						className="relative left-1/2 -translate-x-1/2  w-auto h-[0px] lg:h-[300px] z-30 "
 					/>
 				</div>
 
-				<div className="relative z-10 -mt-10 md:-mt-16">
-					<div className="bg-[#1C1C1C] rounded-[26px] px-6 md:px-8 py-6 md:py-8 shadow-[0_18px_50px_rgba(0,0,0,0.35)]">
+				<div className="relative z-10">
+					<div className="bg-[#1C1C1C] rounded-[26px] px-6 md:px-8 py-6 md:py-8 ">
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
 							<article className="relative rounded-[18px] p-6 md:p-7 bg-[#0177FF] text-white">
 								<BsArrowUpRightCircleFill
 									aria-hidden
 									className="absolute top-4 right-4 opacity-90 w-6 h-6 md:w-7 md:h-7"
 								/>
-								{/* approx font-size: 40/52 */}
 								<h3 className="text-[36px] md:text-[48px] font-extrabold leading-none">
 									500+
 								</h3>

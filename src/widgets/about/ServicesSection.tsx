@@ -4,7 +4,6 @@ export default function ServicesSection() {
   return (
     <section aria-labelledby="services-title" className="py-10 md:py-14">
       <div className="mx-auto max-w-[1100px] px-5 md:px-10">
-        {/* approx font-size: 26/34 */}
         <h2
           id="services-title"
           className="text-center text-[22px] md:text-[30px] font-extrabold tracking-[0.08em] text-white uppercase"
@@ -38,7 +37,7 @@ export default function ServicesSection() {
               className="w-full min-h-[60px] inline-flex items-center justify-center text-center
                 text-[14px] md:text-[16px] font-semibold leading-snug bg-[#1C1C1C] text-white
                 rounded-full px-6 shadow-[0_8px_20px_rgba(0,0,0,0.35)]
-                transition-colors duration-200 hover:bg-[#0177FF] hover:text-white
+                transition-colors duration-200 hover:bg-[#282828] hover:text-white
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
                 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
             >

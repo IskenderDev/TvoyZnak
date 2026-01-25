@@ -8,7 +8,6 @@ export default function WhyChooseUs() {
 		<section className="relative text-white py-10 md:py-14" aria-label="Почему выбирают нас">
 			<div className="max-w-[1120px] mx-auto px-6 md:px-10">
 				<header className="text-center">
-					{/* approx font-size: 28/40 */}
 					<h2 className="text-[22px] md:text-[36px] font-extrabold tracking-[0.06em] uppercase">
 						ПОЧЕМУ ВЫБИРАЮТ НАС
 					</h2>
@@ -54,7 +53,7 @@ export default function WhyChooseUs() {
 								aria-label="Полное юридическое сопровождение сделок"
 								className={`${cardBase} justify-self-end md:translate-x-6`}
 							>
-								Все сделки сопровождаются юридическим сопровождением, гарантируя полную защиту
+								Все сделки сопровождаются юридически, гарантируя полную защиту
 								интересов клиента.
 							</li>
 						</ul>
