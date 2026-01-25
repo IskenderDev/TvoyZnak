@@ -37,8 +37,8 @@ export default function NumberDetailsSection() {
         if (!mounted) return
         setError(
           err?.response?.data?.message ||
-          err?.message ||
-          "Не удалось загрузить номер"
+            err?.message ||
+            "Не удалось загрузить номер"
         )
       })
       .finally(() => mounted && setLoading(false))
@@ -66,7 +66,7 @@ export default function NumberDetailsSection() {
 
   if (loading) {
     return (
-      <section className="flex min-h-screen items-center justify-center   text-white">
+      <section className="flex min-h-screen items-center justify-center bg-black text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     )
@@ -74,7 +74,7 @@ export default function NumberDetailsSection() {
 
   if (error) {
     return (
-      <section className="flex min-h-screen items-center justify-center   text-white">
+      <section className="flex min-h-screen items-center justify-center bg-black text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -82,7 +82,7 @@ export default function NumberDetailsSection() {
 
   if (!item) {
     return (
-      <section className="flex min-h-screen items-center justify-center   text-white">
+      <section className="flex min-h-screen items-center justify-center bg-black text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
     )
@@ -98,7 +98,10 @@ export default function NumberDetailsSection() {
   const phone = item.phone || "—"
 
   const detailsRows = [
-    { label: "Цена", value: price },
+    {
+      label: "Регион",
+      value: item.plate.regionId ? `RUS ${item.plate.regionId}` : "—",
+    },
     { label: "Дата размещения", value: publishedDate },
     { label: "Имя", value: sellerName },
     { label: "Телефон", value: phone, isPhone: !!item.phone },
@@ -118,96 +121,113 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
-      <section className="  py-6 text-white">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
-
-          <div className="flex items-center gap-4 sm:gap-6">
+      <section className="bg-black py-6 sm:py-8 md:py-10 text-white">
+        <div className="mx-auto w-full max-w-[1220px] px-4 sm:px-6 lg:px-8">
+          {/* HEADER */}
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link to={paths.home}>
               <button
                 type="button"
                 onClick={() => navigate(-1)}
                 aria-label="Назад"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-[#0177FF] hover:bg-[#0C8BFF]"
+                className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0177FF] shadow-[0_10px_30px_rgba(1,119,255,0.6)] transition-colors hover:bg-[#0C8BFF] sm:h-11 sm:w-11"
               >
-                <LuArrowLeft className="h-6 w-6 text-white" />
+                <LuArrowLeft className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </button>
             </Link>
 
-            <h1 className="text-[28px] sm:text-[34px] md:text-[40px] font-semibold">
-              Продам номер{" "}
-              <span className="font-auto-number uppercase tracking-wide">
+            <h1 className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-[22px] font-bold leading-[1.2] tracking-[0.01em] sm:text-[26px] md:text-[30px] lg:text-[36px]">
+              <span>Продам номер</span>
+              <span className="ml-1 font-auto-number uppercase">
                 {numberLabel || item.series}
               </span>
             </h1>
           </div>
 
-          <div className="mt-6 text-center">
-            <PlateStaticLg
-              data={{
-                price: item.price,
-                comment: item.plate.comment ?? item.description ?? "",
-                firstLetter: item.plate.firstLetter,
-                secondLetter: item.plate.secondLetter,
-                thirdLetter: item.plate.thirdLetter,
-                firstDigit: item.plate.firstDigit,
-                secondDigit: item.plate.secondDigit,
-                thirdDigit: item.plate.thirdDigit,
-                regionId: item.plate.regionId,
-              }}
-              responsive
-              showCaption
-              className="mx-auto w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
-            />
+          {/* MAIN CARD */}
+          <div className="mt-6 md:mt-8 rounded-[32px] border border-[#151515] bg-[#0d0d0f] px-3 py-5 shadow-[0_24px_60px_rgba(0,0,0,0.75)] sm:px-6 sm:py-6 lg:px-10 lg:py-8">
+            {/* PLATE */}
+            <div className="flex justify-center px-1 sm:px-4 lg:px-8">
+              <PlateStaticLg
+                data={{
+                  price: item.price,
+                  comment: item.plate.comment ?? item.description ?? "",
+                  firstLetter: item.plate.firstLetter,
+                  secondLetter: item.plate.secondLetter,
+                  thirdLetter: item.plate.thirdLetter,
+                  firstDigit: item.plate.firstDigit,
+                  secondDigit: item.plate.secondDigit,
+                  thirdDigit: item.plate.thirdDigit,
+                  regionId: item.plate.regionId,
+                }}
+                responsive
+                showCaption
+                className="w-full max-w-[860px]"
+              />
+            </div>
 
-            <button
-              onClick={handleBuyClick}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-12 py-3 text-base font-medium hover:bg-[#0C8BFF]"
-            >
-              Купить
-            </button>
-          </div>
-        </div>
-      <div className="mt-10">
-  {detailsRows.map((row, index) => {
-    const bg = index % 2 === 0 ? "bg-[#2C2C2C]" : "bg-transparent"
+            {/* DETAILS ROW */}
+            <div className="mt-6 md:mt-8 grid gap-5 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-6 lg:gap-8">
+              {/* LEFT CARD – INFO */}
+              <div className="rounded-[24px] border border-[#252525] bg-[#0d0d0f] px-4 py-4 shadow-[0_18px_45px_rgba(0,0,0,0.6)] sm:px-6 sm:py-5 md:px-7 md:py-6">
+                <dl className="divide-y divide-[#262626]">
+                  {detailsRows.map((row) => (
+                    <div
+                      key={row.label}
+                      className="flex items-center justify-between py-3 sm:py-3.5"
+                    >
+                      <dt className="pr-4 text-[14px] font-semibold leading-[18px] text-white sm:text-[15px]">
+                        {row.label}
+                      </dt>
+                      <dd className="text-right text-[16px] leading-[20px] text-[#F5F5F5] sm:text-[18px] sm:leading-[22px] font-normal">
+                        {row.isPhone && item.phone ? (
+                          <a
+                            href={`tel:${item.phone}`}
+                            className="transition-colors hover:text-white"
+                          >
+                            {row.value}
+                          </a>
+                        ) : (
+                          row.value
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
 
-    return (
-      <div key={row.label} className={`${bg} w-full`}>
-        <div className="mx-auto w-full min-w-[1200px] px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full  flex justify-center ">
-            <div
-              className="
-                grid items-center
-                grid-cols-[clamp(180px,26vw,340px)_1fr]
-                min-h-[56px] sm:min-h-[64px]
-                gap-8 sm:gap-12  min-w-[600px]
-              "
-            >
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[32px] font-semibold">
-                {row.label}
+                {/* PRICE + BUTTON */}
+                <div className="mt-4 border-t border-[#262626] pt-4 sm:mt-5 sm:pt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+                  <div className="text-[22px] font-medium leading-none sm:text-[26px] md:text-[30px]">
+                    {price}
+                  </div>
+
+                  <button
+                    onClick={handleBuyClick}
+                    className="inline-flex min-h-[44px] min-w-[150px] items-center justify-center rounded-full bg-[#0177FF] px-6 py-2.5 text-[15px] font-medium leading-[18px] tracking-[0.01em] text-white shadow-[0_10px_30px_rgba(1,119,255,0.6)] transition-colors hover:bg-[#0C8BFF] sm:min-h-[46px] sm:px-7 sm:text-[16px] md:min-h-[48px] md:px-8 md:text-[18px] md:leading-[22px]"
+                  >
+                    Купить
+                  </button>
+                </div>
               </div>
 
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[22px] overflow-x-hidden">
-                {row.isPhone ? (
-                  <a href={`tel:${item.phone}`} className="hover:opacity-90">
-                    {row.value}
-                  </a>
-                ) : (
-                  row.value
-                )}
+              {/* RIGHT CARD – TEXT */}
+              <div className="rounded-[24px] border border-[#252525] bg-[#0d0d0f] px-4 py-4 text-[15px] leading-[1.5] text-[#E5E5E5] shadow-[0_18px_45px_rgba(0,0,0,0.6)] sm:px-6 sm:py-5 md:px-7 md:py-6 sm:text-[16px] md:text-[18px] md:leading-[1.55]">
+                {/* Сохраняем заголовок для семантики, но визуально как в макете – без отдельного тайтла */}
+                <h2 className="sr-only">Важная информация</h2>
+                <ul className="list-disc space-y-3 sm:space-y-3.5 pl-5 marker:text-[#0177FF]">
+                  <li>
+                    Начиная с 2020 года вы можете оформить автомобильный номер
+                    только того региона, в котором прописаны.
+                  </li>
+                  <li>
+                    Передача автомобильного номера подразумевает под собой
+                    куплю/продажу нашего транспортного средства.
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    )
-  })}
-</div>
-
-
-
-
-
       </section>
     </>
   )
