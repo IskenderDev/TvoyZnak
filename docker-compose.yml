@@ -10,6 +10,6 @@ services:
     ports:
       - "8080:80"    
     environment:
-      API_BASE_URL: "https://api.mydomain.com"   
+      API_BASE_URL: "http://31.172.72.119:8081"   
       APP_ENV: "production"
     restart: unless-stopped
