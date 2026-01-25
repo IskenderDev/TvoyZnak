@@ -12,7 +12,6 @@ export default function Footer() {
       isActive ? "text-[#85B6FF]" : "text-white hover:text-[#85B6FF]"
     }`
 
-  // Обработчик для NavLink с обновлением страницы
   const handleNavClick = useCallback((path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname === path) {
       e.preventDefault()
@@ -20,7 +19,6 @@ export default function Footer() {
     }
   }, [location.pathname])
 
-  // Обработчик клика на логотип
   const handleLogoClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname === paths.home) {
       e.preventDefault()

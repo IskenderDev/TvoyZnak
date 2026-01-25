@@ -51,7 +51,7 @@ export default function HeroSection() {
             <img
               src="/home-img/heroImg.png"
               alt="Премиальный автомобиль с красивыми номерами"
-              className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-100"
+              className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-100 h-0 md:h-auto"
             />
           </div>
         </div>

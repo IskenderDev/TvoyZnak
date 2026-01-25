@@ -34,7 +34,7 @@ export default function UiSelect<T extends string>({
   placeholder = "Выберите действие",
   options,
   leadingIcon,
-  className = "w-full bg-[#F8F9FA] text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]",
+  className = "w-full bg-[#F8F9FA] text-black rounded-3xl px-4 py-3 outline-none focus:ring-2",
   valueClassName = "text-black",
   placeholderClassName = "text-[#777]",
   dropdownWidth = "trigger",
@@ -194,7 +194,7 @@ export default function UiSelect<T extends string>({
           role="listbox"
           style={dropdownStyle}
           className={[
-            "absolute z-20 mt-2 rounded-2xl bg-[#0177FF] text-white shadow-lg p-3 overflow-y-auto",
+            "absolute z-20 mt-2 rounded-2xl bg-white text-black shadow-lg p-3 overflow-y-auto",
             "scrollbar-none",
             "[&::-webkit-scrollbar]:hidden",
             "[-ms-overflow-style:none]",
@@ -220,16 +220,16 @@ export default function UiSelect<T extends string>({
                 }}
                 className="px-2 py-2 rounded-lg cursor-pointer flex justify-center"
               >
-                <span
+               <span
                   style={pillStyle}
                   className={[
-                    "inline-flex items-center justify-center rounded-full border border-white/30 px-3 py-1.5 text-sm md:text-xl font-semibold min-h-10",
+                    "inline-flex items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-xl font-semibold min-h-10",
                     "transition-colors duration-150 whitespace-nowrap",
                     selected
-                      ? "bg-white text-[#0177FF] border-white"
+                      ? "bg-[#0177FF] text-white "
                       : active
-                        ? "bg-white/10 text-white border-white/40"
-                        : "text-white",
+                        ? "bg-[#eeeeee] text-black border-white/40 hover:bg-[#0177FF] hover:text-white"
+                        : "text-black bg-[#eeeeee] hover:bg-[#0177FF]",
                   ].join(" ")}
                 >
                   {opt.label}

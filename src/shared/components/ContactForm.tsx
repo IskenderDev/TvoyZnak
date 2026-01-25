@@ -98,7 +98,7 @@ export default function ContactForm() {
             value={formData.fullName}
             onChange={handleChange}
             placeholder="Имя *"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
             <input
@@ -109,12 +109,13 @@ export default function ContactForm() {
             onChange={handleChange}
             placeholder="Телефон *"
               inputMode="tel"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
             <div className="space-y-1">
               <UiSelect
                 name="feedbackType"
+            
                 value={formData.feedbackType}
                 onChange={(v) => setFormData((p) => ({ ...p, feedbackType: v }))}
                 placeholder={typesLoading ? "Загрузка..." : "Выберите действие *"}
@@ -131,7 +132,7 @@ export default function ContactForm() {
               value={formData.carNumber}
               onChange={handleChange}
               placeholder="Автомобильный номер (необязательно)"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
           </div>
 

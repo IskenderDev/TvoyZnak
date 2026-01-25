@@ -43,7 +43,7 @@ export default function HowWeWorkSection() {
           <p className="text-[#A7C6FF] text-sm md:text-base mt-1">Просто, быстро и безопасно.</p>
         </header>
 
-        <div className="relative bg-[#0177FF] rounded-[26px] md:rounded-[28px] mt-6 md:mt-8 px-5 md:px-8 py-6 md:py-10">
+        <div className="relative bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] rounded-[26px] md:rounded-[28px] mt-6 md:mt-8 px-5 md:px-8 py-6 md:py-10">
           <div className="relative flex flex-col gap-x-4 md:gap-x-6 gap-y-8 md:gap-y-12">
             {steps.map((step, index) => {
               const isLast = index === steps.length - 1;
