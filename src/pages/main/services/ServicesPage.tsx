@@ -109,7 +109,7 @@ export default function ServicesPage() {
               выкупаем, продаём и подбираем уникальные комбинации, обеспечивая
               прозрачность, безопасность и удобство на каждом этапе.
             </p>
-            <div className="mt-10 -mb-15 mx-auto h-0 md:h-auto">
+            <div className="mt-10 -mb-15 mx-auto md:h-auto">
               <img src="/services/heroServices.png" alt="" />
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function ServicesPage() {
               <article
                 key={service.number}
                 id={service.id}
-                className="mt-10 grid grid-cols-1 items-start gap-15 lg:grid-cols-[280px_1fr] lg:gap-10"
+                className="mt-10 grid grid-cols-1 items-start gap-15 md:grid-cols-[280px_1fr] lg:gap-10"
               >
                 <div className="relative mr-10">
                   <div className="rounded-2xl bg-[#0177FF] p-5 text-white shadow-[_24px_24px_rgb(44,44,44)]">

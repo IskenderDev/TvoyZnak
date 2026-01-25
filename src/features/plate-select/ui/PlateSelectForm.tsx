@@ -147,8 +147,10 @@ export default function PlateSelectForm({
   const radius = isXs ? 10 : Math.max(6, 14 * scale)
   const outerPadY = isXs ? 4 : 6 * scale
 
-  const mainFontLetter = isXs ? 65 : 160 * scale
-  const mainFontNumber = isXs ? 65 : 170 * scale
+  const mainFontBase = isXs ? 65 : 160 * scale
+  const mainFontLetter = mainFontBase
+  const mainFontNumber = mainFontBase
+
   const mainGap = isXs ? 20 : 30 * scale
   const mainPx = isXs ? 6 : 32 * scale
   const mainPb = isXs ? 1 : 0
@@ -157,7 +159,6 @@ export default function PlateSelectForm({
   const digitGap = isXs ? 5 : 0 * scale
   const digitGapLetter = isXs ? 8 : 0 * scale
   const slotDropdownWidth = isXs ? 180 : 180 // одна ширина для букв и цифр
-
 
   const regionFont = isXs ? 32 : 110 * scale
   const rusFont = isXs ? 14 : 42 * scale
@@ -263,6 +264,44 @@ export default function PlateSelectForm({
   const secondLetter = text[4] ?? "*"
   const thirdLetter = text[5] ?? "*"
 
+  const placeholderLetter = "А"
+  const placeholderDigit = "0"
+  const placeholderRegion = "77"
+
+  const [explicitStars, setExplicitStars] = React.useState(() => Array(7).fill(false))
+
+  React.useEffect(() => {
+    setExplicitStars((prev) => {
+      const next = [...prev]
+      if (firstLetter !== "*") next[0] = false
+      if (firstDigit !== "*") next[1] = false
+      if (secondDigit !== "*") next[2] = false
+      if (thirdDigit !== "*") next[3] = false
+      if (secondLetter !== "*") next[4] = false
+      if (thirdLetter !== "*") next[5] = false
+      if (resolvedRegionCode) next[6] = false
+      return next
+    })
+  }, [
+    firstLetter,
+    firstDigit,
+    secondDigit,
+    thirdDigit,
+    secondLetter,
+    thirdLetter,
+    resolvedRegionCode,
+  ])
+
+  const resolveDisplayChar = (value: string, placeholder: string, index: number) =>
+    value === "*" && !explicitStars[index] ? placeholder : value
+
+  const firstLetterDisplay = resolveDisplayChar(firstLetter, placeholderLetter, 0)
+  const firstDigitDisplay = resolveDisplayChar(firstDigit, placeholderDigit, 1)
+  const secondDigitDisplay = resolveDisplayChar(secondDigit, placeholderDigit, 2)
+  const thirdDigitDisplay = resolveDisplayChar(thirdDigit, placeholderDigit, 3)
+  const secondLetterDisplay = resolveDisplayChar(secondLetter, placeholderLetter, 4)
+  const thirdLetterDisplay = resolveDisplayChar(thirdLetter, placeholderLetter, 5)
+
   const glyphColor = (v: string) =>
     v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
 
@@ -298,32 +337,47 @@ export default function PlateSelectForm({
     setError(`Регион "${normalized}" не найден. Введите код из списка.`)
   }, [])
 
+  const markExplicitStar = (index: number, next: string) => {
+    setExplicitStars((prev) => {
+      const updated = [...prev]
+      updated[index] = next === "*"
+      return updated
+    })
+  }
+
   const handleFirstLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(0, next)
     applyChange({ text: setCharAt(text, 0, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleFirstDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(1, next)
     applyChange({ text: setCharAt(text, 1, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleSecondDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(2, next)
     applyChange({ text: setCharAt(text, 2, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleThirdDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(3, next)
     applyChange({ text: setCharAt(text, 3, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleSecondLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(4, next)
     applyChange({ text: setCharAt(text, 4, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleThirdLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(5, next)
     applyChange({ text: setCharAt(text, 5, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleRegionChange = (code: string) => {
     clearError()
+    markExplicitStar(6, code)
     const match = regions.find((region) => region.regionCode === code)
     applyChange({
       text,
@@ -332,7 +386,11 @@ export default function PlateSelectForm({
     })
   }
 
-  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : "")
+  const regionDisplayValue =
+    resolvedRegionCode || (regionsLoading ? "..." : explicitStars[6] ? "*" : placeholderRegion)
+
+  const isRegionPlaceholder = !resolvedRegionCode && !regionsLoading && !explicitStars[6]
+  const regionDisplayColor = isRegionPlaceholder ? "#9AA0A6" : glyphColor(regionDisplayValue)
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -360,6 +418,7 @@ export default function PlateSelectForm({
                 ref={registerSlot(0)}
                 ariaLabel="Буква 1"
                 value={firstLetter}
+                displayValue={firstLetterDisplay}
                 onChange={handleFirstLetterChange}
                 options={LETTER_OPTIONS as unknown as string[]}
                 fontSize={mainFontLetter}
@@ -378,6 +437,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(1)}
                   ariaLabel="Цифра 1"
                   value={firstDigit}
+                  displayValue={firstDigitDisplay}
                   onChange={handleFirstDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -394,6 +454,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(2)}
                   ariaLabel="Цифра 2"
                   value={secondDigit}
+                  displayValue={secondDigitDisplay}
                   onChange={handleSecondDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -410,6 +471,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(3)}
                   ariaLabel="Цифра 3"
                   value={thirdDigit}
+                  displayValue={thirdDigitDisplay}
                   onChange={handleThirdDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -429,6 +491,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(4)}
                   ariaLabel="Буква 2"
                   value={secondLetter}
+                  displayValue={secondLetterDisplay}
                   onChange={handleSecondLetterChange}
                   options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
@@ -445,6 +508,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(5)}
                   ariaLabel="Буква 3"
                   value={thirdLetter}
+                  displayValue={thirdLetterDisplay}
                   onChange={handleThirdLetterChange}
                   options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
@@ -484,7 +548,7 @@ export default function PlateSelectForm({
                 slotW={isXs ? 40 : Math.max(110 * scale, 130 * 1.35 * scale)}
                 slotH={isXs ? 22 : regionFont * 1.05}
                 dropdownOffsetX={-30}
-                color={glyphColor(regionDisplayValue)}
+                color={regionDisplayColor}
                 centerText
                 dropdownMaxHeight={240}
                 dropdownWidth={slotDropdownWidth}
@@ -504,13 +568,11 @@ export default function PlateSelectForm({
                 <img
                   src={flagSrc}
                   alt="Russia"
-                  style={{ height: flagH, border: `${flagBorder}px solid #000`, display: "block" }}
+                  style={{ height: flagH, border: `${flagBorder}px solid "#000"`, display: "block" }}
                 />
               </p>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -532,8 +594,6 @@ export default function PlateSelectForm({
           </button>
         </div>
       )}
-
-    
     </figure>
   )
 }

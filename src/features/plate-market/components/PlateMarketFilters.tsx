@@ -47,7 +47,7 @@ export const  PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw] md:w-[350px] flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
+          className="w-[85vw] md:w-[350px] flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
         />
         <UiSelect
           name="category"
@@ -59,7 +59,7 @@ export const  PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[90vw] md:w-[350px]  flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
+          className="w-[85vw] md:w-[350px]  flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
         />
         <button
           type="button"

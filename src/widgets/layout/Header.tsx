@@ -76,7 +76,6 @@ export default function Header() {
             py-3 sm:py-4 lg:py-6
           "
         >
-          {/* ЛОГО */}
           <Link
             to={paths.home}
             onClick={handleLogoClick}
@@ -92,8 +91,7 @@ export default function Header() {
             />
           </Link>
 
-          {/* NAV — показываем с md и выше */}
-          <div className="hidden flex-1 justify-center md:flex">
+          <div className="hidden flex-1 justify-center lg:flex">
             <div
               className="
                 nav-glass
@@ -106,9 +104,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* ACTIONS */}
           <div className="flex items-center gap-2 md:gap-3 lg:gap-4">
-            {/* burger — только на мобилках (< md) */}
             <button
               type="button"
               onClick={openMenu}
@@ -126,8 +122,7 @@ export default function Header() {
               <LuMenu className="h-6 w-6" />
             </button>
 
-            {/* Кнопки и профиль — с md и выше */}
-            <div className="hidden items-center gap-2 sm:gap-3 md:flex">
+            <div className="hidden items-center gap-2 sm:gap-3 lg:flex">
               <Button
                 onClick={handleSellClick}
                 className="

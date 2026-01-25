@@ -11,7 +11,7 @@ export default function HeroSection() {
       
 
       <div className="relative mx-auto flex min-h-[70svh] max-w-[1200px] items-center px-4 py-12 sm:px-6 md:px-8 lg:px-10 lg:py-16">
-        <div className="grid w-full items-center gap-30  md:gap-70">
+        <div className="grid w-full items-center gap-40  md:gap-70">
             <div className="relative z-10 max-w-xl">
             <h1 className="text-3xl font-extrabold uppercase leading-tight tracking-tight sm:text-4xl md:text-5xl">
               Красивые
@@ -47,11 +47,11 @@ export default function HeroSection() {
               </Link>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative ">
             <img
               src="/home-img/heroImg.png"
               alt="Премиальный автомобиль с красивыми номерами"
-              className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-100 h-0 md:h-auto"
+              className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-40 md:h-auto "
             />
           </div>
         </div>

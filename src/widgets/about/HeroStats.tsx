@@ -30,7 +30,7 @@ export default function HeroStats({
 					<img
 						src={carSrc}
 						alt="Черный автомобиль — визуальный акцент секции"
-						className="relative left-1/2 -translate-x-1/2  w-auto h-[0px] lg:h-[300px] z-30 "
+						className="relative left-1/2 -translate-x-1/2  w-auto lg:h-[300px] z-30 "
 					/>
 				</div>
 
