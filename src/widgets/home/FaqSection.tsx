@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { faqs } from "./faqs";
 import type { FaqItem } from "./faqs";
-import { FaSquareMinus, FaSquarePlus } from "react-icons/fa6";
-import { LuInfo } from "react-icons/lu";
 import { FaMinus, FaPlus } from 'react-icons/fa'
 
 const DEFAULT_OPEN_INDEX = null;
