@@ -16,7 +16,7 @@ export default function AdminLayout() {
     }`;
 
   return (
-    <div className="space-y-10 py-6">
+    <div className="space-y-10 py-6 -mx-10">
       <section className="-mx-4 rounded-3xl bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] px-4 py-8 text-white shadow-xl sm:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="space-y-2">

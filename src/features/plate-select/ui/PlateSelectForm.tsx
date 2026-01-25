@@ -147,8 +147,10 @@ export default function PlateSelectForm({
   const radius = isXs ? 10 : Math.max(6, 14 * scale)
   const outerPadY = isXs ? 4 : 6 * scale
 
-  const mainFontLetter = isXs ? 65 : 160 * scale
-  const mainFontNumber = isXs ? 65 : 170 * scale
+  const mainFontBase = isXs ? 65 : 160 * scale
+  const mainFontLetter = mainFontBase
+  const mainFontNumber = mainFontBase
+
   const mainGap = isXs ? 20 : 30 * scale
   const mainPx = isXs ? 6 : 32 * scale
   const mainPb = isXs ? 1 : 0
@@ -157,7 +159,6 @@ export default function PlateSelectForm({
   const digitGap = isXs ? 5 : 0 * scale
   const digitGapLetter = isXs ? 8 : 0 * scale
   const slotDropdownWidth = isXs ? 180 : 180 // одна ширина для букв и цифр
-
 
   const regionFont = isXs ? 32 : 110 * scale
   const rusFont = isXs ? 14 : 42 * scale
@@ -263,7 +264,7 @@ export default function PlateSelectForm({
   const secondLetter = text[4] ?? "*"
   const thirdLetter = text[5] ?? "*"
 
-  const placeholderLetter = "A"
+  const placeholderLetter = "А"
   const placeholderDigit = "0"
   const placeholderRegion = "77"
 
@@ -387,7 +388,9 @@ export default function PlateSelectForm({
 
   const regionDisplayValue =
     resolvedRegionCode || (regionsLoading ? "..." : explicitStars[6] ? "*" : placeholderRegion)
-  const regionDisplayColor = glyphColor(regionDisplayValue)
+
+  const isRegionPlaceholder = !resolvedRegionCode && !regionsLoading && !explicitStars[6]
+  const regionDisplayColor = isRegionPlaceholder ? "#9AA0A6" : glyphColor(regionDisplayValue)
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -565,13 +568,11 @@ export default function PlateSelectForm({
                 <img
                   src={flagSrc}
                   alt="Russia"
-                  style={{ height: flagH, border: `${flagBorder}px solid #000`, display: "block" }}
+                  style={{ height: flagH, border: `${flagBorder}px solid "#000"`, display: "block" }}
                 />
               </p>
             </div>
           </div>
-
-
         </div>
       </div>
 
@@ -593,8 +594,6 @@ export default function PlateSelectForm({
           </button>
         </div>
       )}
-
-    
     </figure>
   )
 }

@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState, useId } from "react"
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useId,
+} from "react"
 
 type SlotSelectOption = {
   value: string
@@ -31,7 +38,9 @@ type Props = {
 }
 
 const normalizeOptions = (options: Array<string | SlotSelectOption>): SlotSelectOption[] => {
-  const hasAny = options.some((opt) => (typeof opt === "string" ? opt === "*" : opt.value === "*"))
+  const hasAny = options.some((opt) =>
+    typeof opt === "string" ? opt === "*" : opt.value === "*",
+  )
 
   const withAny = hasAny
     ? options
@@ -105,6 +114,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const typeBufferRef = useRef("")
   const typeTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
 
+  // нормализованный фильтр — используем и для списка, и для подсветки внизу
   const normalizedFilter = searchable ? filter.trim().toLowerCase() : ""
 
   const filteredOptions = useMemo(() => {
@@ -365,6 +375,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
     }
   }
 
+  // ---- отображение текста в слоте ----
   const displayText = displayValue ?? value ?? ""
   const hasValue = Boolean(displayText)
   const shownText = displayText || "*"
@@ -392,28 +403,37 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
           setOpen((p) => !p)
         }}
         onKeyDown={onTriggerKeyDown}
-        className={`w-full h-full grid ${centerText ? "place-items-center" : "place-items-end"} select-none transition-colors duration-150 font-auto-number ${disabled ? "cursor-not-allowed opacity-60" : ""
-          }`}
-        style={{ lineHeight: 0.9, fontWeight: 590, fontSize, color: hasValue ? color : "#9AA0A6" }}
+        className={`w-full h-full grid ${
+          centerText ? "place-items-center" : "place-items-end"
+        } select-none transition-colors duration-150 font-auto-number ${
+          disabled ? "cursor-not-allowed opacity-60" : ""
+        }`}
+        // fontSize и fontWeight одинаковые для placeholder и реального значения
+        style={{
+          lineHeight: 0.9,
+          fontWeight: 590,
+          fontSize,
+          color: hasValue ? color : "#9AA0A6",
+        }}
         disabled={disabled}
       >
         {shownText === "*" ? (
           <span
             aria-hidden="true"
-            className='font-sans translate-y-3 '
+            className="font-sans translate-y-3"
           >
             *
           </span>
         ) : (
           shownText
         )}
-
       </button>
 
       {open && (
         <div
-          className={`absolute z-50 -mt-[10%] transition-all duration-150 ${appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
-            }`}
+          className={`absolute z-50 -mt-[10%] transition-all duration-150 ${
+            appear ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1"
+          }`}
           style={{
             top: `calc(100% + 4px)`,
             left: "50%",
@@ -425,7 +445,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
             style={{ width: menuW, maxHeight: dropdownMaxHeight, overflow: "hidden" }}
           >
             {searchable && (
-              <div className=" border-b border-neutral-200">
+              <div className="border-b border-neutral-200">
                 <input
                   ref={searchRef}
                   type="text"
@@ -442,7 +462,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               id={listboxId}
               role="listbox"
               aria-label={ariaLabel}
-              aria-activedescendant={activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined}
+              aria-activedescendant={
+                activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined
+              }
               ref={listboxRef}
               tabIndex={0}
               onKeyDown={onListboxKeyDown}
@@ -459,7 +481,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
               >
                 {filteredOptions.length === 0 ? (
                   <li className="px-4 py-3 text-center text-neutral-500 text-sm">
-                    {normalizedOptions.length === 0 ? "Нет доступных значений" : "Ничего не найдено"}
+                    {normalizedOptions.length === 0
+                      ? "Нет доступных значений"
+                      : "Ничего не найдено"}
                   </li>
                 ) : (
                   filteredOptions.map((option, index) => {
@@ -467,12 +491,25 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                     const highlighted = index === activeIndex
 
                     const lowerLabel = option.label.toLowerCase()
-                    const highlightIndex = shouldHighlight ? lowerLabel.indexOf(normalizedFilter) : -1
+                    const highlightIndex = shouldHighlight
+                      ? lowerLabel.indexOf(normalizedFilter)
+                      : -1
 
-                    const before = highlightIndex >= 0 ? option.label.slice(0, highlightIndex) : option.label
+                    const before =
+                      highlightIndex >= 0
+                        ? option.label.slice(0, highlightIndex)
+                        : option.label
                     const highlightPart =
-                      highlightIndex >= 0 ? option.label.slice(highlightIndex, highlightIndex + highlightLength) : ""
-                    const after = highlightIndex >= 0 ? option.label.slice(highlightIndex + highlightLength) : ""
+                      highlightIndex >= 0
+                        ? option.label.slice(
+                            highlightIndex,
+                            highlightIndex + highlightLength,
+                          )
+                        : ""
+                    const after =
+                      highlightIndex >= 0
+                        ? option.label.slice(highlightIndex + highlightLength)
+                        : ""
 
                     return (
                       <li key={`${option.value}-${option.label}`} className="w-full">
@@ -483,10 +520,13 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           type="button"
                           onMouseEnter={() => setActiveIndex(index)}
                           onClick={() => selectOption(option)}
-                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${selected
+                          className={`w-full flex items-center justify-center transition-colors duration-150 rounded-full border text-center font-medium ${
+                            selected
                               ? "bg-[#0177FF] text-white border-[#0177FF]"
                               : "bg-neutral-200 text-neutral-800 border-neutral-200 hover:bg-neutral-300 text-[18px]"
-                            } ${highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""}`}
+                          } ${
+                            highlighted && !selected ? "ring-2 ring-[#0177FF]/40" : ""
+                          }`}
                           style={{
                             height: optionSize,
                             width: optionSize,
@@ -501,7 +541,9 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
                           {shouldHighlight && highlightPart ? (
                             <span>
                               {before}
-                              <span className="text-[#0019FF]">{highlightPart}</span>
+                              <span className="text-[#0019FF]">
+                                {highlightPart}
+                              </span>
                               {after}
                             </span>
                           ) : (
