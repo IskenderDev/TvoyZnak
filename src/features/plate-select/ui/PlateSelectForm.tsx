@@ -263,6 +263,17 @@ export default function PlateSelectForm({
   const secondLetter = text[4] ?? "*"
   const thirdLetter = text[5] ?? "*"
 
+  const placeholderLetter = "A"
+  const placeholderDigit = "0"
+  const placeholderRegion = "77"
+
+  const firstLetterDisplay = firstLetter === "*" ? placeholderLetter : firstLetter
+  const firstDigitDisplay = firstDigit === "*" ? placeholderDigit : firstDigit
+  const secondDigitDisplay = secondDigit === "*" ? placeholderDigit : secondDigit
+  const thirdDigitDisplay = thirdDigit === "*" ? placeholderDigit : thirdDigit
+  const secondLetterDisplay = secondLetter === "*" ? placeholderLetter : secondLetter
+  const thirdLetterDisplay = thirdLetter === "*" ? placeholderLetter : thirdLetter
+
   const glyphColor = (v: string) =>
     v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
 
@@ -332,7 +343,8 @@ export default function PlateSelectForm({
     })
   }
 
-  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : "")
+  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : placeholderRegion)
+  const regionDisplayColor = resolvedRegionCode ? "#000000" : "#9AA0A6"
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
@@ -360,6 +372,7 @@ export default function PlateSelectForm({
                 ref={registerSlot(0)}
                 ariaLabel="Буква 1"
                 value={firstLetter}
+                displayValue={firstLetterDisplay}
                 onChange={handleFirstLetterChange}
                 options={LETTER_OPTIONS as unknown as string[]}
                 fontSize={mainFontLetter}
@@ -378,6 +391,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(1)}
                   ariaLabel="Цифра 1"
                   value={firstDigit}
+                  displayValue={firstDigitDisplay}
                   onChange={handleFirstDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -394,6 +408,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(2)}
                   ariaLabel="Цифра 2"
                   value={secondDigit}
+                  displayValue={secondDigitDisplay}
                   onChange={handleSecondDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -410,6 +425,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(3)}
                   ariaLabel="Цифра 3"
                   value={thirdDigit}
+                  displayValue={thirdDigitDisplay}
                   onChange={handleThirdDigitChange}
                   options={DIGIT_OPTIONS as unknown as string[]}
                   fontSize={mainFontNumber}
@@ -429,6 +445,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(4)}
                   ariaLabel="Буква 2"
                   value={secondLetter}
+                  displayValue={secondLetterDisplay}
                   onChange={handleSecondLetterChange}
                   options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
@@ -445,6 +462,7 @@ export default function PlateSelectForm({
                   ref={registerSlot(5)}
                   ariaLabel="Буква 3"
                   value={thirdLetter}
+                  displayValue={thirdLetterDisplay}
                   onChange={handleThirdLetterChange}
                   options={LETTER_OPTIONS as unknown as string[]}
                   fontSize={mainFontLetter}
@@ -484,7 +502,7 @@ export default function PlateSelectForm({
                 slotW={isXs ? 40 : Math.max(110 * scale, 130 * 1.35 * scale)}
                 slotH={isXs ? 22 : regionFont * 1.05}
                 dropdownOffsetX={-30}
-                color={glyphColor(regionDisplayValue)}
+                color={regionDisplayColor}
                 centerText
                 dropdownMaxHeight={240}
                 dropdownWidth={slotDropdownWidth}
