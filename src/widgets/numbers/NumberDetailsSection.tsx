@@ -98,7 +98,7 @@ export default function NumberDetailsSection() {
   const phone = item.phone || "—"
 
   const detailsRows = [
-    { label: "Цена", value: price },
+    { label: "Регион", value: item.plate.regionId ? `RUS ${item.plate.regionId}` : "—" },
     { label: "Дата размещения", value: publishedDate },
     { label: "Имя", value: sellerName },
     { label: "Телефон", value: phone, isPhone: !!item.phone },
@@ -118,10 +118,9 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
-      <section className="  py-6 text-white">
+      <section className="bg-black py-8 text-white sm:py-10">
         <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
-
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
             <Link to={paths.home}>
               <button
                 type="button"
@@ -133,7 +132,7 @@ export default function NumberDetailsSection() {
               </button>
             </Link>
 
-            <h1 className="text-[28px] sm:text-[34px] md:text-[40px] font-semibold">
+            <h1 className="text-[28px] font-semibold sm:text-[32px] md:text-[36px]">
               Продам номер{" "}
               <span className="font-auto-number uppercase tracking-wide">
                 {numberLabel || item.series}
@@ -141,73 +140,74 @@ export default function NumberDetailsSection() {
             </h1>
           </div>
 
-          <div className="mt-6 text-center">
-            <PlateStaticLg
-              data={{
-                price: item.price,
-                comment: item.plate.comment ?? item.description ?? "",
-                firstLetter: item.plate.firstLetter,
-                secondLetter: item.plate.secondLetter,
-                thirdLetter: item.plate.thirdLetter,
-                firstDigit: item.plate.firstDigit,
-                secondDigit: item.plate.secondDigit,
-                thirdDigit: item.plate.thirdDigit,
-                regionId: item.plate.regionId,
-              }}
-              responsive
-              showCaption
-              className="mx-auto w-[320px] xs:w-[360px] sm:w-[520px] md:w-[640px] lg:w-[720px]"
-            />
+          <div className="mt-6 rounded-3xl bg-[#1C1C1C] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.45)] sm:p-6 lg:p-8">
+            <div className="flex justify-center">
+              <PlateStaticLg
+                data={{
+                  price: item.price,
+                  comment: item.plate.comment ?? item.description ?? "",
+                  firstLetter: item.plate.firstLetter,
+                  secondLetter: item.plate.secondLetter,
+                  thirdLetter: item.plate.thirdLetter,
+                  firstDigit: item.plate.firstDigit,
+                  secondDigit: item.plate.secondDigit,
+                  thirdDigit: item.plate.thirdDigit,
+                  regionId: item.plate.regionId,
+                }}
+                responsive
+                showCaption
+                className="w-full max-w-[860px] sm:max-w-[920px]"
+              />
+            </div>
 
-            <button
-              onClick={handleBuyClick}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-12 py-3 text-base font-medium hover:bg-[#0C8BFF]"
-            >
-              Купить
-            </button>
-          </div>
-        </div>
-      <div className="mt-10">
-  {detailsRows.map((row, index) => {
-    const bg = index % 2 === 0 ? "bg-[#2C2C2C]" : "bg-transparent"
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+              <div className="rounded-2xl bg-[#222222] p-5 sm:p-6">
+                <dl className="grid gap-4 sm:gap-5">
+                  {detailsRows.map((row) => (
+                    <div key={row.label} className="space-y-1">
+                      <dt className="text-sm text-neutral-400 sm:text-base">{row.label}</dt>
+                      <dd className="text-[18px] font-medium text-white sm:text-[20px]">
+                        {row.isPhone ? (
+                          <a href={`tel:${item.phone}`} className="hover:text-white/80">
+                            {row.value}
+                          </a>
+                        ) : (
+                          row.value
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
 
-    return (
-      <div key={row.label} className={`${bg} w-full`}>
-        <div className="mx-auto w-full min-w-[1200px] px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto w-full  flex justify-center ">
-            <div
-              className="
-                grid items-center
-                grid-cols-[clamp(180px,26vw,340px)_1fr]
-                min-h-[56px] sm:min-h-[64px]
-                gap-8 sm:gap-12  min-w-[600px]
-              "
-            >
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[32px] font-semibold">
-                {row.label}
+                <div className="mt-6 flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="text-[26px] font-semibold sm:text-[30px]">{price}</div>
+                  <button
+                    onClick={handleBuyClick}
+                    className="inline-flex items-center justify-center rounded-xl bg-[#0177FF] px-10 py-3 text-base font-medium hover:bg-[#0C8BFF]"
+                  >
+                    Купить
+                  </button>
+                </div>
               </div>
 
-              <div className="text-left text-[18px] sm:text-[22px] md:text-[22px] overflow-x-hidden">
-                {row.isPhone ? (
-                  <a href={`tel:${item.phone}`} className="hover:opacity-90">
-                    {row.value}
-                  </a>
-                ) : (
-                  row.value
-                )}
+              <div className="rounded-2xl bg-[#1F1F1F] p-5 text-sm text-neutral-300 sm:p-6 sm:text-base">
+                <h2 className="mb-4 text-base font-semibold text-white sm:text-lg">
+                  Важная информация
+                </h2>
+                <ul className="list-disc space-y-4 pl-5 leading-relaxed">
+                  <li>
+                    Оформление номера возможно в регионе регистрации, уточняйте детали
+                    перед сделкой.
+                  </li>
+                  <li>
+                    Передача номера предполагает стандартную процедуру купли-продажи
+                    транспортного средства.
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    )
-  })}
-</div>
-
-
-
-
-
       </section>
     </>
   )
