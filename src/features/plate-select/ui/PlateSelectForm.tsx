@@ -267,12 +267,39 @@ export default function PlateSelectForm({
   const placeholderDigit = "0"
   const placeholderRegion = "77"
 
-  const firstLetterDisplay = firstLetter === "*" ? placeholderLetter : firstLetter
-  const firstDigitDisplay = firstDigit === "*" ? placeholderDigit : firstDigit
-  const secondDigitDisplay = secondDigit === "*" ? placeholderDigit : secondDigit
-  const thirdDigitDisplay = thirdDigit === "*" ? placeholderDigit : thirdDigit
-  const secondLetterDisplay = secondLetter === "*" ? placeholderLetter : secondLetter
-  const thirdLetterDisplay = thirdLetter === "*" ? placeholderLetter : thirdLetter
+  const [explicitStars, setExplicitStars] = React.useState(() => Array(7).fill(false))
+
+  React.useEffect(() => {
+    setExplicitStars((prev) => {
+      const next = [...prev]
+      if (firstLetter !== "*") next[0] = false
+      if (firstDigit !== "*") next[1] = false
+      if (secondDigit !== "*") next[2] = false
+      if (thirdDigit !== "*") next[3] = false
+      if (secondLetter !== "*") next[4] = false
+      if (thirdLetter !== "*") next[5] = false
+      if (resolvedRegionCode) next[6] = false
+      return next
+    })
+  }, [
+    firstLetter,
+    firstDigit,
+    secondDigit,
+    thirdDigit,
+    secondLetter,
+    thirdLetter,
+    resolvedRegionCode,
+  ])
+
+  const resolveDisplayChar = (value: string, placeholder: string, index: number) =>
+    value === "*" && !explicitStars[index] ? placeholder : value
+
+  const firstLetterDisplay = resolveDisplayChar(firstLetter, placeholderLetter, 0)
+  const firstDigitDisplay = resolveDisplayChar(firstDigit, placeholderDigit, 1)
+  const secondDigitDisplay = resolveDisplayChar(secondDigit, placeholderDigit, 2)
+  const thirdDigitDisplay = resolveDisplayChar(thirdDigit, placeholderDigit, 3)
+  const secondLetterDisplay = resolveDisplayChar(secondLetter, placeholderLetter, 4)
+  const thirdLetterDisplay = resolveDisplayChar(thirdLetter, placeholderLetter, 5)
 
   const glyphColor = (v: string) =>
     v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
@@ -309,32 +336,47 @@ export default function PlateSelectForm({
     setError(`Регион "${normalized}" не найден. Введите код из списка.`)
   }, [])
 
+  const markExplicitStar = (index: number, next: string) => {
+    setExplicitStars((prev) => {
+      const updated = [...prev]
+      updated[index] = next === "*"
+      return updated
+    })
+  }
+
   const handleFirstLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(0, next)
     applyChange({ text: setCharAt(text, 0, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleFirstDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(1, next)
     applyChange({ text: setCharAt(text, 1, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleSecondDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(2, next)
     applyChange({ text: setCharAt(text, 2, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleThirdDigitChange = (next: string) => {
     clearError()
+    markExplicitStar(3, next)
     applyChange({ text: setCharAt(text, 3, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleSecondLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(4, next)
     applyChange({ text: setCharAt(text, 4, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleThirdLetterChange = (next: string) => {
     clearError()
+    markExplicitStar(5, next)
     applyChange({ text: setCharAt(text, 5, next), regionCode: resolvedRegionCode, regionId: resolvedRegionId })
   }
   const handleRegionChange = (code: string) => {
     clearError()
+    markExplicitStar(6, code)
     const match = regions.find((region) => region.regionCode === code)
     applyChange({
       text,
@@ -343,8 +385,9 @@ export default function PlateSelectForm({
     })
   }
 
-  const regionDisplayValue = resolvedRegionCode || (regionsLoading ? "..." : placeholderRegion)
-  const regionDisplayColor = resolvedRegionCode ? "#000000" : "#9AA0A6"
+  const regionDisplayValue =
+    resolvedRegionCode || (regionsLoading ? "..." : explicitStars[6] ? "*" : placeholderRegion)
+  const regionDisplayColor = glyphColor(regionDisplayValue)
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>
