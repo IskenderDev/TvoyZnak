@@ -1,8 +1,9 @@
 export default function WhyChooseUs() {
 	const cardBase =
-		"rounded-[16px] border border-white/15 bg-white/5 backdrop-blur-[2px] " +
+		"rounded-[16px] border border-white/5 bg-white/5 backdrop-blur-[2px] " +
 		"text-[12px] md:text-[14px] leading-[1.5] px-4 py-3 shadow-[0_10px_24px_rgba(0,0,0,0.25)] " +
 		"max-w-[260px] md:max-w-[360px]"
+
 
 	return (
 		<section className="relative text-white py-10 md:py-14" aria-label="Почему выбирают нас">

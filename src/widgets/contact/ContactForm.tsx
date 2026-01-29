@@ -105,7 +105,7 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Имя *"
         required
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-4xl bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
       <input
@@ -115,7 +115,7 @@ export default function ContactForm() {
         onChange={handleChange}
         placeholder="Телефон *"
         required
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-4xl bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
       <input
@@ -124,7 +124,7 @@ export default function ContactForm() {
         value={formData.carNumber}
         onChange={handleChange}
         placeholder="Гос. номер (необязательно)"
-        className="w-full rounded-lg bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full rounded-4xl bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
       <UiSelect<LeadFormPayload["feedbackType"]>
@@ -133,7 +133,7 @@ export default function ContactForm() {
         onChange={(v) => setFormData((prev) => ({ ...prev, feedbackType: v }))}
         options={contactOptions}
         placeholder="Выберите действие"
-        className="w-full bg-white text-black rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
+        className="w-full bg-white text-black rounded-4xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
         valueClassName="text-black"
         placeholderClassName="text-[#7A7A7A]"
       />
@@ -143,7 +143,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitDisabled}
-        className="w-full rounded-lg bg-[#0177FF] hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 font-medium transition"
+        className="w-full rounded-4xl bg-[#0177FF] hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 font-medium transition"
       >
         {loading ? "Отправка..." : "Отправить"}
       </button>

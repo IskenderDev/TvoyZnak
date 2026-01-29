@@ -65,23 +65,24 @@ export default function ProjectsSection({ items }: Props) {
                   key={item.id}
                   className="shrink-0 w-[82%] sm:w-[48%] lg:w-[32%]"
                 >
-                  <article className="relative overflow-hidden rounded-2xl bg-[#131313] transition-transform duration-300 ">
-                    <div className="h-[300px] overflow-hidden">
+                  {/* карточка по макету */}
+                  <article className="flex h-full flex-col rounded-3xl bg-[#1a1a1a] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+                    {/* картинка с отступами 16px и скруглением */}
+                    <div className="mb-4 overflow-hidden rounded-3xl">
                       <img
                         src={item.cover}
                         alt={item.alt ?? item.title}
-                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.05]"
+                        className="h-[260px] w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
                         loading="lazy"
                       />
                     </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
-
-                    <div className="relative z-10 p-5 h-[260px]">
-                      <h3 className="text-sm md:text-base font-semibold tracking-wide uppercase">
+                    {/* без градиента, просто текстовая часть */}
+                    <div className="flex flex-1 flex-col gap-2">
+                      <h3 className="text-sm md:text-base font-semibold tracking-[0.12em] uppercase">
                         {item.title}
                       </h3>
-                      <p className="mt-2 text-sm text-white/80 leading-relaxed">
+                      <p className="text-sm text-white/80 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -97,12 +98,11 @@ export default function ProjectsSection({ items }: Props) {
             <button
               key={i}
               onClick={() => scrollTo(i)}
-              className={`h-2.5 w-2.5 rounded-full transition
-                ${
-                  active === i
-                    ? "bg-[#1E63FF]"
-                    : "bg-white/30 hover:bg-white/50"
-                }`}
+              className={`h-2.5 w-2.5 rounded-full transition ${
+                active === i
+                  ? "bg-[#1E63FF]"
+                  : "bg-white/30 hover:bg-white/50"
+              }`}
             />
           ))}
         </div>

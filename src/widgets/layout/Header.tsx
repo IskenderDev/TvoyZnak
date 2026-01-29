@@ -97,8 +97,7 @@ export default function Header() {
                 nav-glass
                 inline-flex items-center
                 px-4 sm:px-5
-                py-1.5
-              "
+                "
             >
               <HeaderNav />
             </div>
@@ -155,6 +154,7 @@ export default function Header() {
                     transition
                     hover:bg-white/10
                     max-w-[220px]
+                    mr-2
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5 shrink-0" />
@@ -181,6 +181,7 @@ export default function Header() {
                     backdrop-blur-xl
                     transition
                     hover:bg-white/10
+                    mr-2
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5" />

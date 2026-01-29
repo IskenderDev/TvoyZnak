@@ -15,15 +15,10 @@ type UiSelectProps<T extends string> = {
   valueClassName?: string;
   placeholderClassName?: string;
 
-
   dropdownWidth?: "trigger" | "content" | "custom";
-
   customDropdownWidth?: number;
-  
 
   minContentWidth?: number;
-  
-
   maxContentWidth?: number;
 };
 
@@ -55,7 +50,10 @@ export default function UiSelect<T extends string>({
 
   const longestLabel = useMemo(() => {
     if (!options.length) return "";
-    return options.reduce((max, o) => (o.label.length > max.length ? o.label : max), options[0].label);
+    return options.reduce(
+      (max, o) => (o.label.length > max.length ? o.label : max),
+      options[0].label
+    );
   }, [options]);
 
   useEffect(() => {
@@ -86,7 +84,7 @@ export default function UiSelect<T extends string>({
     if (typeof minContentWidth === "number") {
       w = Math.max(w, minContentWidth);
     }
-    
+
     if (typeof maxContentWidth === "number") {
       w = Math.min(w, maxContentWidth);
     }
@@ -125,29 +123,15 @@ export default function UiSelect<T extends string>({
 
   const dropdownStyle = useMemo(() => {
     let baseStyle: React.CSSProperties = {};
-    
+
     if (dropdownWidth === "custom" && typeof customDropdownWidth === "number") {
       baseStyle.width = customDropdownWidth + 24;
     } else if (dropdownWidth === "content" && contentWidth) {
       baseStyle.width = contentWidth + 24;
     }
-    
-    // Высота для 10 элементов ("Все регионы" + 9 регионов)
-    // min-h-10 (40px) + py-2 (16px) = ~56px на элемент
-    // 56px * 10 = 560px + padding = ~584px
     baseStyle.maxHeight = "584px";
-    
-    return baseStyle;
-  }, [dropdownWidth, customDropdownWidth, contentWidth]);
 
-  const pillStyle = useMemo(() => {
-    if (dropdownWidth === "custom" && typeof customDropdownWidth === "number") {
-      return { width: customDropdownWidth };
-    }
-    if (dropdownWidth === "content" && contentWidth) {
-      return { width: contentWidth };
-    }
-    return undefined;
+    return baseStyle;
   }, [dropdownWidth, customDropdownWidth, contentWidth]);
 
   return (
@@ -172,18 +156,22 @@ export default function UiSelect<T extends string>({
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className={`${className} pr-10 relative ${value ? valueClassName : placeholderClassName} text-center`}
+        className={`${className} pr-10 relative ${
+          value ? valueClassName : placeholderClassName
+        } text-center`}
       >
         <span className="flex items-center justify-center gap-2">
           {leadingIcon ? (
-            <span className="flex h-4 w-4 items-center  justify-center md:h-5 md:w-5">
+            <span className="flex h-4 w-4 items-center justify-center md:h-5 md:w-5">
               {leadingIcon}
             </span>
           ) : null}
           <span className="truncate">{current?.label ?? placeholder}</span>
         </span>
         <LuChevronDown
-          className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`absolute right-3 top-1/2 -translate-y-1/2 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
           size={18}
         />
       </button>
@@ -199,7 +187,7 @@ export default function UiSelect<T extends string>({
             "[&::-webkit-scrollbar]:hidden",
             "[-ms-overflow-style:none]",
             "[scrollbar-width:none]",
-            dropdownWidth === "trigger" ? "w-full left-0" : "left-1/2 -translate-x-1/2",
+            dropdownWidth === "trigger" ? "w-full " : "left-1/2 -translate-x-1/2",
           ].join(" ")}
         >
           {options.map((opt, idx) => {
@@ -218,18 +206,17 @@ export default function UiSelect<T extends string>({
                   onChange(opt.value);
                   setOpen(false);
                 }}
-                className="px-2 py-2 rounded-lg cursor-pointer flex justify-center"
+                className="px-2 py-2 rounded-lg cursor-pointer"
               >
-               <span
-                  style={pillStyle}
+                <span
                   className={[
-                    "inline-flex items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-xl font-semibold min-h-10",
+                    "inline-flex w-full items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-lg font-medium min-h-10",
                     "transition-colors duration-150 whitespace-nowrap",
                     selected
                       ? "bg-[#0177FF] text-white "
                       : active
-                        ? "bg-[#eeeeee] text-black border-white/40 hover:bg-[#0177FF] hover:text-white"
-                        : "text-black bg-[#eeeeee] hover:bg-[#0177FF]",
+                      ? "bg-[#eeeeee] text-black border-white/40 hover:bg-[#d8d8d8] "
+                      : "text-black bg-[#eeeeee] hover:bg-[#d8d8d8]",
                   ].join(" ")}
                 >
                   {opt.label}

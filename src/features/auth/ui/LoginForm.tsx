@@ -87,7 +87,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
             autoComplete="email"
             placeholder="Почта *"
             aria-invalid={errors.email ? "true" : "false"}
-            className="h-11 w-full rounded-[10px] border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
             {...register("email")}
           />
           {errors.email ? (
@@ -104,7 +104,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
             autoComplete="current-password"
             placeholder="Пароль *"
             aria-invalid={errors.password ? "true" : "false"}
-            className="h-11 w-full rounded-[10px] border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
             {...register("password")}
           />
           {errors.password ? (
@@ -124,7 +124,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
             {...register("remember")}
             className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
           />
-          <span className="leading-snug">Запомнить меня</span>
+          <span className="leading-snug text-white mt-1">Запомнить меня</span>
         </label>
       </div>
 
@@ -140,7 +140,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
         <Button
           type="submit"
           disabled={isSubmitting || !isValid}
-          className="h-12 w-full rounded-[10px] bg-[#1E66FF] text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-12 w-full rounded-4xl bg-[#1E66FF] text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
@@ -158,7 +158,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="h-12 w-full rounded-[10px] bg-[#3B3B3B] text-sm font-semibold text-[#E5E7EB] transition hover:bg-[#4B4B4B]"
+          className="h-12 w-full rounded-4xl bg-[#3B3B3B] text-sm font-semibold text-[#E5E7EB] transition hover:bg-[#4B4B4B]"
         >
           Зарегистрироваться
         </button>

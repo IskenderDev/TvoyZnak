@@ -76,8 +76,7 @@ export default function PlateStaticSm({
   const rusGap = 4
   const rusPb = 1
   const flagH = 14 * k
-  const flagBorder = 0.1
-
+ 
   const containerStyle: React.CSSProperties = responsive
     ? { width: "100%", maxWidth: `${W}px` }
     : { width: `${W}px` }
@@ -147,7 +146,6 @@ export default function PlateStaticSm({
                   alt="Russia"
                   style={{
                     height: flagH,
-                    border: `${flagBorder}px solid #000`,
                     display: "block",
                   }}
                 />

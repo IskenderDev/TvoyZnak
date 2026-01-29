@@ -10,7 +10,7 @@ import Container from "@/shared/components/Container"
 export default function App() {
   return (
     <AuthProvider>
-      <div className="min-h-dvh flex flex-col lg:mx-52 ">
+      <div className="min-h-dvh flex flex-col max-w-[1200px] mx-auto">
         <Header />
         <main className="flex-1">
           <Container>

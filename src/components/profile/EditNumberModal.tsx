@@ -8,7 +8,7 @@ import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-sel
 import { numbersApi } from "@/shared/services/numbersApi"
 import type { NumberItem } from "@/entities/number/types"
 import type { AdminLot } from "@/shared/api/adminLots"
-import { useStableViewportWidth } from '@/shared/lib/hooks/useStableViewport'
+import { useStableViewportWidth } from "@/shared/lib/hooks/useStableViewport"
 
 const INPUT_BASE =
   "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border"
@@ -174,13 +174,13 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     requestAnimationFrame(() => recalcViewport())
 
     queueMicrotask(() => {
-      priceInputRef.current?.focus()
-      priceInputRef.current?.setSelectionRange(
-        priceInputRef.current.value.length,
-        priceInputRef.current.value.length,
-      )
+      if (!priceInputRef.current) return
+      const el = priceInputRef.current
+      el.focus()
+      const len = el.value.length
+      el.setSelectionRange(len, len)
     })
-  }, [open, lotId, recalcViewport])
+  }, [open, lotId, recalcViewport, lot])
 
   const isSubmitDisabled = useMemo(() => {
     if (!open) return true
@@ -261,7 +261,8 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
       {toast ? <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} /> : null}
 
       <Modal open={open && Boolean(lot)} onClose={handleClose}>
-        <div className="relative max-h-[90vh] overflow-hidden rounded-[32px] bg-[#fff] text-black shadow-2xl">
+        {/* сама модалка шириной до 1200px */}
+        <div className="relative max-h-[90vh] w-full max-w-[1200px] overflow-hidden rounded-[32px] bg-[#fff] text-black shadow-2xl">
           <button
             type="button"
             onClick={handleClose}
@@ -272,8 +273,11 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
           </button>
 
           <div className="max-h-[90vh] overflow-y-auto px-6 pb-8 pt-10 sm:px-10 sm:pb-10 sm:pt-12">
-            <div className="mx-auto w-full max-w-[640px]">
-              <h2 className="text-center text-3xl uppercase md:text-4xl">Изменение объявления</h2>
+            {/* контент тоже до 1200px */}
+            <div className="mx-auto w-full max-w-[1200px]">
+              <h2 className="text-center text-2xl uppercase sm:text-3xl md:text-4xl">
+                Изменение объявления
+              </h2>
               <p className="mt-3 text-center text-sm text-black/70 md:text-base">
                 Обновите данные номера и сохраните изменения.
               </p>
@@ -282,15 +286,19 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
                 <PlateSelectForm
                   size={plateSize}
                   responsive
-                  className='mx-auto'
+                  className="mx-auto"
                   flagSrc="/flag-russia.svg"
-                  showCaption={true}
+                  showCaption
                   value={plate}
                   onChange={setPlate}
                 />
               </div>
 
-              <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
+              {/* форма теперь шире — до 960px, чтобы инпуты растянулись */}
+              <form
+                className="mt-6 w-full max-w-[960px] mx-auto space-y-6 md:mt-8"
+                onSubmit={handleSubmit}
+              >
                 <input
                   ref={priceInputRef}
                   type="text"
@@ -313,7 +321,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
                 {error ? <p className="text-sm text-[#EB5757]">{error}</p> : null}
 
-                <div className="flex justify-center">
+                <div className="flex justify-center md:justify-end">
                   <button
                     type="submit"
                     disabled={isSubmitDisabled}

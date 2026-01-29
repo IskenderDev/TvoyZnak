@@ -379,6 +379,7 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
   const displayText = displayValue ?? value ?? ""
   const hasValue = Boolean(displayText)
   const shownText = displayText || "*"
+  const isPlaceholder = !hasValue || shownText === "*"
 
   const highlightLength = searchable ? filter.length : 0
   const shouldHighlight = searchable && normalizedFilter && highlightLength > 0
@@ -408,12 +409,15 @@ const SlotSelect = React.forwardRef<HTMLButtonElement, Props>(function SlotSelec
         } select-none transition-colors duration-150 font-auto-number ${
           disabled ? "cursor-not-allowed opacity-60" : ""
         }`}
-        // fontSize и fontWeight одинаковые для placeholder и реального значения
+        // одинаковые fontSize/fontWeight для placeholder и реального значения
         style={{
           lineHeight: 0.9,
           fontWeight: 590,
           fontSize,
-          color: hasValue ? color : "#9AA0A6",
+          color: isPlaceholder ? "#d7d7d7" : color,
+          WebkitTextStroke: isPlaceholder ? "1px #bebebe" : "0",
+          // fallback для браузеров без text-stroke
+          textShadow: isPlaceholder ? "0 0 0 #bebebe" : "none",
         }}
         disabled={disabled}
       >

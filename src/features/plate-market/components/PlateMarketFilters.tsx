@@ -36,7 +36,7 @@ export const  PlateMarketFilters = ({
       <div className="">
         <PlateSelectForm320 value={plateQuery} onChange={onPlateQueryChange} />
       </div>
-      <div className="flex w-full flex-wrap items-center gap-3 rounded-3xl bg-white px-4 py-3 sm:px-6 md:px-10">
+      <div className="flex w-full flex-wrap items-center gap-3 rounded-4xl bg-white p-4  sm:p-6 md:p-4">
         <UiSelect
           name="region"
           value={region}
@@ -59,12 +59,12 @@ export const  PlateMarketFilters = ({
           dropdownWidth="content"
           minContentWidth={300}
           maxContentWidth={400}
-          className="w-[85vw] md:w-[350px]  flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
+          className="w-[85vw] md:w-[350px] flex-1 rounded-full bg-[#eeeeee] px-4 py-2 text-sm text-black shadow-sm md:text-lg"
         />
         <button
           type="button"
           onClick={onReset}
-          className="w-full rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-black/5 sm:ml-auto sm:w-auto flex items-center justify-center gap-2 md:text-lg" 
+          className="w-full rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-black/5 sm:ml-auto sm:w-auto flex items-center justify-center gap-2 md:text-lg bg-[#eeeeee] " 
         >
           <RiDeleteBin5Line className="h-4 w-4 text-black/60 md:h-5 md:w-5" /> Сбросить 
         </button>

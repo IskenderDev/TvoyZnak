@@ -1,54 +1,54 @@
-import type { CSSProperties, ReactNode } from "react";
-import { LuPencilLine } from "react-icons/lu";
+import type { CSSProperties, ReactNode } from "react"
+import { LuPencilLine } from "react-icons/lu"
 
-import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm";
+import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm"
 
-const GRID_COLS = "140px minmax(260px,1fr) 200px minmax(220px,1fr) 180px";
+const GRID_COLS = "140px minmax(260px,1fr) 200px minmax(220px,1fr) 180px"
 
 export type ProfileInfoField = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
 export type ProfileLotRow = {
-  id: string;
-  dateLabel: string;
-  plate: PlateData;
-  priceLabel: string;
-  sellerLabel: string;
-  onDelete: () => void;
-  isDeleting: boolean;
-  deleteLabel: string;
-  deletingLabel: string;
-  onEdit?: () => void;
-  editLabel?: string;
-};
+  id: string
+  dateLabel: string
+  plate: PlateData
+  priceLabel: string
+  sellerLabel: string
+  onDelete: () => void
+  isDeleting: boolean
+  deleteLabel: string
+  deletingLabel: string
+  onEdit?: () => void
+  editLabel?: string
+}
 
 export type ProfileLayoutLikeCatalogProps = {
-  pageTitle: string;
+  pageTitle: string
   profileCard: {
-    eyebrow?: string;
-    title: string;
-    description?: string;
-    actions?: ReactNode;
-    fields?: ProfileInfoField[];
-  };
+    eyebrow?: string
+    title: string
+    description?: string
+    actions?: ReactNode
+    fields?: ProfileInfoField[]
+  }
   lotsCard: {
-    title: string;
-    subtitle?: string;
-    headerActions?: ReactNode;
-    items: ProfileLotRow[];
-    loading: boolean;
-    loadingLabel?: string;
-    error?: string | null;
-    emptyLabel: string;
-    canShowMore: boolean;
-    onShowMore?: () => void;
-    showMoreLabel?: string;
-  };
-};
+    title: string
+    subtitle?: string
+    headerActions?: ReactNode
+    items: ProfileLotRow[]
+    loading: boolean
+    loadingLabel?: string
+    error?: string | null
+    emptyLabel: string
+    canShowMore: boolean
+    onShowMore?: () => void
+    showMoreLabel?: string
+  }
+}
 
-const DESKTOP_COLS_STYLE: CSSProperties = { "--cols": GRID_COLS } as CSSProperties;
+const DESKTOP_COLS_STYLE: CSSProperties = { "--cols": GRID_COLS } as CSSProperties
 
 export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsCard }: ProfileLayoutLikeCatalogProps) {
   const {
@@ -57,7 +57,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
     description,
     actions,
     fields,
-  } = profileCard;
+  } = profileCard
 
   const {
     title: lotsTitle,
@@ -71,9 +71,9 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
     canShowMore,
     onShowMore,
     showMoreLabel,
-  } = lotsCard;
+  } = lotsCard
 
-  const hasFields = Boolean(fields && fields.length);
+  const hasFields = Boolean(fields && fields.length)
 
   return (
     <section className="min-h-screen  py-12 text-white">
@@ -145,7 +145,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                       >
                         <span className="tabular-nums text-black/80">{item.dateLabel}</span>
                         <div className="flex items-center justify-center">
-                          <PlateStaticSm data={item.plate} responsive  className="mx-auto max-w-[210px]" />
+                          <PlateStaticSm data={item.plate} responsive className="mx-auto max-w-[210px]" />
                         </div>
                         <span className="text-base font-medium text-black">{item.priceLabel}</span>
                         <span className="text-black/80">{item.sellerLabel}</span>
@@ -159,7 +159,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                                 aria-label={item.editLabel ?? "Изменить номер"}
                               >
                                 <LuPencilLine className="h-4 w-4" />
-                                
+
                               </button>
                             ) : null}
                             <button
@@ -186,7 +186,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                       </div>
 
                       <div className="mt-3 flex justify-center">
-                        <PlateStaticSm data={item.plate} responsive  className="max-w-[210px]" />
+                        <PlateStaticSm data={item.plate} responsive className="max-w-[210px]" />
                       </div>
 
                       <dl className="mt-4 grid gap-2 text-sm">
@@ -215,10 +215,20 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                           type="button"
                           onClick={item.onDelete}
                           disabled={item.isDeleting}
-                          className="flex-1 rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
+                          className="
+    flex-1 rounded-full
+    border border-red-500
+    px-4 py-2
+    text-sm font-medium text-red-600
+    transition
+    hover:bg-red-50
+    disabled:cursor-not-allowed
+    disabled:opacity-60
+  "
                         >
                           {item.isDeleting ? item.deletingLabel : item.deleteLabel}
                         </button>
+
                       </div>
                     </li>
                   ))}
@@ -241,5 +251,5 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
         </div>
       </div>
     </section>
-  );
+  )
 }

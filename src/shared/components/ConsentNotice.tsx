@@ -4,7 +4,7 @@ type ConsentNoticeProps = {
 
 export default function ConsentNotice({ className }: ConsentNoticeProps) {
   const baseClasses =
-    "text-xs leading-relaxed text-[#6B7280] md:text-[13px]" + (className ? ` ${className}` : "")
+    "text-xs leading-relaxed text-[#bebebe] md:text-[13px]" + (className ? ` ${className}` : "")
 
   return (
     <p className={baseClasses}>

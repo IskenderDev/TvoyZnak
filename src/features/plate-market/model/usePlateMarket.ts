@@ -9,6 +9,13 @@ import type { NumberItem } from "@/entities/number/types";
 
 const DEFAULT_LIMIT = 8;
 
+const PRIORITY_REGION_NAMES = [
+  "Москва",
+  "Московская область",
+  "Санкт-Петербург",
+  "Ленинградская область",
+];
+
 const createInitialState = (): PlateMarketFiltersState => ({
   region: "",
   category: "",
@@ -95,14 +102,37 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
       }
     });
 
+    const allOptions = Array.from(base).map((value) => {
+      const rawLabel = regionLabels.get(value) ?? value;
+      const label = rawLabel.trim();
+      return { value, label };
+    });
+
+    const priorityNameSet = new Set(PRIORITY_REGION_NAMES);
+
+    const priorityOptions: { value: string; label: string }[] = [];
+    const regularOptions: { value: string; label: string }[] = [];
+
+    allOptions.forEach((option) => {
+      if (priorityNameSet.has(option.label)) {
+        priorityOptions.push(option);
+      } else {
+        regularOptions.push(option);
+      }
+    });
+
+    regularOptions.sort((a, b) => a.label.localeCompare(b.label, "ru"));
+
+    const seenLabels = new Set<string>();
+    const finalOptions = [...priorityOptions, ...regularOptions].filter((opt) => {
+      if (seenLabels.has(opt.label)) return false;
+      seenLabels.add(opt.label);
+      return true;
+    });
+
     return [
       { label: "Все регионы", value: "" },
-      ...Array.from(base)
-        .map((value) => ({
-          value,
-          label: regionLabels.get(value) ?? value,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label, "ru")),
+      ...finalOptions,
     ];
   }, [items, regionLabels]);
 
@@ -150,7 +180,6 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
       if (prev.sortField !== field) {
         return { ...prev, sortField: field, sortDir: "desc" };
       }
-
       return { ...prev, sortDir: prev.sortDir === "asc" ? "desc" : "asc" };
     });
   }, []);

@@ -303,7 +303,7 @@ export default function PlateSelectForm({
   const thirdLetterDisplay = resolveDisplayChar(thirdLetter, placeholderLetter, 5)
 
   const glyphColor = (v: string) =>
-    v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#9AA0A6"
+    v && v !== "*" && v !== "—" && v !== "..." ? "#000000" : "#d7d7d7"
 
   const createCommitHandler = React.useCallback(
     (index: number) => () => {
@@ -390,7 +390,7 @@ export default function PlateSelectForm({
     resolvedRegionCode || (regionsLoading ? "..." : explicitStars[6] ? "*" : placeholderRegion)
 
   const isRegionPlaceholder = !resolvedRegionCode && !regionsLoading && !explicitStars[6]
-  const regionDisplayColor = isRegionPlaceholder ? "#9AA0A6" : glyphColor(regionDisplayValue)
+  const regionDisplayColor = isRegionPlaceholder ? "#d7d7d7" : glyphColor(regionDisplayValue)
 
   return (
     <figure className={`flex flex-col ${className} text-black`} style={containerStyle}>

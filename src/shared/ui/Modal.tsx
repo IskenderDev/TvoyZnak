@@ -102,7 +102,7 @@ export default function Modal({ open, onClose, children }: PropsWithChildren<Mod
       />
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-[720px] outline-none"
+        className="relative z-10 w-full max-w-[1200px] outline-none"
         tabIndex={-1}
         role="document"
       >

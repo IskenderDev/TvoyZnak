@@ -265,7 +265,7 @@ export default function PlaceAdForm() {
             />
           </div>
 
-          <p className="text-[12px] text-[#d4d4d4]">
+          <p className="text-[12px] text-[#bebebe]">
             <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
@@ -307,7 +307,7 @@ export default function PlaceAdForm() {
 }
 
 const INPUT_BASE =
-  "bg-[#F8F9FA] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]";
+  "bg-[#F8F9FA] text-black placeholder-[#777] rounded-4xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]";
 
 const normalizePrice = (value: string): number => {
   if (!value) return NaN;

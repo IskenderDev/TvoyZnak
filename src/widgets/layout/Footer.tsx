@@ -8,8 +8,8 @@ export default function Footer() {
   const location = useLocation()
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `transition-colors duration-200 font-[400] text-[14px] ${
-      isActive ? "text-[#85B6FF]" : "text-white hover:text-[#85B6FF]"
+    `transition-colors duration-200 hover:text-[#85B6FF] font-[400] text-[14px] ${
+      isActive ? "text-white" : "text-white hover:text-[#85B6FF]"
     }`
 
   const handleNavClick = useCallback((path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -30,7 +30,6 @@ export default function Footer() {
     <footer className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] text-white p-10">
       <Container>
         <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto">
-          {/* ЛОГОТИП */}
           <div className="flex flex-col items-start order-1 md:order-none">
             <div className="my-6 md:my-10">
               <Link 
@@ -47,7 +46,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* ТЕЛЕФОН + СОЦСЕТИ (на мобилке идёт сразу после логотипа) */}
           <div className="flex flex-col items-start md:items-end gap-3 order-2 md:order-last">
             <a
               href="tel:+79959202090"
@@ -80,11 +78,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* МЕНЮ (на мобилке уходит вниз, как на скрине) */}
           <div className="grid grid-cols-2 gap-8 sm:gap-16 order-3 md:order-none">
             <div>
               <h4 className="text-[18px] font-medium mb-3">Основные</h4>
-              <ul className="flex flex-col gap-2">
+              <ul className="flex flex-col gap-2 text-white">
                 <li>
                   <NavLink 
                     to={paths.home} 
@@ -142,7 +139,7 @@ export default function Footer() {
                     className={linkClass}
                     onClick={handleNavClick("/services")}
                   >
-                    Оценка авто номера
+                    Оценка автономера
                   </NavLink>
                 </li>
                 <li>
@@ -151,7 +148,7 @@ export default function Footer() {
                     className={linkClass}
                     onClick={handleNavClick("/services")}
                   >
-                    Быстрый выкуп авто номера
+                    Быстрый выкуп автономера
                   </NavLink>
                 </li>
                 <li>
@@ -160,7 +157,7 @@ export default function Footer() {
                     className={linkClass}
                     onClick={handleNavClick("/services")}
                   >
-                    Продажа авто номеров из наличия
+                    Продажа автономеров из наличия
                   </NavLink>
                 </li>
                 <li>
@@ -169,7 +166,7 @@ export default function Footer() {
                     className={linkClass}
                     onClick={handleNavClick("/services")}
                   >
-                    Поиск авто номера под ваш запрос
+                    Поиск автономера под запрос
                   </NavLink>
                 </li>
               </ul>

@@ -39,9 +39,9 @@ export default function HeaderNav({
     "relative flex items-center font-[400] transition-colors duration-200";
 
   const horizontalText =
-    "justify-center text-[15px] text-slate-100 hover:text-white px-1 py-1";
+    "justify-center text-[15px] text-slate-100 hover:text-white px-1 ";
   const verticalText =
-    "w-full justify-start pl-4 text-base py-1.5 text-slate-100 hover:text-white";
+    "w-full justify-start pl-4 text-base text-slate-100 hover:text-white";
 
   const activeHorizontal =
     "text-white after:absolute after:-bottom-[1px] after:left-1/2 after:h-0.5 after:w-8 after:-translate-x-1/2 after:rounded-full after:bg-[#2F8DFF]";
