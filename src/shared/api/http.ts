@@ -12,8 +12,8 @@ const baseURL = (() => {
     return candidate;
   }
 
-  // return "http://31.172.72.119:8081";
-  return "http://localhost:8081";
+  return "http://31.172.72.119:8081";
+  // return "http://localhost:8081";
 })();
 
 const http = axios.create({
