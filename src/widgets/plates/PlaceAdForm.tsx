@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import UiSelect from "@/shared/components/UiSelect";
 import Toast from "@/shared/components/Toast";
 import ConsentNotice from "@/shared/components/ConsentNotice";
 import PlateSelectForm from "@/features/plate-select/ui/PlateSelectForm";
@@ -63,9 +62,6 @@ export default function PlaceAdForm() {
     }));
   };
 
-  const handleTypeChange = (value: string) => {
-    setForm((prev) => ({ ...prev, type: value }));
-  };
 
   const isSubmitDisabled =
     loading ||
