@@ -61,7 +61,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         style={style}
         aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
       >
-        <time className="tabular-nums text-sm text-black md:text-lg">
+        <time className="tabular-nums text-sm font-light text-black/65 md:text-lg">
           {row.date ? formatDate(row.date) : "—"}
         </time>
 
@@ -70,10 +70,10 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         </div>
 
         <div className="tabular-nums text-sm md:text-lg w-[200px]">
-          <span className="font-medium">{priceLabel}</span>
+          <span className="font-[400]">{priceLabel}</span>
         </div>
 
-        <div className="text-sm md:text-lg">{row.seller}</div>
+        <div className="text-sm font-light md:text-lg text-black/65">{row.seller}</div>
 
         <div className="justify-self-end">
           <button

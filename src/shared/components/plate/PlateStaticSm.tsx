@@ -106,7 +106,7 @@ export default function PlateStaticSm({
                 {firstLetter}
               </span>
 
-              <div className="flex" style={{ fontSize: mainFontNumbers, lineHeight: 0.5, gap: digitGap }}>
+              <div className="flex" style={{ fontSize: mainFontNumbers, lineHeight: 0.4, gap: digitGap }}>
                 <span>{data.firstDigit ?? "*"}</span>
                 <span>{data.secondDigit ?? "*"}</span>
                 <span>{data.thirdDigit ?? "*"}</span>
@@ -130,7 +130,7 @@ export default function PlateStaticSm({
                 boxSizing: "border-box",
               }}
             >
-              <p className="font-bold" style={{ fontSize: regionFont, lineHeight: 1, }}>
+              <p style={{ fontSize: regionFont, lineHeight: 1, }}>
                 {regionLabel}
               </p>
 
@@ -138,7 +138,7 @@ export default function PlateStaticSm({
                 className="flex items-center justify-center"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb, }}
               >
-                <span className="font-extrabold" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className='font-medium font-manrope' style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img

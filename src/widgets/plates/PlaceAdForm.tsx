@@ -269,13 +269,7 @@ export default function PlaceAdForm() {
             <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
           </p>
 
-          <UiSelect
-            name="type"
-            placeholder="Выберите действие"
-            options={TYPE_OPTIONS}
-            value={form.type}
-            onChange={handleTypeChange}
-          />
+        
 
           <textarea
             className={`${INPUT_BASE} w-full min-h-[110px] resize-y`}

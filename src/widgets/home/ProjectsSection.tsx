@@ -53,7 +53,7 @@ export default function ProjectsSection({ items }: Props) {
   return (
     <section className="py-16 text-white">
       <div className="mx-auto max-w-[1200px] px-6 md:px-10">
-        <h2 className="mb-10 text-center text-2xl md:text-4xl font-semibold tracking-wide uppercase">
+        <h2 className="mb-10 text-center text-2xl md:text-4xl font-bold tracking-wide uppercase">
           Наши готовые работы
         </h2>
 
@@ -65,9 +65,7 @@ export default function ProjectsSection({ items }: Props) {
                   key={item.id}
                   className="shrink-0 w-[82%] sm:w-[48%] lg:w-[32%]"
                 >
-                  {/* карточка по макету */}
                   <article className="flex h-full flex-col rounded-3xl bg-[#1a1a1a] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
-                    {/* картинка с отступами 16px и скруглением */}
                     <div className="mb-4 overflow-hidden rounded-3xl">
                       <img
                         src={item.cover}

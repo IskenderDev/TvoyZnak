@@ -12,13 +12,13 @@ export default function HeroSection() {
 
       <div className="relative mx-auto flex min-h-[70svh] max-w-[1200px] items-center px-4 py-12 sm:px-6 md:px-8 lg:px-10 lg:py-16">
         <div className="grid w-full items-center gap-40  md:gap-70">
-            <div className="relative z-10 max-w-xl">
-            <h1 className="text-3xl font-extrabold uppercase leading-tight tracking-tight sm:text-4xl md:text-5xl">
+            <div className="relative z-10 max-w-2xl">
+            <h1 className="text-3xl font-bold uppercase leading-tight tracking-tight sm:text-4xl md:text-5xl max-w-xl">
               Красивые
               автомобильные номера
             </h1>
 
-            <p className="mt-4 text-sm text-neutral-300 sm:text-base md:text-lg md:leading-relaxed">
+            <p className="mt-4 text-sm text-neutral-300 sm:text-base md:text-2xl font-[400]  md:leading-relaxed">
               Оценка, покупка и продажа красивых автономеров.
             </p>
 
@@ -40,7 +40,7 @@ export default function HeroSection() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 to="/contacts"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none focus-visible:ring-2 md:text-base"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none font-medium   focus-visible:ring-2 md:text-base"
               >
                 <FaTelegramPlane className="h-4 w-4 md:h-5 md:w-5" />
                 <span>Запросить список</span>

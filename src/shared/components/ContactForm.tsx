@@ -112,6 +112,16 @@ export default function ContactForm() {
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
+            
+            <input
+              type="text"
+              name="carNumber"
+              value={formData.carNumber}
+              onChange={handleChange}
+              placeholder="Автомобильный номер (необязательно)"
+              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+            />
+
             <div className="space-y-1">
               <UiSelect
                 name="feedbackType"
@@ -126,14 +136,6 @@ export default function ContactForm() {
               )}
             </div>
 
-            <input
-              type="text"
-              name="carNumber"
-              value={formData.carNumber}
-              onChange={handleChange}
-              placeholder="Автомобильный номер (необязательно)"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
-            />
           </div>
 
           <ConsentNotice className="text-[#94A3B8]" />

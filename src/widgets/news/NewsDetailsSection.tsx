@@ -60,10 +60,9 @@ export default function NewsDetailsSection() {
     }
   }, [item])
 
-
   if (loading) {
     return (
-      <section className=" text-white min-h-screen flex items-center justify-center">
+      <section className="text-white min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Загрузка…</p>
       </section>
     )
@@ -71,7 +70,7 @@ export default function NewsDetailsSection() {
 
   if (error) {
     return (
-      <section className=" text-white min-h-screen flex items-center justify-center">
+      <section className="text-white min-h-screen flex items-center justify-center">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -79,7 +78,7 @@ export default function NewsDetailsSection() {
 
   if (!item) {
     return (
-      <section className=" text-white min-h-screen flex items-center justify-center">
+      <section className="text-white min-h-screen flex items-center justify-center">
         <p className="text-neutral-300">Новость не найдена</p>
       </section>
     )
@@ -92,7 +91,7 @@ export default function NewsDetailsSection() {
         description={item.excerpt || item.content?.slice(0, 180)}
       />
 
-      <section className=" text-white min-h-screen">
+      <section className="text-white min-h-screen">
         <div className="mx-auto max-w-9xl px-4 md:px-6 py-6">
           <Link
             to="/news"
@@ -101,7 +100,7 @@ export default function NewsDetailsSection() {
             <span className="-mt-[1px]">←</span> Все новости
           </Link>
 
-          <article className=" overflow-hidden">
+          <article className="overflow-hidden">
             <div className="flex flex-col lg:flex-row gap-0">
               {item.cover ? (
                 <div className="lg:w-[46%] relative">
@@ -116,19 +115,28 @@ export default function NewsDetailsSection() {
 
               <div className="flex-1 p-6 md:p-8">
                 {meta.date && (
-                  <time dateTime={meta.dateTime} className="inline-block text-lg text-neutral-400 mb-4">
+                  <time
+                    dateTime={meta.dateTime}
+                    className="inline-block text-lg text-neutral-400 mb-4"
+                  >
                     {meta.date}
                   </time>
                 )}
 
-                <h1 className="uppercase font-extrabold tracking-wide leading-tight text-white text-[26px] md:text-[34px] mb-4">
+                <h1 className="uppercase font-bold tracking-wide leading-tight text-white text-[26px] md:text-[36px] mb-4">
                   {item.title}
                 </h1>
 
                 {item.excerpt && (
-                  <p className="mb-6 text-[15px] md:text-2xl">
+                  <p className="mb-6 text-[15px] font-[400] md:text-lg">
                     {item.excerpt}
                   </p>
+                )}
+
+                {item.content && (
+                  <div className="mt-4 text-[15px] md:text-lg leading-relaxed whitespace-pre-line">
+                    {item.content}
+                  </div>
                 )}
               </div>
             </div>
@@ -152,7 +160,6 @@ export default function NewsDetailsSection() {
   )
 }
 
-
 const formatDateShort = (value: string): string => {
   const d = new Date(value)
   if (Number.isNaN(+d)) return ""
@@ -161,4 +168,3 @@ const formatDateShort = (value: string): string => {
   const yyyy = d.getFullYear()
   return `${dd}.${mm}.${yyyy}`
 }
-

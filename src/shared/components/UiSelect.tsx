@@ -210,7 +210,7 @@ export default function UiSelect<T extends string>({
               >
                 <span
                   className={[
-                    "inline-flex w-full items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-lg font-medium min-h-10",
+                    "inline-flex w-full items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-lg font-[400] min-h-10",
                     "transition-colors duration-150 whitespace-nowrap",
                     selected
                       ? "bg-[#0177FF] text-white "

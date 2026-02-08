@@ -29,7 +29,7 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] text-white p-10">
       <Container>
-        <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto">
+        <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto max-w-[1120px]">
           <div className="flex flex-col items-start order-1 md:order-none">
             <div className="my-6 md:my-10">
               <Link 
@@ -157,7 +157,7 @@ export default function Footer() {
                     className={linkClass}
                     onClick={handleNavClick("/services")}
                   >
-                    Продажа автономеров из наличия
+                    Продажа автономеров
                   </NavLink>
                 </li>
                 <li>

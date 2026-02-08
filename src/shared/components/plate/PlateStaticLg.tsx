@@ -116,7 +116,7 @@ export default function PlateStaticLg({
             style={{ height: "100%" }}
           >
             <div
-              className="flex items-end justify-center bg-white font-bold uppercase"
+              className="flex items-end justify-center bg-white uppercase"
               style={{
                 width: "70%",
                 border: `${borderW}px solid #000`,
@@ -164,7 +164,6 @@ export default function PlateStaticLg({
               }}
             >
               <p
-                className="font-bold"
                 style={{ fontSize: regionFont, lineHeight: 1, margin: 0 }}
               >
                 {regionLabel || "*"}
@@ -175,7 +174,7 @@ export default function PlateStaticLg({
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb }}
               >
                 <span
-                  className="font-extrabold font-auto-number"
+                  className="font-medium font-manrope"
                   style={{ fontSize: rusFont, lineHeight: 1 }}
                 >
                   RUS

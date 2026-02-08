@@ -30,13 +30,13 @@ export const PlateMarketTable = ({
   return (
     <div className={`overflow-hidden rounded-2xl bg-white text-black ${className}`}>
       <div
-        className="grid items-center gap-4 border-b border-black/10 px-6 py-3 text-lg font-bold [grid-template-columns:var(--cols)] text-center"
+        className="grid items-center gap-4 border-b text-black/65 border-black/10 px-6 py-3 text-lg font-light [grid-template-columns:var(--cols)] text-center"
         style={style}
       >
         <button
           type="button"
           onClick={() => onSort("date")}
-          className="mx-auto flex items-center gap-1 tabular-nums"
+          className="mx-auto flex items-center gap-1 tabular-nums "
           title="Сортировать по дате"
         >
           Дата

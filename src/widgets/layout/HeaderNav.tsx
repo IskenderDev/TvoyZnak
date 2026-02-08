@@ -39,7 +39,7 @@ export default function HeaderNav({
     "relative flex items-center font-[400] transition-colors duration-200";
 
   const horizontalText =
-    "justify-center text-[15px] text-slate-100 hover:text-white px-1 ";
+    "justify-center text-[17px] text-slate-100 hover:text-white px-1 ";
   const verticalText =
     "w-full justify-start pl-4 text-base text-slate-100 hover:text-white";
 

@@ -32,7 +32,7 @@ export default function NewsCard({ news }: Props) {
 
         <Link
           to={`/news/${news.id}`}
-          className="block mt-5 text-center text-white bg-[#0177FF] hover:bg-[#046FFF] rounded-xl py-2 font-sans font-medium"
+          className="block mt-5 text-center text-white bg-[#0177FF] hover:bg-[#046FFF] rounded-4xl py-2 font-sans font-medium"
         >
           Читать больше
         </Link>

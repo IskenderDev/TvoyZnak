@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 @import "tailwindcss";
 @reference "tailwindcss";
 
@@ -12,7 +13,12 @@
 
 @theme {
   --font-sans: "Rubik", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
   --font-auto-number: "AutoNumber_Regular", "Rubik", sans-serif;
+}
+
+@utility font-manrope {
+  font-family: var(--font-manrope);
 }
 
 @utility font-auto-number {
@@ -28,8 +34,9 @@ html.dark {
 }
 
 body {
-  @apply bg-[#030305] antialiased font-sans overflow-x-hidden;
+  @apply bg-[#0b0b0c] antialiased font-sans overflow-x-hidden;
 }
+
 a {
   cursor: pointer;
 }
@@ -47,7 +54,6 @@ button {
 
 button::-moz-focus-inner {
   border: 0;
-
   cursor: pointer;
 }
 
@@ -63,12 +69,11 @@ button::-moz-focus-inner {
 .nav-glass {
   position: relative;
   border-radius: 9999px;
-
   padding-top: 15px;
   padding-bottom: 15px;
+
   background-color: rgba(255, 255, 255, 0.04);
-  border: solid 1px;
-  border-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

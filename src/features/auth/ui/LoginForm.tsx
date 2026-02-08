@@ -118,11 +118,11 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
       <div className="flex flex-col gap-3 text-[13px] text-slate-300">
         <ConsentNotice />
 
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             {...register("remember")}
-            className="mt-0.5 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
+            className="mt-1 h-4 w-4 rounded-[4px] border border-[#94A3B8] text-[#1E66FF] transition-all duration-200"
           />
           <span className="leading-snug text-white mt-1">Запомнить меня</span>
         </label>
