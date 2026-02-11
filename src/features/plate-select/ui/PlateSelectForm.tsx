@@ -562,7 +562,7 @@ export default function PlateSelectForm({
                 className="flex items-center justify-center m-0"
                 style={{ height: rusRowH, gap: rusGap, paddingBottom: rusPb }}
               >
-                <span className="font-extrabold font-auto-number" style={{ fontSize: rusFont, lineHeight: 1 }}>
+                <span className="font-medium font-manrope" style={{ fontSize: rusFont, lineHeight: 1 }}>
                   RUS
                 </span>
                 <img
