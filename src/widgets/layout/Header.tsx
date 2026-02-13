@@ -18,7 +18,18 @@ export default function Header() {
   const { openLogin } = useAuthModal()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  const userRoles = user?.roles?.length ? user.roles : user?.role ? [user.role] : []
+  // 🔥 функция обрезания имени
+  const truncateName = (name: string, max = 7) => {
+    const trimmed = name.trim()
+    return trimmed.length > max ? `${trimmed.slice(0, max)}...` : trimmed
+  }
+
+  const userRoles = user?.roles?.length
+    ? user.roles
+    : user?.role
+    ? [user.role]
+    : []
+
   const isAdmin = userRoles.includes("admin")
   const userDestination = isAdmin ? paths.admin.lots : paths.profile
 
@@ -28,7 +39,9 @@ export default function Header() {
 
   const handleLoginClick = useCallback(() => {
     openLogin({
-      redirectTo: `${location.pathname}${location.search}${location.hash}` || paths.profile,
+      redirectTo:
+        `${location.pathname}${location.search}${location.hash}` ||
+        paths.profile,
     })
   }, [location.hash, location.pathname, location.search, openLogin])
 
@@ -65,8 +78,6 @@ export default function Header() {
         overflow-hidden
       "
     >
-  
-
       <Container>
         <div
           className="
@@ -79,10 +90,7 @@ export default function Header() {
           <Link
             to={paths.home}
             onClick={handleLogoClick}
-            className="
-              shrink-0
-              inline-flex items-center
-            "
+            className="shrink-0 inline-flex items-center"
           >
             <img
               src="/logo.svg"
@@ -92,13 +100,7 @@ export default function Header() {
           </Link>
 
           <div className="hidden flex-1 justify-center lg:flex">
-            <div
-              className="
-                nav-glass
-                inline-flex items-center
-                px-4 sm:px-5
-                "
-            >
+            <div className="nav-glass inline-flex items-center px-4 sm:px-5">
               <HeaderNav />
             </div>
           </div>
@@ -129,7 +131,7 @@ export default function Header() {
                   bg-[#0075ff]
                   px-4 sm:px-5
                   py-2 sm:py-2.5
-                  text- sm:text-sm font-semibold
+                  text-sm font-semibold
                   transition
                   hover:bg-[#0063e6]
                   whitespace-nowrap
@@ -143,12 +145,12 @@ export default function Header() {
                   to={userDestination}
                   onClick={handleProfileClick}
                   className="
-                    flex items-center gap-1.5 sm:gap-2
+                    flex items-center gap-1 sm:gap-1
                     rounded-full
                     bg-white/5
-                    px-2.5 sm:px-3
-                    py-1.5
-                    text-[16px]
+                    px-2 sm:px-3
+                    py-2
+                    text-[14px]
                     ring-1 ring-white/10
                     backdrop-blur-xl
                     transition
@@ -159,13 +161,8 @@ export default function Header() {
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5 shrink-0" />
-                  <span
-                    className="
-                      hidden lg:block
-                      truncate
-                    "
-                  >
-                    {user.fullName}
+                  <span className="hidden lg:block">
+                    {truncateName(user?.fullName ?? "", 7)}
                   </span>
                 </Link>
               ) : (
@@ -186,7 +183,9 @@ export default function Header() {
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5" />
-                  <span className="hidden lg:block text-sm font-medium">Войти</span>
+                  <span className="hidden lg:block text-sm font-medium">
+                    Войти
+                  </span>
                 </button>
               )}
             </div>
