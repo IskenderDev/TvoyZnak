@@ -66,7 +66,7 @@ export default function NumberDetailsSection() {
 
   if (loading) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-black text-white">
+      <section className="flex min-h-screen items-center justify-center bg-[#0b0b0c] text-white">
         <p className="text-neutral-300">Загрузка...</p>
       </section>
     )
@@ -74,7 +74,7 @@ export default function NumberDetailsSection() {
 
   if (error) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-black text-white">
+      <section className="flex min-h-screen items-center justify-center bg-[#0b0b0c] text-white">
         <p className="text-[#EB5757]">{error}</p>
       </section>
     )
@@ -82,7 +82,7 @@ export default function NumberDetailsSection() {
 
   if (!item) {
     return (
-      <section className="flex min-h-screen items-center justify-center bg-black text-white">
+      <section className="flex min-h-screen items-center justify-center bg-[#0b0b0c] text-white">
         <p className="text-neutral-300">Номер не найден</p>
       </section>
     )
@@ -121,7 +121,7 @@ export default function NumberDetailsSection() {
         description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
-      <section className="bg-black py-6 sm:py-8 md:py-10 text-white">
+      <section className="bg-[#0b0b0c] py-6 sm:py-8 md:py-10 text-white">
         <div className="mx-auto w-full max-w-[1220px] px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link to={paths.home}>
@@ -143,7 +143,7 @@ export default function NumberDetailsSection() {
             </h1>
           </div>
 
-          <div className="mt-6 md:mt-8 rounded-[32px] border border-[#151515] bg-[#0d0d0f] px-3 py-5 shadow-[0_24px_60px_rgba(0,0,0,0.75)] sm:px-6 sm:py-6 lg:px-10 lg:py-8">
+          <div className="mt-6 md:mt-8 rounded-[32px] border border-[#151515] bg-[#0b0b0c] px-3 py-5  sm:px-6 sm:py-6 lg:px-10 lg:py-8">
             <div className="flex justify-center px-1 sm:px-4 lg:px-8">
               <PlateStaticLg
                 data={{
@@ -165,7 +165,7 @@ export default function NumberDetailsSection() {
 
          
             <div className="mt-6 md:mt-8 grid gap-5 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-6 lg:gap-8">
-              <div className="rounded-[24px] border border-[#252525] bg-[#0d0d0f] px-4 py-4 shadow-[0_18px_45px_rgba(0,0,0,0.6)] sm:px-6 sm:py-5 md:px-7 md:py-6">
+              <div className="rounded-[24px] border border-[#252525] bg-[#0b0b0c] px-4 py-4  sm:px-6 sm:py-5 md:px-7 md:py-6">
                 <dl className="divide-y divide-[#262626]">
                   {detailsRows.map((row) => (
                     <div
@@ -205,7 +205,7 @@ export default function NumberDetailsSection() {
                 </div>
               </div>
 
-              <div className="rounded-[24px] border border-[#252525] bg-[#0d0d0f] px-4 py-4 text-[15px] leading-[1.5] text-[#E5E5E5] shadow-[0_18px_45px_rgba(0,0,0,0.6)] sm:px-6 sm:py-5 md:px-7 md:py-6 sm:text-[16px] md:text-[18px] md:leading-[1.55]">
+              <div className="rounded-[24px] border border-[#252525] bg-[#0b0b0c] px-4 py-4 text-[15px] leading-[1.5] text-[#E5E5E5] sm:px-6 sm:py-5 md:px-7 md:py-6 sm:text-[16px] md:text-[18px] md:leading-[1.55]">
               
                 <h2 className="sr-only">Важная информация</h2>
                 <ul className="list-disc space-y-3 sm:space-y-3.5 pl-5 marker:text-[#0177FF]">

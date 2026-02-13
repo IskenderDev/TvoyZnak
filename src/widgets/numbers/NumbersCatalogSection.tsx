@@ -6,7 +6,7 @@ import {
   usePlateMarket,
 } from "@/features/plate-market";
 
-const GRID_COLS = "140px minmax(260px,1fr) 200px minmax(240px,1fr) 200px";
+const GRID_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px";
 
 export default function NumbersCatalogSection() {
   const {
@@ -34,7 +34,6 @@ export default function NumbersCatalogSection() {
       <Seo title="Номера — Знак отличия" description="Каталог автомобильных номеров с актуальными предложениями." />
       <section className=" text-white min-h-screen py-12">
         <div className="mx-auto px-4 sm:px-6">
-          <h1 className="mb-6 text-3xl uppercase md:text-4xl">Номера</h1>
 
           <PlateMarketFilters
             className="mb-6"
