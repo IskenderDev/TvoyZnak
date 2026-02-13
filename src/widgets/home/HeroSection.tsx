@@ -40,7 +40,7 @@ export default function HeroSection() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 to="/contacts"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none font-medium   focus-visible:ring-2 md:text-base"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none  focus-visible:ring-2 md:text-base"
               >
                 <FaTelegramPlane className="h-4 w-4 md:h-5 md:w-5" />
                 <span>Запросить список</span>

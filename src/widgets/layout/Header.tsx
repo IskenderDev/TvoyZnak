@@ -83,7 +83,7 @@ export default function Header() {
           className="
             relative
             flex items-center justify-between
-            gap-3 md:gap-5 lg:gap-8
+            gap-3 md:gap-5 lg:gap-5
             py-3 sm:py-4 lg:py-6
           "
         >
