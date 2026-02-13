@@ -19,7 +19,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="mt-4 text-sm text-neutral-300 sm:text-base md:text-2xl font-[400]  md:leading-relaxed">
-              Оценка, покупка и продажа красивых автономеров.
+              Оценка, покупка и продажа красивых автономеров
             </p>
 
             <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-sm text-neutral-300 sm:text-base">

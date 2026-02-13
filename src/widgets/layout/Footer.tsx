@@ -31,7 +31,7 @@ export default function Footer() {
       <Container>
         <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto max-w-[1120px]">
           <div className="flex flex-col items-start order-1 md:order-none">
-            <div className="my-6 md:my-10">
+            <div className="my-2">
               <Link 
                 to={paths.home} 
                 className="shrink-0"
