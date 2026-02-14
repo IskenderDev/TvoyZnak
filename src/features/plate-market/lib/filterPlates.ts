@@ -24,12 +24,21 @@ const matchesRegion = (query: PlateSelectValue, row: NumberItem) => {
   return String(row.plate.regionId) === normalizedRegion || row.region === normalizedRegion
 }
 
+const isMirrorPlate = (row: NumberItem) => {
+  const { firstDigit, secondDigit, thirdDigit } = row.plate
+  return firstDigit === thirdDigit && secondDigit !== firstDigit
+}
+
 const applyFilters = (row: NumberItem, filters: PlateMarketFiltersState) => {
   if (filters.region && !(String(row.plate.regionId) === filters.region || row.region === filters.region)) {
     return false
   }
 
-  if (filters.category && !row.categories?.includes(filters.category)) {
+  if (filters.category === "mirror") {
+    if (!isMirrorPlate(row)) {
+      return false
+    }
+  } else if (filters.category && !row.categories?.includes(filters.category)) {
     return false
   }
 
