@@ -3,7 +3,7 @@ import { LuPencilLine } from "react-icons/lu"
 
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm"
 
-const GRID_COLS = "140px minmax(260px,1fr) 200px minmax(220px,1fr) 180px"
+const GRID_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px"
 
 export type ProfileInfoField = {
   label: string

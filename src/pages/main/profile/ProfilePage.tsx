@@ -197,7 +197,7 @@ export default function ProfilePage() {
           headerActions: (
             <Link
               to={paths.sellNumber}
-              className="inline-flex items-center gap-2 rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium uppercase tracking-wide text-white transition hover:brightness-95"
+              className="inline-flex items-center gap-2  rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium uppercase tracking-wide text-white transition hover:brightness-95"
             >
               <LuPlus className="h-4 w-4" /> Добавить номер
             </Link>
