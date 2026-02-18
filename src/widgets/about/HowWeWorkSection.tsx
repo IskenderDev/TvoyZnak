@@ -37,10 +37,9 @@ export default function HowWeWorkSection() {
     <section className="relative text-white py-12 md:py-16" aria-label="Как мы работаем">
       <div className="max-w-[1100px] mx-auto px-6 md:px-10">
         <header className="text-center">
-          <h2 className="text-2xl md:text-4xl font-extrabold tracking-wide">
+          <h2 className="text-2xl md:text-4xl font-bold tracking-wide">
             КАК МЫ РАБОТАЕМ
           </h2>
-          <p className="text-[#A7C6FF] text-sm md:text-base mt-1">Просто, быстро и безопасно.</p>
         </header>
 
         <div className="relative bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] rounded-[26px] md:rounded-[28px] mt-6 md:mt-8 px-5 md:px-8 py-6 md:py-10">

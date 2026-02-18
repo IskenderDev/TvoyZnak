@@ -98,12 +98,12 @@ export default function ServicesPage() {
           <div className="absolute inset-0 pointer-events-none" />
 
           <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 py-16 sm:py-20 md:px-8 lg:py-24">
-            <h1 className="mt-5 text-center text-2xl font-extrabold uppercase leading-tight sm:text-3xl lg:text-4xl">
+            <h1 className="mt-5 text-center text-2xl font-bold uppercase leading-tight sm:text-3xl lg:text-4xl">
               ВСЕ УСЛУГИ С{" "}
               <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
               <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
             </h1>
-            <p className="mt-5 max-w-[820px] text-center text-sm text-[#bebebe] sm:text-base">
+            <p className="mt-5 max-w-[820px] text-center text-sm text-[#bebebe] sm:text-lg">
               Компания «ЗНАК ОТЛИЧИЯ» предлагает комплексные решения для
               владельцев и покупателей автомобильных номеров. Мы оцениваем,
               выкупаем, продаём и подбираем уникальные комбинации, обеспечивая
@@ -131,7 +131,7 @@ export default function ServicesPage() {
                       <div className="text-2xl text-left md:text-3xl font-bold tracking-[0.2em]">
                         
                       </div>
-                      <div className="text-right text-5xl font-extrabold leading-none tracking-[0.2em]">
+                      <div className="text-right text-5xl font-bold leading-none tracking-[0.2em]">
                         {service.number}
                       </div>
                     </div>

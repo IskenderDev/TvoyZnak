@@ -16,10 +16,10 @@ export default function HeroStats({
 		>
 			<div className="mx-auto max-w-[1200px] px-6 md:px-10 pt-12 md:pt-16 pb-14 md:pb-24">
 				<header className="text-center">
-					<h2 className="text-[26px] md:text-[40px] font-extrabold uppercase tracking-[0.02em] leading-[1.15]">
+					<h2 className="text-[26px] md:text-[36px] font-bold uppercase tracking-[0.02em] leading-[1.15]">
 						КРАСИВЫЕ <span className="text-[#0177FF]">АВТОНОМЕРА</span> — ВАШ СТАТУС НА ДОРОГЕ
 					</h2>
-					<p className="mt-4 md:mt-5 text-[#C8C8C8] text-[14px] md:text-[16px] leading-[1.7] max-w-[880px] mx-auto">
+					<p className="mt-4 md:mt-5 text-[#C8C8C8] text-[14px] md:text-[18px] leading-[1.7] max-w-[880px] mx-auto">
 						Мы оцениваем уникальные комбинации, выкупаем номера по выгодной цене и подбираем
 						идеальный вариант под ваши пожелания. С нами покупка и продажа номеров становится
 						простой, прозрачной и надёжной.

@@ -6,7 +6,7 @@ export default function ServicesSection() {
       <div className="mx-auto max-w-[1100px] px-5 md:px-10">
         <h2
           id="services-title"
-          className="text-center text-[22px] md:text-[30px] font-extrabold tracking-[0.08em] text-white uppercase"
+          className="text-center text-[22px] md:text-[36px] font-bold tracking-[0.08em] text-white uppercase"
         >
           НАШИ УСЛУГИ
         </h2>

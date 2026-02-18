@@ -64,9 +64,9 @@ export const  PlateMarketFilters = ({
         <button
           type="button"
           onClick={onReset}
-          className="w-full rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black/80 transition hover:bg-black/5 sm:ml-auto sm:w-auto flex items-center justify-center gap-2 md:text-lg bg-[#eeeeee] " 
+          className="w-full rounded-full border border-black/20 px-4 py-2 text-sm font-[400] text-black/80 transition hover:bg-black/5 sm:ml-auto sm:w-auto flex items-center justify-center gap-2 md:text-lg bg-[#eeeeee] " 
         >
-          <RiDeleteBin5Line className="h-4 w-4 text-black/60 md:h-5 md:w-5" /> Сбросить 
+          <RiDeleteBin5Line className="h-4 w-4 text-black/60 md:h-5 md:w-5 " /> Сбросить 
         </button>
       </div>
     </div>

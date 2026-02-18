@@ -9,7 +9,7 @@ export default function WhyChooseUs() {
 		<section className="relative text-white py-10 md:py-14" aria-label="Почему выбирают нас">
 			<div className="max-w-[1120px] mx-auto px-6 md:px-10">
 				<header className="text-center">
-					<h2 className="text-[22px] md:text-[36px] font-extrabold tracking-[0.06em] uppercase">
+					<h2 className="text-[22px] md:text-[36px] font-bold tracking-[0.06em] uppercase">
 						ПОЧЕМУ ВЫБИРАЮТ НАС
 					</h2>
 				</header>
