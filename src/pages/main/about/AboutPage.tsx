@@ -1,4 +1,5 @@
 import ContactForm from '@/shared/components/ContactForm'
+import PageTopSpacing from '@/shared/components/PageTopSpacing'
 import Seo from "@/shared/components/Seo";
 import HeroStats from '@/widgets/about/HeroStats'
 import HowWeWorkSection from '@/widgets/about/HowWeWorkSection'
@@ -10,14 +11,16 @@ export default function AboutPage() {
   return (
     <>
       <Seo title="О компании — Знак отличия" description="Информация о компании (каркас)" />
-      <div>
-        <HeroStats/>
-        <WhyChooseUs/>
-        <HowWeWorkSection/>
-        <ServicesSection/>
-        <ProjectsSection/>
-        <ContactForm/>
-      </div>
+      <PageTopSpacing>
+        <div>
+          <HeroStats/>
+          <WhyChooseUs/>
+          <HowWeWorkSection/>
+          <ServicesSection/>
+          <ProjectsSection/>
+          <ContactForm/>
+        </div>
+      </PageTopSpacing>
     </>
   );
 }

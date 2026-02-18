@@ -6,6 +6,7 @@ import { DEFAULT_PLATE_VALUE, type PlateSelectValue } from "@/features/plate-sel
 import { numbersApi } from "@/shared/services/numbersApi";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { isPasswordCompromised } from "@/shared/lib/security/passwordLeakCheck";
+import PageTopSpacing from "@/shared/components/PageTopSpacing";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -173,126 +174,128 @@ export default function PlaceAdForm() {
   };
 
   return (
-    <section className=" text-white py-12 md:py-16" aria-label="Размещение объявления">
-      {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
+    <PageTopSpacing>
+      <section className=" text-white pb-12 md:pb-16" aria-label="Размещение объявления">
+        {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
-      <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">
-          РАЗМЕСТИТЬ ОБЪЯВЛЕНИЕ
-        </h2>
-        <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
-          Все сделки сопровождаются юридической поддержкой
-        </p>
+        <div className="max-w-[900px] mx-auto px-5 sm:px-8">
+          <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">
+            РАЗМЕСТИТЬ ОБЪЯВЛЕНИЕ
+          </h2>
+          <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
+            Все сделки сопровождаются юридической поддержкой
+          </p>
 
-        <div className="mt-6 md:mt-8">
-          <PlateSelectForm
-            size={window.innerWidth < 640 ? 'xs' : 'lg'}
-            responsive
-            flagSrc="/flag-russia.svg"
-            showCaption={false}
-            className="mx-auto"
-            value={plate}
-            onChange={setPlate}
-          />
-        </div>
-
-        <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {requiresContactInfo && (
-              <>
-                <input
-                  type="text"
-                  inputMode="text"
-                  className={INPUT_BASE}
-                  placeholder="Имя *"
-                  aria-label="Имя"
-                  name="name"
-                  value={form.name}
-                  onChange={handleInputChange}
-                  required
-                />
-
-                <input
-                  type="tel"
-                  inputMode="tel"
-                  className={INPUT_BASE}
-                  placeholder="Телефон *"
-                  aria-label="Телефон"
-                  name="phone"
-                  value={form.phone}
-                  onChange={handleInputChange}
-                  required
-                />
-
-                <input
-                  type="email"
-                  inputMode="email"
-                  className={INPUT_BASE}
-                  placeholder="Почта"
-                  aria-label="Почта"
-                  name="email"
-                  value={form.email}
-                  onChange={handleInputChange}
-                />
-
-                <input
-                  type="password"
-                  autoComplete="new-password"
-                  className={INPUT_BASE}
-                  placeholder="Пароль"
-                  aria-label="Пароль"
-                  name="password"
-                  value={form.password}
-                  onChange={handleInputChange}
-                />
-              </>
-            )}
-
-            <input
-              type="text"
-              inputMode="numeric"
-              className={`${INPUT_BASE} sm:col-span-2`}
-              placeholder="Стоимость *"
-              aria-label="Стоимость"
-              name="price"
-              value={form.price}
-              onChange={handleInputChange}
-              required
+          <div className="mt-6 md:mt-8">
+            <PlateSelectForm
+              size={window.innerWidth < 640 ? 'xs' : 'lg'}
+              responsive
+              flagSrc="/flag-russia.svg"
+              showCaption={false}
+              className="mx-auto"
+              value={plate}
+              onChange={setPlate}
             />
           </div>
 
-          <p className="text-[12px] text-[#bebebe]">
-            <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
-          </p>
+          <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {requiresContactInfo && (
+                <>
+                  <input
+                    type="text"
+                    inputMode="text"
+                    className={INPUT_BASE}
+                    placeholder="Имя *"
+                    aria-label="Имя"
+                    name="name"
+                    value={form.name}
+                    onChange={handleInputChange}
+                    required
+                  />
 
-        
+                  <input
+                    type="tel"
+                    inputMode="tel"
+                    className={INPUT_BASE}
+                    placeholder="Телефон *"
+                    aria-label="Телефон"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleInputChange}
+                    required
+                  />
 
-          <textarea
-            className={`${INPUT_BASE} w-full min-h-[110px] resize-y`}
-            placeholder="Комментарий"
-            aria-label="Комментарий"
-            name="comment"
-            value={form.comment}
-            onChange={handleInputChange}
-          />
+                  <input
+                    type="email"
+                    inputMode="email"
+                    className={INPUT_BASE}
+                    placeholder="Почта"
+                    aria-label="Почта"
+                    name="email"
+                    value={form.email}
+                    onChange={handleInputChange}
+                  />
 
-          {error && <p className="text-sm text-[#EB5757]">{error}</p>}
+                  <input
+                    type="password"
+                    autoComplete="new-password"
+                    className={INPUT_BASE}
+                    placeholder="Пароль"
+                    aria-label="Пароль"
+                    name="password"
+                    value={form.password}
+                    onChange={handleInputChange}
+                  />
+                </>
+              )}
 
-          <ConsentNotice className="text-[#94A3B8]" />
+              <input
+                type="text"
+                inputMode="numeric"
+                className={`${INPUT_BASE} sm:col-span-2`}
+                placeholder="Стоимость *"
+                aria-label="Стоимость"
+                name="price"
+                value={form.price}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
 
-          <div className="flex justify-center">
-            <button
-              type="submit"
-              disabled={isSubmitDisabled}
-              className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
-              aria-label="Разместить объявление"
-            >
-              {loading ? "Отправка..." : "Разместить"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
+            <p className="text-[12px] text-[#bebebe]">
+              <span className='text-[#EF4444]'>*</span> При публикации объявления к конечной стоимости добавляется комиссия в размере 10–30% минимум
+            </p>
+
+          
+
+            <textarea
+              className={`${INPUT_BASE} w-full min-h-[110px] resize-y`}
+              placeholder="Комментарий"
+              aria-label="Комментарий"
+              name="comment"
+              value={form.comment}
+              onChange={handleInputChange}
+            />
+
+            {error && <p className="text-sm text-[#EB5757]">{error}</p>}
+
+            <ConsentNotice className="text-[#94A3B8]" />
+
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={isSubmitDisabled}
+                className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+                aria-label="Разместить объявление"
+              >
+                {loading ? "Отправка..." : "Разместить"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </PageTopSpacing>
   );
 }
 

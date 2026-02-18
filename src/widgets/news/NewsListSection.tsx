@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Seo from "@/shared/components/Seo";
+import PageTopSpacing from "@/shared/components/PageTopSpacing";
 import Pagination from "@/shared/components/Pagination";
 import NewsCard from "@/shared/components/NewsCard";
 import { newsApi } from "@/shared/services/newsApi";
@@ -53,28 +54,30 @@ export default function NewsListSection() {
   return (
     <>
       <Seo title="Новости — Знак отличия" description="Свежие новости компании и полезные материалы." />
-      <section className=" text-white min-h-screen py-16">
-        <div className="mx-auto px-6 max-w-6xl">
-          {loading && <p className="text-center text-neutral-300">Загрузка...</p>}
-          {error && <p className="text-center text-[#EB5757] mb-6">{error}</p>}
+      <PageTopSpacing>
+        <section className=" text-white min-h-screen pb-16">
+          <div className="mx-auto px-6 max-w-6xl">
+            {loading && <p className="text-center text-neutral-300">Загрузка...</p>}
+            {error && <p className="text-center text-[#EB5757] mb-6">{error}</p>}
 
-          {items.length > 0 && (
-            <div className="mb-10 flex justify-center">
-              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pagedItems.map((news) => (
-              <NewsCard key={news.id} news={news} />
-            ))}
-
-            {!loading && items.length === 0 && !error && (
-              <p className="col-span-full text-center text-neutral-300">Новости пока не опубликованы.</p>
+            {items.length > 0 && (
+              <div className="mb-10 flex justify-center">
+                <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+              </div>
             )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {pagedItems.map((news) => (
+                <NewsCard key={news.id} news={news} />
+              ))}
+
+              {!loading && items.length === 0 && !error && (
+                <p className="col-span-full text-center text-neutral-300">Новости пока не опубликованы.</p>
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </PageTopSpacing>
     </>
   );
 }

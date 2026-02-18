@@ -14,7 +14,7 @@ export default function HeroStats({
 			className={`relative z-0 text-white ${className}`}
 			aria-label="Красивые номера — безопасные сделки"
 		>
-			<div className="mx-auto max-w-[1200px] px-6 md:px-10 pt-12 md:pt-16 pb-14 md:pb-24">
+			<div className="mx-auto max-w-[1200px] px-6 md:px-10 pb-14 md:pb-24">
 				<header className="text-center">
 					<h2 className="text-[26px] md:text-[36px] font-bold uppercase tracking-[0.02em] leading-[1.15]">
 						КРАСИВЫЕ <span className="text-[#0177FF]">АВТОНОМЕРА</span> — ВАШ СТАТУС НА ДОРОГЕ
