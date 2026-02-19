@@ -67,6 +67,41 @@ export const useAdminLots = () => {
     };
   }, [load]);
 
+  useEffect(() => {
+    const handleFocus = () => {
+      void load();
+    };
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === "admin-lots-updated-at") {
+        void load();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void load();
+      }
+    };
+
+    const intervalId = window.setInterval(() => {
+      if (document.visibilityState === "visible") {
+        void load();
+      }
+    }, 30000);
+
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener("storage", handleStorage);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("storage", handleStorage);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [load]);
+
   const normalisedSearch = useMemo(() => search.trim().toLowerCase(), [search]);
 
   const filteredLots = useMemo(() => {
@@ -338,4 +373,3 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
 
   return fallback;
 };
-
