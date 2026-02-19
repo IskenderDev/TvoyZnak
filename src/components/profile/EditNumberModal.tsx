@@ -113,7 +113,7 @@ const normalizePlateText = (value: string): string => {
 const getInitialPrice = (lot: EditNumberModalLot | null) => {
   if (!lot) return ""
   const value = isNumberItem(lot) ? lot.price : lot.markupPrice
-  if (!Number.isFinite(value) || value <= 0) return ""
+  if (!Number.isFinite(value) || value < 0) return ""
   return String(value)
 }
 
@@ -192,7 +192,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     const regionIdValue = getRegionIdValue(plate)
     const regionOk = Number.isFinite(regionIdValue) && regionIdValue > 0
 
-    return loading || !Number.isFinite(priceValue) || priceValue <= 0 || !plateOk || !regionOk
+    return loading || !Number.isFinite(priceValue) || priceValue < 0 || !plateOk || !regionOk
   }, [loading, open, plate.regionCode, plate.regionId, plate.text, price])
 
   const handleClose = () => {
@@ -205,7 +205,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     if (!lot) return
 
     const priceValue = normalizePrice(price)
-    if (!Number.isFinite(priceValue) || priceValue <= 0) {
+    if (!Number.isFinite(priceValue) || priceValue < 0) {
       setError("Укажите корректную стоимость")
       return
     }

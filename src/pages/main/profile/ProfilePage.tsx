@@ -7,7 +7,6 @@ import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { paths } from "@/shared/routes/paths";
 import { numbersApi } from "@/shared/services/numbersApi";
 import type { NumberItem } from "@/entities/number/types";
-import { formatPrice } from "@/shared/lib/format";
 import ProfileLayoutLikeCatalog, { type ProfileLotRow } from "@/components/profile/ProfileLayoutLikeCatalog";
 import { formatRegionCode } from "@/shared/lib/plate";
 import EditNumberModal from "@/components/profile/EditNumberModal";
@@ -153,7 +152,7 @@ export default function ProfilePage() {
       comment: item.plate.comment ?? item.description ?? "",
       regionId: formatRegionCode(item.plate.regionId || item.region || ""),
     },
-    priceLabel: formatPrice(item.price),
+    priceLabel: String(item.price),
     sellerLabel: user.fullName || "—",
     onDelete: () => handleDelete(item.id),
     isDeleting: deletingId === item.id,
@@ -174,6 +173,9 @@ export default function ProfilePage() {
         onClose={closeEditModal}
         onUpdated={(updated) => {
           setNumbers((prev) => prev.map((lot) => (lot.id === updated.id ? updated : lot)));
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem("admin-lots-updated-at", String(Date.now()));
+          }
         }}
       />
       <ProfileLayoutLikeCatalog
