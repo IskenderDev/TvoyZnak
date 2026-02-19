@@ -20,7 +20,7 @@ const formatDate = (value: string) => {
 
 export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   const data: PlateData = {
-    price: row.price,
+    price: row.markupPrice ?? row.originalPrice,
     comment: "",
     firstLetter: row.plate.firstLetter,
     secondLetter: row.plate.secondLetter,
@@ -34,7 +34,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
   const style = { "--cols": gridCols } as CSSProperties;
   const navigate = useNavigate();
   const detailsPath = paths.numberDetails(row.id);
-  const priceLabel = formatPrice(row.price);
+  const priceLabel = formatPrice(row.markupPrice ?? row.originalPrice);
   const contactPrefill = buildContactPrefill(row);
   const contactSearch = createSearchParams({
     ...(contactPrefill.carNumber ? { carNumber: contactPrefill.carNumber } : {}),

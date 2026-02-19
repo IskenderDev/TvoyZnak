@@ -24,7 +24,7 @@ export interface NumbersApi {
 export interface CreateNumberLotPayload {
   series: string;
   regionCode: string;
-  price: number;
+  originalPrice: number;
   sellerName: string;
   phone?: string;
   description?: string;
@@ -33,7 +33,7 @@ export interface CreateNumberLotPayload {
 }
 
 export interface CreateAndRegisterPayload {
-  price: number;
+  originalPrice: number;
   firstLetter: string;
   secondLetter: string;
   thirdLetter: string;
@@ -49,7 +49,7 @@ export interface CreateAndRegisterPayload {
 }
 
 export interface CreateAuthorizedNumberLotPayload {
-  price: number;
+  originalPrice: number;
   firstLetter: string;
   secondLetter: string;
   thirdLetter: string;
@@ -61,7 +61,7 @@ export interface CreateAuthorizedNumberLotPayload {
 }
 
 export interface UpdateAuthorizedNumberLotPayload {
-  price: number;
+  originalPrice: number;
   firstLetter: string;
   secondLetter: string;
   thirdLetter: string;
@@ -76,6 +76,8 @@ type UnknownRecord = Record<string, unknown>;
 
 interface RawCarNumberLot extends UnknownRecord {
   id: string | number;
+  originalPrice?: unknown;
+  markupPrice?: unknown;
   price?: unknown;
   status?: unknown;
   state?: unknown;
@@ -136,7 +138,7 @@ const numbersApi: NumbersApi = {
 
   async create(payload) {
     const response = await http.post("/api/car-number-lots", {
-      price: payload.price,
+      originalPrice: payload.originalPrice,
       sellerName: payload.sellerName,
       phone: payload.phone,
       description: payload.description,
@@ -157,7 +159,7 @@ const numbersApi: NumbersApi = {
 
   async createAndRegister(payload) {
     const response = await http.post("/api/car-number-lots/create-and-register", {
-      price: payload.price,
+      originalPrice: payload.originalPrice,
       firstLetter: payload.firstLetter,
       secondLetter: payload.secondLetter,
       thirdLetter: payload.thirdLetter,
@@ -181,7 +183,7 @@ const numbersApi: NumbersApi = {
 
   async createAuthorized(payload) {
     const response = await http.post("/api/car-number-lots", {
-      price: payload.price,
+      originalPrice: payload.originalPrice,
       firstLetter: payload.firstLetter,
       secondLetter: payload.secondLetter,
       thirdLetter: payload.thirdLetter,
@@ -201,7 +203,7 @@ const numbersApi: NumbersApi = {
 
   async updateAuthorized(id, payload) {
     const response = await http.put(`/api/car-number-lots/${id}`, {
-      price: payload.price,
+      originalPrice: payload.originalPrice,
       firstLetter: payload.firstLetter,
       secondLetter: payload.secondLetter,
       thirdLetter: payload.thirdLetter,
@@ -341,11 +343,16 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
   const sellerName = sellerNameRaw || undefined;
   const sellerDisplay = sellerName || sellerLogin || "Продавец";
 
+  const originalPrice = toNumber(dto.originalPrice ?? dto.price, 0);
+  const markupPrice = toNumber(dto.markupPrice ?? dto.price ?? dto.originalPrice, originalPrice);
+
   return {
     id: String(dto.id),
     series,
     region: formattedRegion,
-    price: toNumber(dto.price, 0),
+    originalPrice,
+    markupPrice,
+    price: originalPrice,
     seller: sellerDisplay,
     sellerLogin,
     sellerName,
@@ -453,4 +460,3 @@ const normalizeDate = (value?: string): string => {
 };
 
 export { numbersApi };
-
