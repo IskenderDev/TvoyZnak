@@ -342,7 +342,7 @@ export default function PlateSelectForm({
       const updated = [...prev]
       updated[index] = next === "*"
       return updated
-    })
+    }) 
   }
 
   const handleFirstLetterChange = (next: string) => {
@@ -409,7 +409,7 @@ export default function PlateSelectForm({
                 paddingLeft: mainPx,
                 paddingRight: mainPx,
                 paddingBottom: mainPb,
-                paddingTop: isXs ? 2 : 0,
+                paddingTop: 0,
                 gap: mainGap,
                 boxSizing: "border-box",
               }}
