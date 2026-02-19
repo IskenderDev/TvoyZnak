@@ -143,7 +143,7 @@ export default function ProfilePage() {
     id: item.id,
     dateLabel: item.date ? formatDate(item.date) : "—",
     plate: {
-      price: item.price,
+      price: item.originalPrice,
       firstLetter: item.plate.firstLetter,
       secondLetter: item.plate.secondLetter,
       thirdLetter: item.plate.thirdLetter,
@@ -153,7 +153,7 @@ export default function ProfilePage() {
       comment: item.plate.comment ?? item.description ?? "",
       regionId: formatRegionCode(item.plate.regionId || item.region || ""),
     },
-    priceLabel: formatPrice(item.price),
+    priceLabel: formatPrice(item.originalPrice),
     sellerLabel: user.fullName || "—",
     onDelete: () => handleDelete(item.id),
     isDeleting: deletingId === item.id,

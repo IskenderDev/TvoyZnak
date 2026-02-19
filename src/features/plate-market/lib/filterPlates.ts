@@ -60,7 +60,9 @@ const getDateValue = (value: string) => {
 
 const applySorting = (a: NumberItem, b: NumberItem, filters: PlateMarketFiltersState) => {
   if (filters.sortField === "price") {
-    return filters.sortDir === "asc" ? a.price - b.price : b.price - a.price
+    const aPrice = a.markupPrice ?? a.originalPrice
+    const bPrice = b.markupPrice ?? b.originalPrice
+    return filters.sortDir === "asc" ? aPrice - bPrice : bPrice - aPrice
   }
 
   const aDate = getDateValue(a.date)

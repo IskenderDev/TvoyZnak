@@ -85,14 +85,14 @@ export default function AdminLotsPage() {
       secondDigit: payload.secondDigit,
       thirdDigit: payload.thirdDigit,
       regionId: payload.regionId,
-      markupPrice: payload.price,
+      markupPrice: payload.originalPrice,
       comment: payload.comment ?? null,
     });
 
     return {
       ...lot,
       ...updated,
-      markupPrice: updated.markupPrice ?? payload.price,
+      markupPrice: updated.markupPrice ?? payload.originalPrice,
       comment: updated.comment ?? payload.comment ?? "",
       regionId: updated.regionId ?? payload.regionId,
       firstLetter: updated.firstLetter ?? payload.firstLetter,

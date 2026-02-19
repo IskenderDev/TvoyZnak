@@ -17,6 +17,9 @@ export interface NumberItem {
   id: string;
   series: string;
   region: RegionCode;
+  originalPrice: number;
+  markupPrice: number;
+  /** @deprecated Use originalPrice/markupPrice instead. */
   price: number;
   seller: string;
   sellerLogin?: string;

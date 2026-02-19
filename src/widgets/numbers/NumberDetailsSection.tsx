@@ -88,7 +88,7 @@ export default function NumberDetailsSection() {
     )
   }
 
-  const price = formatPrice(item.price)
+  const price = formatPrice(item.markupPrice ?? item.originalPrice)
   const publishedDate = item.date
     ? new Date(item.date).toLocaleDateString("ru-RU")
     : "—"
@@ -147,7 +147,7 @@ export default function NumberDetailsSection() {
             <div className="flex justify-center px-1 sm:px-4 lg:px-8">
               <PlateStaticLg
                 data={{
-                  price: item.price,
+                  price: item.markupPrice ?? item.originalPrice,
                   comment: item.plate.comment ?? item.description ?? "",
                   firstLetter: item.plate.firstLetter,
                   secondLetter: item.plate.secondLetter,
