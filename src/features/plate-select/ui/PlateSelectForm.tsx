@@ -425,7 +425,7 @@ export default function PlateSelectForm({
                 slotW={slotW}
                 slotH={slotH}
                 color={glyphColor(firstLetter)}
-                dropdownMaxHeight={240}
+                dropdownMaxHeight={295}
                 dropdownWidth={slotDropdownWidth}
                 onCommit={createCommitHandler(0)}
                 onInvalidKey={handleInvalidLetter}
@@ -498,7 +498,7 @@ export default function PlateSelectForm({
                   slotW={slotW}
                   slotH={slotH}
                   color={glyphColor(secondLetter)}
-                  dropdownMaxHeight={240}
+                  dropdownMaxHeight={295}
                   dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(4)}
                   onInvalidKey={handleInvalidLetter}
@@ -515,7 +515,7 @@ export default function PlateSelectForm({
                   slotW={slotW}
                   slotH={slotH}
                   color={glyphColor(thirdLetter)}
-                  dropdownMaxHeight={240}
+                  dropdownMaxHeight={295}
                   dropdownWidth={slotDropdownWidth}
                   onCommit={createCommitHandler(5)}
                   onInvalidKey={handleInvalidLetter}
