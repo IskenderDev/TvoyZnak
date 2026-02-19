@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 
 import type { AdminLot } from "@/shared/api/adminLots";
 import type { AdminLotSortKey, SortDirection } from "@/shared/hooks/useAdminLots";
+import { buildCarNumberFromParts } from "@/shared/lib/plate";
 import Button from "@/shared/ui/Button";
 import IconButton from "@/shared/ui/IconButton";
 import Spinner from "@/shared/ui/Spinner";
@@ -120,12 +121,13 @@ export default function AdminLotsTable({
               : lots.length === 0
                 ? renderStatusRow("Лоты не найдены")
                 : lots.map((lot) => {
+                    const carNumber = buildCarNumberFromParts(lot);
                     const isConfirming = confirmingIds.has(lot.id);
                     const isDeleting = deletingIds.has(lot.id);
                     const isUpdating = updatingIds.has(lot.id);
                     return (
                       <Table.Row key={lot.id}>
-                        <Table.Cell className="font-semibold text-slate-900">{lot.fullCarNumber}</Table.Cell>
+                        <Table.Cell className="font-semibold text-slate-900">{carNumber}</Table.Cell>
                         <Table.Cell>{lot.regionCode}</Table.Cell>
                         <Table.Cell>{currency.format(lot.originalPrice)}</Table.Cell>
                         <Table.Cell>{currency.format(lot.markupPrice)}</Table.Cell>
@@ -189,6 +191,7 @@ export default function AdminLotsTable({
           </Table.Card>
         ) : (
           lots.map((lot) => {
+            const carNumber = buildCarNumberFromParts(lot);
             const isConfirming = confirmingIds.has(lot.id);
             const isDeleting = deletingIds.has(lot.id);
             const isUpdating = updatingIds.has(lot.id);
@@ -196,7 +199,7 @@ export default function AdminLotsTable({
               <Table.Card key={lot.id}>
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-base font-semibold text-slate-900">{lot.fullCarNumber}</p>
+                    <p className="text-base font-semibold text-slate-900">{carNumber}</p>
                     <p className="text-xs text-slate-500">{formatDate(lot.createdDate)}</p>
                   </div>
                   <StatusBadge confirmed={lot.isConfirm} />
