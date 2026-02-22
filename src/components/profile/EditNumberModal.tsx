@@ -64,11 +64,8 @@ const toPlateValue = (lot: EditNumberModalLot | null): PlateSelectValue => {
 
     return {
       text,
-      regionCode: region || "",
-      // Для NumberItem plate.regionId приходит как код региона, а не как id из /api/regions.
-      // Если положить его в regionId, селектор может резолвить другой регион по совпавшему id.
-      // В пользовательском сценарии опираемся на regionCode и не подставляем regionId заранее.
-      regionId: null,
+      regionCode: plate.regionCode || region || "",
+      regionId: plate.regionId ?? null,
     }
   }
 
@@ -128,9 +125,6 @@ const getInitialComment = (lot: EditNumberModalLot | null) => {
 const getRegionIdValue = (plate: PlateSelectValue): number => {
   const fromId = plate.regionId != null ? Number(plate.regionId) : NaN
   if (Number.isFinite(fromId) && fromId > 0) return fromId
-
-  const fromCode = Number(plate.regionCode)
-  if (Number.isFinite(fromCode) && fromCode > 0) return fromCode
 
   return NaN
 }

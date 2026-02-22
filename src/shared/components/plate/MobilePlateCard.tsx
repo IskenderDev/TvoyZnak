@@ -6,7 +6,8 @@ import type { NumberItem } from "@/entities/number/types";
 
 type PlateLike = Partial<PlateData> & {
   region?: string | number;
-  regionId?: string | number;
+  regionCode?: string | number;
+  regionId?: string | number | null;
 };
 
 type PlateRowLike = Partial<NumberItem> & {
@@ -96,7 +97,7 @@ function pickPlate(row: PlateRowLike): PlateData {
     secondLetter: ensureChar(src.secondLetter ?? row.plate?.secondLetter),
     thirdLetter: ensureChar(src.thirdLetter ?? row.plate?.thirdLetter),
     regionId: formatRegionCode(
-      src.regionId ?? src.region ?? row.plate?.regionId ?? row.region ?? "",
+      row.plate?.regionCode ?? src.regionCode ?? src.region ?? row.region ?? "",
     ),
   };
 }

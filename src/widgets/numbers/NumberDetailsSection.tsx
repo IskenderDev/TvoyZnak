@@ -105,7 +105,7 @@ export default function NumberDetailsSection() {
   const detailsRows = [
     {
       label: "Регион",
-      value: item.plate.regionId ? `RUS ${item.plate.regionId}` : "—",
+      value: item.plate.regionCode ? `RUS ${item.plate.regionCode}` : "—",
     },
     { label: "Дата размещения", value: publishedDate },
     { label: "Имя", value: sellerName },
@@ -160,7 +160,7 @@ export default function NumberDetailsSection() {
                   firstDigit: item.plate.firstDigit,
                   secondDigit: item.plate.secondDigit,
                   thirdDigit: item.plate.thirdDigit,
-                  regionId: item.plate.regionId,
+                  regionId: item.plate.regionCode || item.region,
                 }}
                 responsive
                 showCaption

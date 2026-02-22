@@ -10,7 +10,7 @@ export type PlateData = {
   secondDigit: string
   thirdDigit: string
   comment: string
-  regionId: string | number
+  regionId: string | number | null
 }
 
 type PlateSize = "sm" | "lg"

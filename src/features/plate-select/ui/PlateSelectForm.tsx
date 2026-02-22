@@ -256,6 +256,21 @@ export default function PlateSelectForm({
   const resolvedRegionCode = activeRegion?.regionCode ?? currentValue.regionCode ?? ""
   const resolvedRegionId = activeRegion?.id ?? currentValue.regionId ?? null
 
+  React.useEffect(() => {
+    if (!activeRegion) return
+
+    const regionCodeChanged = currentValue.regionCode !== activeRegion.regionCode
+    const regionIdChanged = currentValue.regionId !== activeRegion.id
+
+    if (!regionCodeChanged && !regionIdChanged) return
+
+    applyChange({
+      text: currentValue.text,
+      regionCode: activeRegion.regionCode,
+      regionId: activeRegion.id,
+    })
+  }, [activeRegion, applyChange, currentValue.regionCode, currentValue.regionId, currentValue.text])
+
   const text = currentValue.text
   const firstLetter = text[0] ?? "*"
   const firstDigit = text[1] ?? "*"

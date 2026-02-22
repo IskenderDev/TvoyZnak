@@ -151,7 +151,7 @@ export default function ProfilePage() {
       secondDigit: item.plate.secondDigit,
       thirdDigit: item.plate.thirdDigit,
       comment: item.plate.comment ?? item.description ?? "",
-      regionId: formatRegionCode(item.plate.regionId || item.region || ""),
+      regionId: formatRegionCode(item.plate.regionCode || item.region || ""),
     },
     priceLabel: formatPrice(item.originalPrice),
     sellerLabel: user.fullName || "—",
