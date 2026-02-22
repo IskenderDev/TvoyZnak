@@ -15,6 +15,7 @@ import {
   type AdminLotSortKey,
   type AdminLotStatusFilter,
 } from "@/shared/hooks/useAdminLots";
+import { buildCarNumberFromParts } from "@/shared/lib/plate";
 
 const STATUS_OPTIONS: { value: AdminLotStatusFilter; label: string }[] = [
   { value: "all", label: "Все" },
@@ -85,14 +86,14 @@ export default function AdminLotsPage() {
       secondDigit: payload.secondDigit,
       thirdDigit: payload.thirdDigit,
       regionId: payload.regionId,
-      markupPrice: payload.originalPrice,
+      markupPrice: payload.priceField === "markupPrice" ? payload.price : lot.markupPrice,
       comment: payload.comment ?? null,
     });
 
     return {
       ...lot,
       ...updated,
-      markupPrice: updated.markupPrice ?? payload.originalPrice,
+      markupPrice: updated.markupPrice ?? (payload.priceField === "markupPrice" ? payload.price : lot.markupPrice),
       comment: updated.comment ?? payload.comment ?? "",
       regionId: updated.regionId ?? payload.regionId,
       firstLetter: updated.firstLetter ?? payload.firstLetter,
@@ -244,7 +245,7 @@ export default function AdminLotsPage() {
         title="Удалить лот?"
         description={
           deleteCandidate
-            ? `Вы действительно хотите удалить лот ${deleteCandidate.fullCarNumber}? Действие нельзя отменить.`
+            ? `Вы действительно хотите удалить лот ${buildCarNumberFromParts(deleteCandidate)}? Действие нельзя отменить.`
             : undefined
         }
         confirmLabel="Удалить"

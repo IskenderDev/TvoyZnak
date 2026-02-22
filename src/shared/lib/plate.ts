@@ -9,6 +9,8 @@ type PlatePartsLike = {
   thirdDigit?: string | null;
   secondLetter?: string | null;
   thirdLetter?: string | null;
+  regionCode?: string | number | null;
+  regionId?: string | number | null;
   fullCarNumber?: string | null;
   fullNumber?: string | null;
 };
@@ -91,7 +93,9 @@ export const buildCarNumberFromParts = (plate: PlatePartsLike): string => {
     return (plate.fullCarNumber ?? plate.fullNumber ?? "").trim();
   }
 
-  return `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
+  const series = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
+  const region = sanitizeRegion(plate.regionCode ?? plate.regionId ?? undefined);
+  return [series, region].filter(Boolean).join(" ");
 };
 
 export const formatPlateLabel = (

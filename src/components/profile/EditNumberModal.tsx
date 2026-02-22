@@ -9,6 +9,7 @@ import { numbersApi } from "@/shared/services/numbersApi"
 import type { NumberItem } from "@/entities/number/types"
 import type { AdminLot } from "@/shared/api/adminLots"
 import { useStableViewportWidth } from "@/shared/lib/hooks/useStableViewport"
+import { useAuth } from "@/shared/lib/hooks/useAuth"
 
 const INPUT_BASE =
   "bg-[#f9f9fa] text-black placeholder-[#777] rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF] border"
@@ -16,7 +17,8 @@ const INPUT_BASE =
 type ToastState = { type: "success" | "error"; msg: string } | null
 
 export type EditNumberModalSubmitPayload = {
-  originalPrice: number
+  price: number
+  priceField: "originalPrice" | "markupPrice"
   firstLetter: string
   secondLetter: string
   thirdLetter: string
@@ -63,10 +65,10 @@ const toPlateValue = (lot: EditNumberModalLot | null): PlateSelectValue => {
     return {
       text,
       regionCode: region || "",
-      regionId: (() => {
-        const numeric = Number(plate.regionId)
-        return Number.isFinite(numeric) && numeric > 0 ? numeric : null
-      })(),
+      // Для NumberItem plate.regionId приходит как код региона, а не как id из /api/regions.
+      // Если положить его в regionId, селектор может резолвить другой регион по совпавшему id.
+      // В пользовательском сценарии опираемся на regionCode и не подставляем regionId заранее.
+      regionId: null,
     }
   }
 
@@ -110,9 +112,9 @@ const normalizePlateText = (value: string): string => {
   return (value ?? "").replace(/\s+/g, "").replace(/-/g, "").toUpperCase()
 }
 
-const getInitialPrice = (lot: EditNumberModalLot | null) => {
+const getInitialPrice = (lot: EditNumberModalLot | null, isAdmin: boolean) => {
   if (!lot) return ""
-  const value = lot.originalPrice
+  const value = isAdmin ? lot.markupPrice : lot.originalPrice
   if (!Number.isFinite(value) || value <= 0) return ""
   return String(value)
 }
@@ -140,8 +142,11 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
   onUpdated,
   onSubmit,
 }: EditNumberModalProps<TLot>) {
+  const { user } = useAuth()
+  const isAdmin = (user?.roles?.length ? user.roles : user?.role ? [user.role] : []).includes("admin")
+
   const [plate, setPlate] = useState<PlateSelectValue>(() => toPlateValue(lot))
-  const [price, setPrice] = useState<string>(() => getInitialPrice(lot))
+  const [price, setPrice] = useState<string>(() => getInitialPrice(lot, isAdmin))
   const [comment, setComment] = useState<string>(() => getInitialComment(lot))
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -160,14 +165,14 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
   const lotId = useMemo(() => {
     if (!lot) return null
-    return (lot as any).id ?? null
+    return lot.id ?? null
   }, [lot])
 
   useEffect(() => {
     if (!open) return
 
     setPlate(toPlateValue(lot))
-    setPrice(getInitialPrice(lot))
+    setPrice(getInitialPrice(lot, isAdmin))
     setComment(getInitialComment(lot))
     setError(null)
 
@@ -180,20 +185,20 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
       const len = el.value.length
       el.setSelectionRange(len, len)
     })
-  }, [open, lotId, recalcViewport, lot])
+  }, [isAdmin, open, lotId, recalcViewport, lot])
 
   const isSubmitDisabled = useMemo(() => {
     if (!open) return true
 
-    const originalPriceValue = normalizePrice(price)
+    const priceValue = normalizePrice(price)
     const plateText = normalizePlateText(plate.text)
     const plateOk = plateText.length === 6 && !plateText.includes("*")
 
     const regionIdValue = getRegionIdValue(plate)
     const regionOk = Number.isFinite(regionIdValue) && regionIdValue > 0
 
-    return loading || !Number.isFinite(originalPriceValue) || originalPriceValue <= 0 || !plateOk || !regionOk
-  }, [loading, open, plate.regionCode, plate.regionId, plate.text, price])
+    return loading || !Number.isFinite(priceValue) || priceValue <= 0 || !plateOk || !regionOk
+  }, [loading, open, plate, price])
 
   const handleClose = () => {
     if (loading) return
@@ -204,8 +209,8 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     event.preventDefault()
     if (!lot) return
 
-    const originalPriceValue = normalizePrice(price)
-    if (!Number.isFinite(originalPriceValue) || originalPriceValue <= 0) {
+    const priceValue = normalizePrice(price)
+    if (!Number.isFinite(priceValue) || priceValue <= 0) {
       setError("Укажите корректную стоимость")
       return
     }
@@ -228,7 +233,8 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
     try {
       const payload: EditNumberModalSubmitPayload = {
-        originalPrice: originalPriceValue,
+        price: priceValue,
+        priceField: isAdmin ? "markupPrice" : "originalPrice",
         firstLetter: parts.firstLetter,
         firstDigit: parts.firstDigit,
         secondDigit: parts.secondDigit,
@@ -362,7 +368,7 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
 
 const defaultSubmit: EditNumberModalSubmitHandler<NumberItem> = async (lot, payload) => {
   return numbersApi.updateAuthorized(lot.id, {
-    originalPrice: payload.originalPrice,
+    originalPrice: payload.price,
     firstLetter: payload.firstLetter,
     firstDigit: payload.firstDigit,
     secondDigit: payload.secondDigit,
