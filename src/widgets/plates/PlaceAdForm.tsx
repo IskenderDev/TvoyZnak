@@ -224,7 +224,6 @@ export default function PlaceAdForm() {
                     required
                   />
 
-                  <div>
                     <PhoneInput
                       className={INPUT_BASE}
                       placeholder="Телефон *"
@@ -240,7 +239,6 @@ export default function PlaceAdForm() {
                       required
                     />
                     {phoneError ? <p className="mt-1 text-xs text-[#EB5757]">{phoneError}</p> : null}
-                  </div>
 
                   <input
                     type="email"
