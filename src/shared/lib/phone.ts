@@ -13,19 +13,14 @@ export const formatPhone = (raw: string): string => {
   const second = digits.slice(7, 9);
   const third = digits.slice(9, 11);
 
-  let result = "+";
-
   if (!country) {
-    return result;
+    return "";
   }
 
-  result += country;
+  let result = `+${country}`;
 
   if (area.length) {
-    result += ` (${area}`;
-    if (area.length === 3) {
-      result += ")";
-    }
+    result += ` ${area}`;
   }
 
   if (first.length) {
