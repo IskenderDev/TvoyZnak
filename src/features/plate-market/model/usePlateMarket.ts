@@ -90,7 +90,7 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
 
     items.forEach((item) => {
       if (item.region) usedCodes.add(String(item.region));
-      else if (item.plate.regionId) usedCodes.add(String(item.plate.regionId));
+      else if (item.plate.regionCode) usedCodes.add(String(item.plate.regionCode));
     });
 
     const labelToCodes = new Map<string, Set<string>>();
@@ -146,8 +146,8 @@ export const usePlateMarket = (initialLimit = DEFAULT_LIMIT) => {
     return items.filter((item) => {
       const code = item.region
         ? String(item.region)
-        : item.plate.regionId
-        ? String(item.plate.regionId)
+        : item.plate.regionCode
+        ? String(item.plate.regionCode)
         : "";
       return allowedCodes.has(code);
     });

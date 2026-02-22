@@ -21,7 +21,7 @@ const matchesRegion = (query: PlateSelectValue, row: NumberItem) => {
   const normalizedRegion =
     query.regionCode && query.regionCode !== "*" ? query.regionCode : ""
   if (!normalizedRegion) return true
-  return String(row.plate.regionId) === normalizedRegion || row.region === normalizedRegion
+  return row.plate.regionCode === normalizedRegion || row.region === normalizedRegion
 }
 
 const isMirrorPlate = (row: NumberItem) => {
@@ -30,7 +30,7 @@ const isMirrorPlate = (row: NumberItem) => {
 }
 
 const applyFilters = (row: NumberItem, filters: PlateMarketFiltersState) => {
-  if (filters.region && !(String(row.plate.regionId) === filters.region || row.region === filters.region)) {
+  if (filters.region && !(row.plate.regionCode === filters.region || row.region === filters.region)) {
     return false
   }
 

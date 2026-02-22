@@ -96,6 +96,7 @@ interface RawCarNumberLot extends UnknownRecord {
   number?: unknown;
   region?: unknown;
   regionCode?: unknown;
+  regionId?: unknown;
   createdAt?: unknown;
   createdDate?: unknown;
   created?: unknown;
@@ -310,6 +311,7 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     dto.region,
     plateSource.region,
   ]);
+  const regionId = pickRegionId([dto.regionId, plateSource.regionId]);
 
   const formattedRegion = formatRegionCode(regionCode);
 
@@ -320,7 +322,8 @@ const toNumberItem = (dto: RawCarNumberLot): NumberItem => {
     firstDigit: digits[0],
     secondDigit: digits[1],
     thirdDigit: digits[2],
-    regionId: formattedRegion,
+    regionId,
+    regionCode: formattedRegion,
     comment: pickString([dto.comment, plateSource.comment]) || undefined,
   };
 
@@ -387,6 +390,23 @@ const pickString = (values: unknown[]): string => {
     }
   }
   return "";
+};
+
+const pickRegionId = (values: unknown[]): number | null => {
+  for (const value of values) {
+    if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+      return value;
+    }
+
+    if (typeof value === "string") {
+      const parsed = Number(value.trim());
+      if (Number.isFinite(parsed) && parsed > 0) {
+        return parsed;
+      }
+    }
+  }
+
+  return null;
 };
 
 const ensureLetter = (value: string): string => {

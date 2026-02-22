@@ -56,7 +56,7 @@ export const formatRegionCode = (value?: string | number | null): string => {
   return "";
 };
 
-const sanitizeRegion = (value?: string | number): string => {
+const sanitizeRegion = (value?: string | number | null): string => {
   return formatRegionCode(value ?? "");
 };
 
