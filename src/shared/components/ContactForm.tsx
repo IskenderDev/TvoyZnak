@@ -4,6 +4,8 @@ import ConsentNotice from "@/shared/components/ConsentNotice"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
 import { useFeedbackTypes } from "@/shared/hooks/useFeedbackTypes"
 import { useEffect, useMemo, useState } from "react"
+import PhoneInput from "@/shared/ui/PhoneInput"
+import { isPhoneComplete } from "@/shared/lib/phone"
 
 type LeadForm = LeadFormPayload
 
@@ -22,6 +24,7 @@ export default function ContactForm() {
   })
 
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null)
+  const [phoneError, setPhoneError] = useState<string>("")
 
   useEffect(() => {
     if (error) setToast({ type: "error", msg: `Не удалось отправить: ${error}` })
@@ -63,19 +66,28 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (!isPhoneComplete(formData.phoneNumber)) {
+      setPhoneError("Введите номер телефона полностью")
+      return
+    }
+
     const ok = await submit({
       fullName: formData.fullName,
       phoneNumber: formData.phoneNumber,
       feedbackType: formData.feedbackType,
       carNumber: formData.carNumber,
     })
-    if (ok) setFormData({ fullName: "", phoneNumber: "", feedbackType: "", carNumber: "" })
+    if (ok) {
+      setPhoneError("")
+      setFormData({ fullName: "", phoneNumber: "", feedbackType: "", carNumber: "" })
+    }
   }
 
   const isSubmitDisabled =
     loading ||
     !formData.fullName.trim() ||
-    !formData.phoneNumber.trim() ||
+    !isPhoneComplete(formData.phoneNumber) ||
     !formData.feedbackType ||
     typesLoading
 
@@ -93,26 +105,31 @@ export default function ContactForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <input
               type="text"
-            name="fullName"
-            required
-            value={formData.fullName}
-            onChange={handleChange}
-            placeholder="Имя *"
+              name="fullName"
+              required
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Имя *"
               className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
             />
 
-            <input
-              type="tel"
-            name="phoneNumber"
-            required
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            placeholder="Телефон *"
-              inputMode="tel"
-              className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
-            />
+            <div>
+              <PhoneInput
+                name="phoneNumber"
+                required
+                value={formData.phoneNumber}
+                onChange={(value) => {
+                  setFormData((prev) => ({ ...prev, phoneNumber: value }))
+                  if (phoneError && isPhoneComplete(value)) {
+                    setPhoneError("")
+                  }
+                }}
+                placeholder="Телефон *"
+                className="w-full bg-[#F8F9FA] text-black placeholder-[#777] rounded-3xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1E63FF]"
+              />
+              {phoneError ? <p className="mt-1 text-xs text-[#EB5757]">{phoneError}</p> : null}
+            </div>
 
-            
             <input
               type="text"
               name="carNumber"
@@ -125,17 +142,13 @@ export default function ContactForm() {
             <div className="space-y-1">
               <UiSelect
                 name="feedbackType"
-            
                 value={formData.feedbackType}
                 onChange={(v) => setFormData((p) => ({ ...p, feedbackType: v }))}
                 placeholder={typesLoading ? "Загрузка..." : "Выберите действие *"}
                 options={selectOptions as { label: string; value: string }[]}
               />
-              {typesError && (
-                <p className="text-xs text-[#EB5757]">{typesError}</p>
-              )}
+              {typesError && <p className="text-xs text-[#EB5757]">{typesError}</p>}
             </div>
-
           </div>
 
           <ConsentNotice className="text-[#94A3B8]" />

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -9,6 +9,8 @@ import { useAuth } from "@/shared/lib/hooks/useAuth"
 import type { AuthSession } from "@/entities/session/model/auth"
 import { useNavigate } from "react-router-dom"
 import { paths } from "@/shared/routes/paths"
+import PhoneInput from "@/shared/ui/PhoneInput"
+import { isPhoneComplete } from "@/shared/lib/phone"
 
 const registerSchema = z.object({
   fullName: z
@@ -22,8 +24,7 @@ const registerSchema = z.object({
     .email("Введите корректный e-mail"),
   phoneNumber: z
     .string({ required_error: "Введите телефон" })
-    .trim()
-    .regex(/^\+?[0-9]{10,15}$/u, "Введите корректный телефон"),
+    .refine(isPhoneComplete, "Введите номер телефона полностью"),
   password: z
     .string({ required_error: "Введите пароль" })
     .min(6, "Минимум 6 символов"),
@@ -56,6 +57,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting, isValid },
     setFocus,
   } = useForm<RegisterFormValues>({
@@ -128,14 +130,22 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
         </div>
 
         <div>
-          <input
-            id="register-phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="Телефон *"
-            aria-invalid={errors.phoneNumber ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
-            {...register("phoneNumber")}
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <PhoneInput
+                id="register-phone"
+                placeholder="Телефон *"
+                aria-invalid={errors.phoneNumber ? "true" : "false"}
+                className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
           />
           {errors.phoneNumber ? (
             <p className="mt-1 text-xs text-[#EF4444]" role="alert">

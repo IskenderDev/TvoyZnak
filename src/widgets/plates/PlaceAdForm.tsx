@@ -7,6 +7,8 @@ import { numbersApi } from "@/shared/services/numbersApi";
 import { useAuth } from "@/shared/lib/hooks/useAuth";
 import { isPasswordCompromised } from "@/shared/lib/security/passwordLeakCheck";
 import PageTopSpacing from "@/shared/components/PageTopSpacing";
+import PhoneInput from "@/shared/ui/PhoneInput";
+import { isPhoneComplete } from "@/shared/lib/phone";
 
 const TYPE_OPTIONS = [
   { label: "Купить номер", value: "buy" },
@@ -44,6 +46,7 @@ export default function PlaceAdForm() {
   const [toast, setToast] = useState<ToastState>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string>("");
 
   const requiresContactInfo = !isAuthenticated;
 
@@ -70,7 +73,7 @@ export default function PlaceAdForm() {
     plate.text.includes("*") ||
     !plate.regionCode.trim() ||
     plate.regionId == null ||
-    (requiresContactInfo && (!form.name.trim() || !form.phone.trim()));
+    (requiresContactInfo && (!form.name.trim() || !isPhoneComplete(form.phone)));
 
   const resetForm = useCallback(() => {
     setForm(INITIAL_FORM);
@@ -110,6 +113,12 @@ export default function PlaceAdForm() {
     }
 
     const trimmedPassword = form.password.trim();
+    if (requiresContactInfo && !isPhoneComplete(form.phone)) {
+      setPhoneError("Введите номер телефона полностью");
+      setToast({ type: "error", msg: "Введите номер телефона полностью" });
+      return;
+    }
+
     if (requiresContactInfo && trimmedPassword.length < 3) {
       setToast({ type: "error", msg: "Пароль должен содержать минимум 3 символа" });
       return;
@@ -163,6 +172,7 @@ export default function PlaceAdForm() {
         });
       }
       setToast({ type: "success", msg: "Объявление успешно отправлено" });
+      setPhoneError("");
       resetForm();
     } catch (error: unknown) {
       const message = extractErrorMessage(error, "Не удалось отправить объявление");
@@ -214,17 +224,23 @@ export default function PlaceAdForm() {
                     required
                   />
 
-                  <input
-                    type="tel"
-                    inputMode="tel"
-                    className={INPUT_BASE}
-                    placeholder="Телефон *"
-                    aria-label="Телефон"
-                    name="phone"
-                    value={form.phone}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <div>
+                    <PhoneInput
+                      className={INPUT_BASE}
+                      placeholder="Телефон *"
+                      aria-label="Телефон"
+                      name="phone"
+                      value={form.phone}
+                      onChange={(value) => {
+                        setForm((prev) => ({ ...prev, phone: value }));
+                        if (phoneError && isPhoneComplete(value)) {
+                          setPhoneError("");
+                        }
+                      }}
+                      required
+                    />
+                    {phoneError ? <p className="mt-1 text-xs text-[#EB5757]">{phoneError}</p> : null}
+                  </div>
 
                   <input
                     type="email"

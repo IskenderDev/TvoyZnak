@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { feedbacksApi } from "@/shared/services/feedbacksApi";
+import { normalizePhone } from "@/shared/lib/phone";
 
 export type LeadFormPayload = {
   fullName: string;
@@ -22,7 +23,7 @@ export function useLeadSubmit() {
       try {
         await feedbacksApi.create({
           fullName: data.fullName.trim(),
-          phoneNumber: data.phoneNumber.trim(),
+          phoneNumber: normalizePhone(data.phoneNumber),
           feedbackType: data.feedbackType,
           carNumber: data.carNumber.trim(),
         });

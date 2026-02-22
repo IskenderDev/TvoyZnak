@@ -4,6 +4,8 @@ import Toast from "@/shared/components/Toast"
 import ConsentNotice from "@/shared/components/ConsentNotice"
 import { useLeadSubmit, type LeadFormPayload } from "@/shared/hooks/useLeadSubmit"
 import UiSelect from "@/shared/components/UiSelect"
+import PhoneInput from "@/shared/ui/PhoneInput"
+import { isPhoneComplete, normalizePhone } from "@/shared/lib/phone"
 
 export default function ContactForm() {
   const { submit, loading, error, success } = useLeadSubmit()
@@ -17,6 +19,7 @@ export default function ContactForm() {
   })
 
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null)
+  const [phoneError, setPhoneError] = useState<string>("")
 
   useEffect(() => {
     if (error) setToast({ type: "error", msg: `Не удалось отправить: ${error}` })
@@ -59,7 +62,7 @@ export default function ContactForm() {
     setFormData((prev) => ({
       ...prev,
       ...(merged.fullName ? { fullName: merged.fullName } : {}),
-      ...(merged.phoneNumber ? { phoneNumber: merged.phoneNumber } : {}),
+      ...(merged.phoneNumber ? { phoneNumber: normalizePhone(merged.phoneNumber) } : {}),
       ...(merged.carNumber ? { carNumber: merged.carNumber } : {}),
       ...(merged.feedbackType ? { feedbackType: merged.feedbackType } : {}),
     }))
@@ -84,14 +87,22 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!isPhoneComplete(formData.phoneNumber)) {
+      setPhoneError("Введите номер телефона полностью")
+      return
+    }
+
     const ok = await submit(formData)
-    if (ok) setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "" })
+    if (ok) {
+      setPhoneError("")
+      setFormData({ fullName: "", phoneNumber: "", feedbackType: "buy", carNumber: "" })
+    }
   }
 
   const isSubmitDisabled =
     loading ||
     !formData.fullName.trim() ||
-    !formData.phoneNumber.trim() ||
+    !isPhoneComplete(formData.phoneNumber) ||
     !formData.feedbackType
 
   return (
@@ -108,15 +119,20 @@ export default function ContactForm() {
         className="w-full rounded-4xl bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
 
-      <input
-        type="tel"
+      <PhoneInput
         name="phoneNumber"
         value={formData.phoneNumber}
-        onChange={handleChange}
+        onChange={(value) => {
+          setFormData((prev) => ({ ...prev, phoneNumber: value }))
+          if (phoneError && isPhoneComplete(value)) {
+            setPhoneError("")
+          }
+        }}
         placeholder="Телефон *"
         required
         className="w-full rounded-4xl bg-white text-black placeholder-[#7A7A7A] px-4 py-3 outline-none focus:ring-2 focus:ring-[#0177FF]"
       />
+      {phoneError ? <p className="text-xs text-[#EB5757]">{phoneError}</p> : null}
 
       <input
         type="text"
