@@ -73,7 +73,7 @@ export default function PlateStaticSm({
   const regionFont = 30 * k
   const rusFont = 14  * k
   const rusRowH = 16 * k
-  const rusGap = 4
+  const rusGap = 1
   const rusPb = 1
   const flagH = 14 * k
  
@@ -119,14 +119,13 @@ export default function PlateStaticSm({
             </div>
 
             <div
-              className="flex flex-col items-center bg-white"
+              className="flex flex-col items-center bg-white py-[3px]"
               style={{
                 width: rightWidth,
                 border: `${borderW}px solid #000`,
                 borderRadius: radius,
-                paddingBottom: 2 * k,
                 justifyContent: "space-between",
-                gap: 2 * k,
+                gap: 0,
                 boxSizing: "border-box",
               }}
             >
