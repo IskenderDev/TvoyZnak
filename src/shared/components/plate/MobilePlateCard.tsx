@@ -30,7 +30,7 @@ type Props = {
 export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, detailsHref, className = "" }: Props) {
   const plate: PlateData = pickPlate(row);
   const date = fmtDate(row.date || row.createdAt);
-  const price = fmtPrice(row.price);
+  const price = fmtPrice((row.markupPrice ?? row.originalPrice ?? row.price));
   const seller = row.seller || row.owner || row.ownerName || row.user || "Продавец";
 
   const handleBuy = (event: MouseEvent<HTMLButtonElement>) => {
@@ -87,7 +87,7 @@ export default function MobilePlateCard({ row, ctaText = "Купить", onBuy, 
 function pickPlate(row: PlateRowLike): PlateData {
   const src = (row.plate as PlateLike | undefined) ?? row.data ?? row.plateData ?? {};
   return {
-    price: src.price ?? row.price ?? 0,
+    price: src.price ?? row.markupPrice ?? row.originalPrice ?? row.price ?? 0,
     comment: "",
     firstLetter: ensureChar(src.firstLetter ?? row.plate?.firstLetter),
     firstDigit: ensureChar(src.firstDigit ?? row.plate?.firstDigit),

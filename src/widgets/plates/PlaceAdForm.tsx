@@ -135,7 +135,7 @@ export default function PlaceAdForm() {
     try {
       if (isAuthenticated) {
         await numbersApi.createAuthorized({
-          price: priceValue,
+          originalPrice: priceValue,
           firstLetter: plateParts.firstLetter,
           secondLetter: plateParts.secondLetter,
           thirdLetter: plateParts.thirdLetter,
@@ -147,7 +147,7 @@ export default function PlaceAdForm() {
         });
       } else {
         await numbersApi.createAndRegister({
-          price: priceValue,
+          originalPrice: priceValue,
           firstLetter: plateParts.firstLetter,
           secondLetter: plateParts.secondLetter,
           thirdLetter: plateParts.thirdLetter,

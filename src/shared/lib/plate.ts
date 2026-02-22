@@ -2,6 +2,17 @@ import type { NumberItem, PlateInfo } from "@/entities/number/types";
 import { formatPrice } from "./format";
 import { normalizePlateLetter } from "./plateLetters";
 
+type PlatePartsLike = {
+  firstLetter?: string | null;
+  firstDigit?: string | null;
+  secondDigit?: string | null;
+  thirdDigit?: string | null;
+  secondLetter?: string | null;
+  thirdLetter?: string | null;
+  fullCarNumber?: string | null;
+  fullNumber?: string | null;
+};
+
 const sanitizeLetter = (value?: string): string => {
   if (typeof value !== "string") return "";
   const trimmed = value.trim();
@@ -68,6 +79,21 @@ const buildSeriesFromPlate = (plate?: PlateInfo | null): string => {
   return [letters[0], digits.join(""), letters[1], letters[2]].join("");
 };
 
+export const buildCarNumberFromParts = (plate: PlatePartsLike): string => {
+  const firstLetter = sanitizeLetter(plate.firstLetter ?? undefined);
+  const firstDigit = sanitizeDigit(plate.firstDigit ?? undefined);
+  const secondDigit = sanitizeDigit(plate.secondDigit ?? undefined);
+  const thirdDigit = sanitizeDigit(plate.thirdDigit ?? undefined);
+  const secondLetter = sanitizeLetter(plate.secondLetter ?? undefined);
+  const thirdLetter = sanitizeLetter(plate.thirdLetter ?? undefined);
+
+  if (!firstLetter || !firstDigit || !secondDigit || !thirdDigit || !secondLetter || !thirdLetter) {
+    return (plate.fullCarNumber ?? plate.fullNumber ?? "").trim();
+  }
+
+  return `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
+};
+
 export const formatPlateLabel = (
   item: Pick<NumberItem, "series" | "plate" | "region"> | {
     series?: string;
@@ -84,9 +110,10 @@ export const formatPlateLabel = (
   return [series, region].filter(Boolean).join(" ");
 };
 
-export const buildContactPrefill = (item: Pick<NumberItem, "series" | "plate" | "region" | "price" >) => {
+export const buildContactPrefill = (item: Pick<NumberItem, "series" | "plate" | "region" | "originalPrice" | "markupPrice">) => {
   const numberLabel = formatPlateLabel(item);
-  const priceLabel = typeof item.price === "number" && item.price > 0 ? formatPrice(item.price) : "";
+  const displayPrice = item.markupPrice ?? item.originalPrice
+  const priceLabel = typeof displayPrice === "number" && displayPrice > 0 ? formatPrice(displayPrice) : "";
   const descriptionParts = [numberLabel, priceLabel].filter(Boolean);
 
   return {

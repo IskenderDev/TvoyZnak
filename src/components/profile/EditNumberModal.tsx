@@ -16,7 +16,7 @@ const INPUT_BASE =
 type ToastState = { type: "success" | "error"; msg: string } | null
 
 export type EditNumberModalSubmitPayload = {
-  price: number
+  originalPrice: number
   firstLetter: string
   secondLetter: string
   thirdLetter: string
@@ -112,8 +112,8 @@ const normalizePlateText = (value: string): string => {
 
 const getInitialPrice = (lot: EditNumberModalLot | null) => {
   if (!lot) return ""
-  const value = isNumberItem(lot) ? lot.price : lot.markupPrice
-  if (!Number.isFinite(value) || value < 0) return ""
+  const value = lot.originalPrice
+  if (!Number.isFinite(value) || value <= 0) return ""
   return String(value)
 }
 
@@ -185,14 +185,14 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
   const isSubmitDisabled = useMemo(() => {
     if (!open) return true
 
-    const priceValue = normalizePrice(price)
+    const originalPriceValue = normalizePrice(price)
     const plateText = normalizePlateText(plate.text)
     const plateOk = plateText.length === 6 && !plateText.includes("*")
 
     const regionIdValue = getRegionIdValue(plate)
     const regionOk = Number.isFinite(regionIdValue) && regionIdValue > 0
 
-    return loading || !Number.isFinite(priceValue) || priceValue < 0 || !plateOk || !regionOk
+    return loading || !Number.isFinite(originalPriceValue) || originalPriceValue <= 0 || !plateOk || !regionOk
   }, [loading, open, plate.regionCode, plate.regionId, plate.text, price])
 
   const handleClose = () => {
@@ -204,8 +204,8 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
     event.preventDefault()
     if (!lot) return
 
-    const priceValue = normalizePrice(price)
-    if (!Number.isFinite(priceValue) || priceValue < 0) {
+    const originalPriceValue = normalizePrice(price)
+    if (!Number.isFinite(originalPriceValue) || originalPriceValue <= 0) {
       setError("Укажите корректную стоимость")
       return
     }
@@ -228,7 +228,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
     try {
       const payload: EditNumberModalSubmitPayload = {
-        price: priceValue,
+        originalPrice: originalPriceValue,
         firstLetter: parts.firstLetter,
         firstDigit: parts.firstDigit,
         secondDigit: parts.secondDigit,
@@ -362,7 +362,7 @@ const extractErrorMessage = (error: unknown, fallback: string): string => {
 
 const defaultSubmit: EditNumberModalSubmitHandler<NumberItem> = async (lot, payload) => {
   return numbersApi.updateAuthorized(lot.id, {
-    price: payload.price,
+    originalPrice: payload.originalPrice,
     firstLetter: payload.firstLetter,
     firstDigit: payload.firstDigit,
     secondDigit: payload.secondDigit,
