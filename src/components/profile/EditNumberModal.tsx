@@ -65,10 +65,10 @@ const toPlateValue = (lot: EditNumberModalLot | null): PlateSelectValue => {
     return {
       text,
       regionCode: region || "",
-      regionId: (() => {
-        const numeric = Number(plate.regionId)
-        return Number.isFinite(numeric) && numeric > 0 ? numeric : null
-      })(),
+      // Для NumberItem plate.regionId приходит как код региона, а не как id из /api/regions.
+      // Если положить его в regionId, селектор может резолвить другой регион по совпавшему id.
+      // В пользовательском сценарии опираемся на regionCode и не подставляем regionId заранее.
+      regionId: null,
     }
   }
 
