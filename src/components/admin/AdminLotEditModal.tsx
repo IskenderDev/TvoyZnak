@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { AdminLot, UpdateAdminLotPayload } from "@/shared/api/adminLots";
 import { regionsApi, type Region } from "@/shared/services/regionsApi";
 import { DIGITS, LETTERS } from "@/shared/components/plate/constants";
+import { buildCarNumberFromParts } from "@/shared/lib/plate";
 
 const letterValues = new Set(LETTERS.map((letter) => letter.toUpperCase()));
 const digitValues = new Set(DIGITS.map((digit) => digit.toUpperCase()));
@@ -295,7 +296,7 @@ export default function AdminLotEditModal({
       >
         <div className="border-b border-white/10 px-6 py-4">
           <h2 id="admin-lot-edit-title" className="text-xl font-semibold">
-            Редактирование лота {lot.fullCarNumber}
+            Редактирование лота {buildCarNumberFromParts(lot)}
           </h2>
           <p className="mt-1 text-sm text-neutral-300">Измените данные и сохраните изменения.</p>
         </div>

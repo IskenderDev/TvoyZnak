@@ -4,7 +4,7 @@ import { LuArrowLeft } from "react-icons/lu"
 import Seo from "@/shared/components/Seo"
 import PlateStaticLg from "@/shared/components/plate/PlateStaticLg"
 import { formatPrice } from "@/shared/lib/format"
-import { buildContactPrefill, formatPlateLabel } from "@/shared/lib/plate"
+import { buildCarNumberFromParts, buildContactPrefill } from "@/shared/lib/plate"
 import { paths } from "@/shared/routes/paths"
 import { numbersApi } from "@/shared/services/numbersApi"
 import type { NumberItem } from "@/entities/number/types"
@@ -93,7 +93,12 @@ export default function NumberDetailsSection() {
     ? new Date(item.date).toLocaleDateString("ru-RU")
     : "—"
 
-  const numberLabel = formatPlateLabel(item)
+  const numberLabel = buildCarNumberFromParts({
+    ...item.plate,
+    regionCode: item.region,
+    fullCarNumber: item.series,
+    fullNumber: item.series,
+  })
   const sellerName = item.sellerName || item.seller || "—"
   const phone = item.phone || "—"
 
