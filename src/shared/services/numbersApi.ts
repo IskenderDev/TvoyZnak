@@ -468,12 +468,12 @@ const toNumber = (value: unknown, fallback: number): number => {
 
 const normalizeDate = (value?: string): string => {
   if (!value) {
-    return new Date().toISOString();
+    return "";
   }
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return new Date().toISOString();
+    return "";
   }
 
   return date.toISOString();
