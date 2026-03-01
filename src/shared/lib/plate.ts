@@ -95,7 +95,7 @@ export const buildCarNumberFromParts = (plate: PlatePartsLike): string => {
 
   const series = `${firstLetter}${firstDigit}${secondDigit}${thirdDigit}${secondLetter}${thirdLetter}`;
   const region = sanitizeRegion(plate.regionCode ?? plate.regionId ?? undefined);
-  return [series, region].filter(Boolean).join(" ");
+  return [series, region].filter(Boolean).join("");
 };
 
 export const formatPlateLabel = (
