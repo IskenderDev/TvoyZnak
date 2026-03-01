@@ -27,6 +27,30 @@ const formatDate = (value: string): string => {
 
 const LIMIT_STEP = 6;
 
+const getTimestamp = (value?: string): number | null => {
+  if (!value) return null;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const sortLotsByNewest = (items: NumberItem[]): NumberItem[] => {
+  return [...items].sort((a, b) => {
+    const bTime = getTimestamp(b.date);
+    const aTime = getTimestamp(a.date);
+
+    if (bTime !== null && aTime !== null && bTime !== aTime) {
+      return bTime - aTime;
+    }
+
+    // Лоты без даты (или с невалидной датой) отправляем в конец списка.
+    if (bTime !== null && aTime === null) return 1;
+    if (bTime === null && aTime !== null) return -1;
+
+    // Детерминированный порядок, чтобы исключить случайную перестановку.
+    return b.id.localeCompare(a.id, "ru");
+  });
+};
+
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const [numbers, setNumbers] = useState<NumberItem[]>([]);
@@ -73,10 +97,10 @@ export default function ProfilePage() {
     setVisibleCount(LIMIT_STEP);
   }, [numbers.length]);
 
-  const myLots = useMemo<NumberItem[]>(
-    () => numbers.map((n) => ({ ...n, sellerName: user?.fullName ?? n.sellerName ?? n.seller })),
-    [numbers, user?.fullName]
-  );
+  const myLots = useMemo<NumberItem[]>(() => {
+    const normalized = numbers.map((n) => ({ ...n, sellerName: user?.fullName ?? n.sellerName ?? n.seller }));
+    return sortLotsByNewest(normalized);
+  }, [numbers, user?.fullName]);
 
   const visibleLots = useMemo(
     () => myLots.slice(0, Math.min(visibleCount, myLots.length)),
