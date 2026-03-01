@@ -25,6 +25,11 @@
   font-family: var(--font-auto-number);
 }
 
+
+:root {
+  --page-content-offset: clamp(1.75rem, 3vw, 3rem);
+}
+
 html {
   color-scheme: dark;
 }

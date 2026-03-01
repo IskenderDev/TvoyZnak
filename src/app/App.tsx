@@ -6,6 +6,7 @@ import AuthModal from "@/features/auth/ui/AuthModal"
 import Header from "@/widgets/layout/Header"
 import Footer from "@/widgets/layout/Footer"
 import Container from "@/shared/components/Container"
+import PageTopSpacing from "@/shared/components/PageTopSpacing"
 
 export default function App() {
   return (
@@ -14,7 +15,9 @@ export default function App() {
         <Header />
         <main className="flex-1">
           <Container>
-            <Outlet />
+            <PageTopSpacing>
+              <Outlet />
+            </PageTopSpacing>
           </Container>
         </main>
         <AuthModal />

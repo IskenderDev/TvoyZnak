@@ -1,6 +1,5 @@
 import { useEffect } from "react"
 import ContactForm from "@/shared/components/ContactForm"
-import PageTopSpacing from "@/shared/components/PageTopSpacing"
 import Seo from "@/shared/components/Seo"
 import ServicesSection from "@/widgets/about/ServicesSection"
 import { useLocation } from "react-router-dom"
@@ -93,8 +92,7 @@ export default function ServicesPage() {
         title="Услуги — Знак отличия"
         description="Все услуги компании Знак отличия по работе с автомобильными номерами"
       />
-      <PageTopSpacing>
-        <main className="text-white">
+      <main className="text-white">
           <section className="relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none" />
 
@@ -170,7 +168,6 @@ export default function ServicesPage() {
 
           <ContactForm />
         </main>
-      </PageTopSpacing>
     </>
   )
 }

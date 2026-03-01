@@ -73,7 +73,6 @@ export default function Header() {
       className="
         relative
         mx-3 sm:mx-4 lg:mx-5
-        md:mb-10
         text-white
         overflow-hidden
       "
