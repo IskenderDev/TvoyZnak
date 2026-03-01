@@ -1,6 +1,5 @@
 import { useEffect } from "react"
 import ContactForm from "@/shared/components/ContactForm"
-import PageTopSpacing from "@/shared/components/PageTopSpacing"
 import Seo from "@/shared/components/Seo"
 import ServicesSection from "@/widgets/about/ServicesSection"
 import { useLocation } from "react-router-dom"
@@ -93,13 +92,12 @@ export default function ServicesPage() {
         title="Услуги — Знак отличия"
         description="Все услуги компании Знак отличия по работе с автомобильными номерами"
       />
-      <PageTopSpacing>
-        <main className="text-white">
+      <main className="text-white">
           <section className="relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none" />
 
-            <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 pb-16 sm:pb-20 md:px-8 lg:pb-24">
-              <h1 className="mt-5 text-center text-2xl font-bold uppercase leading-tight sm:text-3xl lg:text-4xl">
+            <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 pt-12 pb-16 sm:pt-12 sm:pb-20 md:px-8 lg:pb-24">
+              <h1 className="text-center text-2xl font-bold uppercase leading-tight sm:text-3xl lg:text-4xl">
                 ВСЕ УСЛУГИ С{" "}
                 <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
                 <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
@@ -170,7 +168,6 @@ export default function ServicesPage() {
 
           <ContactForm />
         </main>
-      </PageTopSpacing>
     </>
   )
 }
