@@ -75,7 +75,6 @@ export default function ProjectsSection({ items }: Props) {
                       />
                     </div>
 
-                    {/* без градиента, просто текстовая часть */}
                     <div className="flex flex-1 flex-col gap-2">
                       <h3 className="text-sm md:text-base font-semibold tracking-[0.12em] uppercase">
                         {item.title}
