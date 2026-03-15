@@ -29,8 +29,8 @@ export default function Footer() {
   return (
     <footer className="bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] text-white p-10">
       <Container>
-        <div className="grid gap-8 md:gap-18 md:grid-cols-[auto_1fr_auto] items-start mx-auto max-w-[1120px]">
-          <div className="flex flex-col items-start order-1 md:order-none">
+        <div className="grid gap-8 desktop:gap-18 desktop:grid-cols-[auto_1fr_auto] items-start mx-auto max-w-[1120px]">
+          <div className="flex flex-col items-start order-1 desktop:order-none">
             <div className="my-2">
               <Link 
                 to={paths.home} 
@@ -40,16 +40,16 @@ export default function Footer() {
                 <img
                   src="/logo.svg"
                   alt="Знак отличия"
-                  className="h-8 md:h-12 w-auto"
+                  className="h-8 desktop:h-12 w-auto"
                 />
               </Link>
             </div>
           </div>
 
-          <div className="flex flex-col items-start md:items-end gap-3 order-2 md:order-last">
+          <div className="flex flex-col items-start desktop:items-end gap-3 order-2 desktop:order-last">
             <a
               href="tel:+79959202090"
-              className="text-xl md:text-3xl font-semibold text-white hover:text-[#85B6FF] transition-colors"
+              className="text-xl desktop:text-3xl font-semibold text-white hover:text-[#85B6FF] transition-colors"
             >
               +7 (995) 920-20-90
             </a>
@@ -78,7 +78,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 sm:gap-16 order-3 md:order-none">
+          <div className="grid grid-cols-2 gap-8 desktop:gap-16 order-3 desktop:order-none">
             <div>
               <h4 className="text-[18px] font-medium mb-3">Основные</h4>
               <ul className="flex flex-col gap-2 text-white">

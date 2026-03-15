@@ -150,7 +150,7 @@ export default function PostFormModal({
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <div className="max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl sm:p-10">
+      <div className="max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl desktop:p-10">
         <div className="flex flex-col gap-6">
           <header className="space-y-2">
             <h2 className="text-2xl font-semibold text-slate-900">
@@ -240,11 +240,11 @@ export default function PostFormModal({
               </div>
             ) : null}
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <div className="flex flex-col gap-3 desktop:flex-row desktop:justify-end">
               <Button
                 type="button"
                 variant="ghost"
-                className="w-full sm:w-auto"
+                className="w-full desktop:w-auto"
                 onClick={handleClose}
                 disabled={isSubmitting}
               >
@@ -252,7 +252,7 @@ export default function PostFormModal({
               </Button>
               <Button
                 type="submit"
-                className="w-full sm:w-auto"
+                className="w-full desktop:w-auto"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

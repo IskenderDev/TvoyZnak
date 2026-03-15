@@ -159,7 +159,7 @@ export default function AuthModal() {
   const showAuthenticatedMessage = isAuthenticated;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex min-h-dvh items-center justify-center px-4 py-6 sm:py-10">
+    <div className="fixed inset-0 z-50 flex min-h-dvh items-center justify-center px-4 py-6 desktop:py-10">
       <div
         className="absolute inset-0 bg-[rgba(0,0,0,0.70)] transition-opacity duration-200 data-[state=open]:opacity-100 data-[state=opening]:opacity-0 data-[state=closing]:opacity-0"
         data-state={stateAttribute}
@@ -176,13 +176,13 @@ export default function AuthModal() {
         aria-describedby="auth-modal-description"
         tabIndex={-1}
         data-state={stateAttribute}
-        className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-4xl bg-[#1B1B1B] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 sm:px-8 sm:py-8 max-h-[90vh]"
+        className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-4xl bg-[#1B1B1B] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 desktop:px-8 desktop:py-8 max-h-[90vh]"
       >
         <div className="flex items-start justify-between">
           <div className="flex flex-col gap-3">
             <h2
               id="auth-modal-title"
-              className="text-[36px] font-extrabold uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
+              className="text-[36px] font-extrabold uppercase tracking-wide text-[#1E66FF] desktop:text-[24px]"
             >
               {showAuthenticatedMessage ? "ВЫ УЖЕ В СИСТЕМЕ" : VIEW_TITLE[view]}
             </h2>
@@ -218,7 +218,7 @@ export default function AuthModal() {
             <p className="rounded-4xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
               Вы уже авторизованы. Если хотите использовать другой аккаунт, выйдите из текущего профиля.
             </p>
-            <div className="mt-auto grid gap-3 sm:grid-cols-2">
+            <div className="mt-auto grid gap-3 desktop:grid-cols-2">
               <button
                 type="button"
                 onClick={() => {

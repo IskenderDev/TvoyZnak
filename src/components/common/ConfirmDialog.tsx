@@ -115,11 +115,11 @@ export default function ConfirmDialog({
           {description ? <p className="mt-2 text-sm text-neutral-300">{description}</p> : null}
         </div>
 
-        <div className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:justify-end sm:gap-2">
+        <div className="flex flex-col gap-3 px-5 py-4 desktop:flex-row desktop:justify-end desktop:gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="w-full rounded-lg border border-white/10 bg-neutral-800 px-4 py-2 text-sm font-medium transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:w-auto"
+            className="w-full rounded-lg border border-white/10 bg-neutral-800 px-4 py-2 text-sm font-medium transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 desktop:w-auto"
           >
             {cancelLabel}
           </button>
@@ -127,7 +127,7 @@ export default function ConfirmDialog({
             type="button"
             onClick={onConfirm}
             disabled={confirmLoading}
-            className={`w-full rounded-lg px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 sm:w-auto ${
+            className={`w-full rounded-lg px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 desktop:w-auto ${
               confirmTone === "danger"
                 ? "bg-red-600 text-white hover:bg-red-500 disabled:bg-red-700/60"
                 : "bg-emerald-500 text-black hover:bg-emerald-400 disabled:bg-emerald-500/60"

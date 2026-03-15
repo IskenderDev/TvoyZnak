@@ -61,7 +61,7 @@ export default function PostViewDrawer({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl sm:max-w-xl">
+      <div className="max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-white p-8 shadow-2xl desktop:max-w-xl">
         {isLoading && !currentPost ? (
           <div className="flex min-h-[240px] flex-col items-center justify-center gap-4 text-slate-500">
             <Spinner />
@@ -79,7 +79,7 @@ export default function PostViewDrawer({
         {currentPost ? (
           <div className="flex flex-col gap-6">
             <header className="space-y-3">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex flex-col gap-2 desktop:flex-row desktop:items-start desktop:justify-between">
                 <div>
                   <h2 className="text-2xl font-semibold text-slate-900">
                     {currentPost.title}

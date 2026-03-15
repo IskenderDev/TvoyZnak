@@ -15,8 +15,8 @@ function FaqRow({
   onToggle: () => void;
 }) {
   return (
-    <div className="rounded-4xl   bg-[#131313]  px-4 sm:px-6 py-4 sm:py-5 hover:bg-[#282828] transition-colors duration-500">
-      <div className="flex items-center gap-3 sm:gap-4">
+    <div className="rounded-4xl   bg-[#131313]  px-4 desktop:px-6 py-4 desktop:py-5 hover:bg-[#282828] transition-colors duration-500">
+      <div className="flex items-center gap-3 desktop:gap-4">
         
 
         <div className="flex-1">
@@ -26,7 +26,7 @@ function FaqRow({
             aria-controls={`faq-panel-${item.id}`}
             onClick={onToggle}
           >
-            <span className="font-semibold text-[15px] sm:text-base text-white">
+            <span className="font-semibold text-[15px] desktop:text-base text-white">
               {item.question}
             </span>
 
@@ -52,7 +52,7 @@ function FaqRow({
               open ? "max-h-80 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-1"
             ].join(" ")}
           >
-            <p className="text-neutral-300 text-sm sm:text-[15px] leading-relaxed pr-10 mt-3">
+            <p className="text-neutral-300 text-sm desktop:text-[15px] leading-relaxed pr-10 mt-3">
               {item.answer}
             </p>
           </div>
@@ -72,13 +72,13 @@ export default function FaqSection({
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
 
   return (
-    <section className=" text-white py-12 md:py-16">
-      <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-2xl md:text-4xl font-bold uppercase tracking-wide">
+    <section className=" text-white py-12 desktop:py-16">
+      <div className="max-w-[1100px] mx-auto px-5 desktop:px-8">
+        <h2 className="text-center text-2xl desktop:text-4xl font-bold uppercase tracking-wide">
           Часто задаваемые вопросы
         </h2>
 
-        <div className="mt-6 md:mt-8 space-y-4">
+        <div className="mt-6 desktop:mt-8 space-y-4">
           {items.map((item, i) => (
             <FaqRow
               key={item.id}

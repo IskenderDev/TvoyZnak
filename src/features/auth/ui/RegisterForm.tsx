@@ -102,7 +102,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
             autoComplete="name"
             placeholder="Имя *"
             aria-invalid={errors.fullName ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
             {...register("fullName")}
           />
           {errors.fullName ? (
@@ -119,7 +119,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
             autoComplete="email"
             placeholder="Почта *"
             aria-invalid={errors.email ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
             {...register("email")}
           />
           {errors.email ? (
@@ -138,7 +138,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
                 id="register-phone"
                 placeholder="Телефон *"
                 aria-invalid={errors.phoneNumber ? "true" : "false"}
-                className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+                className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
                 value={field.value}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -161,7 +161,7 @@ export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFor
             autoComplete="new-password"
             placeholder="Пароль *"
             aria-invalid={errors.password ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
             {...register("password")}
           />
           {errors.password ? (

@@ -92,17 +92,17 @@ export default function ContactForm() {
     typesLoading
 
   return (
-    <section className=" text-white py-12 md:py-16">
+    <section className=" text-white py-12 desktop:py-16">
       {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
-      <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">Оставьте заявку!</h2>
-        <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
+      <div className="max-w-[900px] mx-auto px-5 desktop:px-8">
+        <h2 className="text-center text-3xl desktop:text-4xl font-bold uppercase">Оставьте заявку!</h2>
+        <p className="text-center text-neutral-300 mt-2 text-sm desktop:text-base">
           Все сделки сопровождаются юридической поддержкой, а номера подбираются только из проверенных источников.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 desktop:grid-cols-2 gap-4 desktop:gap-5">
             <input
               type="text"
               name="fullName"
@@ -157,7 +157,7 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={isSubmitDisabled}
-              className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors duration-300"
+              className="rounded-full w-full desktop:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors duration-300"
             >
               {loading ? "Отправка..." : "Отправить"}
             </button>

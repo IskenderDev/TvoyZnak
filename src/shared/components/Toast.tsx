@@ -20,7 +20,7 @@ export default function Toast({
           <div className="mt-[2px]">
             {type === "success" ? <FiCheckCircle size={20} /> : <FiXCircle size={20} />}
           </div>
-          <div className="flex-1 text-sm md:text-base">{message}</div>
+          <div className="flex-1 text-sm desktop:text-base">{message}</div>
           <button
             aria-label="Закрыть уведомление"
             onClick={onClose}

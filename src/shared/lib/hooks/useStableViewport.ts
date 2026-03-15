@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
+import { DESKTOP_BREAKPOINT } from "@/shared/config/responsive"
 
 export function getStableViewportWidth(): number {
-  if (typeof window === "undefined") return 1024
+  if (typeof window === "undefined") return DESKTOP_BREAKPOINT
 
   const vv = window.visualViewport?.width
   if (typeof vv === "number" && Number.isFinite(vv) && vv > 0) return vv

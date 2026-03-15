@@ -55,17 +55,17 @@ export default function ConfirmDialog({
           ) : null}
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+        <div className="mt-8 flex flex-col gap-3 desktop:flex-row desktop:justify-end">
           <Button
             variant="ghost"
-            className="w-full sm:w-auto"
+            className="w-full desktop:w-auto"
             onClick={handleCancel}
             disabled={loading}
           >
             {cancelText}
           </Button>
           <Button
-            className="w-full sm:w-auto"
+            className="w-full desktop:w-auto"
             onClick={onConfirm}
             disabled={loading}
           >

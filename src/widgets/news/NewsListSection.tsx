@@ -65,7 +65,7 @@ export default function NewsListSection() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 desktop:grid-cols-2 desktop:grid-cols-3 gap-6">
             {pagedItems.map((news) => (
               <NewsCard key={news.id} news={news} />
             ))}

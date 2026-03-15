@@ -33,7 +33,7 @@ export default function NumbersCatalogSection() {
     <>
       <Seo title="Номера — Знак отличия" description="Каталог автомобильных номеров с актуальными предложениями." />
       <section className="text-white min-h-screen pb-12">
-        <div className="mx-auto px-4 sm:px-6">
+        <div className="mx-auto px-4 desktop:px-6">
           <PlateMarketFilters
             className="mb-6"
             region={region}
@@ -51,7 +51,7 @@ export default function NumbersCatalogSection() {
           {loading && <p className="mb-4 text-neutral-300">Загрузка предложений...</p>}
 
           <PlateMarketTable
-            className="hidden md:block"
+            className="hidden desktop:block"
             rows={visibleRows}
             sortField={sortField}
             sortDir={sortDir}
@@ -59,12 +59,12 @@ export default function NumbersCatalogSection() {
             onSort={onSort}
           />
           {!loading && !visibleRows.length && !error ? (
-            <p className="rounded-xl md:-mt-10 bg-white px-6 py-10 pt-20 text-center text-black">
+            <p className="rounded-xl desktop:-mt-10 bg-white px-6 py-10 pt-20 text-center text-black">
               Номера не найдены. Измените фильтры.
             </p>
           ) : (
             <>
-              <PlateMarketMobileList className="mt-6 md:hidden" rows={visibleRows} />
+              <PlateMarketMobileList className="mt-6 desktop:hidden" rows={visibleRows} />
 
               {canShowMore && (
                 <div className="mt-6 flex justify-center">

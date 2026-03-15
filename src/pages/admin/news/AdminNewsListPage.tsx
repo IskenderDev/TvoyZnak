@@ -289,7 +289,7 @@ export default function AdminNewsListPage() {
 
   return (
     <div className="space-y-8">
-      <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <header className="flex flex-col gap-4 desktop:flex-row desktop:items-center desktop:justify-between">
         <div className="space-y-1">
           <h1 className="text-3xl font-extrabold text-white">Новости</h1>
           <p className="text-lg text-white/90">
@@ -303,13 +303,13 @@ export default function AdminNewsListPage() {
       </header>
 
       <section className="flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 desktop:flex-row desktop:items-center desktop:justify-between">
           <Input
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Поиск по заголовку или описанию"
-            wrapperClassName="md:max-w-sm"
+            wrapperClassName="desktop:max-w-sm"
           />
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <span>
@@ -322,7 +322,7 @@ export default function AdminNewsListPage() {
         {renderTable()}
 
         {items.length > 0 ? (
-          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
+          <div className="flex flex-col items-center justify-between gap-3 desktop:flex-row">
             <div className="flex items-center gap-2">
               <Button
                 variant="secondary"

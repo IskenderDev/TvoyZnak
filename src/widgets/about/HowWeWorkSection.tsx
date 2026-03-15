@@ -31,38 +31,38 @@ export default function HowWeWorkSection() {
   ] as const;
 
   const numberBaseClass =
-    "relative w-[60px] md:w-[90px] pr-2 md:pr-3 text-right text-6xl md:text-9xl font-extrabold leading-none text-white/95 select-none";
+    "relative w-[60px] desktop:w-[90px] pr-2 desktop:pr-3 text-right text-6xl desktop:text-9xl font-extrabold leading-none text-white/95 select-none";
 
   return (
-    <section className="relative text-white py-12 md:py-16" aria-label="Как мы работаем">
-      <div className="max-w-[1100px] mx-auto px-6 md:px-10">
+    <section className="relative text-white py-12 desktop:py-16" aria-label="Как мы работаем">
+      <div className="max-w-[1100px] mx-auto px-6 desktop:px-10">
         <header className="text-center">
-          <h2 className="text-2xl md:text-4xl font-bold tracking-wide">
+          <h2 className="text-2xl desktop:text-4xl font-bold tracking-wide">
             КАК МЫ РАБОТАЕМ
           </h2>
         </header>
 
-        <div className="relative bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] rounded-[26px] md:rounded-[28px] mt-6 md:mt-8 px-5 md:px-8 py-6 md:py-10">
-          <div className="relative flex flex-col gap-x-4 md:gap-x-6 gap-y-8 md:gap-y-12">
+        <div className="relative bg-gradient-to-r from-[#001833] via-[#003979] to-[#004899] rounded-[26px] desktop:rounded-[28px] mt-6 desktop:mt-8 px-5 desktop:px-8 py-6 desktop:py-10">
+          <div className="relative flex flex-col gap-x-4 desktop:gap-x-6 gap-y-8 desktop:gap-y-12">
             {steps.map((step, index) => {
               const isLast = index === steps.length - 1;
               const stepNumberClass = [
                 numberBaseClass,
                 isLast
                   ? "after:hidden"
-                  : "after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:top-full after:h-full after:my-2 md:after:h-12 after:border-l-4 after:border-dashed after:border-white",
+                  : "after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:top-full after:h-full after:my-2 desktop:after:h-12 after:border-l-4 after:border-dashed after:border-white",
               ].join(" ");
 
               return (
-                <div key={step.id} className="flex gap-4 md:gap-6 items-center">
+                <div key={step.id} className="flex gap-4 desktop:gap-6 items-center">
                   <div aria-hidden="true" className={stepNumberClass}>
                     {step.number}
                   </div>
                   <article aria-labelledby={`${step.id}-title`}>
-                    <h3 id={`${step.id}-title`} className="font-semibold text-base md:text-lg">
+                    <h3 id={`${step.id}-title`} className="font-semibold text-base desktop:text-lg">
                       {step.title}
                     </h3>
-                    <p className="text-white/90 text-sm md:text-[15px] leading-relaxed mt-1">
+                    <p className="text-white/90 text-sm desktop:text-[15px] leading-relaxed mt-1">
                       {step.description}
                     </p>
                   </article>

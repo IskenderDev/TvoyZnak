@@ -96,19 +96,19 @@ export default function ServicesPage() {
           <section className="relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none" />
 
-            <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 pt-12 pb-16 sm:pt-0 sm:pb-20 md:px-8 lg:pb-24">
-              <h1 className="text-center text-2xl font-bold uppercase leading-tight sm:text-3xl lg:text-4xl">
+            <div className="relative mx-auto flex max-w-6xl flex-col items-center px-5 pt-12 pb-16 desktop:pt-0 desktop:pb-20 desktop:px-8 desktop:pb-24">
+              <h1 className="text-center text-2xl font-bold uppercase leading-tight desktop:text-3xl desktop:text-4xl">
                 ВСЕ УСЛУГИ С{" "}
                 <span className="text-[#0177FF]">АВТОМОБИЛЬНЫМИ НОМЕРАМИ</span>
                 <br /> В ОДНОМ МЕСТЕ — БЫСТРО, УДОБНО И ПРОЗРАЧНО
               </h1>
-              <p className="mt-5 max-w-[820px] text-center text-sm text-[#bebebe] sm:text-lg">
+              <p className="mt-5 max-w-[820px] text-center text-sm text-[#bebebe] desktop:text-lg">
                 Компания «ЗНАК ОТЛИЧИЯ» предлагает комплексные решения для
                 владельцев и покупателей автомобильных номеров. Мы оцениваем,
                 выкупаем, продаём и подбираем уникальные комбинации, обеспечивая
                 прозрачность, безопасность и удобство на каждом этапе.
               </p>
-              <div className="mt-10 -mb-15 mx-auto md:h-auto">
+              <div className="mt-10 -mb-15 mx-auto desktop:h-auto">
                 <img src="/services/heroServices.png" alt="" />
               </div>
             </div>
@@ -116,18 +116,18 @@ export default function ServicesPage() {
 
           <ServicesSection />
 
-          <section className="px-5 pb-16 pt-4 md:px-8 lg:pb-24">
+          <section className="px-5 pb-16 pt-4 desktop:px-8 desktop:pb-24">
             <div className="mx-auto flex flex-col max-w-6xl gap-15">
               {serviceBlocks.map((service) => (
                 <article
                   key={service.number}
                   id={service.id}
-                  className="mt-10 grid grid-cols-1 items-start gap-15 md:grid-cols-[280px_1fr] lg:gap-10"
+                  className="mt-10 grid grid-cols-1 items-start gap-15 desktop:grid-cols-[280px_1fr] desktop:gap-10"
                 >
                   <div className="relative mr-10">
                     <div className="rounded-2xl bg-[#0177FF] p-5 text-white ">
                       <div className="items-start justify-between">
-                        <div className="text-2xl text-left md:text-3xl font-bold tracking-[0.2em]">
+                        <div className="text-2xl text-left desktop:text-3xl font-bold tracking-[0.2em]">
                           
                         </div>
                         <div className="text-right text-5xl font-bold leading-none tracking-[0.2em]">
@@ -141,20 +141,20 @@ export default function ServicesPage() {
                   </div>
 
                   <div className="text-white/95">
-                    <h3 className="text-2xl md:text-3xl font-bold uppercase">
+                    <h3 className="text-2xl desktop:text-3xl font-bold uppercase">
                       {service.title}
                     </h3>
-                    <p className="my-5 text-[16px] md:text-lg leading-relaxed">
+                    <p className="my-5 text-[16px] desktop:text-lg leading-relaxed">
                       {service.description}
                     </p>
-                    <p className="mt-4 text-[16px] md:text-lg">
+                    <p className="mt-4 text-[16px] desktop:text-lg">
                       {service.subtitle}
                     </p>
                     <div className="mt-3 flex flex-col">
                       {service.chips.map((chip) => (
                         <span
                           key={chip}
-                          className="rounded-xl py-2 text-[12px] md:text-[14px] duration-200 text-[#bebebe]"
+                          className="rounded-xl py-2 text-[12px] desktop:text-[14px] duration-200 text-[#bebebe]"
                         >
                           —  {chip}
                         </span>

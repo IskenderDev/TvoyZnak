@@ -32,7 +32,7 @@ export default function HeaderNav({
 }: HeaderNavProps) {
   const containerBase =
     orientation === "horizontal"
-      ? "flex items-center gap-7 xl:gap-9"
+      ? "flex items-center gap-7 desktop:gap-9"
       : "flex flex-col gap-4";
 
   const linkBase =
