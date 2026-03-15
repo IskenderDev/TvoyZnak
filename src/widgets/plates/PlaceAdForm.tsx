@@ -185,18 +185,18 @@ export default function PlaceAdForm() {
 
   return (
     <PageTopSpacing>
-      <section className=" text-white pb-12 md:pb-16" aria-label="Размещение объявления">
+      <section className=" text-white pb-12 desktop:pb-16" aria-label="Размещение объявления">
         {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
-        <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-          <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">
+        <div className="max-w-[900px] mx-auto px-5 desktop:px-8">
+          <h2 className="text-center text-3xl desktop:text-4xl font-bold uppercase">
             РАЗМЕСТИТЬ ОБЪЯВЛЕНИЕ
           </h2>
-          <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
+          <p className="text-center text-neutral-300 mt-2 text-sm desktop:text-base">
             Все сделки сопровождаются юридической поддержкой
           </p>
 
-          <div className="mt-6 md:mt-8">
+          <div className="mt-6 desktop:mt-8">
             <PlateSelectForm
               size={window.innerWidth < 640 ? 'xs' : 'lg'}
               responsive
@@ -209,7 +209,7 @@ export default function PlaceAdForm() {
           </div>
 
           <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 desktop:grid-cols-2 gap-4">
               {requiresContactInfo && (
                 <>
                   <input
@@ -267,7 +267,7 @@ export default function PlaceAdForm() {
               <input
                 type="text"
                 inputMode="numeric"
-                className={`${INPUT_BASE} sm:col-span-2`}
+                className={`${INPUT_BASE} desktop:col-span-2`}
                 placeholder="Стоимость *"
                 aria-label="Стоимость"
                 name="price"
@@ -300,7 +300,7 @@ export default function PlaceAdForm() {
               <button
                 type="submit"
                 disabled={isSubmitDisabled}
-                className="rounded-full w-full sm:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
+                className="rounded-full w-full desktop:w-auto px-10 py-3 bg-[#1E63FF] hover:bg-[#1557E0] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium transition-colors"
                 aria-label="Разместить объявление"
               >
                 {loading ? "Отправка..." : "Разместить"}

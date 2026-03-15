@@ -61,7 +61,7 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
         style={style}
         aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
       >
-        <time className="tabular-nums text-sm font-light text-black/65 md:text-lg">
+        <time className="tabular-nums text-sm font-light text-black/65 desktop:text-lg">
           {row.date ? formatDate(row.date) : "—"}
         </time>
 
@@ -69,16 +69,16 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
           <PlateStaticSm data={data} responsive className="mx-auto max-w-[210px]" />
         </div>
 
-        <div className="tabular-nums text-sm md:text-lg w-[200px]">
+        <div className="tabular-nums text-sm desktop:text-lg w-[200px]">
           <span className="font-[400]">{priceLabel}</span>
         </div>
 
-        <div className="text-sm font-light md:text-lg text-black/65">{row.seller}</div>
+        <div className="text-sm font-light desktop:text-lg text-black/65">{row.seller}</div>
 
         <div className="justify-self-end">
           <button
             onClick={handleBuyClick}
-            className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white transition hover:brightness-95 md:text-lg"
+            className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white transition hover:brightness-95 desktop:text-lg"
           >
             Купить
           </button>

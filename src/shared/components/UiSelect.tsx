@@ -143,7 +143,7 @@ export default function UiSelect<T extends string>({
           ref={measureRef}
           className={[
             "pointer-events-none absolute -left-[9999px] -top-[9999px] whitespace-nowrap",
-            "inline-flex items-center text-sm md:text-xl justify-center rounded-full border border-white/30 px-3 py-1.5 font-semibold min-h-10",
+            "inline-flex items-center text-sm desktop:text-xl justify-center rounded-full border border-white/30 px-3 py-1.5 font-semibold min-h-10",
           ].join(" ")}
         >
           {longestLabel || placeholder}
@@ -162,7 +162,7 @@ export default function UiSelect<T extends string>({
       >
         <span className="flex items-center justify-center gap-2">
           {leadingIcon ? (
-            <span className="flex h-4 w-4 items-center justify-center md:h-5 md:w-5">
+            <span className="flex h-4 w-4 items-center justify-center desktop:h-5 desktop:w-5">
               {leadingIcon}
             </span>
           ) : null}
@@ -210,7 +210,7 @@ export default function UiSelect<T extends string>({
               >
                 <span
                   className={[
-                    "inline-flex w-full items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm md:text-lg font-[400] min-h-10",
+                    "inline-flex w-full items-center justify-center rounded-full border border-white/30 px-10 py-2 text-sm desktop:text-lg font-[400] min-h-10",
                     "transition-colors duration-150 whitespace-nowrap",
                     selected
                       ? "bg-[#0177FF] text-white "

@@ -72,7 +72,7 @@ export default function Header() {
     <header
       className="
         relative
-        mx-3 sm:mx-4 lg:mx-5
+        mx-3 desktop:mx-4 desktop:mx-5
         text-white
         overflow-hidden
       "
@@ -82,8 +82,8 @@ export default function Header() {
           className="
             relative
             flex items-center justify-between
-            gap-3 md:gap-5 lg:gap-5
-            py-3 sm:py-4 lg:py-6
+            gap-3 desktop:gap-5 desktop:gap-5
+            py-3 desktop:py-4 desktop:py-6
           "
         >
           <Link
@@ -94,22 +94,22 @@ export default function Header() {
             <img
               src="/logo.svg"
               alt="Знак отличия"
-              className="h-7 w-auto sm:h-8 lg:h-9"
+              className="h-7 w-auto desktop:h-8 desktop:h-9"
             />
           </Link>
 
-          <div className="hidden flex-1 justify-center lg:flex">
-            <div className="nav-glass inline-flex items-center px-4 sm:px-5">
+          <div className="hidden flex-1 justify-center desktop:flex">
+            <div className="nav-glass inline-flex items-center px-4 desktop:px-5">
               <HeaderNav />
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3 lg:gap-4">
+          <div className="flex items-center gap-2 desktop:gap-3 desktop:gap-4">
             <button
               type="button"
               onClick={openMenu}
               className="
-                flex md:hidden
+                flex desktop:hidden
                 h-10 w-10 items-center justify-center
                 rounded-full
                 bg-white/5
@@ -122,14 +122,14 @@ export default function Header() {
               <LuMenu className="h-6 w-6" />
             </button>
 
-            <div className="hidden items-center gap-2 sm:gap-3 lg:flex">
+            <div className="hidden items-center gap-2 desktop:gap-3 desktop:flex">
               <Button
                 onClick={handleSellClick}
                 className="
                   rounded-full
                   bg-[#0075ff]
-                  px-4 sm:px-5
-                  py-2 sm:py-2.5
+                  px-4 desktop:px-5
+                  py-2 desktop:py-2.5
                   text-sm font-semibold
                   transition
                   hover:bg-[#0063e6]
@@ -144,10 +144,10 @@ export default function Header() {
                   to={userDestination}
                   onClick={handleProfileClick}
                   className="
-                    flex items-center gap-1 sm:gap-1
+                    flex items-center gap-1 desktop:gap-1
                     rounded-full
                     bg-white/5
-                    px-2 sm:px-3
+                    px-2 desktop:px-3
                     py-2
                     text-[14px]
                     ring-1 ring-white/10
@@ -160,7 +160,7 @@ export default function Header() {
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5 shrink-0" />
-                  <span className="hidden lg:block">
+                  <span className="hidden desktop:block">
                     {truncateName(user?.fullName ?? "", 7)}
                   </span>
                 </Link>
@@ -168,12 +168,12 @@ export default function Header() {
                 <button
                   onClick={handleLoginClick}
                   className="
-                    flex items-center gap-1.5 sm:gap-2
+                    flex items-center gap-1.5 desktop:gap-2
                     rounded-full
                     bg-white/5
-                    px-2.5 sm:px-3
+                    px-2.5 desktop:px-3
                     py-1.5
-                    text-xs sm:text-sm
+                    text-xs desktop:text-sm
                     ring-1 ring-white/10
                     backdrop-blur-xl
                     transition
@@ -182,7 +182,7 @@ export default function Header() {
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5" />
-                  <span className="hidden lg:block text-sm font-medium">
+                  <span className="hidden desktop:block text-sm font-medium">
                     Войти
                   </span>
                 </button>

@@ -128,8 +128,8 @@ export default function AdminLotsPage() {
 
       <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2">
         <section className="flex flex-col gap-6 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="w-full md:max-w-sm">
+          <div className="flex flex-col gap-4 desktop:flex-row desktop:items-end desktop:justify-between">
+            <div className="w-full desktop:max-w-sm">
               <div className="relative">
                 <FiSearch className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
@@ -143,7 +143,7 @@ export default function AdminLotsPage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 md:flex-row md:items-center">
+            <div className="flex flex-col gap-3 desktop:flex-row desktop:items-center">
               <ControlGroup label="На странице">
                 <select
                   value={pageSize}
@@ -189,7 +189,7 @@ export default function AdminLotsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={resetFilters}
-                className="md:self-end"
+                className="desktop:self-end"
               >
                 <FiRefreshCw className="h-4 w-4" />
                 Сбросить

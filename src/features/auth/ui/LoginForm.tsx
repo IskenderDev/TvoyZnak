@@ -87,7 +87,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
             autoComplete="email"
             placeholder="Почта *"
             aria-invalid={errors.email ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
             {...register("email")}
           />
           {errors.email ? (
@@ -104,7 +104,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister }: LoginFormPr
             autoComplete="current-password"
             placeholder="Пароль *"
             aria-invalid={errors.password ? "true" : "false"}
-            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] sm:h-12"
+            className="h-11 w-full rounded-4xl border border-[#E5E7EB] bg-white px-4 text-sm text-[#0B0B0C] placeholder:text-[#8F9BB3] focus:outline-none focus:border-[#1E66FF] focus:ring-4 focus:ring-[rgba(30,102,255,0.12)] desktop:h-12"
             {...register("password")}
           />
           {errors.password ? (

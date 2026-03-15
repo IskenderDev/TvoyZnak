@@ -308,7 +308,7 @@ export default function AdminLotEditModal({
             </div>
           ) : null}
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 desktop:grid-cols-3">
             <Field label="Первая буква" error={errors.firstLetter?.message}>
               <input
                 {...register("firstLetter")}
@@ -353,7 +353,7 @@ export default function AdminLotEditModal({
             </Field>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 desktop:grid-cols-2">
             <Field label="Регион" error={errors.regionId?.message}>
               <select
                 {...register("regionId", { valueAsNumber: true })}
@@ -393,18 +393,18 @@ export default function AdminLotEditModal({
             />
           </Field>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+          <div className="flex flex-col gap-3 desktop:flex-row desktop:justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="w-full rounded-lg border border-white/10 bg-neutral-800 px-4 py-2 text-sm font-medium transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 sm:w-auto"
+              className="w-full rounded-lg border border-white/10 bg-neutral-800 px-4 py-2 text-sm font-medium transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 desktop:w-auto"
             >
               Отмена
             </button>
             <button
               type="submit"
               disabled={isBusy || regionsLoading}
-              className="w-full rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/60 sm:w-auto"
+              className="w-full rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-black transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-emerald-500/60 desktop:w-auto"
             >
               {isBusy ? "Сохранение..." : "Сохранить"}
             </button>

@@ -251,7 +251,7 @@ export default function AdminLotsTable({
         )}
       </Table.Mobile>
 
-      <div className="flex flex-col gap-3 border-t border-slate-100 pt-4 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 border-t border-slate-100 pt-4 text-sm text-slate-500 desktop:flex-row desktop:items-center desktop:justify-between">
         <span>
           Показано {shownCount} из {totalItems}
         </span>

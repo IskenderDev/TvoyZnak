@@ -77,30 +77,30 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
 
   return (
     <section className="min-h-screen  py-12 text-white">
-      <div className="mx-auto w-full px-4 sm:px-6">
-        <h1 className="mb-6 text-3xl uppercase md:text-4xl">{pageTitle}</h1>
+      <div className="mx-auto w-full px-4 desktop:px-6">
+        <h1 className="mb-6 text-3xl uppercase desktop:text-4xl">{pageTitle}</h1>
 
         <div className="grid gap-6">
-          <article className="rounded-2xl bg-white px-6 py-6 text-black shadow-sm sm:px-8 sm:py-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <article className="rounded-2xl bg-white px-6 py-6 text-black shadow-sm desktop:px-8 desktop:py-8">
+            <div className="flex flex-col gap-4 desktop:flex-row desktop:items-start desktop:justify-between">
               <div>
                 {eyebrow ? (
                   <p className="text-xs uppercase tracking-[0.3em] text-black/50">{eyebrow}</p>
                 ) : null}
-                <h2 className="mt-2 text-3xl uppercase text-black md:text-4xl">{title}</h2>
+                <h2 className="mt-2 text-3xl uppercase text-black desktop:text-4xl">{title}</h2>
                 {description ? (
-                  <p className="mt-3 max-w-2xl text-sm text-black/70 md:text-base">{description}</p>
+                  <p className="mt-3 max-w-2xl text-sm text-black/70 desktop:text-base">{description}</p>
                 ) : null}
               </div>
-              {actions ? <div className="md:pt-2">{actions}</div> : null}
+              {actions ? <div className="desktop:pt-2">{actions}</div> : null}
             </div>
 
             {hasFields ? (
-              <dl className="mt-6 grid gap-4 md:grid-cols-2">
+              <dl className="mt-6 grid gap-4 desktop:grid-cols-2">
                 {fields!.map((field) => (
                   <div key={field.label} className="rounded-2xl bg-black/5 px-4 py-3">
                     <dt className="text-xs uppercase tracking-wide text-black/50">{field.label}</dt>
-                    <dd className="mt-1 text-sm font-medium text-black md:text-base">{field.value}</dd>
+                    <dd className="mt-1 text-sm font-medium text-black desktop:text-base">{field.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -108,10 +108,10 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
           </article>
 
           <article className="overflow-hidden rounded-2xl bg-white text-black shadow-sm">
-            <div className="flex flex-col gap-4 border-b border-black/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-4 border-b border-black/10 px-6 py-5 desktop:flex-row desktop:items-center desktop:justify-between">
               <div>
-                <h2 className="text-2xl uppercase text-black md:text-3xl">{lotsTitle}</h2>
-                {lotsSubtitle ? <p className="mt-1 text-sm text-black/70 md:text-base">{lotsSubtitle}</p> : null}
+                <h2 className="text-2xl uppercase text-black desktop:text-3xl">{lotsTitle}</h2>
+                {lotsSubtitle ? <p className="mt-1 text-sm text-black/70 desktop:text-base">{lotsSubtitle}</p> : null}
               </div>
               {headerActions ? <div className="flex flex-wrap items-center gap-3">{headerActions}</div> : null}
             </div>
@@ -127,7 +127,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
 
             {items.length ? (
               <div className="mt-6">
-                <div className="hidden border-y border-black/10 md:block">
+                <div className="hidden border-y border-black/10 desktop:block">
                   <div className="grid items-center gap-4 px-6 py-3 text-center text-lg font-bold [grid-template-columns:var(--cols)]" style={DESKTOP_COLS_STYLE}>
                     <span>Дата</span>
                     <span>Номер</span>
@@ -140,7 +140,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                     {items.map((item) => (
                       <li
                         key={item.id}
-                        className="grid items-center gap-4 px-6 py-4 text-center text-sm md:text-base [grid-template-columns:var(--cols)]"
+                        className="grid items-center gap-4 px-6 py-4 text-center text-sm desktop:text-base [grid-template-columns:var(--cols)]"
                         style={DESKTOP_COLS_STYLE}
                       >
                         <span className="tabular-nums text-black/80">{item.dateLabel}</span>
@@ -177,7 +177,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                   </ul>
                 </div>
 
-                <ul className="grid gap-4 px-4 pb-6 md:hidden">
+                <ul className="grid gap-4 px-4 pb-6 desktop:hidden">
                   {items.map((item) => (
                     <li key={item.id} className="rounded-2xl bg-white px-4 py-4 text-black shadow-sm ring-1 ring-black/10">
                       <div className="flex items-center justify-between text-xs uppercase tracking-wide text-black/50">

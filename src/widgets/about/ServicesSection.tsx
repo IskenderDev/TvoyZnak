@@ -2,16 +2,16 @@ import { Link } from "react-router-dom"
 
 export default function ServicesSection() {
   return (
-    <section aria-labelledby="services-title" className="py-10 md:py-14">
-      <div className="mx-auto max-w-[1100px] px-5 md:px-10">
+    <section aria-labelledby="services-title" className="py-10 desktop:py-14">
+      <div className="mx-auto max-w-[1100px] px-5 desktop:px-10">
         <h2
           id="services-title"
-          className="text-center text-[22px] md:text-[36px] font-bold tracking-[0.08em] text-white uppercase"
+          className="text-center text-[22px] desktop:text-[36px] font-bold tracking-[0.08em] text-white uppercase"
         >
           НАШИ УСЛУГИ
         </h2>
 
-        <div className="mt-8 md:mt-10 mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 max-w-[900px]">
+        <div className="mt-8 desktop:mt-10 mx-auto grid grid-cols-1 desktop:grid-cols-2 gap-4 desktop:gap-5 max-w-[900px]">
           {[
             {
               to: "/services#service-eval",
@@ -35,7 +35,7 @@ export default function ServicesSection() {
               to={item.to}
               aria-label={item.label}
               className="w-full min-h-[60px] inline-flex items-center justify-center text-center
-                text-[14px] md:text-[16px] font-semibold leading-snug bg-[#1C1C1C] text-white
+                text-[14px] desktop:text-[16px] font-semibold leading-snug bg-[#1C1C1C] text-white
                 rounded-full px-6 shadow-[0_8px_20px_rgba(0,0,0,0.35)]
                 transition-colors duration-200 hover:bg-[#282828] hover:text-white
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0177FF]
@@ -51,7 +51,7 @@ export default function ServicesSection() {
             to="/contacts"
             aria-label="Узнать больше"
             className="inline-flex items-center justify-center rounded-full bg-[#0177FF] text-white
-              px-6 py-2 text-[14px] md:text-[16px]
+              px-6 py-2 text-[14px] desktop:text-[16px]
               transition-all duration-200 hover:brightness-95 hover:-translate-y-[1px]
               focus:outline-none focus:ring-2 focus:ring-white/50"
           >

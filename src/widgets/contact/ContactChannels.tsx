@@ -3,7 +3,7 @@ import { FaVk, FaTelegramPlane, FaWhatsapp } from "react-icons/fa"
 
 export default function ContactChannels() {
   return (
-    <div className="grid gap-4 sm:gap-5 content-start">
+    <div className="grid gap-4 desktop:gap-5 content-start">
       <ChannelRow
         icon={<LuPhone className="w-5 h-5" aria-hidden />}
         label="+7 (995) 920-20-90"
@@ -53,7 +53,7 @@ function ChannelRow({
       </span>
       <a
         href={href}
-        className="text-[15px] sm:text-base font-medium hover:text-[#0177FF] transition-colors"
+        className="text-[15px] desktop:text-base font-medium hover:text-[#0177FF] transition-colors"
       >
         {label}
       </a>
