@@ -200,7 +200,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                         </div>
                       </dl>
 
-                      <div className="mt-4 flex items-center gap-2">
+                      <div className="mt-4 flex items-center justify-between ">
                         {item.onEdit ? (
                           <button
                             type="button"
@@ -216,7 +216,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                           onClick={item.onDelete}
                           disabled={item.isDeleting}
                           className="
-    flex-1 rounded-full
+     rounded-full
     border border-red-500
     px-4 py-2
     text-sm font-medium text-red-600
