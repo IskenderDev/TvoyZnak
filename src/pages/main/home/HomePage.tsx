@@ -24,31 +24,28 @@ export default function HomePage({ hideSeo = false }: HomePageProps = {}) {
       {hideSeo ? null : (
         <Seo title="Знак отличия" description="Главная страница каркаса SPA" />
       )}
-      <div>  <div
-          aria-hidden
-          className="
+      <div> <div
+  aria-hidden
+  className="
     pointer-events-none
     absolute
     left-1/2
-    top-0
+    -top-100
     -z-10
     -translate-x-1/2
-    translate-y-[10%]
-    md:-translate-y-1/3
-    lg:-translate-y-1/2
-    h-[260px] w-[320px]
-    sm:h-[500px] sm:w-[800px]
-    md:h-[700px] md:w-[1100px]
-    lg:h-[900px] lg:w-[1600px]
-    xl:h-[1100px] xl:w-[2000px]
+
+    translate-y-[clamp(5%,10vw,20%)]
+
+    h-[clamp(300px,60vw,1100px)]
+    w-[clamp(400px,90vw,2000px)]
+
     rounded-full
+
     bg-[radial-gradient(circle,_rgba(0,45,104,0.95)_0%,_rgba(0,45,104,0.65)_25%,_rgba(0,45,104,0.35)_45%,_rgba(3,7,18,0.2)_60%,_transparent_75%)]
-    blur-[80px]
-    sm:blur-[120px]
-    md:blur-[160px]
-    lg:blur-[200px]
+
+    blur-[clamp(60px,10vw,200px)]
   "
-        />
+/>
         <HeroSection />
         <NumbersMarketSection />
         <ProjectsSection />

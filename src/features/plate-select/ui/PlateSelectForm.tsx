@@ -152,8 +152,8 @@ export default function PlateSelectForm({
   const mainFontNumber = mainFontBase
 
   const mainGap = isXs ? 20 : 30 * scale
-  const mainPx = isXs ? 6 : 32 * scale
-  const mainPb = isXs ? 1 : 0
+  const mainPx = isXs ? 10 : 32 * scale
+  const mainPb = 0
   const slotW = isXs ? 22 : 80 * scale
   const slotH = isXs ? 68 : mainFontNumber
   const digitGap = isXs ? 5 : 0 * scale
@@ -416,7 +416,7 @@ export default function PlateSelectForm({
         >
           <div className="flex w-full bg-black rounded-xl font-auto-number" style={{ height: "100%" }}>
             <div
-              className="flex items-end justify-center bg-white font-bold"
+              className="flex items-center  bg-white font-bold"
               style={{
                 width: "70%",
                 border: `${borderW}px solid #000`,

@@ -18,7 +18,6 @@ export default function Header() {
   const { openLogin } = useAuthModal()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  // 🔥 функция обрезания имени
   const truncateName = (name: string, max = 7) => {
     const trimmed = name.trim()
     return trimmed.length > max ? `${trimmed.slice(0, max)}...` : trimmed
@@ -116,6 +115,7 @@ export default function Header() {
                 ring-1 ring-white/15
                 backdrop-blur-xl
                 transition
+                mr-1
                 hover:bg-white/10 hover:ring-white/30
               "
             >
