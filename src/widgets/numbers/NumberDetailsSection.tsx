@@ -142,7 +142,7 @@ export default function NumberDetailsSection() {
               </button>
             </Link>
 
-            <h1 className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-[22px] font-bold leading-[1.2] tracking-[0.01em] sm:text-[26px] lg:text-[30px] lg:text-[36px]">
+            <h1 className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-[22px] font-bold leading-[1.2] tracking-[0.01em] sm:text-[26px] lg:text-[36px]">
               <span>Продам номер</span>
               <span className="ml-1 font-auto-number uppercase">
                 {numberLabel}
@@ -187,7 +187,7 @@ export default function NumberDetailsSection() {
             </div>
 
          
-            <div className="mt-6 lg:mt-8 grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-6 lg:gap-8">
+            <div className="mt-6 lg:mt-8 grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]  lg:gap-8">
               <div className="rounded-[24px] border border-[#252525] bg-[#0b0b0c] px-4 py-4  sm:px-6 sm:py-5 lg:px-7 lg:py-6">
                 <dl className="divide-y divide-[#262626]">
                   {detailsRows.map((row) => (
