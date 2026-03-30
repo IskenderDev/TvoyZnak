@@ -4,7 +4,7 @@ export function useIsMdUp() {
   const [isMdUp, setIsMdUp] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
+    const media = window.matchMedia("(min-width: 670px)");
 
     const handler = () => setIsMdUp(media.matches);
     handler();

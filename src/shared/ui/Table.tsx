@@ -12,7 +12,7 @@ type TableRootProps = PropsWithChildren<{
 
 const TableRoot = ({ className, children }: TableRootProps) => (
   <div className={twMerge("overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm", className)}>
-    <table className="hidden min-w-full divide-y divide-slate-100 text-left text-sm text-slate-600 md:table">
+    <table className="hidden min-w-full divide-y divide-slate-100 text-left text-sm text-slate-600 lg:table">
       {children}
     </table>
   </div>
@@ -58,7 +58,7 @@ const TableCell = ({ children, className, ...props }: PropsWithChildren<TdHTMLAt
 );
 
 const TableMobile = ({ children }: PropsWithChildren) => (
-  <div className="grid gap-4 md:hidden">{children}</div>
+  <div className="grid gap-4 lg:hidden">{children}</div>
 );
 
 const TableCard = ({ children }: PropsWithChildren) => (

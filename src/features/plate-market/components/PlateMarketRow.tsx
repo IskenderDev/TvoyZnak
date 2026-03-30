@@ -57,28 +57,28 @@ export const PlateMarketRow = ({ row, gridCols }: PlateMarketRowProps) => {
     <li>
       <Link
         to={detailsPath}
-        className="grid cursor-pointer items-center gap-4 px-6 py-4 text-center transition hover:bg-black/5 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)]"
+        className="grid cursor-pointer items-center gap-3 px-4 py-4 text-center transition hover:bg-black/5 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#0177FF] [grid-template-columns:var(--cols)] min-[1100px]:gap-4 min-[1100px]:px-6"
         style={style}
         aria-label={`Подробнее о номере ${formatPlateLabel(row)}`}
       >
-        <time className="tabular-nums text-sm font-light text-black/65 md:text-lg">
+        <time className="tabular-nums text-xs font-light text-black/65 min-[1100px]:text-lg">
           {row.date ? formatDate(row.date) : "—"}
         </time>
 
         <div className="flex items-center">
-          <PlateStaticSm data={data} responsive className="mx-auto max-w-[210px]" />
+          <PlateStaticSm data={data} responsive className="mx-auto max-w-[180px] min-[1100px]:max-w-[210px]" />
         </div>
 
-        <div className="tabular-nums text-sm md:text-lg w-[200px]">
+        <div className="tabular-nums w-[140px] text-sm min-[1100px]:w-[200px] min-[1100px]:text-lg">
           <span className="font-[400]">{priceLabel}</span>
         </div>
 
-        <div className="text-sm font-light md:text-lg text-black/65">{row.seller}</div>
+        <div className="truncate text-sm font-light text-black/65 min-[1100px]:text-lg">{row.seller}</div>
 
         <div className="justify-self-end">
           <button
             onClick={handleBuyClick}
-            className="rounded-full bg-[#0177FF] px-5 py-2 text-sm font-medium text-white transition hover:brightness-95 md:text-lg"
+            className="rounded-full bg-[#0177FF] px-3 py-2 text-sm font-medium text-white transition hover:brightness-95 min-[1100px]:px-5 min-[1100px]:text-lg"
           >
             Купить
           </button>

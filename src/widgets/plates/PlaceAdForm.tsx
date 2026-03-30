@@ -185,24 +185,33 @@ export default function PlaceAdForm() {
 
   return (
     <PageTopSpacing>
-      <section className=" text-white pb-12 md:pb-16" aria-label="Размещение объявления">
+      <section className=" text-white pb-12 lg:pb-16" aria-label="Размещение объявления">
         {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
         <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-          <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">
+          <h2 className="text-center text-3xl lg:text-4xl font-bold uppercase">
             РАЗМЕСТИТЬ ОБЪЯВЛЕНИЕ
           </h2>
-          <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
+          <p className="text-center text-neutral-300 mt-2 text-sm lg:text-base">
             Все сделки сопровождаются юридической поддержкой
           </p>
 
-          <div className="mt-6 md:mt-8">
+          <div className="mt-6 lg:mt-8">
             <PlateSelectForm
-              size={window.innerWidth < 640 ? 'xs' : 'lg'}
+              size="xs"
               responsive
               flagSrc="/flag-russia.svg"
               showCaption={false}
-              className="mx-auto"
+              className="mx-auto w-full sm:hidden"
+              value={plate}
+              onChange={setPlate}
+            />
+            <PlateSelectForm
+              size="md"
+              responsive
+              flagSrc="/flag-russia.svg"
+              showCaption={false}
+              className="mx-auto hidden w-full sm:block"
               value={plate}
               onChange={setPlate}
             />

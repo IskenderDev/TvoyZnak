@@ -4,7 +4,7 @@ import { PlateMarketRow } from "./PlateMarketRow"
 import type { SortDir, SortField } from "../model/types"
 import type { NumberItem } from "@/entities/number/types"
 
-const DEFAULT_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px"
+const DEFAULT_COLS = "96px minmax(210px,1fr) 140px minmax(150px,1fr) 132px"
 
 type PlateMarketTableProps = {
   rows: NumberItem[]
@@ -30,7 +30,7 @@ export const PlateMarketTable = ({
   return (
     <div className={`overflow-hidden rounded-2xl bg-white text-black ${className}`}>
       <div
-        className="grid items-center gap-4 border-b text-black/65 border-black/10 px-6 py-3 text-lg font-light [grid-template-columns:var(--cols)] text-center"
+        className="grid items-center gap-3 border-b text-black/65 border-black/10 px-4 py-3 text-sm font-light [grid-template-columns:var(--cols)] text-center min-[1100px]:gap-4 min-[1100px]:px-6 min-[1100px]:text-lg"
         style={style}
       >
         <button

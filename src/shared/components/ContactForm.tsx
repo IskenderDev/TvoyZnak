@@ -92,12 +92,12 @@ export default function ContactForm() {
     typesLoading
 
   return (
-    <section className=" text-white py-12 md:py-16">
+    <section className=" text-white py-12 lg:py-16">
       {toast && <Toast type={toast.type} message={toast.msg} onClose={() => setToast(null)} />}
 
       <div className="max-w-[900px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-3xl md:text-4xl font-bold uppercase">Оставьте заявку!</h2>
-        <p className="text-center text-neutral-300 mt-2 text-sm md:text-base">
+        <h2 className="text-center text-3xl lg:text-4xl font-bold uppercase">Оставьте заявку!</h2>
+        <p className="text-center text-neutral-300 mt-2 text-sm lg:text-base">
           Все сделки сопровождаются юридической поддержкой, а номера подбираются только из проверенных источников.
         </p>
 

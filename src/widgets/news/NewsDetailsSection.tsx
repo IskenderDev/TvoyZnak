@@ -92,7 +92,7 @@ export default function NewsDetailsSection() {
       />
 
       <section className="text-white min-h-screen">
-        <div className="mx-auto max-w-9xl px-4 md:px-6 py-6">
+        <div className="mx-auto max-w-9xl px-4 lg:px-6 py-6">
           <Link
             to="/news"
             className="inline-flex items-center gap-2 text-[#0177FF] hover:underline mb-6"
@@ -113,7 +113,7 @@ export default function NewsDetailsSection() {
                 </div>
               ) : null}
 
-              <div className="flex-1 p-6 md:p-8">
+              <div className="flex-1 p-6 lg:p-8">
                 {meta.date && (
                   <time
                     dateTime={meta.dateTime}
@@ -123,18 +123,18 @@ export default function NewsDetailsSection() {
                   </time>
                 )}
 
-                <h1 className="uppercase font-bold tracking-wide leading-tight text-white text-[26px] md:text-[36px] mb-4">
+                <h1 className="uppercase font-bold tracking-wide leading-tight text-white text-[26px] lg:text-[36px] mb-4">
                   {item.title}
                 </h1>
 
                 {item.excerpt && (
-                  <p className="mb-6 text-[15px] font-[400] md:text-lg">
+                  <p className="mb-6 text-[15px] font-[400] lg:text-lg">
                     {item.excerpt}
                   </p>
                 )}
 
                 {item.content && (
-                  <div className="mt-4 text-[15px] md:text-lg leading-relaxed whitespace-pre-line">
+                  <div className="mt-4 text-[15px] lg:text-lg leading-relaxed whitespace-pre-line">
                     {item.content}
                   </div>
                 )}
@@ -144,7 +144,7 @@ export default function NewsDetailsSection() {
 
           {related.length > 0 && (
             <>
-              <h2 className="text-[28px] md:text-[34px] font-extrabold mt-12 md:mt-16 mb-6">
+              <h2 className="text-[28px] lg:text-[34px] font-extrabold mt-12 lg:mt-16 mb-6">
                 Другие новости
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -10,15 +10,15 @@ export default function HeroSection() {
     >
       
 
-      <div className="relative mx-auto flex min-h-[70svh] max-w-[1200px] items-center px-4 py-12 sm:px-6 md:px-8 lg:px-10 lg:py-0">
-        <div className="grid w-full items-center gap-40  md:gap-70">
-            <div className="relative z-10 max-w-2xl">
-            <h1 className="text-3xl font-bold uppercase leading-tight tracking-tight sm:text-4xl md:text-5xl max-w-xl">
+      <div className="relative mx-auto flex max-w-[1200px] items-center px-4 py-10 sm:px-6 lg:px-10 lg:py-0">
+        <div className="grid w-full items-center gap-10 min-[770px]:gap-12 lg:gap-70">
+          <div className="relative z-10 max-w-2xl">
+            <h1 className="text-3xl font-bold uppercase leading-tight tracking-tight sm:text-4xl lg:text-5xl max-w-xl">
               Красивые
               автомобильные номера
             </h1>
 
-            <p className="mt-4 text-sm text-neutral-300 sm:text-base md:text-2xl font-[400]  md:leading-relaxed">
+            <p className="mt-4 text-sm text-neutral-300 sm:text-base lg:text-2xl font-[400]  lg:leading-relaxed">
               Оценка, покупка и продажа красивых автономеров
             </p>
 
@@ -40,18 +40,18 @@ export default function HeroSection() {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 to="/contacts"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none  focus-visible:ring-2 md:text-base"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0177FF] px-7 py-3.5 text-sm font-semibold text-white transition hover:shadow-blue-500/60 focus-visible:outline-none  focus-visible:ring-2 lg:text-base"
               >
-                <FaTelegramPlane className="h-4 w-4 md:h-5 md:w-5" />
+                <FaTelegramPlane className="h-4 w-4 lg:h-5 lg:w-5" />
                 <span>Запросить список</span>
               </Link>
             </div>
           </div>
-          <div className="relative ">
+          <div className="relative mx-auto w-full max-w-[780px] min-[770px]:max-w-[860px] lg:max-w-none">
             <img
               src="/home-img/heroImg.png"
               alt="Премиальный автомобиль с красивыми номерами"
-              className="pointer-events-none select-none absolute inset-x-0 bottom-0 z-40 md:h-auto "
+              className="pointer-events-none relative mx-auto block w-full max-w-[720px] select-none min-[770px]:max-w-[820px] lg:absolute lg:inset-x-0 lg:bottom-0 lg:z-40 lg:max-w-none lg:h-auto"
             />
           </div>
         </div>

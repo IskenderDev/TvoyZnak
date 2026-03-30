@@ -275,14 +275,14 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
           <div className="max-h-[90vh] overflow-y-auto px-6 pb-8 pt-10 sm:px-10 sm:pb-10 sm:pt-12">
             {/* контент тоже до 1200px */}
             <div className="mx-auto w-full max-w-[1200px]">
-              <h2 className="text-center text-2xl uppercase sm:text-3xl md:text-4xl">
+              <h2 className="text-center text-2xl uppercase sm:text-3xl lg:text-4xl">
                 Изменение объявления
               </h2>
-              <p className="mt-3 text-center text-sm text-black/70 md:text-base">
+              <p className="mt-3 text-center text-sm text-black/70 lg:text-base">
                 Обновите данные номера и сохраните изменения.
               </p>
 
-              <div className="mt-6 md:mt-8">
+              <div className="mt-6 lg:mt-8">
                 <PlateSelectForm
                   size={plateSize}
                   responsive
@@ -296,7 +296,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
               {/* форма теперь шире — до 960px, чтобы инпуты растянулись */}
               <form
-                className="mt-6 w-full max-w-[960px] mx-auto space-y-6 md:mt-8"
+                className="mt-6 w-full max-w-[960px] mx-auto space-y-6 lg:mt-8"
                 onSubmit={handleSubmit}
               >
                 <input
@@ -321,7 +321,7 @@ export default function EditNumberModal<TLot extends EditNumberModalLot>({
 
                 {error ? <p className="text-sm text-[#EB5757]">{error}</p> : null}
 
-                <div className="flex justify-center md:justify-end">
+                <div className="flex justify-center lg:justify-end">
                   <button
                     type="submit"
                     disabled={isSubmitDisabled}

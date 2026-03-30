@@ -17,7 +17,7 @@ export default function ContactSection() {
         </p>
 
         <div className="mt-8 sm:mt-10 rounded-2xl bg-[#202020] px-5 sm:px-8 py-6 sm:py-7">
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(320px,1fr)_360px] gap-6 sm:gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(320px,1fr)_360px] gap-6 sm:gap-8 items-start">
             <ContactForm />
             <ContactChannels />
           </div>

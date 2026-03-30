@@ -52,8 +52,8 @@ export default function ProjectsSection({ items }: Props) {
 
   return (
     <section className="py-16 text-white">
-      <div className="mx-auto max-w-[1200px] px-6 md:px-10">
-        <h2 className="mb-10 text-center text-2xl md:text-4xl font-bold tracking-wide uppercase">
+      <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
+        <h2 className="mb-10 text-center text-2xl lg:text-4xl font-bold tracking-wide uppercase">
           Наши готовые работы
         </h2>
 
@@ -76,7 +76,7 @@ export default function ProjectsSection({ items }: Props) {
                     </div>
 
                     <div className="flex flex-1 flex-col gap-2">
-                      <h3 className="text-sm md:text-base font-semibold tracking-[0.12em] uppercase">
+                      <h3 className="text-sm lg:text-base font-semibold tracking-[0.12em] uppercase">
                         {item.title}
                       </h3>
                       <p className="text-sm text-white/80 leading-relaxed">

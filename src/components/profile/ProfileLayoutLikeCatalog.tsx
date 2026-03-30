@@ -3,7 +3,7 @@ import { LuPencilLine } from "react-icons/lu"
 
 import PlateStaticSm, { type PlateData } from "@/shared/components/plate/PlateStaticSm"
 
-const GRID_COLS = "120px minmax(230px,1fr) 180px minmax(220px,1fr) 180px"
+const GRID_COLS = "96px minmax(210px,1fr) 140px minmax(150px,1fr) 148px"
 
 export type ProfileInfoField = {
   label: string
@@ -78,29 +78,29 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
   return (
     <section className="min-h-screen  py-12 text-white">
       <div className="mx-auto w-full px-4 sm:px-6">
-        <h1 className="mb-6 text-3xl uppercase md:text-4xl">{pageTitle}</h1>
+        <h1 className="mb-6 text-3xl uppercase min-[1024px]:text-4xl">{pageTitle}</h1>
 
         <div className="grid gap-6">
           <article className="rounded-2xl bg-white px-6 py-6 text-black shadow-sm sm:px-8 sm:py-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-4 min-[1024px]:flex-row min-[1024px]:items-start min-[1024px]:justify-between">
               <div>
                 {eyebrow ? (
                   <p className="text-xs uppercase tracking-[0.3em] text-black/50">{eyebrow}</p>
                 ) : null}
-                <h2 className="mt-2 text-3xl uppercase text-black md:text-4xl">{title}</h2>
+                <h2 className="mt-2 text-3xl uppercase text-black min-[1024px]:text-4xl">{title}</h2>
                 {description ? (
-                  <p className="mt-3 max-w-2xl text-sm text-black/70 md:text-base">{description}</p>
+                  <p className="mt-3 max-w-2xl text-sm text-black/70 min-[1024px]:text-base">{description}</p>
                 ) : null}
               </div>
-              {actions ? <div className="md:pt-2">{actions}</div> : null}
+              {actions ? <div className="min-[1024px]:pt-2">{actions}</div> : null}
             </div>
 
             {hasFields ? (
-              <dl className="mt-6 grid gap-4 md:grid-cols-2">
+              <dl className="mt-6 grid gap-4 min-[1024px]:grid-cols-2">
                 {fields!.map((field) => (
                   <div key={field.label} className="rounded-2xl bg-black/5 px-4 py-3">
                     <dt className="text-xs uppercase tracking-wide text-black/50">{field.label}</dt>
-                    <dd className="mt-1 text-sm font-medium text-black md:text-base">{field.value}</dd>
+                    <dd className="mt-1 text-sm font-medium text-black min-[1024px]:text-base">{field.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -108,10 +108,10 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
           </article>
 
           <article className="overflow-hidden rounded-2xl bg-white text-black shadow-sm">
-            <div className="flex flex-col gap-4 border-b border-black/10 px-6 py-5 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-4 border-b border-black/10 px-6 py-5 min-[1024px]:flex-row min-[1024px]:items-center min-[1024px]:justify-between">
               <div>
-                <h2 className="text-2xl uppercase text-black md:text-3xl">{lotsTitle}</h2>
-                {lotsSubtitle ? <p className="mt-1 text-sm text-black/70 md:text-base">{lotsSubtitle}</p> : null}
+                <h2 className="text-2xl uppercase text-black min-[1024px]:text-3xl">{lotsTitle}</h2>
+                {lotsSubtitle ? <p className="mt-1 text-sm text-black/70 min-[1024px]:text-base">{lotsSubtitle}</p> : null}
               </div>
               {headerActions ? <div className="flex flex-wrap items-center gap-3">{headerActions}</div> : null}
             </div>
@@ -127,35 +127,35 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
 
             {items.length ? (
               <div className="mt-6">
-                <div className="hidden border-y border-black/10 md:block">
-                  <div className="grid items-center gap-4 px-6 py-3 text-center text-lg font-bold [grid-template-columns:var(--cols)]" style={DESKTOP_COLS_STYLE}>
+                <div className="hidden border-y border-black/10 min-[1024px]:block">
+                  <div className="grid items-center gap-3 px-4 py-3 text-center text-sm font-bold [grid-template-columns:var(--cols)] min-[1100px]:gap-4 min-[1100px]:px-6 min-[1100px]:text-lg" style={DESKTOP_COLS_STYLE}>
                     <span>Дата</span>
                     <span>Номер</span>
                     <span>Цена</span>
                     <span>Продавец</span>
-                    <span className="justify-self-end text-base font-medium">Действия</span>
+                    <span className="justify-self-end text-sm font-medium min-[1100px]:text-base">Действия</span>
                   </div>
 
                   <ul className="divide-y divide-black/10">
                     {items.map((item) => (
                       <li
                         key={item.id}
-                        className="grid items-center gap-4 px-6 py-4 text-center text-sm md:text-base [grid-template-columns:var(--cols)]"
+                        className="grid items-center gap-3 px-4 py-4 text-center text-sm min-[1100px]:gap-4 min-[1100px]:px-6 min-[1100px]:text-base [grid-template-columns:var(--cols)]"
                         style={DESKTOP_COLS_STYLE}
                       >
                         <span className="tabular-nums text-black/80">{item.dateLabel}</span>
                         <div className="flex items-center justify-center">
-                          <PlateStaticSm data={item.plate} responsive className="mx-auto max-w-[210px]" />
+                          <PlateStaticSm data={item.plate} responsive className="mx-auto max-w-[180px] min-[1100px]:max-w-[210px]" />
                         </div>
-                        <span className="text-base font-medium text-black">{item.priceLabel}</span>
-                        <span className="text-black/80">{item.sellerLabel}</span>
+                        <span className="text-sm font-medium text-black min-[1100px]:text-base">{item.priceLabel}</span>
+                        <span className="truncate text-black/80">{item.sellerLabel}</span>
                         <div className="justify-self-end">
                           <div className="flex items-center justify-end gap-2">
                             {item.onEdit ? (
                               <button
                                 type="button"
                                 onClick={item.onEdit}
-                                className="flex h-9 w-9 items-center justify-center rounded-full border border-black/20 text-black transition hover:bg-black/5"
+                                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/20 text-black transition hover:bg-black/5 min-[1100px]:h-9 min-[1100px]:w-9"
                                 aria-label={item.editLabel ?? "Изменить номер"}
                               >
                                 <LuPencilLine className="h-4 w-4" />
@@ -166,7 +166,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                               type="button"
                               onClick={item.onDelete}
                               disabled={item.isDeleting}
-                              className="rounded-full border border-black/20 px-4 py-2 text-sm font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60"
+                              className="rounded-full border border-black/20 px-3 py-2 text-xs font-medium text-black transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-60 min-[1100px]:px-4 min-[1100px]:text-sm"
                             >
                               {item.isDeleting ? item.deletingLabel : item.deleteLabel}
                             </button>
@@ -177,7 +177,7 @@ export default function ProfileLayoutLikeCatalog({ pageTitle, profileCard, lotsC
                   </ul>
                 </div>
 
-                <ul className="grid gap-4 px-4 pb-6 md:hidden">
+                <ul className="grid gap-4 px-4 pb-6 min-[1024px]:hidden">
                   {items.map((item) => (
                     <li key={item.id} className="rounded-2xl bg-white px-4 py-4 text-black shadow-sm ring-1 ring-black/10">
                       <div className="flex items-center justify-between text-xs uppercase tracking-wide text-black/50">

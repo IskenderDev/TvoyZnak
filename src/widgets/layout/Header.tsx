@@ -71,7 +71,7 @@ export default function Header() {
     <header
       className="
         relative
-        mx-3 sm:mx-4 lg:mx-5
+        mx-3 sm:mx-4 min-[1024px]:mx-5
         text-white
         overflow-hidden
       "
@@ -81,8 +81,8 @@ export default function Header() {
           className="
             relative
             flex items-center justify-between
-            gap-3 md:gap-5 lg:gap-5
-            py-3 sm:py-4 lg:py-6
+            gap-3 min-[1024px]:gap-4 xl:gap-5
+            py-3 sm:py-4 min-[1024px]:py-5 xl:py-6
           "
         >
           <Link
@@ -93,22 +93,22 @@ export default function Header() {
             <img
               src="/logo.svg"
               alt="Знак отличия"
-              className="h-7 w-auto sm:h-8 lg:h-9"
+              className="h-7 w-auto sm:h-8 min-[1024px]:h-8 xl:h-9"
             />
           </Link>
 
-          <div className="hidden flex-1 justify-center lg:flex">
-            <div className="nav-glass inline-flex items-center px-4 sm:px-5">
+          <div className="hidden flex-1 justify-center min-[1024px]:flex">
+            <div className="nav-glass inline-flex items-center px-3 min-[1024px]:px-4 xl:px-5">
               <HeaderNav />
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3 lg:gap-4">
+          <div className="flex items-center gap-2 min-[1024px]:gap-3 xl:gap-4">
             <button
               type="button"
               onClick={openMenu}
               className="
-                flex md:hidden
+                flex min-[1024px]:hidden
                 h-10 w-10 items-center justify-center
                 rounded-full
                 bg-white/5
@@ -122,15 +122,16 @@ export default function Header() {
               <LuMenu className="h-6 w-6" />
             </button>
 
-            <div className="hidden items-center gap-2 sm:gap-3 lg:flex">
+            <div className="hidden items-center gap-2 min-[1024px]:flex xl:gap-3">
               <Button
                 onClick={handleSellClick}
                 className="
                   rounded-full
                   bg-[#0075ff]
-                  px-4 sm:px-5
-                  py-2 sm:py-2.5
-                  text-sm font-semibold
+                  px-3 min-[1024px]:px-4 xl:px-5
+                  py-2 min-[1024px]:py-2
+                  text-[13px] min-[1024px]:text-sm
+                  font-semibold
                   transition
                   hover:bg-[#0063e6]
                   whitespace-nowrap
@@ -144,23 +145,23 @@ export default function Header() {
                   to={userDestination}
                   onClick={handleProfileClick}
                   className="
-                    flex items-center gap-1 sm:gap-1
+                    flex items-center gap-1
                     rounded-full
                     bg-white/5
-                    px-2 sm:px-3
+                    px-2 min-[1024px]:px-2.5 xl:px-3
                     py-2
-                    text-[14px]
+                    text-[13px] xl:text-[14px]
                     ring-1 ring-white/10
                     backdrop-blur-xl
                     transition
                     font-[400]
                     hover:bg-white/10
-                    max-w-[220px]
-                    mr-2
+                    max-w-[170px] xl:max-w-[220px]
+                    mr-1 xl:mr-2
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5 shrink-0" />
-                  <span className="hidden lg:block">
+                  <span className="hidden min-[1024px]:block">
                     {truncateName(user?.fullName ?? "", 7)}
                   </span>
                 </Link>
@@ -168,21 +169,21 @@ export default function Header() {
                 <button
                   onClick={handleLoginClick}
                   className="
-                    flex items-center gap-1.5 sm:gap-2
+                    flex items-center gap-1.5 xl:gap-2
                     rounded-full
                     bg-white/5
-                    px-2.5 sm:px-3
+                    px-2.5 min-[1024px]:px-2.5 xl:px-3
                     py-1.5
-                    text-xs sm:text-sm
+                    text-xs min-[1024px]:text-[13px] xl:text-sm
                     ring-1 ring-white/10
                     backdrop-blur-xl
                     transition
                     hover:bg-white/10
-                    mr-2
+                    mr-1 xl:mr-2
                   "
                 >
                   <LuCircleUserRound className="h-5 w-5" />
-                  <span className="hidden lg:block text-sm font-medium">
+                  <span className="hidden min-[1024px]:block text-[13px] xl:text-sm font-medium">
                     Войти
                   </span>
                 </button>

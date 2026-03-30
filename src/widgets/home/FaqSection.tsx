@@ -72,13 +72,13 @@ export default function FaqSection({
   const [openIndex, setOpenIndex] = useState<number | null>(defaultOpenIndex);
 
   return (
-    <section className=" text-white py-12 md:py-16">
+    <section className=" text-white py-12 lg:py-16">
       <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
-        <h2 className="text-center text-2xl md:text-4xl font-bold uppercase tracking-wide">
+        <h2 className="text-center text-2xl lg:text-4xl font-bold uppercase tracking-wide">
           Часто задаваемые вопросы
         </h2>
 
-        <div className="mt-6 md:mt-8 space-y-4">
+        <div className="mt-6 lg:mt-8 space-y-4">
           {items.map((item, i) => (
             <FaqRow
               key={item.id}

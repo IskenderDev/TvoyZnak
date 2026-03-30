@@ -30,16 +30,16 @@ export default function HeaderNav({
   className = "",
   onNavigate,
 }: HeaderNavProps) {
-  const containerBase =
-    orientation === "horizontal"
-      ? "flex items-center gap-7 xl:gap-9"
+const containerBase =
+  orientation === "horizontal"
+      ? "flex items-center gap-4 min-[1024px]:gap-5 xl:gap-7"
       : "flex flex-col gap-4";
 
   const linkBase =
     "relative flex items-center font-[400] transition-colors duration-200";
 
-  const horizontalText =
-    "justify-center text-[17px] text-slate-100 hover:text-white px-1 ";
+const horizontalText =
+    "justify-center text-[14px] min-[1024px]:text-[15px] xl:text-[17px] text-slate-100 hover:text-white px-1 ";
   const verticalText =
     "w-full justify-start pl-4 text-base text-slate-100 hover:text-white";
 
