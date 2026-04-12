@@ -108,7 +108,7 @@ export default function PlateStaticLg({
           style={{
             border: `${borderW}px solid #000`,
             borderRadius: radius,
-            height: `${preset.h}px`,
+            height: `${preset.h * Math.max(0.8, Math.min(1, scale))}px`,
           }}
         >
           <div

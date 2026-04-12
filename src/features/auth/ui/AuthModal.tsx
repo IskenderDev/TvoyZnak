@@ -178,11 +178,11 @@ export default function AuthModal() {
         data-state={stateAttribute}
         className="relative z-10 flex w-full max-w-[640px] flex-col overflow-hidden rounded-4xl bg-[#1B1B1B] px-6 py-6 text-white shadow-[0_20px_60px_rgba(0,0,0,0.45)] outline-none transition-all duration-200 ease-out data-[state=opening]:translate-y-2 data-[state=opening]:opacity-0 data-[state=closing]:translate-y-2 data-[state=closing]:opacity-0 sm:px-8 sm:py-8 max-h-[90vh]"
       >
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex flex-col gap-3">
             <h2
               id="auth-modal-title"
-              className="text-[36px] font-extrabold uppercase tracking-wide text-[#1E66FF] sm:text-[24px]"
+              className="text-[23px] lg:text-[36px] font-extrabold uppercase text-[#1E66FF]"
             >
               {showAuthenticatedMessage ? "ВЫ УЖЕ В СИСТЕМЕ" : VIEW_TITLE[view]}
             </h2>
