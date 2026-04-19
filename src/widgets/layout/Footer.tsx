@@ -8,8 +8,7 @@ export default function Footer() {
   const location = useLocation()
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `transition-colors duration-200 hover:text-[#85B6FF] font-[400] text-[14px] ${
-      isActive ? "text-white" : "text-white hover:text-[#85B6FF]"
+    `transition-colors duration-200 hover:text-[#85B6FF] font-[400] text-[14px] ${isActive ? "text-white" : "text-white hover:text-[#85B6FF]"
     }`
 
   const handleNavClick = useCallback((path: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -32,8 +31,8 @@ export default function Footer() {
         <div className="grid gap-8 lg:gap-18 lg:grid-cols-[auto_1fr_auto] items-start mx-auto max-w-[1120px]">
           <div className="flex flex-col items-start order-1 lg:order-none">
             <div className="my-2">
-              <Link 
-                to={paths.home} 
+              <Link
+                to={paths.home}
                 className="shrink-0"
                 onClick={handleLogoClick}
               >
@@ -55,25 +54,31 @@ export default function Footer() {
             </a>
             <div className="flex gap-4 text-[22px]">
               <a
-                href="#"
+                href="https://vk.ru/znakonet"
+                target="_blank"
                 className="hover:text-[#85B6FF] transition-colors"
                 aria-label="VK"
               >
                 <FaVk />
               </a>
               <a
-                href="#"
+                href="https://t.me/znakonet"
+                target="_blank"
                 className="hover:text-[#85B6FF] transition-colors"
                 aria-label="Telegram"
               >
                 <FaTelegramPlane />
               </a>
               <a
-                href="#"
+                href="https://wa.me/79959202090"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-[#85B6FF] transition-colors"
                 aria-label="WhatsApp"
               >
+
                 <FaWhatsapp />
+
               </a>
             </div>
           </div>
@@ -83,8 +88,8 @@ export default function Footer() {
               <h4 className="text-[18px] font-medium mb-3">Основные</h4>
               <ul className="flex flex-col gap-2 text-white">
                 <li>
-                  <NavLink 
-                    to={paths.home} 
+                  <NavLink
+                    to={paths.home}
                     className={linkClass}
                     onClick={handleNavClick(paths.home)}
                   >
@@ -92,8 +97,8 @@ export default function Footer() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink 
-                    to="/about" 
+                  <NavLink
+                    to="/about"
                     className={linkClass}
                     onClick={handleNavClick("/about")}
                   >
@@ -101,8 +106,8 @@ export default function Footer() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink 
-                    to="/numbers" 
+                  <NavLink
+                    to="/numbers"
                     className={linkClass}
                     onClick={handleNavClick("/numbers")}
                   >
@@ -110,8 +115,8 @@ export default function Footer() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink 
-                    to="/news" 
+                  <NavLink
+                    to="/news"
                     className={linkClass}
                     onClick={handleNavClick("/news")}
                   >
@@ -119,8 +124,8 @@ export default function Footer() {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink 
-                    to="/contacts" 
+                  <NavLink
+                    to="/contacts"
                     className={linkClass}
                     onClick={handleNavClick("/contacts")}
                   >
