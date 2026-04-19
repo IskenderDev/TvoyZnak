@@ -88,7 +88,7 @@ export default function ProjectsSection({ items }: Props) {
                   </article>
                 </div>
               ))}
-            </div>≠
+            </div>
           </div>
         </div>
 
