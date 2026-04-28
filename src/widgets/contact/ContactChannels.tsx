@@ -19,12 +19,12 @@ export default function ContactChannels() {
       <div className="flex items-center gap-3 pt-1">
         <SocialIcon
           label="VK"
-          href="https://vk.com/tvoyznak"
+          href="https://vk.com/znakonet"
           icon={<FaVk className="w-5 h-5" aria-hidden />}
         />
         <SocialIcon
           label="TG"
-          href="https://t.me/tvoyznak"
+          href="https://t.me/znakonet"
           icon={<FaTelegramPlane className="w-5 h-5" aria-hidden />}
         />
         <SocialIcon
