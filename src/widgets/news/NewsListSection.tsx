@@ -53,7 +53,7 @@ export default function NewsListSection() {
 
   return (
     <>
-      <Seo title="Новости — Знак отличия" description="Свежие новости компании и полезные материалы." />
+      <Seo title="Новости — Знак Отличия" description="Свежие новости компании и полезные материалы." />
       <section className="text-white min-h-screen pb-16">
         <div className="mx-auto px-6 max-w-6xl">
           {loading && <p className="text-center text-neutral-300">Загрузка...</p>}
