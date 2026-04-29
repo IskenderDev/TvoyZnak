@@ -14,7 +14,7 @@ export default function HeroSection() {
         <div className="grid w-full items-center gap-10 min-[770px]:gap-12 lg:gap-70">
           <div className="relative z-10 max-w-2xl">
             <h1 className="text-3xl font-bold uppercase leading-tight tracking-tight sm:text-4xl lg:text-5xl max-w-xl">
-              Красивые
+              Красивые солнце
               автомобильные номера
             </h1>
 
