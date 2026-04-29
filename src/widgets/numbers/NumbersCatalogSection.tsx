@@ -31,7 +31,7 @@ export default function NumbersCatalogSection() {
 
   return (
     <>
-      <Seo title="Номера — Знак отличия" description="Каталог автомобильных номеров с актуальными предложениями." />
+      <Seo title="Номера — Знак Отличия" description="Каталог автомобильных номеров с актуальными предложениями." />
       <section className="text-white min-h-screen pb-12">
         <div className="mx-auto px-4 sm:px-6">
           <PlateMarketFilters
