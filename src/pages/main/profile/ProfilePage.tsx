@@ -141,7 +141,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <>
-        <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
+        <Seo title="Профиль — Знак Отличия" description="Управление личной информацией и объявлениями." />
         <section className="min-h-screen py-12 text-white">
           <div className="mx-auto w-full px-4 sm:px-6">
             <h1 className="mb-6 text-3xl uppercase lg:text-4xl">Профиль</h1>
