@@ -191,7 +191,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <Seo title="Профиль — Знак отличия" description="Управление личной информацией и объявлениями." />
+      <Seo title="Профиль — Знак Отличия" description="Управление личной информацией и объявлениями." />
       <EditNumberModal
         open={isEditModalOpen && Boolean(editingLot)}
         lot={editingLot}
