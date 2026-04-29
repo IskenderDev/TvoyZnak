@@ -16,25 +16,32 @@ export default function NewsDetailsSection() {
 
   useEffect(() => {
     if (!id) return
+
     let mounted = true
+
     setLoading(true)
     setError(null)
 
     Promise.all([newsApi.get(id), newsApi.list({})])
       .then(([current, list]) => {
         if (!mounted) return
+
         setItem(current)
+
         const filtered = list
           .filter((news) => news.id !== current.id)
           .slice(0, PER_PAGE)
+
         setRelated(filtered)
       })
       .catch((err) => {
         if (!mounted) return
+
         const message =
           err?.response?.data?.message ||
           err?.message ||
           "Не удалось загрузить новость"
+
         setError(message)
       })
       .finally(() => {
@@ -47,12 +54,20 @@ export default function NewsDetailsSection() {
   }, [id])
 
   const meta = useMemo(() => {
-    if (!item) return { date: "", views: 0, dateTime: "" }
+    if (!item) {
+      return {
+        date: "",
+        views: 0,
+        dateTime: "",
+      }
+    }
+
     const rawDate =
       (item as any).publishedAt ||
       (item as any).createdDate ||
       (item as any).updatedDate ||
       ""
+
     return {
       date: rawDate ? formatDateShort(rawDate) : "",
       dateTime: rawDate || "",
@@ -127,12 +142,6 @@ export default function NewsDetailsSection() {
                   {item.title}
                 </h1>
 
-                {item.excerpt && (
-                  <p className="mb-6 text-[15px] font-[400] lg:text-lg">
-                    {item.excerpt}
-                  </p>
-                )}
-
                 {item.content && (
                   <div className="mt-4 text-[15px] lg:text-lg leading-relaxed whitespace-pre-line">
                     {item.content}
@@ -147,6 +156,7 @@ export default function NewsDetailsSection() {
               <h2 className="text-[28px] lg:text-[34px] font-extrabold mt-12 lg:mt-16 mb-6">
                 Другие новости
               </h2>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {related.map((news) => (
                   <NewsCard key={news.id} news={news} />
@@ -162,9 +172,12 @@ export default function NewsDetailsSection() {
 
 const formatDateShort = (value: string): string => {
   const d = new Date(value)
+
   if (Number.isNaN(+d)) return ""
+
   const dd = String(d.getDate()).padStart(2, "0")
   const mm = String(d.getMonth() + 1).padStart(2, "0")
   const yyyy = d.getFullYear()
+
   return `${dd}.${mm}.${yyyy}`
 }

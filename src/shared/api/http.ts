@@ -12,7 +12,7 @@ const baseURL = (() => {
     return candidate;
   }
 
-  return "http://31.172.72.119:8081";
+  return "https://znako.net";
   // return "http://localhost:8081";
 })();
 
