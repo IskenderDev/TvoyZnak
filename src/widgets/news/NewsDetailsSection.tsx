@@ -102,7 +102,7 @@ export default function NewsDetailsSection() {
   return (
     <>
       <Seo
-        title={`${item.title} — Знак отличия`}
+        title={`${item.title} — Знак Отличия`}
         description={item.excerpt || item.content?.slice(0, 180)}
       />
 
