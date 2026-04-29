@@ -89,8 +89,8 @@ export default function ServicesPage() {
   return (
     <>
       <Seo
-        title="Услуги — Знак отличия"
-        description="Все услуги компании Знак отличия по работе с автомобильными номерами"
+        title="Услуги — Знак Отличия"
+        description="Все услуги компании Знак Отличия по работе с автомобильными номерами"
       />
       <main className="text-white">
           <section className="relative overflow-hidden">
