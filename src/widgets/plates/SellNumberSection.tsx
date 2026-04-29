@@ -4,7 +4,7 @@ import PlaceAdForm from "@/widgets/plates/PlaceAdForm";
 export default function SellNumberSection() {
   return (
     <>
-      <Seo title="Продажа номера — Знак отличия" description="Разместите объявление о продаже автомобильного номера." />
+      <Seo title="Продажа номера — Знак Отличия" description="Разместите объявление о продаже автомобильного номера." />
       <PlaceAdForm />
     </>
   );
