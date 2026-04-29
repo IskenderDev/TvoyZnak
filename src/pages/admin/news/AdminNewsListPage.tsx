@@ -15,14 +15,10 @@ import PostFormModal from "./components/PostFormModal";
 import PostViewDrawer from "./components/PostViewDrawer";
 
 const formatDateTime = (value?: string | null) => {
-  if (!value) {
-    return "—";
-  }
+  if (!value) return "—";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
+  if (Number.isNaN(date.getTime())) return "—";
 
   return new Intl.DateTimeFormat("ru-RU", {
     day: "2-digit",
@@ -71,7 +67,8 @@ export default function AdminNewsListPage() {
     } satisfies PostsListParams;
   }, [debouncedSearch, page, sortDirection]);
 
-  const { data, isLoading, isFetching, isError, refetch } = usePostsQuery(queryParams);
+  const { data, isLoading, isFetching, isError, refetch } =
+    usePostsQuery(queryParams);
 
   const deleteMutation = useDeletePost();
 
@@ -105,6 +102,7 @@ export default function AdminNewsListPage() {
 
   const handleDelete = async () => {
     if (!postToDelete) return;
+
     try {
       await deleteMutation.mutateAsync(postToDelete.id);
       setPostToDelete(null);
@@ -171,6 +169,7 @@ export default function AdminNewsListPage() {
             </Table.HeaderCell>
             <Table.HeaderCell className="text-right">Действия</Table.HeaderCell>
           </Table.Head>
+
           <Table.Body>
             {items.map((post) => (
               <Table.Row key={post.id}>
@@ -187,6 +186,7 @@ export default function AdminNewsListPage() {
                     </div>
                   )}
                 </Table.Cell>
+
                 <Table.Cell>
                   <button
                     type="button"
@@ -196,6 +196,7 @@ export default function AdminNewsListPage() {
                     {post.title}
                   </button>
                 </Table.Cell>
+
                 <Table.Cell>
                   <p
                     className="max-w-xl truncate text-sm text-slate-600"
@@ -205,19 +206,26 @@ export default function AdminNewsListPage() {
                     {post.description.length > 120 ? "…" : ""}
                   </p>
                 </Table.Cell>
+
                 <Table.Cell>
                   <span className="text-sm text-slate-600">
                     {formatDateTime(post.createdAt)}
                   </span>
                 </Table.Cell>
+
                 <Table.Cell>
                   <div className="flex items-center justify-end gap-2">
                     <IconButton label="Просмотр" onClick={() => handleView(post)}>
                       <FiEye className="h-4 w-4" />
                     </IconButton>
-                    <IconButton label="Редактировать" onClick={() => handleEdit(post)}>
+
+                    <IconButton
+                      label="Редактировать"
+                      onClick={() => handleEdit(post)}
+                    >
                       <FiEdit2 className="h-4 w-4" />
                     </IconButton>
+
                     <IconButton
                       label="Удалить"
                       onClick={() => setPostToDelete(post)}
@@ -247,6 +255,7 @@ export default function AdminNewsListPage() {
                     Нет фото
                   </div>
                 )}
+
                 <div className="flex-1 space-y-2">
                   <button
                     type="button"
@@ -255,6 +264,7 @@ export default function AdminNewsListPage() {
                   >
                     {post.title}
                   </button>
+
                   <p className="text-sm text-slate-600" title={post.description}>
                     {post.description.slice(0, 120)}
                     {post.description.length > 120 ? "…" : ""}
@@ -264,13 +274,19 @@ export default function AdminNewsListPage() {
 
               <div className="flex items-center justify-between text-xs text-slate-500">
                 <span>{formatDateTime(post.createdAt)}</span>
+
                 <div className="flex items-center gap-2">
                   <IconButton label="Просмотр" onClick={() => handleView(post)}>
                     <FiEye className="h-4 w-4" />
                   </IconButton>
-                  <IconButton label="Редактировать" onClick={() => handleEdit(post)}>
+
+                  <IconButton
+                    label="Редактировать"
+                    onClick={() => handleEdit(post)}
+                  >
                     <FiEdit2 className="h-4 w-4" />
                   </IconButton>
+
                   <IconButton
                     label="Удалить"
                     onClick={() => setPostToDelete(post)}
@@ -296,55 +312,63 @@ export default function AdminNewsListPage() {
             Управляйте новостями: создавайте, редактируйте и удаляйте публикации.
           </p>
         </div>
+
         <Button onClick={handleCreate}>
           <FiPlus className="h-4 w-4" />
           Создать новость
         </Button>
       </header>
 
-      <section className="flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <Input
-            type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Поиск по заголовку или описанию"
-            wrapperClassName="lg:max-w-sm"
-          />
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <span>
-              Показано {shownCount} из {total}
-            </span>
-            {isFetching ? <Spinner size="sm" /> : null}
-          </div>
-        </div>
+      <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 px-4 lg:px-6">
+        <section className="flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <Input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Поиск по заголовку или описанию"
+              wrapperClassName="lg:max-w-sm"
+            />
 
-        {renderTable()}
-
-        {items.length > 0 ? (
-          <div className="flex flex-col items-center justify-between gap-3 lg:flex-row">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="secondary"
-                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                disabled={page === 1}
-              >
-                Назад
-              </Button>
-              <span className="text-sm text-slate-500">
-                Страница {page} из {totalPages}
+            <div className="flex items-center gap-2 text-sm text-slate-500">
+              <span>
+                Показано {shownCount} из {total}
               </span>
-              <Button
-                variant="secondary"
-                onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-                disabled={page >= totalPages}
-              >
-                Вперёд
-              </Button>
+              {isFetching ? <Spinner size="sm" /> : null}
             </div>
           </div>
-        ) : null}
-      </section>
+
+          {renderTable()}
+
+          {items.length > 0 ? (
+            <div className="flex flex-col items-center justify-between gap-3 lg:flex-row">
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="secondary"
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  disabled={page === 1}
+                >
+                  Назад
+                </Button>
+
+                <span className="text-sm text-slate-500">
+                  Страница {page} из {totalPages}
+                </span>
+
+                <Button
+                  variant="secondary"
+                  onClick={() =>
+                    setPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                  disabled={page >= totalPages}
+                >
+                  Вперёд
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </section>
+      </div>
 
       <PostFormModal
         open={isFormOpen}
