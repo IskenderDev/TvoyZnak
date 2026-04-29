@@ -124,7 +124,7 @@ export default function NumberDetailsSection() {
   return (
     <>
       <Seo
-        title={`Номер ${numberLabel || item.series} — Знак отличия`}
+        title={`Номер ${numberLabel || item.series} — Знак Отличия`}
         description={`Предложение от ${sellerName}. Стоимость ${price}.`}
       />
 
